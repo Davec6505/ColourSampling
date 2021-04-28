@@ -10,9 +10,9 @@ Value=ColourSampling.c
 [USE_EEPROM]
 Value=0
 [USE_HEAP]
-Value=0
+Value=1
 [HEAP_SIZE]
-Value=2000
+Value=6000
 [EEPROM_DEFINITION]
 Value=
 [FILES]

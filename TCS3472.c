@@ -4,32 +4,32 @@
 unsigned short TCS3472_Bits;
 sbit TCS3472_Initialised at TCS3472_Bits.B0;
 
-unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain ){
-unsigned short x;
-     x = TCS3472_Read8(TCS3472_ID);
-      /*if((x != 0x44) || (x != 0x4D))
-         return x;*/
-   
-   TCS3472_Initialised = 1;
-   
-   TCS3472_SetIntergration_Time(It);
-   TCS3472_SetGain(gain);
-   TCS3472_Enable();
-   
+unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain, TCS3472x Id ){
+unsigned short id;
 
-   return 2;//TCS3472_Bits;
+   id = TCS3472_Read8(TCS3472_ID);
+   if(id != Id)
+      return 255;
+      
+   if(!TCS3472_Initialised){
+     TCS3472_Initialised = 1;
+     TCS3472_SetIntergration_Time(It);
+     TCS3472_SetGain(gain);
+     TCS3472_Enable();
+   }
+   return id;
 }
 
 void TCS3472_Write(unsigned short cmd){
   I2C2_Start();                      // issue I2C start signal
-  I2C2_Write(TCS3472_ADDR);          // send byte via I2C  (slave address)
+  I2C2_Write(TCS3472_ADDW);          // send byte via I2C  (slave address)
   I2C2_Write(cmd);                  // send byte (command reg MSB)
   I2C2_Stop();
 }
 
 void TCS3472_Write8(unsigned short reg_add, unsigned short value){
   I2C2_Start();                      // issue I2C start signal
-  I2C2_Write(TCS3472_ADDR);          // send byte via I2C  (slave address)
+  I2C2_Write(TCS3472_ADDW);          // send byte via I2C  (slave address)
   I2C2_Write(TCS3472_CMD_BIT | reg_add);       // send byte (command reg MSB)
   I2C2_Write(value);                 // send byte (data to be written)
   I2C2_Stop();                       // issue I2C stop signal
@@ -39,23 +39,26 @@ void TCS3472_Write8(unsigned short reg_add, unsigned short value){
 unsigned short TCS3472_Read8(unsigned short reg_add){
 unsigned short temp;
   I2C2_Start();                   // issue I2C start signal
-  I2C2_Write(TCS3472_ADDR);       // send byte via I2C  (device address + W)
-  I2C2_Write(reg_add);            // send byte (data address)
-  temp = I2C2_Read(_I2C_NACK);   // Read the data (NO acknowledge)
+  I2C2_Write(TCS3472_ADDW);       // send byte via I2C  (device address + W)
+  I2C2_Write(TCS3472_CMD_BIT | reg_add);            // send byte (data address)
+  I2C2_Stop();
+  I2C2_Start();
+  I2C2_Write(TCS3472_ADDR);
+  temp = I2C2_Read(1);   // Read the data (NO acknowledge)
   I2C2_Stop();
   return temp;
 }
 
 unsigned int TCS3472_Read16(unsigned short reg_add){
- unsigned short temp[2];
+ unsigned char temp[2];
  unsigned int reslt;
   I2C2_Start();              // issue I2C start signal
-  I2C2_Write(TCS3472_ADDR);          // send byte via I2C  (device address + W)
-  I2C2_Write(TCS3472_CMD_BIT | reg_add);       // send byte (command reg MSB)
-  I2C2_Restart();            // issue I2C signal repeated start
+  I2C2_Write(TCS3472_ADDW);          // send byte via I2C  (device address + W)
+  I2C2_Write(TCS3472_CMD_AUTO_INC | reg_add);       // send byte (command reg MSB)
+  I2C_ReStart();           // issue I2C signal repeated start
   I2C2_Write(TCS3472_ADDR);          // send byte (device address + R)
   temp[0] = I2C2_Read(_I2C_ACK);      // Read the data (NO acknowledge)
-  temp[1] = I2C2_Read(_I2C_ACK);
+  temp[1] = I2C2_Read(_I2C_NACK);
   I2C2_Stop();
   reslt = temp[0];
   reslt = (reslt << 8) | temp[1];

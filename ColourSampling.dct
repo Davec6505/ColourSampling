@@ -9914,6 +9914,7 @@ devaddr6
 devaddr6
 devaddr6
 devaddr6_bit
+device_id
 devid
 devid
 devid
@@ -21486,6 +21487,7 @@ twip
 twip
 twip_bit
 txt
+txtr
 u1addr
 u1addrbits
 u1addrclr

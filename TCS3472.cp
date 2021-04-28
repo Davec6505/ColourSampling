@@ -5,7 +5,7 @@
 
 
 extern sfr TCS3472_Initialised;
-#line 58 "c:/users/git/coloursampling/tcs3472.h"
+#line 60 "c:/users/git/coloursampling/tcs3472.h"
 typedef enum {
  TCS3472_INTEGRATIONTIME_2_4MS = 0xFF,
  TCS3472_INTEGRATIONTIME_24MS = 0xF6,
@@ -25,7 +25,13 @@ typedef enum {
 } TCS3472_Gain_t;
 
 
-unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain );
+typedef enum{
+ TCS3472_1_5 = 0x44,
+ TCS3472_3_7 = 0x4D
+} TCS3472x;
+
+
+unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain , TCS3472x Id );
 void TCS3472_Write(unsigned short cmd);
 void TCS3472_Write8(unsigned short reg_add,unsigned short value);
 unsigned short TCS3472_Read8(unsigned short reg_add);
@@ -45,30 +51,32 @@ void TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 unsigned short TCS3472_Bits;
 sbit TCS3472_Initialised at TCS3472_Bits.B0;
 
-unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain ){
-unsigned short x;
- x = TCS3472_Read8( 0x12 );
-#line 13 "C:/Users/GIT/ColourSampling/TCS3472.c"
- TCS3472_Initialised = 1;
+unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain, TCS3472x Id ){
+unsigned short id;
 
+ id = TCS3472_Read8( 0x12 );
+ if(id != Id)
+ return 255;
+
+ if(!TCS3472_Initialised){
+ TCS3472_Initialised = 1;
  TCS3472_SetIntergration_Time(It);
  TCS3472_SetGain(gain);
  TCS3472_Enable();
-
-
- return 2;
+ }
+ return id;
 }
 
 void TCS3472_Write(unsigned short cmd){
  I2C2_Start();
- I2C2_Write( 0x29 );
+ I2C2_Write( 0x52 );
  I2C2_Write(cmd);
  I2C2_Stop();
 }
 
 void TCS3472_Write8(unsigned short reg_add, unsigned short value){
  I2C2_Start();
- I2C2_Write( 0x29 );
+ I2C2_Write( 0x52 );
  I2C2_Write( 0x80  | reg_add);
  I2C2_Write(value);
  I2C2_Stop();
@@ -78,23 +86,26 @@ void TCS3472_Write8(unsigned short reg_add, unsigned short value){
 unsigned short TCS3472_Read8(unsigned short reg_add){
 unsigned short temp;
  I2C2_Start();
- I2C2_Write( 0x29 );
- I2C2_Write(reg_add);
- temp = I2C2_Read(_I2C_NACK);
+ I2C2_Write( 0x52 );
+ I2C2_Write( 0x80  | reg_add);
+ I2C2_Stop();
+ I2C2_Start();
+ I2C2_Write( 0x53 );
+ temp = I2C2_Read(1);
  I2C2_Stop();
  return temp;
 }
 
 unsigned int TCS3472_Read16(unsigned short reg_add){
- unsigned short temp[2];
+ unsigned char temp[2];
  unsigned int reslt;
  I2C2_Start();
- I2C2_Write( 0x29 );
- I2C2_Write( 0x80  | reg_add);
- I2C2_Restart();
- I2C2_Write( 0x29 );
+ I2C2_Write( 0x52 );
+ I2C2_Write( 0xA0  | reg_add);
+ I2C_ReStart();
+ I2C2_Write( 0x53 );
  temp[0] = I2C2_Read(_I2C_ACK);
- temp[1] = I2C2_Read(_I2C_ACK);
+ temp[1] = I2C2_Read(_I2C_NACK);
  I2C2_Stop();
  reslt = temp[0];
  reslt = (reslt << 8) | temp[1];

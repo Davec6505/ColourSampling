@@ -5,7 +5,7 @@
 #include "_Timers.h"
 #include "built_in.h"
 
- 
+extern unsigned short i;
 
 
 void ConfigPic();

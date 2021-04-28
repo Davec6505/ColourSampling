@@ -17,8 +17,8 @@ SW	R2, Offset(AD1PCFG+0)(GP)
 _LX	
 INS	R2, R0, BitPos(JTAGEN_bit+0), 1
 _SX	
-;Config.c,9 :: 		TRISA = 0X020C;
-ORI	R2, R0, 524
+;Config.c,9 :: 		TRISA = 0X0200;
+ORI	R2, R0, 512
 SW	R2, Offset(TRISA+0)(GP)
 ;Config.c,10 :: 		TRISB = 0X0000;
 SW	R0, Offset(TRISB+0)(GP)
@@ -33,10 +33,12 @@ SW	R2, Offset(TRISE+0)(GP)
 SW	R0, Offset(TRISF+0)(GP)
 ;Config.c,15 :: 		TRISG = 0X0000;
 SW	R0, Offset(TRISG+0)(GP)
-;Config.c,18 :: 		I2C2_Init(100000);//_Advanced(80000,400000);//INIT I2C AT 100KHZ
+;Config.c,18 :: 		I2C2_Init_Advanced(80000,100000);//INIT I2C AT 100KHZ
+LUI	R26, 1
+ORI	R26, R26, 34464
 LUI	R25, 1
-ORI	R25, R25, 34464
-JAL	_I2C2_Init+0
+ORI	R25, R25, 14464
+JAL	_I2C2_Init_Advanced+0
 NOP	
 ;Config.c,19 :: 		I2C_Set_Active(&I2C2_Start, &I2C2_Restart, &I2C2_Read, &I2C2_Write,
 LUI	R28, hi_addr(_I2C2_Write+0)
@@ -65,8 +67,8 @@ L_ConfigPic0:
 ADDIU	R24, R24, -1
 BNE	R24, R0, L_ConfigPic0
 NOP	
-;Config.c,22 :: 		UART2_Init(56000);              // Initialize UART module at 9600 bps
-ORI	R25, R0, 56000
+;Config.c,22 :: 		UART2_Init(9600);              // Initialize UART module at 9600 bps
+ORI	R25, R0, 9600
 JAL	_UART2_Init+0
 NOP	
 ;Config.c,26 :: 		LATA10_bit = 0;

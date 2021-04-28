@@ -6,7 +6,7 @@
 
 
 extern sfr TCS3472_Initialised;
-#line 58 "c:/users/git/coloursampling/tcs3472.h"
+#line 60 "c:/users/git/coloursampling/tcs3472.h"
 typedef enum {
  TCS3472_INTEGRATIONTIME_2_4MS = 0xFF,
  TCS3472_INTEGRATIONTIME_24MS = 0xF6,
@@ -26,7 +26,13 @@ typedef enum {
 } TCS3472_Gain_t;
 
 
-unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain );
+typedef enum{
+ TCS3472_1_5 = 0x44,
+ TCS3472_3_7 = 0x4D
+} TCS3472x;
+
+
+unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain , TCS3472x Id );
 void TCS3472_Write(unsigned short cmd);
 void TCS3472_Write8(unsigned short reg_add,unsigned short value);
 unsigned short TCS3472_Read8(unsigned short reg_add);
@@ -103,7 +109,10 @@ typedef struct{
 void InitTimer1();
 void Get_Time();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 11 "c:/users/git/coloursampling/config.h"
+#line 8 "c:/users/git/coloursampling/config.h"
+extern unsigned short i;
+
+
 void ConfigPic();
 void InitISR();
 void WriteData(char *_data);

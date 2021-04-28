@@ -4,16 +4,18 @@
 
 extern sfr TCS3472_Initialised;
 
-#define TCS3472_ADDW 0x28
-#define TCS3472_ADDR 0x29     /**< I2C address || 0x19 = TCS34725/7 || 0x39 = TCS34721/3  || **/
-#define TCS3472_CMD_BIT 0x80  /**< Command bit **/
-#define TCS3472_EN  0x00      /**< Interrupt Enable register */
-#define TCS3472_EN_AIEN 0x10  /**< RGBC Interrupt Enable */
-#define TCS3472_EN_WEN  0x08  /**< Wait Enable - Writing 1 activates the wait timer */
-#define TCS3472_EN_AEN  0x02  /**< RGBC Enable - Writing 1 actives the ADC, 0 disables it */
-#define TCS3472_EN_PON  0x01  /**< Power on - Writing 1 activates the internal oscillator, 0 disables it */
-#define TCS3472_ATIME   0x01  /**< Integration time */
-#define TCS3472_WTIME   0x03  /**< Wait time (if TCS34725_ENABLE_WEN is asserted) */
+#define TCS3472_ADDW 0x52
+#define TCS3472_ADDR 0x53      /**< I2C address || 0x19 = TCS34725/7 || 0x39 = TCS34721/3  || **/
+#define TCS3472_CMD_BIT 0x80   /**< Command bit **/
+#define TCS3472_CMD_AUTO_INC 0xA0  /**<Auto incrament protocol transaction>**/
+#define TCS3472_CMD_SF 0xE0    /**<Special function>**/
+#define TCS3472_EN  0x00       /**< Interrupt Enable register */
+#define TCS3472_EN_AIEN 0x10   /**< RGBC Interrupt Enable */
+#define TCS3472_EN_WEN  0x08   /**< Wait Enable - Writing 1 activates the wait timer */
+#define TCS3472_EN_AEN  0x02   /**< RGBC Enable - Writing 1 actives the ADC, 0 disables it */
+#define TCS3472_EN_PON  0x01   /**< Power on - Writing 1 activates the internal oscillator, 0 disables it */
+#define TCS3472_ATIME   0x01   /**< Integration time */
+#define TCS3472_WTIME   0x03   /**< Wait time (if TCS34725_ENABLE_WEN is asserted) */
 #define TCS3472_WTIME_2_4MS 0xFF /**< WLONG0 = 2.4ms   WLONG1 = 0.029s */
 #define TCS3472_WTIME_204MS 0xAB /**< WLONG0 = 204ms   WLONG1 = 2.45s  */
 #define TCS3472_WTIME_614MS 0x00 /**< WLONG0 = 614ms   WLONG1 = 7.4s   */
@@ -73,8 +75,14 @@ typedef enum {
   TCS3472_GAIN_60X = 0x03  /**<  60x gain */
 } TCS3472_Gain_t;
 
+/** Device ID **/
+typedef enum{
+  TCS3472_1_5 = 0x44,
+  TCS3472_3_7 = 0x4D
+} TCS3472x;
+
 /** Function Prototypes  **/
-unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain );
+unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain , TCS3472x Id  );
 void TCS3472_Write(unsigned short cmd);
 void TCS3472_Write8(unsigned short reg_add,unsigned short value);
 unsigned short TCS3472_Read8(unsigned short reg_add);

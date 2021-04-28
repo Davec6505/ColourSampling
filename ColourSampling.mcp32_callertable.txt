@@ -1,10 +1,7 @@
 main
-	__CC2DW
-	__FillZeros
 	ConfigPic
-		I2C2_Init
+		I2C2_Init_Advanced
 			SetI2C2Ptrs
-			Get_Fosc_kHz
 			I2C2_Wait_For_Idle
 				I2C2_Is_Idle
 		I2C_Set_Active
@@ -13,19 +10,15 @@ main
 			UART_Calc_BRG
 		InitTimer1
 		InitISR
-	ByteToStr
-	WriteData
-		UART2_Write_Text
-			UART2_Write
 	TCS3472_Init
 		TCS3472_Read8
 			I2C2_Start
 				I2C2_Wait_For_Idle
 			I2C2_Write
 				I2C2_Wait_For_Idle
-			I2C2_Read
-				I2C2_Wait_For_Idle
 			I2C2_Stop
+				I2C2_Wait_For_Idle
+			I2C2_Read
 				I2C2_Wait_For_Idle
 		TCS3472_SetIntergration_Time
 			TCS3472_Write8
@@ -36,9 +29,57 @@ main
 			TCS3472_Write8
 		TCS3472_Enable
 			TCS3472_Write8
+	UART2_Write_Text
+		UART2_Write
+	ByteToStr
+	TCS3472_getRawData
+		TCS3472_Read16
+			I2C2_Start
+			I2C2_Write
+			I2C_Restart
+				I2C2_Start
+				I2C2_Restart
+					I2C2_Wait_For_Idle
+				I2C2_Is_Idle
+				I2C1_Is_Idle
+				I2C1_Start
+					I2C1_Wait_For_Idle
+						I2C1_Is_Idle
+				I2C1_Restart
+					I2C1_Wait_For_Idle
+				UART1_Read
+				UART1_Data_Ready
+				UART1_Tx_Idle
+				UART2_Read
+				UART2_Data_Ready
+				UART2_Tx_Idle
+			I2C2_Read
+			I2C2_Stop
+	WriteData
+		UART2_Write_Text
+	sprintf
+		_doprntf
+			isdigit
+			_Compare_FP
+			scale
+				_Mul_FP
+			_Mul_FP
+			_Div_FP
+			_FloatToUnsignedIntegral
+			_Unsigned32IntToFloat
+				_SignedIntegralToFloat
+				_UnsignedIntegralToFloat
+			_Sub_FP
+				_Add_FP
+			_Add_FP
+			fround
+				_Mul_FP
+			_FloatToSignedIntegral
+	UART2_Write
+	__CC2DW
+	__FillZeros
 Timer1Interrupt
 	I2C2_Stop
 	Get_Time
 	I2C1_Stop
 		I2C1_Wait_For_Idle
-			I2C1_Is_Idle

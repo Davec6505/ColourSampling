@@ -6,7 +6,7 @@
 
 
 extern sfr TCS3472_Initialised;
-#line 58 "c:/users/git/coloursampling/tcs3472.h"
+#line 60 "c:/users/git/coloursampling/tcs3472.h"
 typedef enum {
  TCS3472_INTEGRATIONTIME_2_4MS = 0xFF,
  TCS3472_INTEGRATIONTIME_24MS = 0xF6,
@@ -26,7 +26,13 @@ typedef enum {
 } TCS3472_Gain_t;
 
 
-unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain );
+typedef enum{
+ TCS3472_1_5 = 0x44,
+ TCS3472_3_7 = 0x4D
+} TCS3472x;
+
+
+unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain , TCS3472x Id );
 void TCS3472_Write(unsigned short cmd);
 void TCS3472_Write8(unsigned short reg_add,unsigned short value);
 unsigned short TCS3472_Read8(unsigned short reg_add);
@@ -103,29 +109,52 @@ typedef struct{
 void InitTimer1();
 void Get_Time();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 11 "c:/users/git/coloursampling/config.h"
+#line 8 "c:/users/git/coloursampling/config.h"
+extern unsigned short i;
+
+
 void ConfigPic();
 void InitISR();
 void WriteData(char *_data);
 #line 3 "C:/Users/GIT/ColourSampling/ColourSampling.c"
 char txt[] = "00000";
-
+char txtR[] = "00000";
 TCS3472_IntegrationTime_t it;
 TCS3472_Gain_t G;
-
+TCS3472x device_Id;
 void main() {
 unsigned short i;
+unsigned int RawData[4];
+unsigned int R;
  ConfigPic();
  it = TCS3472_INTEGRATIONTIME_2_4MS;
  G = TCS3472_GAIN_4X;
+ device_Id = TCS3472_1_5;
  i = 0;
+ i = TCS3472_Init(it,G,device_Id);
+ UART2_Write_Text("Device Id:= ");
+ ByteToStr(i, txt);
+ UART2_Write_Text(txt);
 
 while(1){
- ByteToStr(i, txt);
 
- WriteData(txt);
- LATE3_bit = i;
- i = TCS3472_Init(it,G);
+ TCS3472_getRawData(RawData);
+
+ WriteData("C | R | G | B | = ");
+ sprintf(txtR,"%d",RawData[0]);
+ WriteData(txtR);
+ UART2_Write('\t');
+ sprintf(txtR,"%d",RawData[1]);
+ WriteData(txtR);
+ UART2_Write('\t');
+ sprintf(txtR,"%d",RawData[2]);
+ WriteData(txtR);
+ UART2_Write('\t');
+ sprintf(txtR,"%d",RawData[3]);
+ WriteData(txtR);
+ UART2_Write('\r');
+ UART2_Write('\n');
+
  Delay_ms(1000);
  }
 
