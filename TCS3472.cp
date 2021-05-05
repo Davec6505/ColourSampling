@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 1 "C:/Users/Git/ColourSampling/TCS3472.c"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 
 
@@ -47,7 +47,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC);
 unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
 void TCS3472_SetInterrupt(char i);
 void TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
-#line 4 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 4 "C:/Users/Git/ColourSampling/TCS3472.c"
 unsigned short TCS3472_Bits;
 sbit TCS3472_Initialised at TCS3472_Bits.B0;
 

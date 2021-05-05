@@ -1895,6 +1895,8 @@ b8
 b9
 bcd2dec
 bcd2dec16
+bcddevice
+bcdusb
 bcl
 bcl
 bcl
@@ -1910,6 +1912,13 @@ bcl
 bcl
 bcl_bit
 bcl_i2c2stat_bit
+bdescriptortype
+bdeviceclass
+bdeviceprotocol
+bdevicesubclass
+bdsctype
+bdsctype
+bdsctype
 bdtptrh
 bdtptrh
 bdtptrh
@@ -1982,6 +1991,11 @@ bito
 bito
 bito
 bito_bit
+blength
+blength
+blength
+blength
+bmaxpacketsize0
 bmxarb
 bmxarb
 bmxarb
@@ -2690,6 +2704,7 @@ bmxwsdrm
 bmxwsdrm
 bmxwsdrm
 bmxwsdrm_bit
+bnumconfigurations
 bor
 bor
 bor
@@ -7415,6 +7430,7 @@ cnt
 cnt
 cnt
 cnt
+cnt
 cnt0
 cnt0_bit
 cnt1
@@ -7442,6 +7458,7 @@ coe
 coe
 coe_bit
 coe_cm2con_bit
+configdescriptor1
 configpic
 cosc
 cosc
@@ -9914,6 +9931,7 @@ devaddr6
 devaddr6
 devaddr6
 devaddr6_bit
+device_dsc
 device_id
 devid
 devid
@@ -9994,6 +10012,7 @@ dir
 dir
 dir_
 dir_bit
+direction
 disablethreads
 dissdo
 dissdo
@@ -10268,6 +10287,8 @@ dppulup
 dppulup
 dppulup
 dppulup_bit
+endpoint_number
+endpoint_number
 endpt
 endpt
 endpt
@@ -10303,6 +10324,10 @@ ep
 ep
 ep
 ep
+ep_data_in
+ep_data_out
+ep_in_interval
+ep_out_interval
 ep0
 ep0
 ep0
@@ -10852,6 +10877,7 @@ ferr
 ferr
 ferr_bit
 ferr_u2sta_bit
+filler1
 floattostr
 form
 form
@@ -11043,6 +11069,9 @@ gcstat
 gcstat
 gcstat_bit
 gcstat_i2c2stat_bit
+gen_enable
+gen_read
+gen_write
 get_fosc_khz
 get_time
 get_timer_values
@@ -11053,6 +11082,13 @@ halfsec
 halfsec
 halfsec
 halfsec_bit
+hid_disable
+hid_enable
+hid_input_report_bytes
+hid_output_report_bytes
+hid_read
+hid_rpt_desc
+hid_write
 hosten
 hosten
 hosten
@@ -12392,6 +12428,8 @@ idleif
 idleif
 idleif
 idleif_bit
+idproduct
+idvendor
 iec0
 iec0bits
 iec0clr
@@ -12424,6 +12462,7 @@ ifs1inv
 ifs1invbits
 ifs1set
 ifs1setbits
+imanufacturer
 incm
 incm
 incm
@@ -12725,6 +12764,7 @@ ipc9set
 ipc9setbits
 ipmien
 ipmien
+iproduct
 iptmr
 iptmr0
 iptmr0_bit
@@ -12828,6 +12868,7 @@ isalnum
 isalpha
 iscntrl
 isdigit
+iserialnumber
 isgraph
 islower
 ispunct
@@ -12901,6 +12942,7 @@ jstate_bit
 jtagen
 jtagen
 jtagen_bit
+kk
 labs
 lata
 lata0
@@ -17028,6 +17070,7 @@ pidef
 pidef
 pidef
 pidef_bit
+ping_pong
 piv
 piv
 piv
@@ -18283,6 +18326,8 @@ re9
 re9
 re9
 re9_bit
+readbuff
+report
 reset
 restoreinterrupts
 resume
@@ -19493,6 +19538,9 @@ strchr
 strcmp
 strcpy
 strcspn
+strd1
+strd2
+strd3
 stren
 stren
 stren
@@ -19515,6 +19563,9 @@ strict
 strict
 strict_bit
 strict_i2c2con_bit
+string
+string
+string
 strlen
 strncat
 strncmp
@@ -22226,6 +22277,25 @@ urxisel1
 urxisel1
 urxisel1_bit
 urxisel1_u2sta_bit
+usb_break
+usb_config_dsc_ptr
+usb_hid_ep
+usb_hid_rpt_size
+usb_init_desc
+usb_interrupt
+usb_interrupt_proc
+usb_max_power
+usb_polling_proc
+usb_product_id
+usb_self_power
+usb_string_dsc_ptr
+usb_transfer_type
+usb_vendor_id
+usb1interrupt
+usbbusissuspended
+usbdeferindatastagepackets
+usbdeferoutdatastagepackets
+usbdeferstatusstagepacket
 usben
 usben
 usben
@@ -22284,6 +22354,9 @@ usbsidl
 usbsidl
 usbsidl
 usbsidl_bit
+usbstatusstageenabledflag1
+usbstatusstageenabledflag2
+usbstatusstagetimeoutcounter
 usidl
 usidl
 usidl
@@ -22298,6 +22371,7 @@ uslpgrd
 uslpgrd
 uslpgrd
 uslpgrd_bit
+ustatcopy
 ususpend
 ususpend
 ususpend
@@ -22488,6 +22562,7 @@ utxsel
 utxsel
 utxsel
 utxsel
+val
 vbuschg
 vbuschg
 vbuschg
@@ -23478,6 +23553,7 @@ wrerr
 wrerr
 wrerr
 wrerr_bit
+writebuff
 writedata
 wrsp
 wrsp

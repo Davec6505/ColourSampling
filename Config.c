@@ -21,6 +21,10 @@ void ConfigPic(){
    Delay_ms(100);
    UART2_Init(9600);              // Initialize UART module at 9600 bps
    //ADC1_Init();
+   
+   USBIE_bit = 0;
+   IPC11bits.USBIP = 7;
+   HID_Enable(&readbuff,&writebuff);
 
 
   LATA10_bit = 0;

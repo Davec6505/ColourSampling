@@ -71,21 +71,35 @@ NOP
 ORI	R25, R0, 9600
 JAL	_UART2_Init+0
 NOP	
-;Config.c,26 :: 		LATA10_bit = 0;
+;Config.c,25 :: 		USBIE_bit = 0;
+LUI	R2, BitMask(USBIE_bit+0)
+ORI	R2, R2, BitMask(USBIE_bit+0)
+_SX	
+;Config.c,26 :: 		IPC11bits.USBIP = 7;
+ORI	R2, R0, 7168
+SH	R2, Offset(IPC11bits+8)(GP)
+;Config.c,27 :: 		HID_Enable(&readbuff,&writebuff);
+LUI	R26, hi_addr(_writebuff+0)
+ORI	R26, R26, lo_addr(_writebuff+0)
+LUI	R25, hi_addr(_readbuff+0)
+ORI	R25, R25, lo_addr(_readbuff+0)
+JAL	_HID_Enable+0
+NOP	
+;Config.c,30 :: 		LATA10_bit = 0;
 LUI	R2, BitMask(LATA10_bit+0)
 ORI	R2, R2, BitMask(LATA10_bit+0)
 _SX	
-;Config.c,28 :: 		LATE3_bit = 0;
+;Config.c,32 :: 		LATE3_bit = 0;
 LUI	R2, BitMask(LATE3_bit+0)
 ORI	R2, R2, BitMask(LATE3_bit+0)
 _SX	
-;Config.c,29 :: 		InitTimer1();
+;Config.c,33 :: 		InitTimer1();
 JAL	_InitTimer1+0
 NOP	
-;Config.c,30 :: 		InitISR();
+;Config.c,34 :: 		InitISR();
 JAL	_InitISR+0
 NOP	
-;Config.c,31 :: 		}
+;Config.c,35 :: 		}
 L_end_ConfigPic:
 LW	R28, 16(SP)
 LW	R27, 12(SP)
