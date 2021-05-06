@@ -1,4 +1,4 @@
-#line 1 "C:/Users/Git/ColourSampling/_Timers.c"
+#line 1 "C:/Users/GIT/ColourSampling/_Timers.c"
 #line 1 "c:/users/git/coloursampling/_timers.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 
@@ -59,7 +59,7 @@ typedef struct{
 
 void InitTimer1();
 void Get_Time();
-#line 3 "C:/Users/Git/ColourSampling/_Timers.c"
+#line 3 "C:/Users/GIT/ColourSampling/_Timers.c"
 Timers TMR0;
 void InitTimer1(){
 

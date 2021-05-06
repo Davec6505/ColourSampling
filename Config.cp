@@ -1,4 +1,4 @@
-#line 1 "C:/Users/Git/ColourSampling/Config.c"
+#line 1 "C:/Users/GIT/ColourSampling/Config.c"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 
@@ -124,7 +124,7 @@ extern char writebuff[64];
 void ConfigPic();
 void InitISR();
 void WriteData(char *_data);
-#line 4 "C:/Users/Git/ColourSampling/Config.c"
+#line 4 "C:/Users/GIT/ColourSampling/Config.c"
 void ConfigPic(){
  CHECON = 30;
  AD1PCFG = 0xFFFFFFFF;

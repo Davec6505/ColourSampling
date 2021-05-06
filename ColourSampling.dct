@@ -9941,11 +9941,8 @@ devaddr6
 devaddr6
 devaddr6
 devaddr6_bit
-<<<<<<< HEAD
-device_error
-=======
 device_dsc
->>>>>>> 1eaea05460290339656224bd6318061f885bd184
+device_error
 device_id
 devid
 devid

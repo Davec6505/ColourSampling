@@ -15,12 +15,10 @@ char txtR[] = "00000";
 TCS3472_IntegrationTime_t it;
 TCS3472_Gain_t G;
 TCS3472x device_Id;
-<<<<<<< HEAD
 TCS3472_Error device_Error;
-=======
+
 
 //program
->>>>>>> 1eaea05460290339656224bd6318061f885bd184
 void main() {
 unsigned short i;
 unsigned int RawData[4];
@@ -50,25 +48,6 @@ while(1){
    WriteData("C | R | G | B |  | deg | =   ");
    sprintf(txtR,"%d",RawData[0]);
    WriteData(txtR);
-<<<<<<< HEAD
-   UART2_Write(9);
-   sprintf(txtR,"%d",RawData[1]);
-   WriteData(txtR);
-   UART2_Write(9);
-   sprintf(txtR,"%d",RawData[2]);
-   WriteData(txtR);
-   UART2_Write(9);
-   sprintf(txtR,"%d",RawData[3]);
-   WriteData(txtR);
-   UART2_Write(9);
-   UART2_Write(9);
-   
-  //deg = TCS3472_CalcColTemp_dn40(RawData);//TCS3472_CalcColTemp(RawData[1],RawData[2],RawData[3]);
-   sprintf(txtR,"%d",deg);
-   WriteData(txtR);
-   UART2_Write(13);
-   UART2_Write(10);
-=======
    WriteData("|");
   // UART2_Write('\t');
    sprintf(txtR,"%d",RawData[1]);
@@ -84,7 +63,6 @@ while(1){
    WriteData("| \r\n");
   // UART2_Write('\r');
   // UART2_Write('\n');
->>>>>>> 1eaea05460290339656224bd6318061f885bd184
   // WriteData(txt);
    Delay_ms(1000);
  }

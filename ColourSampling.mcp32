@@ -61,12 +61,9 @@ File3=C_String
 File4=UART
 File5=Sprintf
 File6=Conversions
-<<<<<<< HEAD
 File7=C_Math
-=======
-File7=USB
->>>>>>> 1eaea05460290339656224bd6318061f885bd184
-Count=8
+File8=USB
+Count=9
 [INTERRUPT_DEFS]
 EBASE=9FC01000
 VECTOR_SPACEING=32

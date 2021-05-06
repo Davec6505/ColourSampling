@@ -1,4 +1,4 @@
-#line 1 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 1 "C:/Users/GIT/ColourSampling/ColourSampling.c"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 
@@ -124,7 +124,7 @@ extern char writebuff[64];
 void ConfigPic();
 void InitISR();
 void WriteData(char *_data);
-#line 5 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 5 "C:/Users/GIT/ColourSampling/ColourSampling.c"
 char cnt;
 char kk;
 char readbuff[64];
@@ -138,12 +138,10 @@ char txtR[] = "00000";
 TCS3472_IntegrationTime_t it;
 TCS3472_Gain_t G;
 TCS3472x device_Id;
-<<<<<<< HEAD
 TCS3472_Error device_Error;
-=======
 
 
->>>>>>> 1eaea05460290339656224bd6318061f885bd184
+
 void main() {
 unsigned short i;
 unsigned int RawData[4];
@@ -173,25 +171,6 @@ while(1){
  WriteData("C | R | G | B |  | deg | =   ");
  sprintf(txtR,"%d",RawData[0]);
  WriteData(txtR);
-<<<<<<< HEAD
- UART2_Write(9);
- sprintf(txtR,"%d",RawData[1]);
- WriteData(txtR);
- UART2_Write(9);
- sprintf(txtR,"%d",RawData[2]);
- WriteData(txtR);
- UART2_Write(9);
- sprintf(txtR,"%d",RawData[3]);
- WriteData(txtR);
- UART2_Write(9);
- UART2_Write(9);
-
-
- sprintf(txtR,"%d",deg);
- WriteData(txtR);
- UART2_Write(13);
- UART2_Write(10);
-=======
  WriteData("|");
 
  sprintf(txtR,"%d",RawData[1]);
@@ -207,7 +186,6 @@ while(1){
  WriteData("| \r\n");
 
 
->>>>>>> 1eaea05460290339656224bd6318061f885bd184
 
  Delay_ms(1000);
  }

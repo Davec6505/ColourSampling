@@ -1,4 +1,4 @@
-#line 1 "C:/Users/Git/ColourSampling/TCS3472.c"
+#line 1 "C:/Users/GIT/ColourSampling/TCS3472.c"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 
 
@@ -51,15 +51,9 @@ void TCS3472_getRawDataOnce(unsigned int *RGBC);
 unsigned int TCS3472_CalcColTemp(unsigned int R,unsigned int G,unsigned int B);
 unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC);
 unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
-<<<<<<< HEAD
 unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 #line 4 "C:/Users/GIT/ColourSampling/TCS3472.c"
-=======
-void TCS3472_SetInterrupt(char i);
-void TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
-#line 4 "C:/Users/Git/ColourSampling/TCS3472.c"
->>>>>>> 1eaea05460290339656224bd6318061f885bd184
 unsigned short TCS3472_Bits;
 sbit TCS3472_Initialised at TCS3472_Bits.B0;
 unsigned short _i2caddr,_i2caddw;
