@@ -192,6 +192,8 @@ _i2c_timeout_repeated_start
 _i2c_timeout_start
 _i2c_timeout_stop
 _i2c_timeout_wr
+_i2caddr
+_i2caddw
 _longdoubletofloat
 _longdoubletosignedintegral
 _longdoubletosignedlonglong
@@ -280,6 +282,7 @@ _stroset
 _strosetbits
 _sub_dp
 _sub_fp
+_tcs34725integrationtime
 _uart_8bit_evenparity
 _uart_8bit_noparity
 _uart_8bit_oddparity
@@ -338,6 +341,7 @@ ackstat
 ackstat
 ackstat_bit
 ackstat_i2c2stat_bit
+acos
 actvie
 actvie
 actvie
@@ -1848,6 +1852,9 @@ asam
 asam
 asam
 asam_bit
+asin
+atan
+atan2
 atof
 atoi
 atol
@@ -2930,6 +2937,7 @@ cch1
 cch1
 cch1_bit
 cch1_cm2con_bit
+ceil
 cf
 cf
 cf
@@ -7443,6 +7451,7 @@ coe
 coe_bit
 coe_cm2con_bit
 configpic
+cos
 cosc
 cosc
 cosc
@@ -7465,6 +7474,7 @@ cosc2
 cosc2
 cosc2
 cosc2_bit
+cosh
 cout
 cout
 cout
@@ -9914,6 +9924,7 @@ devaddr6
 devaddr6
 devaddr6
 devaddr6_bit
+device_error
 device_id
 devid
 devid
@@ -10762,12 +10773,14 @@ evpol1
 evpol1
 evpol1_bit
 evpol1_cm2con_bit
+exp
 extr
 extr
 extr
 extr
 extr
 extr_bit
+fabs
 fceie
 fceie
 fceie
@@ -10853,6 +10866,7 @@ ferr
 ferr_bit
 ferr_u2sta_bit
 floattostr
+floor
 form
 form
 form
@@ -10897,6 +10911,7 @@ frcdiv2
 frcdiv2
 frcdiv2
 frcdiv2_bit
+frexp
 frm0
 frm0
 frm0
@@ -13456,6 +13471,7 @@ latginv
 latginvbits
 latgset
 latgsetbits
+ldexp
 ldiv
 llock
 llock
@@ -13503,6 +13519,8 @@ lock
 lock
 lock_
 lock_bit
+log
+log10
 longdoubletostr
 longinttohex
 longinttostrwithzeros
@@ -13770,6 +13788,7 @@ mode32
 mode32
 mode32_bit
 mode32_spi2con_bit
+modf
 month01
 month01
 month01
@@ -17266,6 +17285,7 @@ portginv
 portginvbits
 portgset
 portgsetbits
+pow
 ppbi
 ppbi
 ppbi
@@ -18951,6 +18971,8 @@ sidl_t4con_bit
 sidl_t5con_bit
 sidl_u1mode_bit
 sidl_u2mode_bit
+sin
+sinh
 sirqen
 sirqen
 sirqen
@@ -19397,6 +19419,7 @@ spitbe
 spitbe_bit
 spitbe_spi2stat_bit
 sprintf
+sqrt
 srand
 sripl
 sripl
@@ -19889,6 +19912,8 @@ t5is0
 t5is0_bit
 t5is1
 t5is1_bit
+tan
+tanh
 tbf
 tbf
 tbf

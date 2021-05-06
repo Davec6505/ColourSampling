@@ -67,8 +67,9 @@ L_ConfigPic0:
 ADDIU	R24, R24, -1
 BNE	R24, R0, L_ConfigPic0
 NOP	
-;Config.c,22 :: 		UART2_Init(9600);              // Initialize UART module at 9600 bps
-ORI	R25, R0, 9600
+;Config.c,22 :: 		UART2_Init(115200);              // Initialize UART module at 9600 bps
+LUI	R25, 1
+ORI	R25, R25, 49664
 JAL	_UART2_Init+0
 NOP	
 ;Config.c,26 :: 		LATA10_bit = 0;

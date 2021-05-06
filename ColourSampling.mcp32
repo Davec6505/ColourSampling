@@ -60,7 +60,8 @@ File3=C_String
 File4=UART
 File5=Sprintf
 File6=Conversions
-Count=7
+File7=C_Math
+Count=8
 [INTERRUPT_DEFS]
 EBASE=9FC01000
 VECTOR_SPACEING=32

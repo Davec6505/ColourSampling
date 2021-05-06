@@ -19,7 +19,7 @@ void ConfigPic(){
    I2C_Set_Active(&I2C2_Start, &I2C2_Restart, &I2C2_Read, &I2C2_Write,
                   &I2C2_Stop,&I2C2_Is_Idle); // Sets the I2C2 module active
    Delay_ms(100);
-   UART2_Init(9600);              // Initialize UART module at 9600 bps
+   UART2_Init(115200);              // Initialize UART module at 9600 bps
    //ADC1_Init();
 
 

@@ -31,6 +31,12 @@ typedef enum{
  TCS3472_3_7 = 0x4D
 } TCS3472x;
 
+typedef enum{
+ error = 0,
+ Ok
+ }TCS3472_Error;
+
+
 
 unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain , TCS3472x Id );
 void TCS3472_Write(unsigned short cmd);
@@ -39,15 +45,15 @@ unsigned short TCS3472_Read8(unsigned short reg_add);
 unsigned int TCS3472_Read16(unsigned short reg_add);
 void TCS3472_Enable();
 void TCS3472_Disable();
-void TCS3472_SetIntergration_Time(TCS3472_IntegrationTime_t It);
-void TCS3472_SetGain(TCS3472_Gain_t gain);
+unsigned short TCS3472_SetIntergration_Time(TCS3472_IntegrationTime_t It);
+unsigned short TCS3472_SetGain(TCS3472_Gain_t gain);
 void TCS3472_getRawData(unsigned int *RGBC);
 void TCS3472_getRawDataOnce(unsigned int *RGBC);
 unsigned int TCS3472_CalcColTemp(unsigned int R,unsigned int G,unsigned int B);
 unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC);
 unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
-void TCS3472_SetInterrupt(char i);
-void TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
+unsigned short TCS3472_SetInterrupt(char i);
+unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 #line 1 "c:/users/git/coloursampling/_timers.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 
@@ -135,7 +141,7 @@ void ConfigPic(){
  I2C_Set_Active(&I2C2_Start, &I2C2_Restart, &I2C2_Read, &I2C2_Write,
  &I2C2_Stop,&I2C2_Is_Idle);
  Delay_ms(100);
- UART2_Init(9600);
+ UART2_Init(115200);
 
 
 

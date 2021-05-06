@@ -30,6 +30,12 @@ typedef enum{
  TCS3472_3_7 = 0x4D
 } TCS3472x;
 
+typedef enum{
+ error = 0,
+ Ok
+ }TCS3472_Error;
+
+
 
 unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain , TCS3472x Id );
 void TCS3472_Write(unsigned short cmd);
@@ -38,26 +44,27 @@ unsigned short TCS3472_Read8(unsigned short reg_add);
 unsigned int TCS3472_Read16(unsigned short reg_add);
 void TCS3472_Enable();
 void TCS3472_Disable();
-void TCS3472_SetIntergration_Time(TCS3472_IntegrationTime_t It);
-void TCS3472_SetGain(TCS3472_Gain_t gain);
+unsigned short TCS3472_SetIntergration_Time(TCS3472_IntegrationTime_t It);
+unsigned short TCS3472_SetGain(TCS3472_Gain_t gain);
 void TCS3472_getRawData(unsigned int *RGBC);
 void TCS3472_getRawDataOnce(unsigned int *RGBC);
 unsigned int TCS3472_CalcColTemp(unsigned int R,unsigned int G,unsigned int B);
 unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC);
 unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
-void TCS3472_SetInterrupt(char i);
-void TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
+unsigned short TCS3472_SetInterrupt(char i);
+unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 #line 4 "C:/Users/GIT/ColourSampling/TCS3472.c"
 unsigned short TCS3472_Bits;
 sbit TCS3472_Initialised at TCS3472_Bits.B0;
+unsigned short _i2caddr,_i2caddw;
+TCS3472_IntegrationTime_t _tcs34725IntegrationTime;
 
 unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain, TCS3472x Id ){
 unsigned short id;
 
  id = TCS3472_Read8( 0x12 );
  if(id != Id)
- return 255;
-
+ return 0x00;
  if(!TCS3472_Initialised){
  TCS3472_Initialised = 1;
  TCS3472_SetIntergration_Time(It);
@@ -124,13 +131,19 @@ void TCS3472_Disable(){
  TCS3472_Write8( 0x00 , read & ~( 0x01  |  0x02 ));
 }
 
-void TCS3472_SetIntergration_Time(TCS3472_IntegrationTime_t It){
-short cnt;
+unsigned short TCS3472_SetIntergration_Time(TCS3472_IntegrationTime_t It){
+ if(!TCS3472_Initialised)
+ return 0x00;
+
  TCS3472_Write8( 0x01 , It);
+ return 0x01;
 }
 
-void TCS3472_SetGain(TCS3472_Gain_t gain){
+unsigned short TCS3472_SetGain(TCS3472_Gain_t gain){
+ if(!TCS3472_Initialised)
+ return 0x00;
  TCS3472_Write8( 0x0F , gain);
+ return 0x01;
 }
 
 void TCS3472_getRawData(unsigned int *RGBC){
@@ -147,19 +160,93 @@ void TCS3472_getRawDataOnce(unsigned int *RGBC){
 }
 
 unsigned int TCS3472_CalcColTemp(unsigned int R,unsigned int G,unsigned int B){
+ float X, Y, Z;
+ float xc, yc;
+ float n;
+ float cct;
 
+ if (r == 0 && g == 0 && b == 0) {
+ return 0;
+ }
+
+
+
+
+
+ X = (-0.14282F * r) + (1.54924F * g) + (-0.95641F * b);
+ Y = (-0.32466F * r) + (1.57837F * g) + (-0.73191F * b);
+ Z = (-0.68202F * r) + (0.77073F * g) + (0.56332F * b);
+
+
+ xc = (X) / (X + Y + Z);
+ yc = (Y) / (X + Y + Z);
+
+
+ n = (xc - 0.3320F) / (0.1858F - yc);
+
+
+ cct =
+ (449.0F * pow(n, 3)) + (3525.0F * pow(n, 2)) + (6823.3F * n) + 5520.33F;
+
+
+ return (unsigned int)cct;
 }
 
 unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC){
+ unsigned int r2, b2;
+ unsigned int sat;
+ unsigned int ir;
+ unsigned int cct;
+ if (RGBC[0] == 0) {
+ return 0;
+ }
+#line 163 "C:/Users/GIT/ColourSampling/TCS3472.c"
+ if ((256 - TCS3472_INTEGRATIONTIME_2_4MS) > 63) {
 
+ sat = 65535;
+ } else {
+
+ sat = 1024 * (256 - TCS3472_INTEGRATIONTIME_2_4MS);
+ }
+#line 188 "C:/Users/GIT/ColourSampling/TCS3472.c"
+ if ((256 - TCS3472_INTEGRATIONTIME_2_4MS) <= 63) {
+
+ sat -= sat / 4;
+ }
+
+
+ if (RGBC[0] >= sat) {
+ return 0;
+ }
+
+
+
+ ir = (RGBC[1] + RGBC[2] + RGBC[3] > RGBC[0]) ? (RGBC[1] + RGBC[2] + RGBC[3] - RGBC[0]) / 2 : 0;
+
+
+ r2 = RGBC[1] - ir;
+ b2 = RGBC[3] - ir;
+
+ if (r2 == 0) {
+ return 0;
+ }
+
+
+
+ cct = (3810 * b2 / r2 + 1391);
+
+ return cct;
 }
 
 unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B){
 
 }
 
-void TCS3472_SetInterrupt(char i){
+unsigned short TCS3472_SetInterrupt(char i){
 unsigned short r;
+ if(!TCS3472_Initialised)
+ return 0x00;
+
  r = TCS3472_Read8( 0x00 );
 
  if(i = 1)
@@ -168,15 +255,22 @@ unsigned short r;
  r &= ~ 0x10 ;
 
  TCS3472_Write8( 0x00 , r);
+ return 0x01;
 }
 
-void TCS3472_ClearInterrupt(){
+unsigned short TCS3472_ClearInterrupt(){
+ if(!TCS3472_Initialised)
+ return 0x00;
  TCS3472_Write( 0x80  | 0x66);
+ return 0x01;
 }
 
-void TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi){
+unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi){
+ if(!TCS3472_Initialised)
+ return 0x00;
  TCS3472_Write8(0x04, Lo & 0xFF);
  TCS3472_Write8(0x05, Lo >> 8);
  TCS3472_Write8(0x06, Hi & 0xFF);
  TCS3472_Write8(0x07, Hi >> 8);
+ return 0x01;
 }
