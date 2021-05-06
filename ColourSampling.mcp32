@@ -21,7 +21,8 @@ File1=Config.c
 File2=ISR.c
 File3=TCS3472.c
 File4=_Timers.c
-Count=5
+File5=USBdsc.c
+Count=6
 [BINARIES]
 Count=0
 [IMAGES]
@@ -29,11 +30,11 @@ Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
 File0=ColourSampling.c
-File1=config.h
-File2=Config.c
-File3=ISR.c
-File4=TCS3472.c
-File5=TCS3472.h
+File1=Config.c
+File2=ISR.c
+File3=TCS3472.c
+File4=TCS3472.h
+File5=Config.h
 Count=6
 [EEPROM]
 Count=0
@@ -60,7 +61,11 @@ File3=C_String
 File4=UART
 File5=Sprintf
 File6=Conversions
+<<<<<<< HEAD
 File7=C_Math
+=======
+File7=USB
+>>>>>>> 1eaea05460290339656224bd6318061f885bd184
 Count=8
 [INTERRUPT_DEFS]
 EBASE=9FC01000
@@ -70,5 +75,5 @@ USE_SRS=7
 [EXPANDED_NODES]
 0=ColourSampling.mcp32
 1=Sources
-7=Header Files
+8=Header Files
 Count=3

@@ -2,7 +2,9 @@
 
 void (*Get_Timer_Values)();
 
-
+void USB1Interrupt() iv IVT_USB_1 ilevel 7 ics ICS_SRS{
+  USB_Interrupt_Proc();
+}
 
 void InitISR(){
    Get_Timer_Values = &Get_Time;
@@ -14,5 +16,3 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
   //Enter your code here
     Get_Timer_Values();
 }
-
-

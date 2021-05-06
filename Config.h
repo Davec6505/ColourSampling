@@ -6,7 +6,9 @@
 #include "built_in.h"
 
 extern unsigned short i;
-
+extern char kk;
+extern char readbuff[64];
+extern char writebuff[64];
 
 void ConfigPic();
 void InitISR();

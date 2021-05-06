@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/ColourSampling.c"
+#line 1 "C:/Users/Git/ColourSampling/ColourSampling.c"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 
@@ -117,18 +117,33 @@ void Get_Time();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 8 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
-
+extern char kk;
+extern char readbuff[64];
+extern char writebuff[64];
 
 void ConfigPic();
 void InitISR();
 void WriteData(char *_data);
-#line 3 "C:/Users/GIT/ColourSampling/ColourSampling.c"
+#line 5 "C:/Users/Git/ColourSampling/ColourSampling.c"
+char cnt;
+char kk;
+char readbuff[64];
+char writebuff[64];
+
+
 char txt[] = "00000";
 char txtR[] = "00000";
+
+
 TCS3472_IntegrationTime_t it;
 TCS3472_Gain_t G;
 TCS3472x device_Id;
+<<<<<<< HEAD
 TCS3472_Error device_Error;
+=======
+
+
+>>>>>>> 1eaea05460290339656224bd6318061f885bd184
 void main() {
 unsigned short i;
 unsigned int RawData[4];
@@ -146,11 +161,19 @@ unsigned int deg;
 
 while(1){
 
+ if(HID_Read() != 0)
+ {
+ for(cnt=0;cnt<64;cnt++)
+ writebuff[cnt]=readbuff[cnt];
+ while(!HID_Write(&writebuff,64)) ;
+ }
+
  TCS3472_getRawData(RawData);
 
  WriteData("C | R | G | B |  | deg | =   ");
  sprintf(txtR,"%d",RawData[0]);
  WriteData(txtR);
+<<<<<<< HEAD
  UART2_Write(9);
  sprintf(txtR,"%d",RawData[1]);
  WriteData(txtR);
@@ -168,6 +191,23 @@ while(1){
  WriteData(txtR);
  UART2_Write(13);
  UART2_Write(10);
+=======
+ WriteData("|");
+
+ sprintf(txtR,"%d",RawData[1]);
+ WriteData(txtR);
+ WriteData("|");
+
+ sprintf(txtR,"%d",RawData[2]);
+ WriteData(txtR);
+ WriteData("|");
+
+ sprintf(txtR,"%d",RawData[3]);
+ WriteData(txtR);
+ WriteData("| \r\n");
+
+
+>>>>>>> 1eaea05460290339656224bd6318061f885bd184
 
  Delay_ms(1000);
  }
@@ -175,5 +215,6 @@ while(1){
 }
 
 void WriteData(char *_data){
- UART2_Write_Text(_data);
+
+ HID_Write(_data,64) ;
 }

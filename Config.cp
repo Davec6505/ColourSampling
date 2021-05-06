@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/Config.c"
+#line 1 "C:/Users/Git/ColourSampling/Config.c"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 
@@ -117,12 +117,14 @@ void Get_Time();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 8 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
-
+extern char kk;
+extern char readbuff[64];
+extern char writebuff[64];
 
 void ConfigPic();
 void InitISR();
 void WriteData(char *_data);
-#line 4 "C:/Users/GIT/ColourSampling/Config.c"
+#line 4 "C:/Users/Git/ColourSampling/Config.c"
 void ConfigPic(){
  CHECON = 30;
  AD1PCFG = 0xFFFFFFFF;
@@ -143,6 +145,10 @@ void ConfigPic(){
  Delay_ms(100);
  UART2_Init(115200);
 
+
+ USBIE_bit = 0;
+ IPC11bits.USBIP = 7;
+ HID_Enable(&readbuff,&writebuff);
 
 
  LATA10_bit = 0;
