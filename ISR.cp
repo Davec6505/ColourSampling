@@ -36,7 +36,10 @@ typedef enum{
  Ok
  }TCS3472_Error;
 
-
+extern TCS3472_IntegrationTime_t it;
+extern TCS3472_Gain_t G;
+extern TCS3472x device_Id;
+extern TCS3472_Error device_Error;
 
 unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain , TCS3472x Id );
 void TCS3472_Write(unsigned short cmd);
@@ -50,7 +53,7 @@ unsigned short TCS3472_SetGain(TCS3472_Gain_t gain);
 void TCS3472_getRawData(unsigned int *RGBC);
 void TCS3472_getRawDataOnce(unsigned int *RGBC);
 unsigned int TCS3472_CalcColTemp(unsigned int R,unsigned int G,unsigned int B);
-unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC);
+unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime_t It);
 unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
 unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
@@ -124,6 +127,7 @@ extern char writebuff[64];
 void ConfigPic();
 void InitISR();
 void WriteData(char *_data);
+char* StrChecker(int i);
 #line 3 "C:/Users/GIT/ColourSampling/ISR.c"
 void (*Get_Timer_Values)();
 

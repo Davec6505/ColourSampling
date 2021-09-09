@@ -282,7 +282,6 @@ _stroset
 _strosetbits
 _sub_dp
 _sub_fp
-_tcs34725integrationtime
 _uart_8bit_evenparity
 _uart_8bit_noparity
 _uart_8bit_oddparity
@@ -7466,6 +7465,7 @@ coe
 coe
 coe_bit
 coe_cm2con_bit
+conf
 configdescriptor1
 configpic
 cos
@@ -19557,6 +19557,7 @@ stov8_bit
 stov9
 stov9_bit
 strcat
+strchecker
 strchr
 strcmp
 strcpy
@@ -20311,6 +20312,7 @@ tcs3472_setinterrupt_limits
 tcs3472_write
 tcs3472_write8
 temp_ms
+teststr
 tgate
 tgate
 tgate

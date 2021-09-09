@@ -1,10 +1,14 @@
 #include "TCS3472.h"
 
+TCS3472_IntegrationTime_t it;
+TCS3472_Gain_t G;
+TCS3472x device_Id;
+TCS3472_Error device_Error;
 
 unsigned short TCS3472_Bits;
 sbit TCS3472_Initialised at TCS3472_Bits.B0;
 unsigned short _i2caddr,_i2caddw;
-TCS3472_IntegrationTime_t _tcs34725IntegrationTime;
+//TCS3472_IntegrationTime_t _tcs34725IntegrationTime;
 
 unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain, TCS3472x Id ){
 unsigned short id;
@@ -139,8 +143,8 @@ unsigned int TCS3472_CalcColTemp(unsigned int R,unsigned int G,unsigned int B){
   return (unsigned int)cct;
 }
 
-unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC){
-  unsigned int r2, b2; /* RGB values minus IR component */
+unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime_t It){
+  unsigned int r2, b2,g2; /* RGB values minus IR component */
   unsigned int sat;    /* Digital saturation level */
   unsigned int ir;     /* Inferred IR content */
   unsigned int cct;
@@ -160,12 +164,12 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC){
    *     occur before analog saturation. Digital saturation occurs when
    *     the count reaches 65535.
    */
-  if ((256 - TCS3472_INTEGRATIONTIME_2_4MS) > 63) {
+  if ((256 - It) > 63) {
     /* Track digital saturation */
     sat = 65535;
   } else {
     /* Track analog saturation */
-    sat = 1024 * (256 - TCS3472_INTEGRATIONTIME_2_4MS);
+    sat = 1024 * (256 - It);
   }
 
   /* Ripple rejection:
@@ -185,7 +189,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC){
    *     ignored, but <= 150ms you should calculate the 75% saturation
    *     level to avoid this problem.
    */
-  if ((256 - TCS3472_INTEGRATIONTIME_2_4MS) <= 63) {
+  if ((256 - It) <= 63) {
     /* Adjust sat to 75% to avoid analog saturation if atime < 153.6ms */
     sat -= sat / 4;
   }
@@ -201,6 +205,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC){
 
   /* Remove the IR component from the raw RGB values */
   r2 = RGBC[1] - ir;
+  g2 = RGBC[2] - ir;
   b2 = RGBC[3] - ir;
 
   if (r2 == 0) {

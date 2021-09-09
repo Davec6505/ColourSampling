@@ -35,7 +35,10 @@ typedef enum{
  Ok
  }TCS3472_Error;
 
-
+extern TCS3472_IntegrationTime_t it;
+extern TCS3472_Gain_t G;
+extern TCS3472x device_Id;
+extern TCS3472_Error device_Error;
 
 unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain , TCS3472x Id );
 void TCS3472_Write(unsigned short cmd);
@@ -49,15 +52,20 @@ unsigned short TCS3472_SetGain(TCS3472_Gain_t gain);
 void TCS3472_getRawData(unsigned int *RGBC);
 void TCS3472_getRawDataOnce(unsigned int *RGBC);
 unsigned int TCS3472_CalcColTemp(unsigned int R,unsigned int G,unsigned int B);
-unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC);
+unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime_t It);
 unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
 unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
-#line 4 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 3 "C:/Users/GIT/ColourSampling/TCS3472.c"
+TCS3472_IntegrationTime_t it;
+TCS3472_Gain_t G;
+TCS3472x device_Id;
+TCS3472_Error device_Error;
+
 unsigned short TCS3472_Bits;
 sbit TCS3472_Initialised at TCS3472_Bits.B0;
 unsigned short _i2caddr,_i2caddw;
-TCS3472_IntegrationTime_t _tcs34725IntegrationTime;
+
 
 unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain, TCS3472x Id ){
 unsigned short id;
@@ -192,24 +200,24 @@ unsigned int TCS3472_CalcColTemp(unsigned int R,unsigned int G,unsigned int B){
  return (unsigned int)cct;
 }
 
-unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC){
- unsigned int r2, b2;
+unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime_t It){
+ unsigned int r2, b2,g2;
  unsigned int sat;
  unsigned int ir;
  unsigned int cct;
  if (RGBC[0] == 0) {
  return 0;
  }
-#line 163 "C:/Users/GIT/ColourSampling/TCS3472.c"
- if ((256 - TCS3472_INTEGRATIONTIME_2_4MS) > 63) {
+#line 167 "C:/Users/GIT/ColourSampling/TCS3472.c"
+ if ((256 - It) > 63) {
 
  sat = 65535;
  } else {
 
- sat = 1024 * (256 - TCS3472_INTEGRATIONTIME_2_4MS);
+ sat = 1024 * (256 - It);
  }
-#line 188 "C:/Users/GIT/ColourSampling/TCS3472.c"
- if ((256 - TCS3472_INTEGRATIONTIME_2_4MS) <= 63) {
+#line 192 "C:/Users/GIT/ColourSampling/TCS3472.c"
+ if ((256 - It) <= 63) {
 
  sat -= sat / 4;
  }
@@ -225,6 +233,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC){
 
 
  r2 = RGBC[1] - ir;
+ g2 = RGBC[2] - ir;
  b2 = RGBC[3] - ir;
 
  if (r2 == 0) {

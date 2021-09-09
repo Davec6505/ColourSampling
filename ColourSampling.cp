@@ -36,7 +36,10 @@ typedef enum{
  Ok
  }TCS3472_Error;
 
-
+extern TCS3472_IntegrationTime_t it;
+extern TCS3472_Gain_t G;
+extern TCS3472x device_Id;
+extern TCS3472_Error device_Error;
 
 unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain , TCS3472x Id );
 void TCS3472_Write(unsigned short cmd);
@@ -50,7 +53,7 @@ unsigned short TCS3472_SetGain(TCS3472_Gain_t gain);
 void TCS3472_getRawData(unsigned int *RGBC);
 void TCS3472_getRawDataOnce(unsigned int *RGBC);
 unsigned int TCS3472_CalcColTemp(unsigned int R,unsigned int G,unsigned int B);
-unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC);
+unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime_t It);
 unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
 unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
@@ -124,7 +127,10 @@ extern char writebuff[64];
 void ConfigPic();
 void InitISR();
 void WriteData(char *_data);
-#line 5 "C:/Users/GIT/ColourSampling/ColourSampling.c"
+char* StrChecker(int i);
+#line 3 "C:/Users/GIT/ColourSampling/ColourSampling.c"
+char* (*testStr)(int i);
+
 char cnt;
 char kk;
 char readbuff[64];
@@ -133,23 +139,20 @@ char writebuff[64];
 
 char txt[] = "00000";
 char txtR[] = "00000";
-
-
-TCS3472_IntegrationTime_t it;
-TCS3472_Gain_t G;
-TCS3472x device_Id;
-TCS3472_Error device_Error;
+char conf[64] = "";
 
 
 
 void main() {
 unsigned short i;
 unsigned int RawData[4];
-unsigned int R;
+unsigned int R,str_num;
 unsigned int deg;
+unsigned int CCT;
+ testStr = StrChecker;
  ConfigPic();
- it = TCS3472_INTEGRATIONTIME_2_4MS;
- G = TCS3472_GAIN_4X;
+ it = TCS3472_INTEGRATIONTIME_24MS;
+ G = TCS3472_GAIN_1X;
  device_Id = TCS3472_1_5;
  i = 0;
  i = TCS3472_Init(it,G,device_Id);
@@ -158,36 +161,47 @@ unsigned int deg;
  UART2_Write_Text(txt);
 
 while(1){
-
- if(HID_Read() != 0)
+char num,res;
+ num = HID_Read();
+ res = -1;
+ if(num != 0)
  {
- for(cnt=0;cnt<64;cnt++)
- writebuff[cnt]=readbuff[cnt];
- while(!HID_Write(&writebuff,64)) ;
+
+
+ memcpy(writebuff,readbuff,num);
+ memcpy(conf,readbuff,num);
+
+ str_num = 0;
+ res = -1;
+ for(i=0;i < 64;i++){
+ if(conf[i] == '\r')
+ break;
+ str_num++;
+ }
+ memset(conf+str_num+1,'\0',1);
+
+ sprintf(txtR,"%u",str_num);
+ WriteData(txtR);
+ WriteData("\r\n");
+ if(str_num == 3 || str_num == 6){
+ for(i = 0;i < 5;i++){
+ res = strncmp(conf,testStr(i),str_num);
+
+ sprintf(txtR,"%u",res);
+ WriteData(txtR);
+ WriteData("\r\n");
+ if(res == 0)
+ break;
+ }
  }
 
- TCS3472_getRawData(RawData);
 
- WriteData("C | R | G | B |  | deg | =   ");
- sprintf(txtR,"%d",RawData[0]);
- WriteData(txtR);
- WriteData("|");
-
- sprintf(txtR,"%d",RawData[1]);
- WriteData(txtR);
- WriteData("|");
-
- sprintf(txtR,"%d",RawData[2]);
- WriteData(txtR);
- WriteData("|");
-
- sprintf(txtR,"%d",RawData[3]);
- WriteData(txtR);
- WriteData("| \r\n");
-
-
-
- Delay_ms(1000);
+ if(res == 0){
+ WriteData(conf);
+ WriteData("\r\n");
+ }
+ }
+#line 103 "C:/Users/GIT/ColourSampling/ColourSampling.c"
  }
 
 }
@@ -195,4 +209,26 @@ while(1){
 void WriteData(char *_data){
 
  HID_Write(_data,64) ;
+}
+
+
+char* StrChecker(int i){
+ switch(i){
+ case 0:
+ return "AT?";
+ break;
+ case 1:
+ return "AT+SET";
+ break;
+ case 2:
+ return "AT+CONF";
+ break;
+ case 3:
+ return "AT!";
+ break;
+ default:
+ return " ";
+ break;
+ }
+ return " ";
 }

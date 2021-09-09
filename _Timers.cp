@@ -77,6 +77,6 @@ void Get_Time(){
  TMR0.ms++;
  if(TMR0.ms > 999){
  TMR0.ms = 0;
- LATA10_bit = !LATA10_bit;
+
  }
 }

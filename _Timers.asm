@@ -49,13 +49,6 @@ NOP
 L__Get_Time3:
 ;_Timers.c,19 :: 		TMR0.ms = 0;
 SH	R0, Offset(_TMR0+6)(GP)
-;_Timers.c,20 :: 		LATA10_bit = !LATA10_bit;
-_LX	
-EXT	R2, R2, BitPos(LATA10_bit+0), 1
-XORI	R3, R2, 1
-_LX	
-INS	R2, R3, BitPos(LATA10_bit+0), 1
-_SX	
 ;_Timers.c,21 :: 		}
 L_Get_Time0:
 ;_Timers.c,22 :: 		}
