@@ -22,7 +22,8 @@ File2=ISR.c
 File3=TCS3472.c
 File4=_Timers.c
 File5=USBdsc.c
-Count=6
+File6=ColorMatch.c
+Count=7
 [BINARIES]
 Count=0
 [IMAGES]
@@ -30,10 +31,10 @@ Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
 File0=ColourSampling.c
-File1=Config.c
-File2=ISR.c
-File3=TCS3472.c
-File4=TCS3472.h
+File1=ISR.c
+File2=TCS3472.c
+File3=TCS3472.h
+File4=Config.c
 File5=Config.h
 File6=USBdsc.c
 Count=7
@@ -51,7 +52,8 @@ Count=0
 File0=Config.h
 File1=TCS3472.h
 File2=_Timers.h
-Count=3
+File3=ColorMatch.h
+Count=4
 [PLDS]
 Count=0
 [Useses]
@@ -62,8 +64,9 @@ File3=C_String
 File4=UART
 File5=Sprintf
 File6=Conversions
-File7=USB
-Count=8
+File7=C_Math
+File8=USB
+Count=9
 [INTERRUPT_DEFS]
 EBASE=9FC01000
 VECTOR_SPACEING=32
@@ -72,5 +75,5 @@ USE_SRS=7
 [EXPANDED_NODES]
 0=ColourSampling.mcp32
 1=Sources
-8=Header Files
+9=Header Files
 Count=3

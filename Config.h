@@ -13,4 +13,5 @@ extern char writebuff[64];
 void ConfigPic();
 void InitISR();
 void WriteData(char *_data);
+char* StrChecker(int i);
 #endif

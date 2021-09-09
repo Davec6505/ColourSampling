@@ -338,6 +338,7 @@ ackstat
 ackstat
 ackstat_bit
 ackstat_i2c2stat_bit
+acos
 actvie
 actvie
 actvie
@@ -1848,6 +1849,9 @@ asam
 asam
 asam
 asam_bit
+asin
+atan
+atan2
 atof
 atoi
 atol
@@ -2945,6 +2949,7 @@ cch1
 cch1
 cch1_bit
 cch1_cm2con_bit
+ceil
 cf
 cf
 cf
@@ -7460,6 +7465,7 @@ coe_bit
 coe_cm2con_bit
 configdescriptor1
 configpic
+cos
 cosc
 cosc
 cosc
@@ -7482,6 +7488,7 @@ cosc2
 cosc2
 cosc2
 cosc2_bit
+cosh
 cout
 cout
 cout
@@ -10787,12 +10794,14 @@ evpol1
 evpol1
 evpol1_bit
 evpol1_cm2con_bit
+exp
 extr
 extr
 extr
 extr
 extr
 extr_bit
+fabs
 fceie
 fceie
 fceie
@@ -10879,6 +10888,7 @@ ferr_bit
 ferr_u2sta_bit
 filler1
 floattostr
+floor
 form
 form
 form
@@ -10923,6 +10933,7 @@ frcdiv2
 frcdiv2
 frcdiv2
 frcdiv2_bit
+frexp
 frm0
 frm0
 frm0
@@ -13498,6 +13509,7 @@ latginv
 latginvbits
 latgset
 latgsetbits
+ldexp
 ldiv
 llock
 llock
@@ -13545,6 +13557,8 @@ lock
 lock
 lock_
 lock_bit
+log
+log10
 longdoubletostr
 longinttohex
 longinttostrwithzeros
@@ -13812,6 +13826,7 @@ mode32
 mode32
 mode32_bit
 mode32_spi2con_bit
+modf
 month01
 month01
 month01
@@ -17309,6 +17324,7 @@ portginv
 portginvbits
 portgset
 portgsetbits
+pow
 ppbi
 ppbi
 ppbi
@@ -18996,6 +19012,8 @@ sidl_t4con_bit
 sidl_t5con_bit
 sidl_u1mode_bit
 sidl_u2mode_bit
+sin
+sinh
 sirqen
 sirqen
 sirqen
@@ -19442,6 +19460,7 @@ spitbe
 spitbe_bit
 spitbe_spi2stat_bit
 sprintf
+sqrt
 srand
 sripl
 sripl
@@ -19940,6 +19959,8 @@ t5is0
 t5is0_bit
 t5is1
 t5is1_bit
+tan
+tanh
 tbf
 tbf
 tbf

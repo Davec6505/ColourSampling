@@ -63,7 +63,7 @@ typedef enum {
   TCS3472_INTEGRATIONTIME_50MS  = 0xEB, /**<  50ms  - 20 cycles  - Max Count: 20480 */
   TCS3472_INTEGRATIONTIME_101MS = 0xD5, /**<  101ms - 42 cycles  - Max Count: 43008 */
   TCS3472_INTEGRATIONTIME_154MS = 0xC0, /**<  154ms - 64 cycles  - Max Count: 65535 */
-  TCS3472_INTEGRATIONTIME_700MS = 0x00 /**<  700ms - 256 cycles - Max Count: 65535 */
+  TCS3472_INTEGRATIONTIME_700MS = 0x00  /**<  700ms - 256 cycles - Max Count: 65535 */
 } TCS3472_IntegrationTime_t;
 
 
@@ -81,6 +81,15 @@ typedef enum{
   TCS3472_3_7 = 0x4D
 } TCS3472x;
 
+typedef enum{
+ error = 0,
+ Ok
+ }TCS3472_Error;
+ 
+extern TCS3472_IntegrationTime_t it;
+extern TCS3472_Gain_t G;
+extern TCS3472x device_Id;
+extern TCS3472_Error device_Error;
 /** Function Prototypes  **/
 unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain , TCS3472x Id  );
 void TCS3472_Write(unsigned short cmd);
@@ -89,13 +98,13 @@ unsigned short TCS3472_Read8(unsigned short reg_add);
 unsigned int TCS3472_Read16(unsigned short reg_add);
 void TCS3472_Enable();
 void TCS3472_Disable();
-void TCS3472_SetIntergration_Time(TCS3472_IntegrationTime_t It);
-void TCS3472_SetGain(TCS3472_Gain_t gain);
+unsigned short TCS3472_SetIntergration_Time(TCS3472_IntegrationTime_t It);
+unsigned short TCS3472_SetGain(TCS3472_Gain_t gain);
 void TCS3472_getRawData(unsigned int *RGBC);
 void TCS3472_getRawDataOnce(unsigned int *RGBC);
 unsigned int TCS3472_CalcColTemp(unsigned int R,unsigned int G,unsigned int B);
-unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC);
+unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime_t It);
 unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
-void TCS3472_SetInterrupt(char i);
-void TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
+unsigned short TCS3472_SetInterrupt(char i);
+unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 #endif
