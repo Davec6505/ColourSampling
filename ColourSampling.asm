@@ -1,29 +1,34 @@
 _main:
 ;ColourSampling.c,20 :: 		void main() {
-ADDIU	SP, SP, -8
+ADDIU	SP, SP, -52
 ;ColourSampling.c,24 :: 		ConfigPic();
 JAL	_ConfigPic+0
 NOP	
-;ColourSampling.c,25 :: 		it = TCS3472_INTEGRATIONTIME_2_4MS;
-ORI	R2, R0, 255
+;ColourSampling.c,25 :: 		it = TCS3472_INTEGRATIONTIME_101MS;//TCS3472_INTEGRATIONTIME_2_4MS;
+ORI	R2, R0, 213
 SB	R2, Offset(_it+0)(GP)
-;ColourSampling.c,26 :: 		G  = TCS3472_GAIN_4X;
-ORI	R2, R0, 1
-SB	R2, Offset(_G+0)(GP)
+;ColourSampling.c,26 :: 		G  = TCS3472_GAIN_1X;
+SB	R0, Offset(_G+0)(GP)
 ;ColourSampling.c,27 :: 		device_Id = TCS3472_1_5;
 ORI	R2, R0, 68
 SB	R2, Offset(_device_Id+0)(GP)
 ;ColourSampling.c,29 :: 		i = TCS3472_Init(it,G,device_Id);
 ORI	R27, R0, 68
-ORI	R26, R0, 1
-ORI	R25, R0, 255
+MOVZ	R26, R0, R0
+ORI	R25, R0, 213
 JAL	_TCS3472_Init+0
 NOP	
 ; i start address is: 20 (R5)
 ANDI	R5, R2, 255
 ;ColourSampling.c,30 :: 		UART2_Write_Text("Device Id:= ");
-LUI	R25, hi_addr(?lstr1_ColourSampling+0)
-ORI	R25, R25, lo_addr(?lstr1_ColourSampling+0)
+ADDIU	R23, SP, 8
+ADDIU	R22, R23, 13
+LUI	R24, hi_addr(?ICS?lstr1_ColourSampling+0)
+ORI	R24, R24, lo_addr(?ICS?lstr1_ColourSampling+0)
+JAL	___CC2DW+0
+NOP	
+ADDIU	R2, SP, 8
+MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 ;ColourSampling.c,31 :: 		ByteToStr(i, txt);
@@ -101,11 +106,17 @@ MOVZ	R25, R2, R0
 JAL	_TCS3472_getRawData+0
 NOP	
 ;ColourSampling.c,45 :: 		WriteData("C | R | G | B | = ");
-LUI	R25, hi_addr(?lstr2_ColourSampling+0)
-ORI	R25, R25, lo_addr(?lstr2_ColourSampling+0)
+ADDIU	R23, SP, 21
+ADDIU	R22, R23, 19
+LUI	R24, hi_addr(?ICS?lstr2_ColourSampling+0)
+ORI	R24, R24, lo_addr(?ICS?lstr2_ColourSampling+0)
+JAL	___CC2DW+0
+NOP	
+ADDIU	R2, SP, 21
+MOVZ	R25, R2, R0
 JAL	_WriteData+0
 NOP	
-;ColourSampling.c,46 :: 		sprintf(txtR,"%d",RawData[0]);
+;ColourSampling.c,46 :: 		sprintf(txtR,"%u",RawData[0]);
 ADDIU	R2, SP, 0
 LHU	R2, 0(R2)
 ADDIU	SP, SP, -12
@@ -125,11 +136,15 @@ ORI	R25, R25, lo_addr(_txtR+0)
 JAL	_WriteData+0
 NOP	
 ;ColourSampling.c,48 :: 		WriteData("|");
-LUI	R25, hi_addr(?lstr4_ColourSampling+0)
-ORI	R25, R25, lo_addr(?lstr4_ColourSampling+0)
+ORI	R30, R0, 124
+SB	R30, 40(SP)
+MOVZ	R30, R0, R0
+SB	R30, 41(SP)
+ADDIU	R2, SP, 40
+MOVZ	R25, R2, R0
 JAL	_WriteData+0
 NOP	
-;ColourSampling.c,50 :: 		sprintf(txtR,"%d",RawData[1]);
+;ColourSampling.c,50 :: 		sprintf(txtR,"%u",RawData[1]);
 ADDIU	R2, SP, 0
 ADDIU	R2, R2, 2
 LHU	R2, 0(R2)
@@ -150,11 +165,15 @@ ORI	R25, R25, lo_addr(_txtR+0)
 JAL	_WriteData+0
 NOP	
 ;ColourSampling.c,52 :: 		WriteData("|");
-LUI	R25, hi_addr(?lstr6_ColourSampling+0)
-ORI	R25, R25, lo_addr(?lstr6_ColourSampling+0)
+ORI	R30, R0, 124
+SB	R30, 42(SP)
+MOVZ	R30, R0, R0
+SB	R30, 43(SP)
+ADDIU	R2, SP, 42
+MOVZ	R25, R2, R0
 JAL	_WriteData+0
 NOP	
-;ColourSampling.c,54 :: 		sprintf(txtR,"%d",RawData[2]);
+;ColourSampling.c,54 :: 		sprintf(txtR,"%u",RawData[2]);
 ADDIU	R2, SP, 0
 ADDIU	R2, R2, 4
 LHU	R2, 0(R2)
@@ -175,11 +194,15 @@ ORI	R25, R25, lo_addr(_txtR+0)
 JAL	_WriteData+0
 NOP	
 ;ColourSampling.c,56 :: 		WriteData("|");
-LUI	R25, hi_addr(?lstr8_ColourSampling+0)
-ORI	R25, R25, lo_addr(?lstr8_ColourSampling+0)
+ORI	R30, R0, 124
+SB	R30, 44(SP)
+MOVZ	R30, R0, R0
+SB	R30, 45(SP)
+ADDIU	R2, SP, 44
+MOVZ	R25, R2, R0
 JAL	_WriteData+0
 NOP	
-;ColourSampling.c,58 :: 		sprintf(txtR,"%d",RawData[3]);
+;ColourSampling.c,58 :: 		sprintf(txtR,"%u",RawData[3]);
 ADDIU	R2, SP, 0
 ADDIU	R2, R2, 6
 LHU	R2, 0(R2)
@@ -200,8 +223,18 @@ ORI	R25, R25, lo_addr(_txtR+0)
 JAL	_WriteData+0
 NOP	
 ;ColourSampling.c,60 :: 		WriteData("| \r\n");
-LUI	R25, hi_addr(?lstr10_ColourSampling+0)
-ORI	R25, R25, lo_addr(?lstr10_ColourSampling+0)
+ORI	R30, R0, 124
+SB	R30, 46(SP)
+ORI	R30, R0, 32
+SB	R30, 47(SP)
+ORI	R30, R0, 13
+SB	R30, 48(SP)
+ORI	R30, R0, 10
+SB	R30, 49(SP)
+MOVZ	R30, R0, R0
+SB	R30, 50(SP)
+ADDIU	R2, SP, 46
+MOVZ	R25, R2, R0
 JAL	_WriteData+0
 NOP	
 ;ColourSampling.c,64 :: 		Delay_ms(1000);
