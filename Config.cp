@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/Config.c"
+#line 1 "C:/Users/Git/ColourSampling/Config.c"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 
@@ -118,7 +118,40 @@ typedef struct{
 void InitTimer1();
 void Get_Time();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 8 "c:/users/git/coloursampling/config.h"
+#line 1 "c:/users/git/coloursampling/string.h"
+
+
+
+
+
+
+
+
+
+
+extern char string[ 10 ][ 64 ];
+
+struct Constants{
+ unsigned int num_string;
+};
+
+
+typedef struct pstrings_t{
+ char* str;
+ char c;
+ char string[ 10 ][ 64 ];
+ int (*StrSplitFp)(char* str,char c);
+}PString;
+
+
+
+PString InitString(char cmp);
+char* StrChecker(int i);
+int strsplit(char* str,char c);
+void testStrings(char* writebuff);
+char* setstr(char conf[64]);
+void clr_str_arrays(char *str[10]);
+#line 9 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 extern char readbuff[64];
@@ -127,8 +160,7 @@ extern char writebuff[64];
 void ConfigPic();
 void InitISR();
 void WriteData(char *_data);
-char* StrChecker(int i);
-#line 4 "C:/Users/GIT/ColourSampling/Config.c"
+#line 4 "C:/Users/Git/ColourSampling/Config.c"
 void ConfigPic(){
  CHECON = 30;
  AD1PCFG = 0xFFFFFFFF;

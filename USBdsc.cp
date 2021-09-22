@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/USBdsc.c"
+#line 1 "C:/Users/Git/ColourSampling/USBdsc.c"
 const unsigned int USB_VENDOR_ID = 0x1234;
 const unsigned int USB_PRODUCT_ID = 0x0001;
 const char USB_SELF_POWER = 0x80;
@@ -82,6 +82,7 @@ const char configDescriptor1[]= {
  0x07,
  0x05,
  USB_HID_EP | 0x80,
+
  USB_TRANSFER_TYPE,
  0x40,0x00,
  EP_IN_INTERVAL,

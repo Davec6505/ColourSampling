@@ -1,5 +1,5 @@
 #include "Config.h"
-
+PString str_t;
 char* (*testStr)(int i);
 //USB
 char cnt;
@@ -22,11 +22,8 @@ unsigned int deg;
 unsigned int CCT;
  testStr = StrChecker;
  ConfigPic();
-<<<<<<< HEAD
  it = TCS3472_INTEGRATIONTIME_101MS;//TCS3472_INTEGRATIONTIME_2_4MS;
-=======
  it = TCS3472_INTEGRATIONTIME_24MS;//2_4MS;
->>>>>>> 7e24bf2d4ce34742f65f984d34496582df719418
  G  = TCS3472_GAIN_1X;
  device_Id = TCS3472_1_5;
  i = 0;
@@ -34,29 +31,30 @@ unsigned int CCT;
  UART2_Write_Text("Device Id:= ");
  ByteToStr(i, txt);
  UART2_Write_Text(txt);
+ str_t = InitString('+');
  
-while(1){
-char num,res;
+ while(1){
+ char num,*result;
+ int res;
     num = HID_Read();
     res = -1;
-    if(num != 0)
-    {
-      //for(cnt=0;cnt<64;cnt++)
-      //  writebuff[cnt]=readbuff[cnt];
-      memcpy(writebuff,readbuff,num);
+   if(num != 0){
+      clr_str_arrays(string);
       memcpy(conf,readbuff,num);
+      result = setstr(conf);
+      res = strsplit(result,'+');
+      memset(writebuff,0,64);
+      testStrings(&writebuff);
+      //res = strncmp(string[1],"CONFIG",strlen(string[1]));
+      while(!HID_Write(&writebuff,64));
+   }
+ }
+}
 
-      str_num = 0;
-      res = -1;
-      for(i=0;i < 64;i++){
-          if(conf[i] == '\r')
-            break;
-          str_num++;
-      }
-      memset(conf+str_num+1,'\0',1);
-       //while(!HID_Write(&writebuff,64)) ;
-      sprintf(txtR,"%u",str_num);
-      WriteData(txtR);
+
+
+
+   /*   WriteData(txtR);
       WriteData("\r\n");
       if(str_num == 3 || str_num == 6){
          for(i = 0;i < 5;i++){
@@ -68,39 +66,14 @@ char num,res;
            if(res == 0)
               break;
          }
-       }
-
-<<<<<<< HEAD
-   TCS3472_getRawData(RawData);
-  // R = TCS3472_Read16(TCS3472_RDATAL);
-   WriteData("C | R | G | B | = ");
-   sprintf(txtR,"%u",RawData[0]);
-   WriteData(txtR);
-   WriteData("|");
-  // UART2_Write('\t');
-   sprintf(txtR,"%u",RawData[1]);
-   WriteData(txtR);
-   WriteData("|");
-  // UART2_Write('\t');
-   sprintf(txtR,"%u",RawData[2]);
-   WriteData(txtR);
-   WriteData("|");
-  // UART2_Write('\t');
-   sprintf(txtR,"%u",RawData[3]);
-   WriteData(txtR);
-   WriteData("| \r\n");
-  // UART2_Write('\r');
-  // UART2_Write('\n');
-  // WriteData(txt);
-   Delay_ms(1000);
-=======
+       }  */
       // sprintf(txtR,"%d",res);
-       if(res == 0){
+     /*  if(res == 0){
          WriteData(conf);
          WriteData("\r\n");
-       }
-    }
-/*if(!res){
+       } */
+
+   /* if(!res){
        TCS3472_getRawData(RawData);
       // R = TCS3472_Read16(TCS3472_RDATAL);
        WriteData("C || R | G | B | = || ");
@@ -126,36 +99,5 @@ char num,res;
        sprintf(txtR,"%u",CCT);
        WriteData(txtR);
        WriteData(" ||\r\n");
-   }*/
+    }*/
    //Delay_ms(1000);
->>>>>>> 7e24bf2d4ce34742f65f984d34496582df719418
- }
-
-}
-
-void WriteData(char *_data){
-      // UART2_Write_Text(_data);
-      HID_Write(_data,64) ;
-}
-
-//check dtrings for diffeences
-char* StrChecker(int i){
-    switch(i){
-       case 0:
-           return "AT?";
-           break;
-       case 1:
-            return "AT+SET";
-            break;
-       case 2:
-            return "AT+CONF";
-            break;
-       case 3:
-            return "AT!";
-            break;
-       default:
-            return " ";
-            break;
-    }
-    return " ";
-}

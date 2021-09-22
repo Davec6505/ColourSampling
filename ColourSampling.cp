@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/ColourSampling.c"
+#line 1 "C:/Users/Git/ColourSampling/ColourSampling.c"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 
@@ -118,7 +118,40 @@ typedef struct{
 void InitTimer1();
 void Get_Time();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 8 "c:/users/git/coloursampling/config.h"
+#line 1 "c:/users/git/coloursampling/string.h"
+
+
+
+
+
+
+
+
+
+
+extern char string[ 10 ][ 64 ];
+
+struct Constants{
+ unsigned int num_string;
+};
+
+
+typedef struct pstrings_t{
+ char* str;
+ char c;
+ char string[ 10 ][ 64 ];
+ int (*StrSplitFp)(char* str,char c);
+}PString;
+
+
+
+PString InitString(char cmp);
+char* StrChecker(int i);
+int strsplit(char* str,char c);
+void testStrings(char* writebuff);
+char* setstr(char conf[64]);
+void clr_str_arrays(char *str[10]);
+#line 9 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 extern char readbuff[64];
@@ -127,8 +160,8 @@ extern char writebuff[64];
 void ConfigPic();
 void InitISR();
 void WriteData(char *_data);
-char* StrChecker(int i);
-#line 3 "C:/Users/GIT/ColourSampling/ColourSampling.c"
+#line 2 "C:/Users/Git/ColourSampling/ColourSampling.c"
+PString str_t;
 char* (*testStr)(int i);
 
 char cnt;
@@ -151,11 +184,8 @@ unsigned int deg;
 unsigned int CCT;
  testStr = StrChecker;
  ConfigPic();
-<<<<<<< HEAD
  it = TCS3472_INTEGRATIONTIME_101MS;
-=======
  it = TCS3472_INTEGRATIONTIME_24MS;
->>>>>>> 7e24bf2d4ce34742f65f984d34496582df719418
  G = TCS3472_GAIN_1X;
  device_Id = TCS3472_1_5;
  i = 0;
@@ -163,93 +193,22 @@ unsigned int CCT;
  UART2_Write_Text("Device Id:= ");
  ByteToStr(i, txt);
  UART2_Write_Text(txt);
+ str_t = InitString('+');
 
-while(1){
-char num,res;
+ while(1){
+ char num,*result;
+ int res;
  num = HID_Read();
  res = -1;
- if(num != 0)
- {
-
-
-<<<<<<< HEAD
- WriteData("C | R | G | B | = ");
- sprintf(txtR,"%u",RawData[0]);
- WriteData(txtR);
- WriteData("|");
-
- sprintf(txtR,"%u",RawData[1]);
- WriteData(txtR);
- WriteData("|");
-
- sprintf(txtR,"%u",RawData[2]);
-=======
- memcpy(writebuff,readbuff,num);
+ if(num != 0){
+ clr_str_arrays(string);
  memcpy(conf,readbuff,num);
+ result = setstr(conf);
+ res = strsplit(result,'+');
+ memset(writebuff,0,64);
+ testStrings(&writebuff);
 
- str_num = 0;
- res = -1;
- for(i=0;i < 64;i++){
- if(conf[i] == '\r')
- break;
- str_num++;
- }
- memset(conf+str_num+1,'\0',1);
-
- sprintf(txtR,"%u",str_num);
->>>>>>> 7e24bf2d4ce34742f65f984d34496582df719418
- WriteData(txtR);
- WriteData("\r\n");
- if(str_num == 3 || str_num == 6){
- for(i = 0;i < 5;i++){
- res = strncmp(conf,testStr(i),str_num);
-
-<<<<<<< HEAD
- sprintf(txtR,"%u",RawData[3]);
-=======
- sprintf(txtR,"%u",res);
->>>>>>> 7e24bf2d4ce34742f65f984d34496582df719418
- WriteData(txtR);
- WriteData("\r\n");
- if(res == 0)
- break;
+ while(!HID_Write(&writebuff,64));
  }
  }
-
-
- if(res == 0){
- WriteData(conf);
- WriteData("\r\n");
- }
- }
-#line 103 "C:/Users/GIT/ColourSampling/ColourSampling.c"
- }
-
-}
-
-void WriteData(char *_data){
-
- HID_Write(_data,64) ;
-}
-
-
-char* StrChecker(int i){
- switch(i){
- case 0:
- return "AT?";
- break;
- case 1:
- return "AT+SET";
- break;
- case 2:
- return "AT+CONF";
- break;
- case 3:
- return "AT!";
- break;
- default:
- return " ";
- break;
- }
- return " ";
 }

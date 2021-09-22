@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 1 "C:/Users/Git/ColourSampling/TCS3472.c"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 
 
@@ -56,7 +56,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime
 unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
 unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
-#line 3 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 3 "C:/Users/Git/ColourSampling/TCS3472.c"
 TCS3472_IntegrationTime_t it;
 TCS3472_Gain_t G;
 TCS3472x device_Id;
@@ -208,7 +208,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime
  if (RGBC[0] == 0) {
  return 0;
  }
-#line 167 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 167 "C:/Users/Git/ColourSampling/TCS3472.c"
  if ((256 - It) > 63) {
 
  sat = 65535;
@@ -216,7 +216,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime
 
  sat = 1024 * (256 - It);
  }
-#line 192 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 192 "C:/Users/Git/ColourSampling/TCS3472.c"
  if ((256 - It) <= 63) {
 
  sat -= sat / 4;
