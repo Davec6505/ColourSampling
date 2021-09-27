@@ -8,10 +8,10 @@
 
 extern unsigned short i;
 extern char kk;
-extern char readbuff[64];
-extern char writebuff[64];
+
 
 void ConfigPic();
+void InitVars();
 void InitISR();
 void WriteData(char *_data);
 

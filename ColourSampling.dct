@@ -1867,6 +1867,7 @@ attachif
 attachif
 attachif
 attachif_bit
+b_thresh
 b0
 b1
 b10
@@ -2834,6 +2835,7 @@ byto0_bit
 byto1
 byto1_bit
 c
+c_thresh
 c1out
 c1out
 c1out
@@ -2952,6 +2954,7 @@ cch1
 cch1
 cch1_bit
 cch1_cm2con_bit
+cct
 ceil
 cf
 cf
@@ -7467,7 +7470,8 @@ coe
 coe
 coe_bit
 coe_cm2con_bit
-conf
+col_thresh
+com
 configdescriptor1
 configpic
 cos
@@ -10288,6 +10292,7 @@ done
 done
 done
 done_bit
+dostrings
 dppuldwn
 dppuldwn
 dppuldwn
@@ -10327,6 +10332,7 @@ endpt3
 enhbuf
 enhbuf
 enhbuf_bit
+enum_val
 eofee
 eofee
 eofee
@@ -10939,6 +10945,7 @@ frcdiv2
 frcdiv2
 frcdiv2
 frcdiv2_bit
+free
 frexp
 frm0
 frm0
@@ -11066,6 +11073,7 @@ fscmis0_bit
 fscmis1
 fscmis1_bit
 g
+g_thresh
 gcen
 gcen
 gcen
@@ -12499,6 +12507,7 @@ incm1_bit
 initisr
 initstring
 inittimer1
+initvars
 int0ep
 int0ep
 int0ep
@@ -13754,6 +13763,7 @@ lvdstat
 lvdstat
 lvdstat_bit
 main
+malloc
 max
 memchr
 memcmp
@@ -13802,6 +13812,13 @@ min102_bit
 min103
 min103_alrmtime_bit
 min103_bit
+mm_error_
+mm_freememtable
+mm_init
+mm_largestfreememblock
+mm_nrfreeblocksused
+mm_possiblyfragmented
+mm_totalfreememsize
 mode
 mode
 mode
@@ -13908,6 +13925,7 @@ nosc2
 nosc2
 nosc2
 nosc2_bit
+nr_free_blocks
 num_string
 nvmaddr
 nvmaddr0
@@ -17888,6 +17906,7 @@ ptwren
 ptwren
 ptwren
 ptwren_bit
+r_thresh
 r_w
 r_w
 r_w
@@ -18006,6 +18025,7 @@ ra9
 ra9
 ra9_bit
 rand
+rawdata
 rb0
 rb0
 rb0
@@ -18350,6 +18370,8 @@ re9
 re9
 re9
 re9_bit
+read_send_allcolour
+read_send_onecolour
 readbuff
 report
 reset
@@ -18808,6 +18830,7 @@ sesvdif
 sesvdif
 sesvdif
 sesvdif_bit
+setcolourthresholds
 setstr
 shorttohex
 shorttostr
@@ -21578,7 +21601,6 @@ twip
 twip
 twip_bit
 txt
-txtr
 u1addr
 u1addrbits
 u1addrclr

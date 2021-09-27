@@ -9,18 +9,17 @@ char writebuff[64];
 
 //Serial
 char txt[] = "00000";
-char txtR[] = "00000";
-char conf[64] = "";
+
 
 
 //program
 void main() {
+char num;
 unsigned short i;
-unsigned int RawData[4];
 unsigned int R,str_num;
 unsigned int deg;
-unsigned int CCT;
- testStr = StrChecker;
+
+ //testStr = StrChecker;
  ConfigPic();
  it = TCS3472_INTEGRATIONTIME_101MS;//TCS3472_INTEGRATIONTIME_2_4MS;
  it = TCS3472_INTEGRATIONTIME_24MS;//2_4MS;
@@ -34,19 +33,11 @@ unsigned int CCT;
  str_t = InitString('+');
  
  while(1){
- char num,*result;
- int res;
-    num = HID_Read();
-    res = -1;
+   ///////////////////////////////////////////////
+   //Get input from USB to set up thresholds
+   num = HID_Read();
    if(num != 0){
-      clr_str_arrays(string);
-      memcpy(conf,readbuff,num);
-      result = setstr(conf);
-      res = strsplit(result,'+');
-      memset(writebuff,0,64);
-      testStrings(&writebuff);
-      //res = strncmp(string[1],"CONFIG",strlen(string[1]));
-      while(!HID_Write(&writebuff,64));
+      DoStrings(num);
    }
  }
 }

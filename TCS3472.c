@@ -1,10 +1,14 @@
 #include "TCS3472.h"
 
+unsigned int RawData[4];
+unsigned int CCT;
+
 TCS3472_IntegrationTime_t it;
 TCS3472_Gain_t G;
 TCS3472x device_Id;
 TCS3472_Error device_Error;
-
+TCS3472x_Threshold Col_Thresh;
+ 
 unsigned short TCS3472_Bits;
 sbit TCS3472_Initialised at TCS3472_Bits.B0;
 unsigned short _i2caddr,_i2caddw;
@@ -23,6 +27,13 @@ unsigned short id;
      TCS3472_Enable();
    }
    return id;
+}
+
+void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B){
+    Col_Thresh.C_Thresh = C;
+    Col_Thresh.R_Thresh = R;
+    Col_Thresh.G_Thresh = G;
+    Col_Thresh.B_Thresh = B;
 }
 
 void TCS3472_Write(unsigned short cmd){

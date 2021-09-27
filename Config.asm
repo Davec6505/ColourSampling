@@ -111,3 +111,10 @@ ADDIU	SP, SP, 20
 JR	RA
 NOP	
 ; end of _ConfigPic
+_InitVars:
+;Config.c,37 :: 		void InitVars(){
+;Config.c,39 :: 		}
+L_end_InitVars:
+JR	RA
+NOP	
+; end of _InitVars

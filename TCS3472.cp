@@ -1,11 +1,56 @@
 #line 1 "C:/Users/Git/ColourSampling/TCS3472.c"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 
 
 
 
+typedef signed char int8_t;
+typedef signed int int16_t;
+typedef signed long int int32_t;
+typedef signed long long int64_t;
+
+
+typedef unsigned char uint8_t;
+typedef unsigned int uint16_t;
+typedef unsigned long int uint32_t;
+typedef unsigned long long uint64_t;
+
+
+typedef signed char int_least8_t;
+typedef signed int int_least16_t;
+typedef signed long int int_least32_t;
+typedef signed long long int_least64_t;
+
+
+typedef unsigned char uint_least8_t;
+typedef unsigned int uint_least16_t;
+typedef unsigned long int uint_least32_t;
+typedef unsigned long long uint_least64_t;
+
+
+
+typedef signed long int int_fast8_t;
+typedef signed long int int_fast16_t;
+typedef signed long int int_fast32_t;
+typedef signed long long int_fast64_t;
+
+
+typedef unsigned long int uint_fast8_t;
+typedef unsigned long int uint_fast16_t;
+typedef unsigned long int uint_fast32_t;
+typedef unsigned long long uint_fast64_t;
+
+
+typedef signed long int intptr_t;
+typedef unsigned long int uintptr_t;
+
+
+typedef signed long long intmax_t;
+typedef unsigned long long uintmax_t;
+#line 8 "c:/users/git/coloursampling/tcs3472.h"
 extern sfr TCS3472_Initialised;
-#line 60 "c:/users/git/coloursampling/tcs3472.h"
+#line 69 "c:/users/git/coloursampling/tcs3472.h"
 typedef enum {
  TCS3472_INTEGRATIONTIME_2_4MS = 0xFF,
  TCS3472_INTEGRATIONTIME_24MS = 0xF6,
@@ -35,10 +80,28 @@ typedef enum{
  Ok
  }TCS3472_Error;
 
+typedef struct{
+ uint16_t R_Thresh;
+ uint16_t G_Thresh;
+ uint16_t B_Thresh;
+ uint16_t C_Thresh;
+}TCS3472x_Threshold;
+
+
+
+
 extern TCS3472_IntegrationTime_t it;
 extern TCS3472_Gain_t G;
 extern TCS3472x device_Id;
 extern TCS3472_Error device_Error;
+
+
+
+extern unsigned int RawData[4];
+extern unsigned int CCT;
+
+
+
 
 unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain , TCS3472x Id );
 void TCS3472_Write(unsigned short cmd);
@@ -56,11 +119,16 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime
 unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
 unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
+void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 #line 3 "C:/Users/Git/ColourSampling/TCS3472.c"
+unsigned int RawData[4];
+unsigned int CCT;
+
 TCS3472_IntegrationTime_t it;
 TCS3472_Gain_t G;
 TCS3472x device_Id;
 TCS3472_Error device_Error;
+TCS3472x_Threshold Col_Thresh;
 
 unsigned short TCS3472_Bits;
 sbit TCS3472_Initialised at TCS3472_Bits.B0;
@@ -80,6 +148,13 @@ unsigned short id;
  TCS3472_Enable();
  }
  return id;
+}
+
+void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B){
+ Col_Thresh.C_Thresh = C;
+ Col_Thresh.R_Thresh = R;
+ Col_Thresh.G_Thresh = G;
+ Col_Thresh.B_Thresh = B;
 }
 
 void TCS3472_Write(unsigned short cmd){
@@ -208,7 +283,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime
  if (RGBC[0] == 0) {
  return 0;
  }
-#line 167 "C:/Users/Git/ColourSampling/TCS3472.c"
+#line 178 "C:/Users/Git/ColourSampling/TCS3472.c"
  if ((256 - It) > 63) {
 
  sat = 65535;
@@ -216,7 +291,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime
 
  sat = 1024 * (256 - It);
  }
-#line 192 "C:/Users/Git/ColourSampling/TCS3472.c"
+#line 203 "C:/Users/Git/ColourSampling/TCS3472.c"
  if ((256 - It) <= 63) {
 
  sat -= sat / 4;
