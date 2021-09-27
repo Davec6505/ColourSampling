@@ -162,46 +162,35 @@ unsigned int CCT;
 
 while(1){
 char num,res;
+ USB_Polling_Proc();
  num = HID_Read();
- res = -1;
+ res = 0;
+
+
+
+
  if(num != 0)
  {
 
 
- memcpy(writebuff,readbuff,num);
+
  memcpy(conf,readbuff,num);
 
  str_num = 0;
  res = -1;
- for(i=0;i < 64;i++){
- if(conf[i] == '\r')
+ for(i=2;i < 63;i++){
+ if((conf[i] == 0x0A)||(conf[i] == 0x0D))
  break;
  str_num++;
  }
- memset(conf+str_num+1,'\0',1);
 
  sprintf(txtR,"%u",str_num);
- WriteData(txtR);
- WriteData("\r\n");
- if(str_num == 3 || str_num == 6){
- for(i = 0;i < 5;i++){
- res = strncmp(conf,testStr(i),str_num);
+ memcpy(writebuff,txtR,3);
 
- sprintf(txtR,"%u",res);
- WriteData(txtR);
- WriteData("\r\n");
- if(res == 0)
- break;
+ HID_Write(writebuff,64);
+#line 67 "C:/Users/GIT/ColourSampling/ColourSampling.c"
  }
- }
-
-
- if(res == 0){
- WriteData(conf);
- WriteData("\r\n");
- }
- }
-#line 103 "C:/Users/GIT/ColourSampling/ColourSampling.c"
+#line 96 "C:/Users/GIT/ColourSampling/ColourSampling.c"
  }
 
 }

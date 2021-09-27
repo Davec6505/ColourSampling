@@ -33,44 +33,37 @@ unsigned int CCT;
  
 while(1){
 char num,res;
+    USB_Polling_Proc();               // Call this routine periodically
     num = HID_Read();
-    res = -1;
+    res = 0;
+    
+
+
+
     if(num != 0)
     {
       //for(cnt=0;cnt<64;cnt++)
       //  writebuff[cnt]=readbuff[cnt];
-      memcpy(writebuff,readbuff,num);
+      //memcpy(writebuff,readbuff,num);
       memcpy(conf,readbuff,num);
 
       str_num = 0;
       res = -1;
-      for(i=0;i < 64;i++){
-          if(conf[i] == '\r')
+      for(i=2;i < 63;i++){
+          if((conf[i] == 0x0A)||(conf[i] == 0x0D))
             break;
           str_num++;
       }
-      memset(conf+str_num+1,'\0',1);
-       //while(!HID_Write(&writebuff,64)) ;
+      //memcpy(conf+str_num+1,'\0',1);
       sprintf(txtR,"%u",str_num);
-      WriteData(txtR);
-      WriteData("\r\n");
-      if(str_num == 3 || str_num == 6){
-         for(i = 0;i < 5;i++){
-           res = strncmp(conf,testStr(i),str_num);
+      memcpy(writebuff,txtR,3);
 
-           sprintf(txtR,"%u",res);
-           WriteData(txtR);
-           WriteData("\r\n");
-           if(res == 0)
-              break;
-         }
-       }
-
+      HID_Write(writebuff,64);
       // sprintf(txtR,"%d",res);
-       if(res == 0){
+      /* if(res == 0){
          WriteData(conf);
          WriteData("\r\n");
-       }
+       }  */
     }
 /*if(!res){
        TCS3472_getRawData(RawData);
@@ -98,8 +91,8 @@ char num,res;
        sprintf(txtR,"%u",CCT);
        WriteData(txtR);
        WriteData(" ||\r\n");
-   }*/
-   //Delay_ms(1000);
+   }
+   Delay_ms(1000);*/
  }
 
 }
