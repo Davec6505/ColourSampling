@@ -1,9 +1,14 @@
 #ifndef TCS3472_H
 #define TCS3472_H
 
+/////////////////////////////////////////////////
+//includes
+#include <stdint.h>
 
 extern sfr TCS3472_Initialised;
 
+////////////////////////////////////////////////
+//Defines
 #define TCS3472_ADDW 0x52
 #define TCS3472_ADDR 0x53      /**< I2C address || 0x19 = TCS34725/7 || 0x39 = TCS34721/3  || **/
 #define TCS3472_CMD_BIT 0x80   /**< Command bit **/
@@ -56,6 +61,10 @@ extern sfr TCS3472_Initialised;
 #define TCS3472_BDATAL 0x1A          /**< Blue channel data low byte */
 #define TCS3472_BDATAH 0x1B          /**< Blue channel data high byte */
 
+
+/////////////////////////////////////////////////////
+//Structs and enums
+
 /** Integration time settings for TCS34725 */
 typedef enum {
   TCS3472_INTEGRATIONTIME_2_4MS = 0xFF, /**<  2.4ms - 1 cycle    - Max Count: 1024  */
@@ -86,11 +95,29 @@ typedef enum{
  Ok
  }TCS3472_Error;
  
+typedef struct{
+  uint16_t R_Thresh;
+  uint16_t G_Thresh;
+  uint16_t B_Thresh;
+  uint16_t C_Thresh;
+}TCS3472x_Threshold;
+
+
+
+ 
 extern TCS3472_IntegrationTime_t it;
 extern TCS3472_Gain_t G;
 extern TCS3472x device_Id;
 extern TCS3472_Error device_Error;
-/** Function Prototypes  **/
+
+////////////////////////////////////////////////////////
+//Vars and Consts
+extern unsigned int RawData[4];
+extern unsigned int CCT;
+
+
+////////////////////////////////////////////////////////
+//function prototypes
 unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain , TCS3472x Id  );
 void TCS3472_Write(unsigned short cmd);
 void TCS3472_Write8(unsigned short reg_add,unsigned short value);
@@ -107,4 +134,6 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime
 unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
 unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
+void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
+
 #endif

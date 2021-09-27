@@ -33,3 +33,7 @@ void ConfigPic(){
   InitTimer1();
   InitISR();
 }
+
+void InitVars(){
+
+}

@@ -6,7 +6,7 @@ Value=0
 [BUILD_TYPE]
 Value=0
 [ACTIVE_TAB]
-Value=ColourSampling.c
+Value=String.c
 [USE_EEPROM]
 Value=0
 [USE_HEAP]
@@ -23,7 +23,8 @@ File3=TCS3472.c
 File4=_Timers.c
 File5=USBdsc.c
 File6=ColorMatch.c
-Count=7
+File7=String.c
+Count=8
 [BINARIES]
 Count=0
 [IMAGES]
@@ -31,12 +32,13 @@ Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
 File0=ColourSampling.c
-File1=ISR.c
-File2=TCS3472.c
-File3=TCS3472.h
-File4=Config.c
-File5=Config.h
-Count=6
+File1=String.c
+File2=String.h
+File3=Config.c
+File4=Config.h
+File5=TCS3472.c
+File6=TCS3472.h
+Count=7
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -52,7 +54,8 @@ File0=Config.h
 File1=TCS3472.h
 File2=_Timers.h
 File3=ColorMatch.h
-Count=4
+File4=String.h
+Count=5
 [PLDS]
 Count=0
 [Useses]
@@ -65,7 +68,8 @@ File5=Sprintf
 File6=Conversions
 File7=C_Math
 File8=USB
-Count=9
+File9=MemManager
+Count=10
 [INTERRUPT_DEFS]
 EBASE=9FC01000
 VECTOR_SPACEING=32
@@ -74,5 +78,5 @@ USE_SRS=7
 [EXPANDED_NODES]
 0=ColourSampling.mcp32
 1=Sources
-9=Header Files
+10=Header Files
 Count=3

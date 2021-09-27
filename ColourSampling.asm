@@ -1,4 +1,5 @@
 _main:
+<<<<<<< HEAD
 ;ColourSampling.c,17 :: 		void main() {
 ADDIU	SP, SP, -16
 ;ColourSampling.c,23 :: 		testStr = StrChecker;
@@ -6,8 +7,16 @@ LUI	R2, hi_addr(_StrChecker+0)
 ORI	R2, R2, lo_addr(_StrChecker+0)
 SW	R2, Offset(_testStr+0)(GP)
 ;ColourSampling.c,24 :: 		ConfigPic();
+=======
+;ColourSampling.c,16 :: 		void main() {
+ADDIU	SP, SP, -668
+;ColourSampling.c,23 :: 		ConfigPic();
+>>>>>>> f89cda3564d913438379992919d5bbdc0ff5f024
 JAL	_ConfigPic+0
 NOP	
+;ColourSampling.c,24 :: 		it = TCS3472_INTEGRATIONTIME_101MS;//TCS3472_INTEGRATIONTIME_2_4MS;
+ORI	R2, R0, 213
+SB	R2, Offset(_it+0)(GP)
 ;ColourSampling.c,25 :: 		it = TCS3472_INTEGRATIONTIME_24MS;//2_4MS;
 ORI	R2, R0, 246
 SB	R2, Offset(_it+0)(GP)
@@ -47,6 +56,7 @@ LUI	R25, hi_addr(_txt+0)
 ORI	R25, R25, lo_addr(_txt+0)
 JAL	_UART2_Write_Text+0
 NOP	
+<<<<<<< HEAD
 ;ColourSampling.c,34 :: 		while(1){
 L_main0:
 ;ColourSampling.c,36 :: 		USB_Polling_Proc();               // Call this routine periodically
@@ -87,9 +97,33 @@ L_main3:
 ANDI	R2, R4, 255
 SLTIU	R2, R2, 63
 BNE	R2, R0, L__main22
+=======
+;ColourSampling.c,33 :: 		str_t = InitString('+');
+ORI	R25, R0, 43
+ADDIU	R30, SP, 16
+JAL	_InitString+0
 NOP	
-J	L_main4
+ORI	R4, R0, 652
+ADDIU	R3, GP, Offset(_str_t+0)
+ADDIU	R2, SP, 16
+L_main0:
+LBU	R30, 0(R2)
+SB	R30, 0(R3)
+ADDIU	R4, R4, -1
+ADDIU	R2, R2, 1
+ADDIU	R3, R3, 1
+BEQ	R4, R0, L__main5
 NOP	
+J	L_main0
+>>>>>>> f89cda3564d913438379992919d5bbdc0ff5f024
+NOP	
+L__main5:
+;ColourSampling.c,35 :: 		while(1){
+L_main1:
+;ColourSampling.c,38 :: 		num = HID_Read();
+JAL	_HID_Read+0
+NOP	
+<<<<<<< HEAD
 L__main22:
 ;ColourSampling.c,53 :: 		if((conf[i] == 0x0A)||(conf[i] == 0x0D))
 ANDI	R3, R4, 255
@@ -170,11 +204,34 @@ L_main2:
 J	L_main0
 NOP	
 ;ColourSampling.c,98 :: 		}
+=======
+; num start address is: 12 (R3)
+ANDI	R3, R2, 255
+;ColourSampling.c,39 :: 		if(num != 0){
+ANDI	R2, R2, 255
+BNE	R2, R0, L__main7
+NOP	
+J	L_main3
+NOP	
+L__main7:
+;ColourSampling.c,40 :: 		DoStrings(num);
+ANDI	R25, R3, 255
+; num end address is: 12 (R3)
+JAL	_DoStrings+0
+NOP	
+;ColourSampling.c,41 :: 		}
+L_main3:
+;ColourSampling.c,42 :: 		}
+J	L_main1
+NOP	
+;ColourSampling.c,43 :: 		}
+>>>>>>> f89cda3564d913438379992919d5bbdc0ff5f024
 L_end_main:
 L__main_end_loop:
 J	L__main_end_loop
 NOP	
 ; end of _main
+<<<<<<< HEAD
 _WriteData:
 ;ColourSampling.c,100 :: 		void WriteData(char *_data){
 ADDIU	SP, SP, -8
@@ -307,3 +364,5 @@ ADDIU	SP, SP, 32
 JR	RA
 NOP	
 ; end of _StrChecker
+=======
+>>>>>>> f89cda3564d913438379992919d5bbdc0ff5f024

@@ -80,7 +80,8 @@ const char configDescriptor1[]= {
     // Endpoint Descriptor
     0x07,                   // bLength - Descriptor size in bytes (07h)
     0x05,                   // bDescriptorType - The constant Endpoint (05h)
-    USB_HID_EP | 0x80,      // bEndpointAddress - Endpoint number and direction
+    USB_HID_EP | 0x80,      // bEndpointAddress - Endpoint number and direction                                 git status
+    
     USB_TRANSFER_TYPE,      // bmAttributes - Transfer type and supplementary information    
     0x40,0x00,              // wMaxPacketSize - Maximum packet size supported
     EP_IN_INTERVAL,         // bInterval - Service interval or NAK rate

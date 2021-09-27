@@ -7019,6 +7019,7 @@ clklock
 clklock
 clklock
 clklock_bit
+clr_str_arrays
 clrasam
 clrasam
 clrasam
@@ -7465,6 +7466,7 @@ coe
 coe
 coe_bit
 coe_cm2con_bit
+com
 conf
 configdescriptor1
 configpic
@@ -10286,6 +10288,7 @@ done
 done
 done
 done_bit
+dostrings
 dppuldwn
 dppuldwn
 dppuldwn
@@ -10325,6 +10328,7 @@ endpt3
 enhbuf
 enhbuf
 enhbuf_bit
+enum_val
 eofee
 eofee
 eofee
@@ -10937,6 +10941,7 @@ frcdiv2
 frcdiv2
 frcdiv2
 frcdiv2_bit
+free
 frexp
 frm0
 frm0
@@ -12495,6 +12500,7 @@ incm1
 incm1
 incm1_bit
 initisr
+initstring
 inittimer1
 int0ep
 int0ep
@@ -13751,6 +13757,7 @@ lvdstat
 lvdstat
 lvdstat_bit
 main
+malloc
 max
 memchr
 memcmp
@@ -13799,6 +13806,13 @@ min102_bit
 min103
 min103_alrmtime_bit
 min103_bit
+mm_error_
+mm_freememtable
+mm_init
+mm_largestfreememblock
+mm_nrfreeblocksused
+mm_possiblyfragmented
+mm_totalfreememsize
 mode
 mode
 mode
@@ -13905,6 +13919,8 @@ nosc2
 nosc2
 nosc2
 nosc2_bit
+nr_free_blocks
+num_string
 nvmaddr
 nvmaddr0
 nvmaddr0_bit
@@ -18346,6 +18362,8 @@ re9
 re9
 re9
 re9_bit
+read_send_allcolour
+read_send_onecolour
 readbuff
 report
 reset
@@ -18804,6 +18822,7 @@ sesvdif
 sesvdif
 sesvdif
 sesvdif_bit
+setstr
 shorttohex
 shorttostr
 shorttostrwithzeros
@@ -19556,7 +19575,9 @@ stov8
 stov8_bit
 stov9
 stov9_bit
+str_vars
 strcat
+strchecker
 strchecker
 strchr
 strcmp
@@ -19590,12 +19611,14 @@ strict_i2c2con_bit
 string
 string
 string
+string
 strlen
 strncat
 strncmp
 strncpy
 strpbrk
 strrchr
+strsplit
 strspn
 strstr
 strtok
@@ -20313,6 +20336,7 @@ tcs3472_write
 tcs3472_write8
 temp_ms
 teststr
+teststrings
 tgate
 tgate
 tgate
@@ -23581,6 +23605,7 @@ wrerr
 wrerr
 wrerr_bit
 writebuff
+writedata
 writedata
 wrsp
 wrsp
