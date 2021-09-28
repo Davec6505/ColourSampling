@@ -12,6 +12,7 @@ TCS3472x_Threshold Col_Thresh;
 unsigned short TCS3472_Bits;
 sbit TCS3472_Initialised at TCS3472_Bits.B0;
 unsigned short _i2caddr,_i2caddw;
+
 //TCS3472_IntegrationTime_t _tcs34725IntegrationTime;
 
 unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain, TCS3472x Id ){
