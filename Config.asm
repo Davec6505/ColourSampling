@@ -90,17 +90,17 @@ NOP
 LUI	R2, BitMask(LATA10_bit+0)
 ORI	R2, R2, BitMask(LATA10_bit+0)
 _SX	
-;Config.c,32 :: 		LATE3_bit = 0;
+;Config.c,31 :: 		LATE3_bit = 0;
 LUI	R2, BitMask(LATE3_bit+0)
 ORI	R2, R2, BitMask(LATE3_bit+0)
 _SX	
-;Config.c,33 :: 		InitTimer1();
+;Config.c,32 :: 		InitTimer1();
 JAL	_InitTimer1+0
 NOP	
-;Config.c,34 :: 		InitISR();
+;Config.c,33 :: 		InitISR();
 JAL	_InitISR+0
 NOP	
-;Config.c,35 :: 		}
+;Config.c,34 :: 		}
 L_end_ConfigPic:
 LW	R28, 16(SP)
 LW	R27, 12(SP)
@@ -112,8 +112,8 @@ JR	RA
 NOP	
 ; end of _ConfigPic
 _InitVars:
-;Config.c,37 :: 		void InitVars(){
-;Config.c,39 :: 		}
+;Config.c,36 :: 		void InitVars(){
+;Config.c,38 :: 		}
 L_end_InitVars:
 JR	RA
 NOP	

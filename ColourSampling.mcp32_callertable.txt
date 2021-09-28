@@ -1,6 +1,4 @@
 main
-	__CC2DW
-	__FillZeros
 	ConfigPic
 		I2C2_Init_Advanced
 			SetI2C2Ptrs
@@ -33,23 +31,97 @@ main
 			I2C2_Read
 				I2C2_Wait_For_Idle
 		TCS3472_SetIntergration_Time
+			TCS3472_Disable
+				TCS3472_Read8
+				TCS3472_Write8
+					I2C2_Start
+					I2C2_Write
+					I2C2_Stop
 			TCS3472_Write8
-				I2C2_Start
-				I2C2_Write
-				I2C2_Stop
+			TCS3472_Enable
+				TCS3472_Write8
 		TCS3472_SetGain
 			TCS3472_Write8
 		TCS3472_Enable
-			TCS3472_Write8
-	UART2_Write_Text
-		UART2_Write
-	ByteToStr
-	InitString
+	sprintf
+		_doprntf
+			isdigit
+			_Compare_FP
+			scale
+				_Mul_FP
+			_Mul_FP
+			_Div_FP
+			_FloatToUnsignedIntegral
+			_Unsigned32IntToFloat
+				_SignedIntegralToFloat
+				_UnsignedIntegralToFloat
+			_Sub_FP
+				_Add_FP
+			_Add_FP
+			fround
+				_Mul_FP
+			_FloatToSignedIntegral
+	strcat
+	HID_Write
+		Gen_Write
+			USB_Handle_Busy
+			USB_Transfer_Packet
+			USB_Polling_Proc
+				USB_Device_Service
+					USB_Configure
+					USB_Wake_From_Suspend
+						USB_CB_Handler
+							USB_CB_Init_EP
+								USB_Enable_Endpoint
+									USB_Configure_Endpoint
+								USB_Transfer_Packet
+							USB_CB_Check_Other_Req
+								USB_Check_HID_Request
+									USB_EP0_Send_ROM
+									USB_EP0_Transmit_Options
+									USB_EP0_Send_RAM
+					USB_Clear_Interrupt
+					USB_Device_Init
+					USB_Suspend
+						USB_CB_Handler
+					USB_CB_Handler
+					USB_Stall_Handler
+					USB_Ctrl_EPService
+						USB_CtrlTrf_Setup_Handler
+							USB_Check_Std_Request
+								USB_Get_Dsc_Handler
+								USB_Set_Cfg_Handler
+									USB_Disable_Non_Zero_Endpoints
+									USB_memset
+									USB_CB_Handler
+								USB_Get_Status_Handler
+								USB_Std_Feature_Req_Handler
+									USB_CB_Handler
+								USB_CB_Handler
+							USB_CB_Handler
+							USB_CtrlEP_Service_Complete
+								USBCtrlEPAllowDataStage
+									USB_CtrlTrf_Tx_Service
+								USBCtrlEPAllowStatusStage
+						USB_CtrlTrf_Out_Handler
+							USB_CtrlTrf_Rx_Service
+								USBCtrlEPAllowStatusStage
+								I2C2_Stop
+								Get_Time
+								I2C1_Stop
+									I2C1_Wait_For_Idle
+										I2C1_Is_Idle
+						USB_CtrlTrf_In_Handler
+							USB_CtrlTrf_Tx_Service
+							I2C2_Stop
+							Get_Time
+							I2C1_Stop
 	HID_Read
 		Gen_Read
 			USB_Handle_Busy
 			USB_Transfer_Packet
 	DoStrings
+		__CC2DW
 		clr_str_arrays
 		memcpy
 		setstr
@@ -58,83 +130,71 @@ main
 			strlen
 			strncmp
 		memset
-		sprintf
-			_doprntf
-				isdigit
-				_Compare_FP
-				scale
-					_Mul_FP
-				_Mul_FP
-				_Div_FP
-				_FloatToUnsignedIntegral
-				_Unsigned32IntToFloat
+		TCS3472_SetIntergration_Time
+		Read_Send_AllColour
+			TCS3472_getRawData
+				TCS3472_Read16
+					I2C2_Start
+					I2C2_Write
+					I2C2_Restart
+						I2C2_Wait_For_Idle
+					I2C2_Read
+					I2C2_Stop
+			strcpy
+			sprintf
+			strcat
+			TCS3472_C2RGB_Error
+		Read_Send_OneColour
+			TCS3472_Read16
+			strcpy
+			sprintf
+			strcat
+			TCS3472_getRawData
+			TCS3472_CalcColTemp
+				_Unsigned16IntToFloat
 					_SignedIntegralToFloat
 					_UnsignedIntegralToFloat
-				_Sub_FP
-					_Add_FP
+				_Mul_FP
 				_Add_FP
-				fround
+				_Div_FP
+				_Sub_FP
+				pow
+					_Compare_FP
+					_FloatToSignedIntegral
+					_SignedIntegralToFloat
+					log
+						_Compare_FP
+						frexp
+						_Mul_FP
+						_Sub_FP
+						eval_poly
+							_Mul_FP
+							_Add_FP
+						_SignedIntegralToFloat
+						_Add_FP
 					_Mul_FP
-				_FloatToSignedIntegral
-		strcat
-		testStrings
-			strlen
-			strncat
+					exp
+						_Compare_FP
+						_Mul_FP
+						floor
+							_Compare_FP
+							_FloatToSignedIntegral
+							_SignedIntegralToFloat
+							_Sub_FP
+						_FloatToSignedIntegral
+						_SignedIntegralToFloat
+						_Sub_FP
+						eval_poly
+						ldexp
+							_Compare_FP
+						_Div_FP
+				_FloatToUnsignedIntegral
+			TCS3472_CalcColTemp_dn40
+		strncat
+		strlen
 		HID_Write
-			Gen_Write
-				USB_Handle_Busy
-				USB_Transfer_Packet
-				USB_Polling_Proc
-					USB_Device_Service
-						USB_Configure
-						USB_Wake_From_Suspend
-							USB_CB_Handler
-								USB_CB_Init_EP
-									USB_Enable_Endpoint
-										USB_Configure_Endpoint
-									USB_Transfer_Packet
-								USB_CB_Check_Other_Req
-									USB_Check_HID_Request
-										USB_EP0_Send_ROM
-										USB_EP0_Transmit_Options
-										USB_EP0_Send_RAM
-						USB_Clear_Interrupt
-						USB_Device_Init
-						USB_Suspend
-							USB_CB_Handler
-						USB_CB_Handler
-						USB_Stall_Handler
-						USB_Ctrl_EPService
-							USB_CtrlTrf_Setup_Handler
-								USB_Check_Std_Request
-									USB_Get_Dsc_Handler
-									USB_Set_Cfg_Handler
-										USB_Disable_Non_Zero_Endpoints
-										USB_memset
-										USB_CB_Handler
-									USB_Get_Status_Handler
-									USB_Std_Feature_Req_Handler
-										USB_CB_Handler
-									USB_CB_Handler
-								USB_CB_Handler
-								USB_CtrlEP_Service_Complete
-									USBCtrlEPAllowDataStage
-										USB_CtrlTrf_Tx_Service
-									USBCtrlEPAllowStatusStage
-							USB_CtrlTrf_Out_Handler
-								USB_CtrlTrf_Rx_Service
-									USBCtrlEPAllowStatusStage
-									I2C2_Stop
-									Get_Time
-									I2C1_Stop
-										I2C1_Wait_For_Idle
-											I2C1_Is_Idle
-							USB_CtrlTrf_In_Handler
-								USB_CtrlTrf_Tx_Service
-								I2C2_Stop
-								Get_Time
-								I2C1_Stop
-		__CC2DW
+	__CC2DW
+	__FillZeros
 Timer1Interrupt
 	I2C2_Stop
 	Get_Time

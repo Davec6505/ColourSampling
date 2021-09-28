@@ -34,11 +34,9 @@ ActiveImageIndex=-1
 File0=ColourSampling.c
 File1=String.c
 File2=String.h
-File3=Config.c
-File4=Config.h
-File5=TCS3472.c
-File6=TCS3472.h
-Count=7
+File3=TCS3472.c
+File4=TCS3472.h
+Count=5
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -46,9 +44,11 @@ Count=0
 [OTHER_FILES]
 Count=0
 [SEARCH_PATH]
-Count=0
+Path0=..\..\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Packages\Memory manager dlmalloc\Uses\
+Count=1
 [HEADER_PATH]
-Count=0
+Path0=..\..\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Packages\Memory manager dlmalloc\Uses\
+Count=1
 [HEADERS]
 File0=Config.h
 File1=TCS3472.h
@@ -69,7 +69,8 @@ File6=Conversions
 File7=C_Math
 File8=USB
 File9=MemManager
-Count=10
+File10=Memory_manager_dlmalloc
+Count=11
 [INTERRUPT_DEFS]
 EBASE=9FC01000
 VECTOR_SPACEING=32

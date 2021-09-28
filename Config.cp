@@ -1,4 +1,4 @@
-#line 1 "C:/Users/Git/ColourSampling/Config.c"
+#line 1 "C:/Users/GIT/ColourSampling/Config.c"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
@@ -51,7 +51,7 @@ typedef signed long long intmax_t;
 typedef unsigned long long uintmax_t;
 #line 8 "c:/users/git/coloursampling/tcs3472.h"
 extern sfr TCS3472_Initialised;
-#line 69 "c:/users/git/coloursampling/tcs3472.h"
+#line 73 "c:/users/git/coloursampling/tcs3472.h"
 typedef enum {
  TCS3472_INTEGRATIONTIME_2_4MS = 0xFF,
  TCS3472_INTEGRATIONTIME_24MS = 0xF6,
@@ -121,6 +121,7 @@ unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
 unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
+int TCS3472_C2RGB_Error(unsigned int* RGBC);
 #line 1 "c:/users/git/coloursampling/_timers.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 5 "c:/users/git/coloursampling/_timers.h"
@@ -138,21 +139,22 @@ void Get_Time();
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 15 "c:/users/git/coloursampling/string.h"
-extern char string[ 10 ][ 64 ];
+extern char string[ 20 ][ 64 ];
 
 enum ControlColorIO{
 CONFIG,
-SETALL,
+SETA,
 SETR,
 SETG,
 SETB,
 SETC,
-READALL,
+READA,
 READR,
 READG,
 READB,
 READC,
-READTEMP
+READT,
+READT_DN40
 };
 
 struct Constants{
@@ -163,7 +165,7 @@ struct Constants{
 typedef struct pstrings_t{
  char* str;
  char c;
- char string[ 10 ][ 64 ];
+ char string[ 20 ][ 64 ];
  int (*StrSplitFp)(char* str,char c);
 }PString;
 
@@ -182,7 +184,9 @@ void testStrings(char* writebuff);
 char* setstr(char conf[64]);
 void clr_str_arrays(char *str[10]);
 char* Read_Send_AllColour();
-void Read_Send_OneColour(int colr);
+char* Read_Send_OneColour(int colr);
+int Get_It();
+int Get_Gain();
 #line 9 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
@@ -192,7 +196,7 @@ void ConfigPic();
 void InitVars();
 void InitISR();
 void WriteData(char *_data);
-#line 4 "C:/Users/Git/ColourSampling/Config.c"
+#line 4 "C:/Users/GIT/ColourSampling/Config.c"
 void ConfigPic(){
  CHECON = 30;
  AD1PCFG = 0xFFFFFFFF;
@@ -220,7 +224,6 @@ void ConfigPic(){
 
 
  LATA10_bit = 0;
-
  LATE3_bit = 0;
  InitTimer1();
  InitISR();

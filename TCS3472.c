@@ -72,7 +72,7 @@ unsigned int TCS3472_Read16(unsigned short reg_add){
   I2C2_Start();              // issue I2C start signal
   I2C2_Write(TCS3472_ADDW);          // send byte via I2C  (device address + W)
   I2C2_Write(TCS3472_CMD_AUTO_INC | reg_add);       // send byte (command reg MSB)
-  I2C_ReStart();           // issue I2C signal repeated start
+  I2C2_Restart();           // issue I2C signal repeated start
   I2C2_Write(TCS3472_ADDR);          // send byte (device address + R)
   temp[0] = I2C2_Read(_I2C_ACK);      // Read the data (NO acknowledge)
   temp[1] = I2C2_Read(_I2C_NACK);
@@ -97,7 +97,7 @@ void TCS3472_Disable(){
 unsigned short TCS3472_SetIntergration_Time(TCS3472_IntegrationTime_t It){
    if(!TCS3472_Initialised)
       return 0x00;
-       
+
    TCS3472_Write8(TCS3472_ATIME, It);
     return 0x01;
 }
@@ -122,7 +122,7 @@ void TCS3472_getRawDataOnce(unsigned int *RGBC){
    TCS3472_Disable();
 }
  
-unsigned int TCS3472_CalcColTemp(unsigned int R,unsigned int G,unsigned int B){
+unsigned int TCS3472_CalcColTemp(unsigned int r,unsigned int g,unsigned int b){
   float X, Y, Z; /* RGB to XYZ correlation      */
   float xc, yc;  /* Chromaticity co-ordinates   */
   float n;       /* McCamy's formula            */
@@ -132,24 +132,31 @@ unsigned int TCS3472_CalcColTemp(unsigned int R,unsigned int G,unsigned int B){
     return 0;
   }
 
+#ifdef Flourecent
   /* 1. Map RGB values to their XYZ counterparts.    */
   /* Based on 6500K fluorescent, 3000K fluorescent   */
   /* and 60W incandescent values for a wide range.   */
   /* Note: Y = Illuminance or lux                    */
-  X = (-0.14282F * r) + (1.54924F * g) + (-0.95641F * b);
-  Y = (-0.32466F * r) + (1.57837F * g) + (-0.73191F * b);
-  Z = (-0.68202F * r) + (0.77073F * g) + (0.56332F * b);
+  X = (-0.14282 * r) + (1.54924 * g) + (-0.95641 * b);
+  Y = (-0.32466 * r) + (1.57837 * g) + (-0.73191 * b);
+  Z = (-0.68202 * r) + (0.77073 * g) + (0.56332 * b);
+#endif
+#ifdef LED
+  X = (-0.3895 * r) + (1.4933 * g) + (-0.0491 * b);
+  Y = (-0.1212 * r) + (0.8890 * g) + (-0.1231 * b);
+  Z = ( 0.0343 * r) + (-0.2657 * g) + (0.9438 * b);
 
+#endif
   /* 2. Calculate the chromaticity co-ordinates      */
   xc = (X) / (X + Y + Z);
   yc = (Y) / (X + Y + Z);
 
   /* 3. Use McCamy's formula to determine the CCT    */
-  n = (xc - 0.3320F) / (0.1858F - yc);
+  n = (xc - 0.3320) / (0.1858 - yc);
 
   /* Calculate the final CCT */
   cct =
-      (449.0F * pow(n, 3)) + (3525.0F * pow(n, 2)) + (6823.3F * n) + 5520.33F;
+      (449.0F * pow(n, 3)) + (3525.0 * pow(n, 2)) + (6823.3 * n) + 5520.33;
 
   /* Return the results in degrees Kelvin */
   return (unsigned int)cct;
@@ -266,4 +273,13 @@ unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi){
   TCS3472_Write8(0x06, Hi & 0xFF);
   TCS3472_Write8(0x07, Hi >> 8);
   return 0x01;
+}
+
+int TCS3472_C2RGB_Error(unsigned int* RGBC){
+int err;
+     err =   RGBC[0] - RGBC[1] - RGBC[2] -RGBC[3];
+     if((err < -32600)||(err > 32600))
+         return -32666;
+     else
+         return err;
 }
