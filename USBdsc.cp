@@ -1,4 +1,4 @@
-#line 1 "C:/Users/Git/ColourSampling/USBdsc.c"
+#line 1 "C:/Users/GIT/ColourSampling/USBdsc.c"
 const unsigned int USB_VENDOR_ID = 0x1234;
 const unsigned int USB_PRODUCT_ID = 0x0001;
 const char USB_SELF_POWER = 0x80;

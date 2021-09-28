@@ -1,4 +1,4 @@
-#line 1 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 1 "C:/Users/GIT/ColourSampling/ColourSampling.c"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
@@ -51,7 +51,7 @@ typedef signed long long intmax_t;
 typedef unsigned long long uintmax_t;
 #line 8 "c:/users/git/coloursampling/tcs3472.h"
 extern sfr TCS3472_Initialised;
-#line 69 "c:/users/git/coloursampling/tcs3472.h"
+#line 73 "c:/users/git/coloursampling/tcs3472.h"
 typedef enum {
  TCS3472_INTEGRATIONTIME_2_4MS = 0xFF,
  TCS3472_INTEGRATIONTIME_24MS = 0xF6,
@@ -121,6 +121,7 @@ unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
 unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
+int TCS3472_C2RGB_Error(unsigned int* RGBC);
 #line 1 "c:/users/git/coloursampling/_timers.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 5 "c:/users/git/coloursampling/_timers.h"
@@ -138,21 +139,22 @@ void Get_Time();
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 15 "c:/users/git/coloursampling/string.h"
-extern char string[ 10 ][ 64 ];
+extern char string[ 20 ][ 64 ];
 
 enum ControlColorIO{
 CONFIG,
-SETALL,
+SETA,
 SETR,
 SETG,
 SETB,
 SETC,
-READALL,
+READA,
 READR,
 READG,
 READB,
 READC,
-READTEMP
+READT,
+READT_DN40
 };
 
 struct Constants{
@@ -163,7 +165,7 @@ struct Constants{
 typedef struct pstrings_t{
  char* str;
  char c;
- char string[ 10 ][ 64 ];
+ char string[ 20 ][ 64 ];
  int (*StrSplitFp)(char* str,char c);
 }PString;
 
@@ -182,7 +184,9 @@ void testStrings(char* writebuff);
 char* setstr(char conf[64]);
 void clr_str_arrays(char *str[10]);
 char* Read_Send_AllColour();
-void Read_Send_OneColour(int colr);
+char* Read_Send_OneColour(int colr);
+int Get_It();
+int Get_Gain();
 #line 9 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
@@ -192,7 +196,7 @@ void ConfigPic();
 void InitVars();
 void InitISR();
 void WriteData(char *_data);
-#line 2 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 2 "C:/Users/GIT/ColourSampling/ColourSampling.c"
 PString str_t;
 char* (*testStr)(int i);
 
@@ -212,60 +216,26 @@ char num;
 unsigned short i;
 unsigned int R,str_num;
 unsigned int deg;
-
+char txtR[6];
 
  ConfigPic();
- it = TCS3472_INTEGRATIONTIME_101MS;
+ Delay_ms(5000);
  it = TCS3472_INTEGRATIONTIME_24MS;
  G = TCS3472_GAIN_1X;
  device_Id = TCS3472_1_5;
  i = 0;
  i = TCS3472_Init(it,G,device_Id);
- UART2_Write_Text("Device Id:= ");
- ByteToStr(i, txt);
- UART2_Write_Text(txt);
- str_t = InitString('+');
-
-<<<<<<< HEAD
-while(1){
-char num,res;
- USB_Polling_Proc();
- num = HID_Read();
- res = 0;
+ sprintf(txtR,"%2x",i);
+ strcat(writebuff,txtR);
+ while(!HID_Write(&writebuff,64));
 
 
-
-
- if(num != 0)
- {
-
-
-
- memcpy(conf,readbuff,num);
-
- str_num = 0;
- res = -1;
- for(i=2;i < 63;i++){
- if((conf[i] == 0x0A)||(conf[i] == 0x0D))
- break;
- str_num++;
- }
-
- sprintf(txtR,"%u",str_num);
- memcpy(writebuff,txtR,3);
-
- HID_Write(writebuff,64);
-#line 67 "C:/Users/GIT/ColourSampling/ColourSampling.c"
- }
-#line 96 "C:/Users/GIT/ColourSampling/ColourSampling.c"
-=======
  while(1){
 
 
  num = HID_Read();
  if(num != 0){
  DoStrings(num);
->>>>>>> f89cda3564d913438379992919d5bbdc0ff5f024
  }
  }
 }

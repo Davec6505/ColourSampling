@@ -18,20 +18,20 @@ char num;
 unsigned short i;
 unsigned int R,str_num;
 unsigned int deg;
-
+char txtR[6];
  //testStr = StrChecker;
  ConfigPic();
- it = TCS3472_INTEGRATIONTIME_101MS;//TCS3472_INTEGRATIONTIME_2_4MS;
- it = TCS3472_INTEGRATIONTIME_24MS;//2_4MS;
+ Delay_ms(5000);
+ it = TCS3472_INTEGRATIONTIME_24MS;//TCS3472_INTEGRATIONTIME_2_4MS;
  G  = TCS3472_GAIN_1X;
  device_Id = TCS3472_1_5;
  i = 0;
  i = TCS3472_Init(it,G,device_Id);
- UART2_Write_Text("Device Id:= ");
- ByteToStr(i, txt);
- UART2_Write_Text(txt);
- str_t = InitString('+');
- 
+  sprintf(txtR,"%2x",i);
+  strcat(writebuff,txtR);
+  while(!HID_Write(&writebuff,64));
+
+
  while(1){
    ///////////////////////////////////////////////
    //Get input from USB to set up thresholds

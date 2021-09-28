@@ -1,4 +1,4 @@
-#line 1 "C:/Users/Git/ColourSampling/TCS3472.c"
+#line 1 "C:/Users/GIT/ColourSampling/TCS3472.c"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 
@@ -50,7 +50,7 @@ typedef signed long long intmax_t;
 typedef unsigned long long uintmax_t;
 #line 8 "c:/users/git/coloursampling/tcs3472.h"
 extern sfr TCS3472_Initialised;
-#line 69 "c:/users/git/coloursampling/tcs3472.h"
+#line 73 "c:/users/git/coloursampling/tcs3472.h"
 typedef enum {
  TCS3472_INTEGRATIONTIME_2_4MS = 0xFF,
  TCS3472_INTEGRATIONTIME_24MS = 0xF6,
@@ -120,7 +120,8 @@ unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
 unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
-#line 3 "C:/Users/Git/ColourSampling/TCS3472.c"
+int TCS3472_C2RGB_Error(unsigned int* RGBC);
+#line 3 "C:/Users/GIT/ColourSampling/TCS3472.c"
 unsigned int RawData[4];
 unsigned int CCT;
 
@@ -192,7 +193,7 @@ unsigned int TCS3472_Read16(unsigned short reg_add){
  I2C2_Start();
  I2C2_Write( 0x52 );
  I2C2_Write( 0xA0  | reg_add);
- I2C_ReStart();
+ I2C2_Restart();
  I2C2_Write( 0x53 );
  temp[0] = I2C2_Read(_I2C_ACK);
  temp[1] = I2C2_Read(_I2C_NACK);
@@ -217,8 +218,9 @@ void TCS3472_Disable(){
 unsigned short TCS3472_SetIntergration_Time(TCS3472_IntegrationTime_t It){
  if(!TCS3472_Initialised)
  return 0x00;
-
+ TCS3472_Disable();
  TCS3472_Write8( 0x01 , It);
+ TCS3472_Enable();
  return 0x01;
 }
 
@@ -242,7 +244,7 @@ void TCS3472_getRawDataOnce(unsigned int *RGBC){
  TCS3472_Disable();
 }
 
-unsigned int TCS3472_CalcColTemp(unsigned int R,unsigned int G,unsigned int B){
+unsigned int TCS3472_CalcColTemp(unsigned int r,unsigned int g,unsigned int b){
  float X, Y, Z;
  float xc, yc;
  float n;
@@ -251,25 +253,22 @@ unsigned int TCS3472_CalcColTemp(unsigned int R,unsigned int G,unsigned int B){
  if (r == 0 && g == 0 && b == 0) {
  return 0;
  }
+#line 145 "C:/Users/GIT/ColourSampling/TCS3472.c"
+ X = (-0.3895 * r) + (1.4933 * g) + (-0.0491 * b);
+ Y = (-0.1212 * r) + (0.8890 * g) + (-0.1231 * b);
+ Z = ( 0.0343 * r) + (-0.2657 * g) + (0.9438 * b);
 
-
-
-
-
- X = (-0.14282F * r) + (1.54924F * g) + (-0.95641F * b);
- Y = (-0.32466F * r) + (1.57837F * g) + (-0.73191F * b);
- Z = (-0.68202F * r) + (0.77073F * g) + (0.56332F * b);
 
 
  xc = (X) / (X + Y + Z);
  yc = (Y) / (X + Y + Z);
 
 
- n = (xc - 0.3320F) / (0.1858F - yc);
+ n = (xc - 0.3320) / (0.1858 - yc);
 
 
  cct =
- (449.0F * pow(n, 3)) + (3525.0F * pow(n, 2)) + (6823.3F * n) + 5520.33F;
+ (449.0F * pow(n, 3)) + (3525.0 * pow(n, 2)) + (6823.3 * n) + 5520.33;
 
 
  return (unsigned int)cct;
@@ -283,7 +282,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime
  if (RGBC[0] == 0) {
  return 0;
  }
-#line 178 "C:/Users/Git/ColourSampling/TCS3472.c"
+#line 186 "C:/Users/GIT/ColourSampling/TCS3472.c"
  if ((256 - It) > 63) {
 
  sat = 65535;
@@ -291,7 +290,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime
 
  sat = 1024 * (256 - It);
  }
-#line 203 "C:/Users/Git/ColourSampling/TCS3472.c"
+#line 211 "C:/Users/GIT/ColourSampling/TCS3472.c"
  if ((256 - It) <= 63) {
 
  sat -= sat / 4;
@@ -357,4 +356,13 @@ unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi){
  TCS3472_Write8(0x06, Hi & 0xFF);
  TCS3472_Write8(0x07, Hi >> 8);
  return 0x01;
+}
+
+int TCS3472_C2RGB_Error(unsigned int* RGBC){
+int err;
+ err = RGBC[0] - RGBC[1] - RGBC[2] -RGBC[3];
+ if((err < -32600)||(err > 32600))
+ return -32666;
+ else
+ return err;
 }

@@ -1867,6 +1867,7 @@ attachif
 attachif
 attachif
 attachif_bit
+b_thresh
 b0
 b1
 b10
@@ -2808,6 +2809,7 @@ bufs
 bufs
 bufs
 bufs_bit
+bulk_free
 busy
 busy
 busy
@@ -2833,6 +2835,8 @@ byto0
 byto0_bit
 byto1
 byto1_bit
+c
+c_thresh
 c1out
 c1out
 c1out
@@ -2921,6 +2925,7 @@ cal8
 cal8_bit
 cal9
 cal9_bit
+calloc
 cch
 cch
 cch
@@ -2951,6 +2956,7 @@ cch1
 cch1
 cch1_bit
 cch1_cm2con_bit
+cct
 ceil
 cf
 cf
@@ -7466,8 +7472,8 @@ coe
 coe
 coe_bit
 coe_cm2con_bit
+col_thresh
 com
-conf
 configdescriptor1
 configpic
 cos
@@ -10328,7 +10334,6 @@ endpt3
 enhbuf
 enhbuf
 enhbuf_bit
-enum_val
 eofee
 eofee
 eofee
@@ -10942,6 +10947,7 @@ frcdiv2
 frcdiv2
 frcdiv2_bit
 free
+free
 frexp
 frm0
 frm0
@@ -11069,6 +11075,7 @@ fscmis0_bit
 fscmis1
 fscmis1_bit
 g
+g_thresh
 gcen
 gcen
 gcen
@@ -11093,6 +11100,8 @@ gen_enable
 gen_read
 gen_write
 get_fosc_khz
+get_gain
+get_it
 get_time
 get_timer_values
 gp
@@ -12499,9 +12508,12 @@ incm1
 incm1
 incm1
 incm1_bit
+independent_calloc
+independent_comalloc
 initisr
 initstring
 inittimer1
+initvars
 int0ep
 int0ep
 int0ep
@@ -13757,8 +13769,19 @@ lvdstat
 lvdstat
 lvdstat_bit
 main
+mallinfo
 malloc
+malloc
+malloc_footprint
+malloc_footprint_limit
+malloc_max_footprint
+malloc_set_footprint_limit
+malloc_stats
+malloc_trim
+malloc_usable_size
+mallopt
 max
+memalign
 memchr
 memcmp
 memcpy
@@ -17344,6 +17367,7 @@ portginv
 portginvbits
 portgset
 portgsetbits
+posix_memalign
 pow
 ppbi
 ppbi
@@ -17900,6 +17924,8 @@ ptwren
 ptwren
 ptwren
 ptwren_bit
+pvalloc
+r_thresh
 r_w
 r_w
 r_w
@@ -18018,6 +18044,7 @@ ra9
 ra9
 ra9_bit
 rand
+rawdata
 rb0
 rb0
 rb0
@@ -18365,6 +18392,8 @@ re9_bit
 read_send_allcolour
 read_send_onecolour
 readbuff
+realloc
+realloc_in_place
 report
 reset
 restoreinterrupts
@@ -18822,6 +18851,7 @@ sesvdif
 sesvdif
 sesvdif
 sesvdif_bit
+setcolourthresholds
 setstr
 shorttohex
 shorttostr
@@ -19575,9 +19605,10 @@ stov8
 stov8_bit
 stov9
 stov9_bit
+str
+str_t
 str_vars
 strcat
-strchecker
 strchecker
 strchr
 strcmp
@@ -19612,6 +19643,7 @@ string
 string
 string
 string
+string
 strlen
 strncat
 strncmp
@@ -19619,6 +19651,7 @@ strncpy
 strpbrk
 strrchr
 strsplit
+strsplitfp
 strspn
 strstr
 strtok
@@ -20316,6 +20349,7 @@ tcs_t3con_bit
 tcs_t4con_bit
 tcs_t5con_bit
 tcs3472_bits
+tcs3472_c2rgb_error
 tcs3472_calc_lux
 tcs3472_calccoltemp
 tcs3472_calccoltemp_dn40
@@ -21589,7 +21623,6 @@ twip
 twip
 twip_bit
 txt
-txtr
 u1addr
 u1addrbits
 u1addrclr
@@ -22614,6 +22647,7 @@ utxsel
 utxsel
 utxsel
 val
+valloc
 vbuschg
 vbuschg
 vbuschg
@@ -23605,7 +23639,6 @@ wrerr
 wrerr
 wrerr_bit
 writebuff
-writedata
 writedata
 wrsp
 wrsp

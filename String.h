@@ -6,27 +6,28 @@
 #include "TCS3472.h"
 //////////////////////////////////////////////////
 //defines
-#define enum_num (READTEMP - CONFIG)
-#define StrDebug
+#define enum_num (READT_DN40 - CONFIG)+1
+//#define StrDebug
 
-#define size 10
+#define size 20
 #define str_size 64
 //structs and enums
 extern char string[size][str_size];//={"HELLO WORLD","HELLO WORLD","HELLO WORLD","HELLO WORLD","HELLO WORLD"};
 
 enum ControlColorIO{
 CONFIG, //0
-SETALL,
+SETA,
 SETR,
 SETG,
 SETB,
 SETC,
-READALL,  //6
+READA,  //6
 READR,    //7
 READG,    //8
 READB,    //9
 READC,    //10
-READTEMP  //11
+READT,  //11
+READT_DN40 //12
 };
 
 struct Constants{
@@ -56,5 +57,7 @@ void testStrings(char* writebuff);
 char* setstr(char conf[64]);
 void clr_str_arrays(char *str[10]);
 char* Read_Send_AllColour();
-void Read_Send_OneColour(int colr);
+char* Read_Send_OneColour(int colr);
+int Get_It();
+int Get_Gain();
 #endif

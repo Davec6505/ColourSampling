@@ -14,5 +14,4 @@ void ConfigPic();
 void InitVars();
 void InitISR();
 void WriteData(char *_data);
-
 #endif

@@ -9,6 +9,10 @@ extern sfr TCS3472_Initialised;
 
 ////////////////////////////////////////////////
 //Defines
+
+#define  LED
+//#define Flourescent//
+
 #define TCS3472_ADDW 0x52
 #define TCS3472_ADDR 0x53      /**< I2C address || 0x19 = TCS34725/7 || 0x39 = TCS34721/3  || **/
 #define TCS3472_CMD_BIT 0x80   /**< Command bit **/
@@ -135,5 +139,5 @@ unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
 unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
-
+int TCS3472_C2RGB_Error(unsigned int* RGBC);
 #endif
