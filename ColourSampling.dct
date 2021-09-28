@@ -2809,7 +2809,6 @@ bufs
 bufs
 bufs
 bufs_bit
-bulk_free
 busy
 busy
 busy
@@ -2925,7 +2924,6 @@ cal8
 cal8_bit
 cal9
 cal9_bit
-calloc
 cch
 cch
 cch
@@ -10947,7 +10945,6 @@ frcdiv2
 frcdiv2
 frcdiv2_bit
 free
-free
 frexp
 frm0
 frm0
@@ -12508,8 +12505,6 @@ incm1
 incm1
 incm1
 incm1_bit
-independent_calloc
-independent_comalloc
 initisr
 initstring
 inittimer1
@@ -13769,19 +13764,8 @@ lvdstat
 lvdstat
 lvdstat_bit
 main
-mallinfo
 malloc
-malloc
-malloc_footprint
-malloc_footprint_limit
-malloc_max_footprint
-malloc_set_footprint_limit
-malloc_stats
-malloc_trim
-malloc_usable_size
-mallopt
 max
-memalign
 memchr
 memcmp
 memcpy
@@ -17367,7 +17351,6 @@ portginv
 portginvbits
 portgset
 portgsetbits
-posix_memalign
 pow
 ppbi
 ppbi
@@ -17924,7 +17907,6 @@ ptwren
 ptwren
 ptwren
 ptwren_bit
-pvalloc
 r_thresh
 r_w
 r_w
@@ -18392,8 +18374,6 @@ re9_bit
 read_send_allcolour
 read_send_onecolour
 readbuff
-realloc
-realloc_in_place
 report
 reset
 restoreinterrupts
@@ -22647,7 +22627,6 @@ utxsel
 utxsel
 utxsel
 val
-valloc
 vbuschg
 vbuschg
 vbuschg
