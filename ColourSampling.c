@@ -21,6 +21,7 @@ unsigned int deg;
 char txtR[6];
  //testStr = StrChecker;
  ConfigPic();
+
  Delay_ms(5000);
  it = TCS3472_INTEGRATIONTIME_24MS;//TCS3472_INTEGRATIONTIME_2_4MS;
  G  = TCS3472_GAIN_1X;

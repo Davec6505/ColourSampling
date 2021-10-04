@@ -1,63 +1,50 @@
 _TCS3472_Init:
-;TCS3472.c,17 :: 		unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain, TCS3472x Id ){
+;TCS3472.c,18 :: 		unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain, TCS3472x Id ){
 ADDIU	SP, SP, -12
 SW	RA, 0(SP)
-;TCS3472.c,20 :: 		id = TCS3472_Read8(TCS3472_ID);
+;TCS3472.c,21 :: 		id = TCS3472_Read8(TCS3472_ID);
 SW	R25, 4(SP)
-SB	R27, 8(SP)
-SB	R26, 9(SP)
-SB	R25, 10(SP)
+SB	R26, 8(SP)
+SB	R25, 9(SP)
 ORI	R25, R0, 18
 JAL	_TCS3472_Read8+0
 NOP	
-LBU	R25, 10(SP)
-LBU	R26, 9(SP)
-LBU	R27, 8(SP)
-SB	R2, 11(SP)
-;TCS3472.c,21 :: 		if(id != Id)
-ANDI	R3, R2, 255
-ANDI	R2, R27, 255
-BNE	R3, R2, L__TCS3472_Init36
-NOP	
-J	L_TCS3472_Init0
-NOP	
-L__TCS3472_Init36:
-;TCS3472.c,22 :: 		return 0x00;
-MOVZ	R2, R0, R0
-J	L_end_TCS3472_Init
-NOP	
+LBU	R25, 9(SP)
+LBU	R26, 8(SP)
+SB	R2, 10(SP)
+;TCS3472.c,23 :: 		return 0x00;
 L_TCS3472_Init0:
-;TCS3472.c,23 :: 		if(!TCS3472_Initialised){
+;TCS3472.c,24 :: 		if(!TCS3472_Initialised){
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_Init37
+BEQ	R2, R0, L__TCS3472_Init35
 NOP	
 J	L_TCS3472_Init1
 NOP	
-L__TCS3472_Init37:
-;TCS3472.c,24 :: 		TCS3472_Initialised = 1;
+L__TCS3472_Init35:
+;TCS3472.c,25 :: 		TCS3472_Initialised = 1;
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 ORI	R2, R2, 1
 SB	R2, Offset(_TCS3472_Bits+0)(GP)
-;TCS3472.c,25 :: 		TCS3472_SetIntergration_Time(It);
+;TCS3472.c,26 :: 		TCS3472_SetIntergration_Time(It);
 SB	R26, 8(SP)
 JAL	_TCS3472_SetIntergration_Time+0
 NOP	
 LBU	R26, 8(SP)
-;TCS3472.c,26 :: 		TCS3472_SetGain(gain);
+;TCS3472.c,27 :: 		TCS3472_SetGain(gain);
 ANDI	R25, R26, 255
 JAL	_TCS3472_SetGain+0
 NOP	
-;TCS3472.c,27 :: 		TCS3472_Enable();
+;TCS3472.c,28 :: 		TCS3472_Enable();
 JAL	_TCS3472_Enable+0
 NOP	
-;TCS3472.c,28 :: 		}
+;TCS3472.c,29 :: 		}
 L_TCS3472_Init1:
-;TCS3472.c,29 :: 		return id;
-LBU	R2, 11(SP)
-;TCS3472.c,30 :: 		}
-;TCS3472.c,29 :: 		return id;
-;TCS3472.c,30 :: 		}
+;TCS3472.c,30 :: 		return id;
+LBU	R2, 10(SP)
+;TCS3472.c,31 :: 		}
+;TCS3472.c,30 :: 		return id;
+;TCS3472.c,31 :: 		}
 L_end_TCS3472_Init:
 LW	R25, 4(SP)
 LW	RA, 0(SP)
@@ -66,40 +53,40 @@ JR	RA
 NOP	
 ; end of _TCS3472_Init
 _SetColourThresholds:
-;TCS3472.c,32 :: 		void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B){
-;TCS3472.c,33 :: 		Col_Thresh.C_Thresh = C;
+;TCS3472.c,33 :: 		void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B){
+;TCS3472.c,34 :: 		Col_Thresh.C_Thresh = C;
 SH	R25, Offset(_Col_Thresh+6)(GP)
-;TCS3472.c,34 :: 		Col_Thresh.R_Thresh = R;
+;TCS3472.c,35 :: 		Col_Thresh.R_Thresh = R;
 SH	R26, Offset(_Col_Thresh+0)(GP)
-;TCS3472.c,35 :: 		Col_Thresh.G_Thresh = G;
+;TCS3472.c,36 :: 		Col_Thresh.G_Thresh = G;
 SH	R27, Offset(_Col_Thresh+2)(GP)
-;TCS3472.c,36 :: 		Col_Thresh.B_Thresh = B;
+;TCS3472.c,37 :: 		Col_Thresh.B_Thresh = B;
 SH	R28, Offset(_Col_Thresh+4)(GP)
-;TCS3472.c,37 :: 		}
+;TCS3472.c,38 :: 		}
 L_end_SetColourThresholds:
 JR	RA
 NOP	
 ; end of _SetColourThresholds
 _TCS3472_Write:
-;TCS3472.c,39 :: 		void TCS3472_Write(unsigned short cmd){
+;TCS3472.c,40 :: 		void TCS3472_Write(unsigned short cmd){
 ADDIU	SP, SP, -8
 SW	RA, 0(SP)
-;TCS3472.c,40 :: 		I2C2_Start();                      // issue I2C start signal
+;TCS3472.c,41 :: 		I2C2_Start();                      // issue I2C start signal
 SB	R25, 4(SP)
 JAL	_I2C2_Start+0
 NOP	
-;TCS3472.c,41 :: 		I2C2_Write(TCS3472_ADDW);          // send byte via I2C  (slave address)
+;TCS3472.c,42 :: 		I2C2_Write(TCS3472_ADDW);          // send byte via I2C  (slave address)
 ORI	R25, R0, 82
 JAL	_I2C2_Write+0
 NOP	
 LBU	R25, 4(SP)
-;TCS3472.c,42 :: 		I2C2_Write(cmd);                  // send byte (command reg MSB)
+;TCS3472.c,43 :: 		I2C2_Write(cmd);                  // send byte (command reg MSB)
 JAL	_I2C2_Write+0
 NOP	
-;TCS3472.c,43 :: 		I2C2_Stop();
+;TCS3472.c,44 :: 		I2C2_Stop();
 JAL	_I2C2_Stop+0
 NOP	
-;TCS3472.c,44 :: 		}
+;TCS3472.c,45 :: 		}
 L_end_TCS3472_Write:
 LW	RA, 0(SP)
 ADDIU	SP, SP, 8
@@ -107,34 +94,34 @@ JR	RA
 NOP	
 ; end of _TCS3472_Write
 _TCS3472_Write8:
-;TCS3472.c,46 :: 		void TCS3472_Write8(unsigned short reg_add, unsigned short value){
+;TCS3472.c,47 :: 		void TCS3472_Write8(unsigned short reg_add, unsigned short value){
 ADDIU	SP, SP, -12
 SW	RA, 0(SP)
-;TCS3472.c,47 :: 		I2C2_Start();                      // issue I2C start signal
+;TCS3472.c,48 :: 		I2C2_Start();                      // issue I2C start signal
 SW	R25, 4(SP)
 SB	R26, 8(SP)
 SB	R25, 9(SP)
 JAL	_I2C2_Start+0
 NOP	
-;TCS3472.c,48 :: 		I2C2_Write(TCS3472_ADDW);          // send byte via I2C  (slave address)
+;TCS3472.c,49 :: 		I2C2_Write(TCS3472_ADDW);          // send byte via I2C  (slave address)
 ORI	R25, R0, 82
 JAL	_I2C2_Write+0
 NOP	
 LBU	R25, 9(SP)
-;TCS3472.c,49 :: 		I2C2_Write(TCS3472_CMD_BIT | reg_add);       // send byte (command reg MSB)
+;TCS3472.c,50 :: 		I2C2_Write(TCS3472_CMD_BIT | reg_add);       // send byte (command reg MSB)
 ORI	R2, R25, 128
 ANDI	R25, R2, 255
 JAL	_I2C2_Write+0
 NOP	
 LBU	R26, 8(SP)
-;TCS3472.c,50 :: 		I2C2_Write(value);                 // send byte (data to be written)
+;TCS3472.c,51 :: 		I2C2_Write(value);                 // send byte (data to be written)
 ANDI	R25, R26, 255
 JAL	_I2C2_Write+0
 NOP	
-;TCS3472.c,51 :: 		I2C2_Stop();                       // issue I2C stop signal
+;TCS3472.c,52 :: 		I2C2_Stop();                       // issue I2C stop signal
 JAL	_I2C2_Stop+0
 NOP	
-;TCS3472.c,53 :: 		}
+;TCS3472.c,54 :: 		}
 L_end_TCS3472_Write8:
 LW	R25, 4(SP)
 LW	RA, 0(SP)
@@ -143,47 +130,47 @@ JR	RA
 NOP	
 ; end of _TCS3472_Write8
 _TCS3472_Read8:
-;TCS3472.c,55 :: 		unsigned short TCS3472_Read8(unsigned short reg_add){
+;TCS3472.c,56 :: 		unsigned short TCS3472_Read8(unsigned short reg_add){
 ADDIU	SP, SP, -12
 SW	RA, 0(SP)
-;TCS3472.c,57 :: 		I2C2_Start();                   // issue I2C start signal
+;TCS3472.c,58 :: 		I2C2_Start();                   // issue I2C start signal
 SW	R25, 4(SP)
 SB	R25, 8(SP)
 JAL	_I2C2_Start+0
 NOP	
-;TCS3472.c,58 :: 		I2C2_Write(TCS3472_ADDW);       // send byte via I2C  (device address + W)
+;TCS3472.c,59 :: 		I2C2_Write(TCS3472_ADDW);       // send byte via I2C  (device address + W)
 ORI	R25, R0, 82
 JAL	_I2C2_Write+0
 NOP	
 LBU	R25, 8(SP)
-;TCS3472.c,59 :: 		I2C2_Write(TCS3472_CMD_BIT | reg_add);            // send byte (data address)
+;TCS3472.c,60 :: 		I2C2_Write(TCS3472_CMD_BIT | reg_add);            // send byte (data address)
 ORI	R2, R25, 128
 ANDI	R25, R2, 255
 JAL	_I2C2_Write+0
 NOP	
-;TCS3472.c,60 :: 		I2C2_Stop();
+;TCS3472.c,61 :: 		I2C2_Stop();
 JAL	_I2C2_Stop+0
 NOP	
-;TCS3472.c,61 :: 		I2C2_Start();
+;TCS3472.c,62 :: 		I2C2_Start();
 JAL	_I2C2_Start+0
 NOP	
-;TCS3472.c,62 :: 		I2C2_Write(TCS3472_ADDR);
+;TCS3472.c,63 :: 		I2C2_Write(TCS3472_ADDR);
 ORI	R25, R0, 83
 JAL	_I2C2_Write+0
 NOP	
-;TCS3472.c,63 :: 		temp = I2C2_Read(1);   // Read the data (NO acknowledge)
+;TCS3472.c,64 :: 		temp = I2C2_Read(1);   // Read the data (NO acknowledge)
 ORI	R25, R0, 1
 JAL	_I2C2_Read+0
 NOP	
 SB	R2, 9(SP)
-;TCS3472.c,64 :: 		I2C2_Stop();
+;TCS3472.c,65 :: 		I2C2_Stop();
 JAL	_I2C2_Stop+0
 NOP	
-;TCS3472.c,65 :: 		return temp;
+;TCS3472.c,66 :: 		return temp;
 LBU	R2, 9(SP)
-;TCS3472.c,66 :: 		}
-;TCS3472.c,65 :: 		return temp;
-;TCS3472.c,66 :: 		}
+;TCS3472.c,67 :: 		}
+;TCS3472.c,66 :: 		return temp;
+;TCS3472.c,67 :: 		}
 L_end_TCS3472_Read8:
 LW	R25, 4(SP)
 LW	RA, 0(SP)
@@ -192,32 +179,32 @@ JR	RA
 NOP	
 ; end of _TCS3472_Read8
 _TCS3472_Read16:
-;TCS3472.c,68 :: 		unsigned int TCS3472_Read16(unsigned short reg_add){
+;TCS3472.c,69 :: 		unsigned int TCS3472_Read16(unsigned short reg_add){
 ADDIU	SP, SP, -16
 SW	RA, 0(SP)
-;TCS3472.c,71 :: 		I2C2_Start();              // issue I2C start signal
+;TCS3472.c,72 :: 		I2C2_Start();              // issue I2C start signal
 SW	R25, 4(SP)
 SB	R25, 8(SP)
 JAL	_I2C2_Start+0
 NOP	
-;TCS3472.c,72 :: 		I2C2_Write(TCS3472_ADDW);          // send byte via I2C  (device address + W)
+;TCS3472.c,73 :: 		I2C2_Write(TCS3472_ADDW);          // send byte via I2C  (device address + W)
 ORI	R25, R0, 82
 JAL	_I2C2_Write+0
 NOP	
 LBU	R25, 8(SP)
-;TCS3472.c,73 :: 		I2C2_Write(TCS3472_CMD_AUTO_INC | reg_add);       // send byte (command reg MSB)
+;TCS3472.c,74 :: 		I2C2_Write(TCS3472_CMD_AUTO_INC | reg_add);       // send byte (command reg MSB)
 ORI	R2, R25, 160
 ANDI	R25, R2, 255
 JAL	_I2C2_Write+0
 NOP	
-;TCS3472.c,74 :: 		I2C2_Restart();           // issue I2C signal repeated start
+;TCS3472.c,75 :: 		I2C2_Restart();           // issue I2C signal repeated start
 JAL	_I2C2_Restart+0
 NOP	
-;TCS3472.c,75 :: 		I2C2_Write(TCS3472_ADDR);          // send byte (device address + R)
+;TCS3472.c,76 :: 		I2C2_Write(TCS3472_ADDR);          // send byte (device address + R)
 ORI	R25, R0, 83
 JAL	_I2C2_Write+0
 NOP	
-;TCS3472.c,76 :: 		temp[0] = I2C2_Read(_I2C_ACK);      // Read the data (NO acknowledge)
+;TCS3472.c,77 :: 		temp[0] = I2C2_Read(_I2C_ACK);      // Read the data (NO acknowledge)
 ADDIU	R2, SP, 9
 SW	R2, 12(SP)
 MOVZ	R25, R0, R0
@@ -225,7 +212,7 @@ JAL	_I2C2_Read+0
 NOP	
 LW	R3, 12(SP)
 SB	R2, 0(R3)
-;TCS3472.c,77 :: 		temp[1] = I2C2_Read(_I2C_NACK);
+;TCS3472.c,78 :: 		temp[1] = I2C2_Read(_I2C_NACK);
 ADDIU	R2, SP, 9
 ADDIU	R2, R2, 1
 SW	R2, 12(SP)
@@ -234,15 +221,15 @@ JAL	_I2C2_Read+0
 NOP	
 LW	R3, 12(SP)
 SB	R2, 0(R3)
-;TCS3472.c,78 :: 		I2C2_Stop();
+;TCS3472.c,79 :: 		I2C2_Stop();
 JAL	_I2C2_Stop+0
 NOP	
-;TCS3472.c,79 :: 		reslt = temp[0];
+;TCS3472.c,80 :: 		reslt = temp[0];
 ADDIU	R4, SP, 9
 LBU	R2, 0(R4)
 ; reslt start address is: 12 (R3)
 ANDI	R3, R2, 255
-;TCS3472.c,80 :: 		reslt = (reslt << 8) | temp[1];
+;TCS3472.c,81 :: 		reslt = (reslt << 8) | temp[1];
 ANDI	R2, R3, 65535
 ; reslt end address is: 12 (R3)
 SLL	R3, R2, 8
@@ -250,10 +237,10 @@ ADDIU	R2, R4, 1
 LBU	R2, 0(R2)
 ANDI	R2, R2, 255
 OR	R2, R3, R2
-;TCS3472.c,81 :: 		return reslt;
-;TCS3472.c,82 :: 		}
-;TCS3472.c,81 :: 		return reslt;
-;TCS3472.c,82 :: 		}
+;TCS3472.c,82 :: 		return reslt;
+;TCS3472.c,83 :: 		}
+;TCS3472.c,82 :: 		return reslt;
+;TCS3472.c,83 :: 		}
 L_end_TCS3472_Read16:
 LW	R25, 4(SP)
 LW	RA, 0(SP)
@@ -262,17 +249,17 @@ JR	RA
 NOP	
 ; end of _TCS3472_Read16
 _TCS3472_Enable:
-;TCS3472.c,84 :: 		void TCS3472_Enable(){
+;TCS3472.c,85 :: 		void TCS3472_Enable(){
 ADDIU	SP, SP, -12
 SW	RA, 0(SP)
-;TCS3472.c,85 :: 		TCS3472_Write8(TCS3472_EN, TCS3472_EN_PON);
+;TCS3472.c,86 :: 		TCS3472_Write8(TCS3472_EN, TCS3472_EN_PON);
 SW	R25, 4(SP)
 SW	R26, 8(SP)
 ORI	R26, R0, 1
 MOVZ	R25, R0, R0
 JAL	_TCS3472_Write8+0
 NOP	
-;TCS3472.c,86 :: 		Delay_ms(3);
+;TCS3472.c,87 :: 		Delay_ms(3);
 LUI	R24, 1
 ORI	R24, R24, 14463
 L_TCS3472_Enable2:
@@ -280,12 +267,12 @@ ADDIU	R24, R24, -1
 BNE	R24, R0, L_TCS3472_Enable2
 NOP	
 NOP	
-;TCS3472.c,87 :: 		TCS3472_Write8(TCS3472_EN, TCS3472_EN_PON | TCS3472_EN_AEN);
+;TCS3472.c,88 :: 		TCS3472_Write8(TCS3472_EN, TCS3472_EN_PON | TCS3472_EN_AEN);
 ORI	R26, R0, 3
 MOVZ	R25, R0, R0
 JAL	_TCS3472_Write8+0
 NOP	
-;TCS3472.c,88 :: 		}
+;TCS3472.c,89 :: 		}
 L_end_TCS3472_Enable:
 LW	R26, 8(SP)
 LW	R25, 4(SP)
@@ -295,23 +282,23 @@ JR	RA
 NOP	
 ; end of _TCS3472_Enable
 _TCS3472_Disable:
-;TCS3472.c,90 :: 		void TCS3472_Disable(){
+;TCS3472.c,91 :: 		void TCS3472_Disable(){
 ADDIU	SP, SP, -12
 SW	RA, 0(SP)
-;TCS3472.c,92 :: 		read = TCS3472_Read8(TCS3472_EN);
+;TCS3472.c,93 :: 		read = TCS3472_Read8(TCS3472_EN);
 SW	R25, 4(SP)
 SW	R26, 8(SP)
 MOVZ	R25, R0, R0
 JAL	_TCS3472_Read8+0
 NOP	
-;TCS3472.c,93 :: 		TCS3472_Write8(TCS3472_EN, read & ~(TCS3472_EN_PON | TCS3472_EN_AEN));
+;TCS3472.c,94 :: 		TCS3472_Write8(TCS3472_EN, read & ~(TCS3472_EN_PON | TCS3472_EN_AEN));
 ORI	R3, R0, 252
 AND	R2, R2, R3
 ANDI	R26, R2, 255
 MOVZ	R25, R0, R0
 JAL	_TCS3472_Write8+0
 NOP	
-;TCS3472.c,94 :: 		}
+;TCS3472.c,95 :: 		}
 L_end_TCS3472_Disable:
 LW	R26, 8(SP)
 LW	R25, 4(SP)
@@ -321,36 +308,28 @@ JR	RA
 NOP	
 ; end of _TCS3472_Disable
 _TCS3472_SetIntergration_Time:
-;TCS3472.c,96 :: 		unsigned short TCS3472_SetIntergration_Time(TCS3472_IntegrationTime_t It){
-ADDIU	SP, SP, -16
+;TCS3472.c,97 :: 		unsigned short TCS3472_SetIntergration_Time(TCS3472_IntegrationTime_t It){
+ADDIU	SP, SP, -12
 SW	RA, 0(SP)
-;TCS3472.c,97 :: 		if(!TCS3472_Initialised)
+;TCS3472.c,98 :: 		if(!TCS3472_Initialised)
 SW	R25, 4(SP)
 SW	R26, 8(SP)
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_SetIntergration_Time46
+BEQ	R2, R0, L__TCS3472_SetIntergration_Time44
 NOP	
 J	L_TCS3472_SetIntergration_Time4
 NOP	
-L__TCS3472_SetIntergration_Time46:
-;TCS3472.c,98 :: 		return 0x00;
+L__TCS3472_SetIntergration_Time44:
+;TCS3472.c,99 :: 		return 0x00;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_SetIntergration_Time
 NOP	
 L_TCS3472_SetIntergration_Time4:
-;TCS3472.c,99 :: 		TCS3472_Disable();
-SB	R25, 12(SP)
-JAL	_TCS3472_Disable+0
-NOP	
-LBU	R25, 12(SP)
-;TCS3472.c,100 :: 		TCS3472_Write8(TCS3472_ATIME, It);
+;TCS3472.c,101 :: 		TCS3472_Write8(TCS3472_ATIME, It);
 ANDI	R26, R25, 255
 ORI	R25, R0, 1
 JAL	_TCS3472_Write8+0
-NOP	
-;TCS3472.c,101 :: 		TCS3472_Enable();
-JAL	_TCS3472_Enable+0
 NOP	
 ;TCS3472.c,102 :: 		return 0x01;
 ORI	R2, R0, 1
@@ -361,7 +340,7 @@ L_end_TCS3472_SetIntergration_Time:
 LW	R26, 8(SP)
 LW	R25, 4(SP)
 LW	RA, 0(SP)
-ADDIU	SP, SP, 16
+ADDIU	SP, SP, 12
 JR	RA
 NOP	
 ; end of _TCS3472_SetIntergration_Time
@@ -374,11 +353,11 @@ SW	R25, 4(SP)
 SW	R26, 8(SP)
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_SetGain48
+BEQ	R2, R0, L__TCS3472_SetGain46
 NOP	
 J	L_TCS3472_SetGain5
 NOP	
-L__TCS3472_SetGain48:
+L__TCS3472_SetGain46:
 ;TCS3472.c,107 :: 		return 0x00;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_SetGain
@@ -480,23 +459,23 @@ SW	RA, 0(SP)
 SW	R25, 4(SP)
 SW	R26, 8(SP)
 ANDI	R2, R25, 65535
-BEQ	R2, R0, L__TCS3472_CalcColTemp52
+BEQ	R2, R0, L__TCS3472_CalcColTemp50
 NOP	
 J	L__TCS3472_CalcColTemp29
 NOP	
-L__TCS3472_CalcColTemp52:
+L__TCS3472_CalcColTemp50:
 ANDI	R2, R26, 65535
-BEQ	R2, R0, L__TCS3472_CalcColTemp53
+BEQ	R2, R0, L__TCS3472_CalcColTemp51
 NOP	
 J	L__TCS3472_CalcColTemp28
 NOP	
-L__TCS3472_CalcColTemp53:
+L__TCS3472_CalcColTemp51:
 ANDI	R2, R27, 65535
-BEQ	R2, R0, L__TCS3472_CalcColTemp54
+BEQ	R2, R0, L__TCS3472_CalcColTemp52
 NOP	
 J	L__TCS3472_CalcColTemp27
 NOP	
-L__TCS3472_CalcColTemp54:
+L__TCS3472_CalcColTemp52:
 L__TCS3472_CalcColTemp26:
 ;TCS3472.c,132 :: 		return 0;
 MOVZ	R2, R0, R0
@@ -710,11 +689,11 @@ _TCS3472_CalcColTemp_dn40:
 ;TCS3472.c,170 :: 		if (RGBC[0] == 0) {
 LHU	R2, 0(R25)
 ANDI	R2, R2, 65535
-BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4056
+BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4054
 NOP	
 J	L_TCS3472_CalcColTemp_dn409
 NOP	
-L__TCS3472_CalcColTemp_dn4056:
+L__TCS3472_CalcColTemp_dn4054:
 ;TCS3472.c,171 :: 		return 0;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_CalcColTemp_dn40
@@ -727,11 +706,11 @@ ORI	R2, R0, 256
 SUBU	R2, R2, R3
 SEH	R2, R2
 SLTI	R2, R2, 64
-BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4057
+BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4055
 NOP	
 J	L_TCS3472_CalcColTemp_dn4010
 NOP	
-L__TCS3472_CalcColTemp_dn4057:
+L__TCS3472_CalcColTemp_dn4055:
 ;TCS3472.c,188 :: 		sat = 65535;
 ; sat start address is: 16 (R4)
 ORI	R4, R0, 65535
@@ -758,11 +737,11 @@ ORI	R2, R0, 256
 SUBU	R2, R2, R3
 SEH	R2, R2
 SLTI	R2, R2, 64
-BNE	R2, R0, L__TCS3472_CalcColTemp_dn4058
+BNE	R2, R0, L__TCS3472_CalcColTemp_dn4056
 NOP	
 J	L__TCS3472_CalcColTemp_dn4030
 NOP	
-L__TCS3472_CalcColTemp_dn4058:
+L__TCS3472_CalcColTemp_dn4056:
 ;TCS3472.c,213 :: 		sat -= sat / 4;
 ANDI	R2, R4, 65535
 SRL	R2, R2, 2
@@ -783,11 +762,11 @@ ANDI	R3, R2, 65535
 ANDI	R2, R4, 65535
 ; sat end address is: 16 (R4)
 SLTU	R2, R3, R2
-BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4059
+BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4057
 NOP	
 J	L_TCS3472_CalcColTemp_dn4013
 NOP	
-L__TCS3472_CalcColTemp_dn4059:
+L__TCS3472_CalcColTemp_dn4057:
 ;TCS3472.c,218 :: 		return 0;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_CalcColTemp_dn40
@@ -807,11 +786,11 @@ LHU	R2, 0(R25)
 ANDI	R3, R3, 65535
 ANDI	R2, R2, 65535
 SLTU	R2, R2, R3
-BNE	R2, R0, L__TCS3472_CalcColTemp_dn4060
+BNE	R2, R0, L__TCS3472_CalcColTemp_dn4058
 NOP	
 J	L_TCS3472_CalcColTemp_dn4014
 NOP	
-L__TCS3472_CalcColTemp_dn4060:
+L__TCS3472_CalcColTemp_dn4058:
 ADDIU	R2, R25, 2
 LHU	R3, 0(R2)
 ADDIU	R2, R25, 4
@@ -850,11 +829,11 @@ SUBU	R2, R2, R5
 ANDI	R5, R2, 65535
 ;TCS3472.c,230 :: 		if (r2 == 0) {
 ANDI	R2, R3, 65535
-BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4061
+BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4059
 NOP	
 J	L_TCS3472_CalcColTemp_dn4016
 NOP	
-L__TCS3472_CalcColTemp_dn4061:
+L__TCS3472_CalcColTemp_dn4059:
 ; r2 end address is: 16 (R4)
 ; b2 end address is: 20 (R5)
 ;TCS3472.c,231 :: 		return 0;
@@ -898,11 +877,11 @@ SW	R25, 4(SP)
 SW	R26, 8(SP)
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_SetInterrupt64
+BEQ	R2, R0, L__TCS3472_SetInterrupt62
 NOP	
 J	L_TCS3472_SetInterrupt17
 NOP	
-L__TCS3472_SetInterrupt64:
+L__TCS3472_SetInterrupt62:
 ;TCS3472.c,248 :: 		return 0x00;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_SetInterrupt
@@ -946,11 +925,11 @@ SW	RA, 0(SP)
 SW	R25, 4(SP)
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_ClearInterrupt66
+BEQ	R2, R0, L__TCS3472_ClearInterrupt64
 NOP	
 J	L_TCS3472_ClearInterrupt20
 NOP	
-L__TCS3472_ClearInterrupt66:
+L__TCS3472_ClearInterrupt64:
 ;TCS3472.c,263 :: 		return 0x00;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_ClearInterrupt
@@ -981,11 +960,11 @@ SW	R25, 4(SP)
 SW	R26, 8(SP)
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_SetInterrupt_Limits68
+BEQ	R2, R0, L__TCS3472_SetInterrupt_Limits66
 NOP	
 J	L_TCS3472_SetInterrupt_Limits21
 NOP	
-L__TCS3472_SetInterrupt_Limits68:
+L__TCS3472_SetInterrupt_Limits66:
 ;TCS3472.c,270 :: 		return 0x00;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_SetInterrupt_Limits
@@ -1038,7 +1017,7 @@ NOP
 ; end of _TCS3472_SetInterrupt_Limits
 _TCS3472_C2RGB_Error:
 ;TCS3472.c,278 :: 		int TCS3472_C2RGB_Error(unsigned int* RGBC){
-;TCS3472.c,280 :: 		err =   RGBC[0] - RGBC[1] - RGBC[2] -RGBC[3];
+;TCS3472.c,281 :: 		err =   RGBC[0] - RGBC[1] - RGBC[2] -RGBC[3];
 LHU	R3, 0(R25)
 ADDIU	R2, R25, 2
 LHU	R2, 0(R2)
@@ -1051,36 +1030,36 @@ LHU	R2, 0(R2)
 SUBU	R2, R3, R2
 ; err start address is: 12 (R3)
 ANDI	R3, R2, 65535
-;TCS3472.c,281 :: 		if((err < -32600)||(err > 32600))
+;TCS3472.c,282 :: 		if((err < -32600)||(err > 32600))
 SEH	R2, R2
 SLTI	R2, R2, -32600
-BEQ	R2, R0, L__TCS3472_C2RGB_Error70
+BEQ	R2, R0, L__TCS3472_C2RGB_Error68
 NOP	
 J	L__TCS3472_C2RGB_Error33
 NOP	
-L__TCS3472_C2RGB_Error70:
+L__TCS3472_C2RGB_Error68:
 SEH	R2, R3
 SLTI	R2, R2, 32601
-BNE	R2, R0, L__TCS3472_C2RGB_Error71
+BNE	R2, R0, L__TCS3472_C2RGB_Error69
 NOP	
 J	L__TCS3472_C2RGB_Error32
 NOP	
-L__TCS3472_C2RGB_Error71:
+L__TCS3472_C2RGB_Error69:
 J	L_TCS3472_C2RGB_Error24
 NOP	
 ; err end address is: 12 (R3)
 L__TCS3472_C2RGB_Error33:
 L__TCS3472_C2RGB_Error32:
-;TCS3472.c,282 :: 		return -32666;
+;TCS3472.c,283 :: 		return -32666;
 ORI	R2, R0, 32870
 J	L_end_TCS3472_C2RGB_Error
 NOP	
 L_TCS3472_C2RGB_Error24:
-;TCS3472.c,284 :: 		return err;
+;TCS3472.c,285 :: 		return err;
 ; err start address is: 12 (R3)
 SEH	R2, R3
 ; err end address is: 12 (R3)
-;TCS3472.c,285 :: 		}
+;TCS3472.c,286 :: 		}
 L_end_TCS3472_C2RGB_Error:
 JR	RA
 NOP	

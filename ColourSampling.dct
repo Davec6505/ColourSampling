@@ -7472,6 +7472,7 @@ coe_bit
 coe_cm2con_bit
 col_thresh
 com
+comc
 configdescriptor1
 configpic
 cos
@@ -11279,6 +11280,7 @@ i2c2_settimeoutcallback
 i2c2_start
 i2c2_stop
 i2c2_timeout_ptr
+i2c2_timeoutcallback
 i2c2_write
 i2c2add
 i2c2addbits

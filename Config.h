@@ -14,4 +14,6 @@ void ConfigPic();
 void InitVars();
 void InitISR();
 void WriteData(char *_data);
+void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
+
 #endif

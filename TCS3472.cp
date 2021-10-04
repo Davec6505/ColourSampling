@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 1 "C:/Users/Git/ColourSampling/TCS3472.c"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 
@@ -121,7 +121,7 @@ unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
-#line 3 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 3 "C:/Users/Git/ColourSampling/TCS3472.c"
 unsigned int RawData[4];
 unsigned int CCT;
 
@@ -134,6 +134,7 @@ TCS3472x_Threshold Col_Thresh;
 unsigned short TCS3472_Bits;
 sbit TCS3472_Initialised at TCS3472_Bits.B0;
 unsigned short _i2caddr,_i2caddw;
+
 
 
 unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain, TCS3472x Id ){
@@ -218,9 +219,8 @@ void TCS3472_Disable(){
 unsigned short TCS3472_SetIntergration_Time(TCS3472_IntegrationTime_t It){
  if(!TCS3472_Initialised)
  return 0x00;
- TCS3472_Disable();
+
  TCS3472_Write8( 0x01 , It);
- TCS3472_Enable();
  return 0x01;
 }
 
@@ -253,7 +253,7 @@ unsigned int TCS3472_CalcColTemp(unsigned int r,unsigned int g,unsigned int b){
  if (r == 0 && g == 0 && b == 0) {
  return 0;
  }
-#line 145 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 145 "C:/Users/Git/ColourSampling/TCS3472.c"
  X = (-0.3895 * r) + (1.4933 * g) + (-0.0491 * b);
  Y = (-0.1212 * r) + (0.8890 * g) + (-0.1231 * b);
  Z = ( 0.0343 * r) + (-0.2657 * g) + (0.9438 * b);
@@ -282,7 +282,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime
  if (RGBC[0] == 0) {
  return 0;
  }
-#line 186 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 186 "C:/Users/Git/ColourSampling/TCS3472.c"
  if ((256 - It) > 63) {
 
  sat = 65535;
@@ -290,7 +290,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime
 
  sat = 1024 * (256 - It);
  }
-#line 211 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 211 "C:/Users/Git/ColourSampling/TCS3472.c"
  if ((256 - It) <= 63) {
 
  sat -= sat / 4;
@@ -360,6 +360,7 @@ unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi){
 
 int TCS3472_C2RGB_Error(unsigned int* RGBC){
 int err;
+
  err = RGBC[0] - RGBC[1] - RGBC[2] -RGBC[3];
  if((err < -32600)||(err > 32600))
  return -32666;

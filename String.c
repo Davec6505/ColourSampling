@@ -6,7 +6,10 @@ struct Constants str_vars;
 
 char string[size][str_size];
 
-
+const code char *comc[13]={
+   "T",
+   "G"
+};
 const code char *com[13]={
    "CONFIG",  //0
    "SETA",  //1
@@ -34,7 +37,7 @@ PString InitString(char cmp){
 * Get the request from the USB buffer and sort accordingly
 *********************************************************************/
 int DoStrings(int num){
-char *str,err;
+char *str,err,i;
  char *result,conf[64] = "";
  char txtR[6];
  int res0,res1,Int_Time,Gain;
@@ -60,21 +63,51 @@ char *str,err;
 #else
      switch(res1){
         case CONFIG :
-             err = TCS3472_SetIntergration_Time(3);
+             if(!strcmp(string[2],comc[0])){
+               if(string[3] != 0){
+                  Int_Time = atoi(string[3]);
+                  for(i=0;i<Int_Time;i++){
+                       LATE3_bit = !LATE3_bit;
+                       Delay_ms(100);
+                  }
+               }
+               err = TCS3472_SetIntergration_Time(Int_Time);
+               if(err > 0)
+               for(i=0;i<err;i++){
+                   LATE3_bit = !LATE3_bit;
+                   Delay_ms(500);
+               }
+             }else if(!strcmp(string[2],comc[1])){
+                if(string[3] != 0){
+                  Gain = atoi(string[3]);
+                  for(i=0;i<Gain;i++){
+                       LATE3_bit = !LATE3_bit;
+                       Delay_ms(100);
+                  }
+               }
+               err = TCS3472_SetGain(Gain);
+               if(err > 0)
+               for(i=0;i<err;i++){
+                   LATE3_bit = !LATE3_bit;
+                   Delay_ms(500);
+               }
+             }
+             LATE3_bit = 0;
              break;
         case READA :
-             str = Read_Send_AllColour();             break;
+             str = Read_Send_AllColour();             
+             break;
         case READR :
             str = Read_Send_OneColour(READR);
             break;
         case READG :
-           str = Read_Send_OneColour(READG);
+            str = Read_Send_OneColour(READG);
             break;
         case READB :
-           str = Read_Send_OneColour(READB);
+            str = Read_Send_OneColour(READB);
             break;
         case READC :
-           str = Read_Send_OneColour(READC);
+            str = Read_Send_OneColour(READC);
             break;
         case READT :
             str = Read_Send_OneColour(READT);
@@ -181,26 +214,38 @@ void WriteData(char *_data){
 * Read TCS3472 and send RGBC Data
 ********************************************************************/
 char* Read_Send_AllColour(){
-char txtR[9];
+float c,r,g,b;
+char txtR[15];
 char str[64];
 unsigned int cct;
 int err;
        TCS3472_getRawData(RawData);
-
+       c =  (float)RawData[0];
+       r =  (float)RawData[1];
+       g =  (float)RawData[2];
+       b =  (float)RawData[3];
+       
+       r /= c;
+       r *= 256.0;
+       g /= c;
+       g *= 256.0;
+       b /= c;
+       b *= 256.0;
+       
        strcpy(str,"C || R | G | B | = || ");
        sprintf(txtR,"%u",RawData[0]);
        strcat(str,txtR);
        strcat(str," || ");
 
-       sprintf(txtR,"%u",RawData[1]);
+       sprintf(txtR,"%3.2f",r);//RawData[1]);
        strcat(str,txtR);
        strcat(str," | ");
 
-       sprintf(txtR,"%u",RawData[2]);
+       sprintf(txtR,"%3.2f",g);//RawData[2]);
        strcat(str,txtR);
        strcat(str," | ");
 
-       sprintf(txtR,"%u",RawData[3]);
+       sprintf(txtR,"%3.2f",b);//RawData[3]);
        strcat(str,txtR);
        strcat(str," || ");
 

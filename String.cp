@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/String.c"
+#line 1 "C:/Users/Git/ColourSampling/String.c"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
@@ -171,12 +171,15 @@ char* Read_Send_AllColour();
 char* Read_Send_OneColour(int colr);
 int Get_It();
 int Get_Gain();
-#line 5 "C:/Users/GIT/ColourSampling/String.c"
+#line 5 "C:/Users/Git/ColourSampling/String.c"
 struct Constants str_vars;
 
 char string[ 20 ][ 64 ];
 
-
+const code char *comc[13]={
+ "T",
+ "G"
+};
 const code char *com[13]={
  "CONFIG",
  "SETA",
@@ -199,9 +202,9 @@ PString InitString(char cmp){
  str_t.c = cmp;
  str_t.StrSplitFp = strsplit;
 }
-#line 36 "C:/Users/GIT/ColourSampling/String.c"
+#line 39 "C:/Users/Git/ColourSampling/String.c"
 int DoStrings(int num){
-char *str,err;
+char *str,err,i;
  char *result,conf[64] = "";
  char txtR[6];
  int res0,res1,Int_Time,Gain;
@@ -227,10 +230,40 @@ char *str,err;
 
  switch(res1){
  case CONFIG :
- err = TCS3472_SetIntergration_Time(3);
+ if(!strcmp(string[2],comc[0])){
+ if(string[3] != 0){
+ Int_Time = atoi(string[3]);
+ for(i=0;i<Int_Time;i++){
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(100);
+ }
+ }
+ err = TCS3472_SetIntergration_Time(Int_Time);
+ if(err > 0)
+ for(i=0;i<err;i++){
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(500);
+ }
+ }else if(!strcmp(string[2],comc[1])){
+ if(string[3] != 0){
+ Gain = atoi(string[3]);
+ for(i=0;i<Gain;i++){
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(100);
+ }
+ }
+ err = TCS3472_SetGain(Gain);
+ if(err > 0)
+ for(i=0;i<err;i++){
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(500);
+ }
+ }
+ LATE3_bit = 0;
  break;
  case READA :
- str = Read_Send_AllColour(); break;
+ str = Read_Send_AllColour();
+ break;
  case READR :
  str = Read_Send_OneColour(READR);
  break;
@@ -263,7 +296,7 @@ char *str,err;
 ret:
  return 0;
 }
-#line 103 "C:/Users/GIT/ColourSampling/String.c"
+#line 136 "C:/Users/Git/ColourSampling/String.c"
 void clr_str_arrays(char str[20][64]){
 int i,j;
  for(i = 0;i < 20;i++){
@@ -273,7 +306,7 @@ int i,j;
 
  }
 }
-#line 116 "C:/Users/GIT/ColourSampling/String.c"
+#line 149 "C:/Users/Git/ColourSampling/String.c"
 char* setstr(char conf[64]){
  int i;
  for(i=0;i < 64;i++){
@@ -284,7 +317,7 @@ char* setstr(char conf[64]){
 
  return conf;
 }
-#line 130 "C:/Users/GIT/ColourSampling/String.c"
+#line 163 "C:/Users/Git/ColourSampling/String.c"
 int strsplit(char str[64], char c){
 int i,ii,kk;
  ii=kk=0;
@@ -305,7 +338,7 @@ endb:
  }
  return kk;
 }
-#line 154 "C:/Users/GIT/ColourSampling/String.c"
+#line 187 "C:/Users/Git/ColourSampling/String.c"
 int StrChecker(char *str){
 static int enum_val;
 static bit once;
@@ -320,7 +353,7 @@ int i;
  }
  return i;
 }
-#line 172 "C:/Users/GIT/ColourSampling/String.c"
+#line 205 "C:/Users/Git/ColourSampling/String.c"
 void WriteData(char *_data){
 
 
@@ -328,28 +361,40 @@ void WriteData(char *_data){
  strncpy(writebuff,_data,strlen(_data));
  HID_Write(&writebuff,64);
 }
-#line 183 "C:/Users/GIT/ColourSampling/String.c"
+#line 216 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_AllColour(){
-char txtR[9];
+float c,r,g,b;
+char txtR[15];
 char str[64];
 unsigned int cct;
 int err;
  TCS3472_getRawData(RawData);
+ c = (float)RawData[0];
+ r = (float)RawData[1];
+ g = (float)RawData[2];
+ b = (float)RawData[3];
+
+ r /= c;
+ r *= 256.0;
+ g /= c;
+ g *= 256.0;
+ b /= c;
+ b *= 256.0;
 
  strcpy(str,"C || R | G | B | = || ");
  sprintf(txtR,"%u",RawData[0]);
  strcat(str,txtR);
  strcat(str," || ");
 
- sprintf(txtR,"%u",RawData[1]);
+ sprintf(txtR,"%3.2f",r);
  strcat(str,txtR);
  strcat(str," | ");
 
- sprintf(txtR,"%u",RawData[2]);
+ sprintf(txtR,"%3.2f",g);
  strcat(str,txtR);
  strcat(str," | ");
 
- sprintf(txtR,"%u",RawData[3]);
+ sprintf(txtR,"%3.2f",b);
  strcat(str,txtR);
  strcat(str," || ");
 
@@ -361,7 +406,7 @@ int err;
 
  return &str;
 }
-#line 219 "C:/Users/GIT/ColourSampling/String.c"
+#line 264 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_OneColour(int colr){
 unsigned int col;
 char txtR[10];
@@ -422,7 +467,7 @@ int Get_It(){
 int Get_Gain(){
  return 0;
 }
-#line 283 "C:/Users/GIT/ColourSampling/String.c"
+#line 328 "C:/Users/Git/ColourSampling/String.c"
 void testStrings(char* writebuff){
  if(strlen(string[0])!=0){
  strncat(writebuff,string[0],strlen(string[0]));

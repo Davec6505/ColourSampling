@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/ColourSampling.c"
+#line 1 "C:/Users/Git/ColourSampling/ColourSampling.c"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
@@ -135,6 +135,7 @@ typedef struct{
 
 void InitTimer1();
 void Get_Time();
+void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
@@ -196,7 +197,8 @@ void ConfigPic();
 void InitVars();
 void InitISR();
 void WriteData(char *_data);
-#line 2 "C:/Users/GIT/ColourSampling/ColourSampling.c"
+void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
+#line 2 "C:/Users/Git/ColourSampling/ColourSampling.c"
 PString str_t;
 char* (*testStr)(int i);
 
@@ -219,6 +221,7 @@ unsigned int deg;
 char txtR[6];
 
  ConfigPic();
+
  Delay_ms(5000);
  it = TCS3472_INTEGRATIONTIME_24MS;
  G = TCS3472_GAIN_1X;

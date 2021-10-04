@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/ISR.c"
+#line 1 "C:/Users/Git/ColourSampling/ISR.c"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
@@ -135,6 +135,7 @@ typedef struct{
 
 void InitTimer1();
 void Get_Time();
+void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
@@ -196,7 +197,8 @@ void ConfigPic();
 void InitVars();
 void InitISR();
 void WriteData(char *_data);
-#line 3 "C:/Users/GIT/ColourSampling/ISR.c"
+void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
+#line 3 "C:/Users/Git/ColourSampling/ISR.c"
 void (*Get_Timer_Values)();
 
 void USB1Interrupt() iv IVT_USB_1 ilevel 7 ics ICS_SRS{

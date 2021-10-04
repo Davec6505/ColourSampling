@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/Config.c"
+#line 1 "C:/Users/Git/ColourSampling/Config.c"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
@@ -135,6 +135,7 @@ typedef struct{
 
 void InitTimer1();
 void Get_Time();
+void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
@@ -196,7 +197,8 @@ void ConfigPic();
 void InitVars();
 void InitISR();
 void WriteData(char *_data);
-#line 4 "C:/Users/GIT/ColourSampling/Config.c"
+void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
+#line 5 "C:/Users/Git/ColourSampling/Config.c"
 void ConfigPic(){
  CHECON = 30;
  AD1PCFG = 0xFFFFFFFF;
@@ -214,6 +216,7 @@ void ConfigPic(){
  I2C2_Init_Advanced(80000,100000);
  I2C_Set_Active(&I2C2_Start, &I2C2_Restart, &I2C2_Read, &I2C2_Write,
  &I2C2_Stop,&I2C2_Is_Idle);
+ I2C2_SetTimeoutCallback(1000, I2C2_TimeoutCallback);
  Delay_ms(100);
  UART2_Init(115200);
 

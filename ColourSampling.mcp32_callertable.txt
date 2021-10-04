@@ -4,7 +4,9 @@ main
 			SetI2C2Ptrs
 			I2C2_Wait_For_Idle
 				I2C2_Is_Idle
+				I2C2_TimeoutCallback
 		I2C_Set_Active
+		I2C2_SetTimeoutCallback
 		UART2_Init
 			Get_Fosc_kHz
 			UART_Calc_BRG
@@ -24,25 +26,25 @@ main
 		TCS3472_Read8
 			I2C2_Start
 				I2C2_Wait_For_Idle
+				I2C2_TimeoutCallback
 			I2C2_Write
 				I2C2_Wait_For_Idle
+				I2C2_TimeoutCallback
 			I2C2_Stop
 				I2C2_Wait_For_Idle
+				I2C2_TimeoutCallback
 			I2C2_Read
 				I2C2_Wait_For_Idle
+				I2C2_TimeoutCallback
 		TCS3472_SetIntergration_Time
-			TCS3472_Disable
-				TCS3472_Read8
-				TCS3472_Write8
-					I2C2_Start
-					I2C2_Write
-					I2C2_Stop
 			TCS3472_Write8
-			TCS3472_Enable
-				TCS3472_Write8
+				I2C2_Start
+				I2C2_Write
+				I2C2_Stop
 		TCS3472_SetGain
 			TCS3472_Write8
 		TCS3472_Enable
+			TCS3472_Write8
 	sprintf
 		_doprntf
 			isdigit
@@ -111,6 +113,8 @@ main
 								I2C1_Stop
 									I2C1_Wait_For_Idle
 										I2C1_Is_Idle
+										I2C2_TimeoutCallback
+									I2C2_TimeoutCallback
 						USB_CtrlTrf_In_Handler
 							USB_CtrlTrf_Tx_Service
 							I2C2_Stop
@@ -130,7 +134,11 @@ main
 			strlen
 			strncmp
 		memset
+		strcmp
+		atoi
+			isdigit
 		TCS3472_SetIntergration_Time
+		TCS3472_SetGain
 		Read_Send_AllColour
 			TCS3472_getRawData
 				TCS3472_Read16
@@ -138,12 +146,19 @@ main
 					I2C2_Write
 					I2C2_Restart
 						I2C2_Wait_For_Idle
+						I2C2_TimeoutCallback
 					I2C2_Read
 					I2C2_Stop
 			strcpy
 			sprintf
 			strcat
 			TCS3472_C2RGB_Error
+			_Unsigned16IntToFloat
+				_SignedIntegralToFloat
+				_UnsignedIntegralToFloat
+			_Div_FP
+			_Mul_FP
+			__CC2DW
 		Read_Send_OneColour
 			TCS3472_Read16
 			strcpy
@@ -152,8 +167,6 @@ main
 			TCS3472_getRawData
 			TCS3472_CalcColTemp
 				_Unsigned16IntToFloat
-					_SignedIntegralToFloat
-					_UnsignedIntegralToFloat
 				_Mul_FP
 				_Add_FP
 				_Div_FP
@@ -190,6 +203,7 @@ main
 						_Div_FP
 				_FloatToUnsignedIntegral
 			TCS3472_CalcColTemp_dn40
+			__CC2DW
 		strncat
 		strlen
 		HID_Write

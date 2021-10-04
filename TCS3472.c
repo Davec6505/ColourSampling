@@ -277,6 +277,7 @@ unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi){
 
 int TCS3472_C2RGB_Error(unsigned int* RGBC){
 int err;
+
      err =   RGBC[0] - RGBC[1] - RGBC[2] -RGBC[3];
      if((err < -32600)||(err > 32600))
          return -32666;

@@ -12,5 +12,5 @@ typedef struct{
 
 void InitTimer1();
 void Get_Time();
-
+void I2C2_TimeoutCallback(char errorCode);
 #endif

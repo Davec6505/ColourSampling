@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/_Timers.c"
+#line 1 "C:/Users/Git/ColourSampling/_Timers.c"
 #line 1 "c:/users/git/coloursampling/_timers.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 
@@ -59,7 +59,8 @@ typedef struct{
 
 void InitTimer1();
 void Get_Time();
-#line 3 "C:/Users/GIT/ColourSampling/_Timers.c"
+void I2C2_TimeoutCallback(char errorCode);
+#line 3 "C:/Users/Git/ColourSampling/_Timers.c"
 Timers TMR0;
 void InitTimer1(){
 
@@ -78,6 +79,46 @@ void Get_Time(){
  if(TMR0.ms > 999){
  TMR0.ms = 0;
  LATA10_bit = !LATA10_bit;
- LATE3_bit = !LATE3_bit;
  }
+}
+
+
+void I2C2_TimeoutCallback(char errorCode) {
+int i;
+ if (errorCode == _I2C_TIMEOUT_RD) {
+
+ for(i = 0;i < 20;i++){
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(100);
+ }
+ }
+
+ if (errorCode == _I2C_TIMEOUT_WR) {
+
+ for(i = 0;i < 20;i++){
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(500);
+ }
+ }
+
+ if (errorCode == _I2C_TIMEOUT_STOP) {
+
+ }
+
+ if (errorCode == _I2C_TIMEOUT_START) {
+
+ }
+
+ if (errorCode == _I2C_TIMEOUT_REPEATED_START) {
+
+ }
+
+ if (errorCode == _I2C_TIMEOUT_INIT) {
+
+ }
+
+ if (errorCode == _I2C_TIMEOUT_INIT_ADVANCED) {
+
+ }
+
 }

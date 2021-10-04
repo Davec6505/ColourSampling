@@ -44,11 +44,9 @@ Count=0
 [OTHER_FILES]
 Count=0
 [SEARCH_PATH]
-Path0=..\..\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Packages\Memory manager dlmalloc\Uses\
-Count=1
+Count=0
 [HEADER_PATH]
-Path0=..\..\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Packages\Memory manager dlmalloc\Uses\
-Count=1
+Count=0
 [HEADERS]
 File0=Config.h
 File1=TCS3472.h
