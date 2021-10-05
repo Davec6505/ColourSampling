@@ -1,29 +1,31 @@
 #include "String.h"
 
-
+unsigned long  FLASH_Settings_Addr = 0x9D07EFFF;
 
 struct Constants str_vars;
-
+struct Thresh Threshold;
 char string[size][str_size];
 
 const code char *comc[13]={
    "T",
    "G"
 };
-const code char *com[13]={
-   "CONFIG",  //0
-   "SETA",  //1
-   "SETR",    //2
-   "SETG",    //3
-   "SETB",    //4
-   "SETC",     //5
-   "READA", //6
-   "READR",   //7
-   "READG",   //8
-   "READB",   //9
-   "READC",   //10
-   "READT", //11
-   "READT_DN40" //12
+const code char *com[15]={
+   "CONFIG",      //0
+   "SETA",        //1
+   "SETR",        //2
+   "SETG",        //3
+   "SETB",        //4
+   "SETC",        //5
+   "READA",       //6
+   "READR",       //7
+   "READG",       //8
+   "READB",       //9
+   "READC",       //10
+   "READT",       //11
+   "READT_DN40",  //12
+   "READA_SCL",   //13
+   "WRITE_SCL"    //14
 };
 
 
@@ -114,6 +116,15 @@ char *str,err,i;
             break;
         case READT_DN40 :
             str = Read_Send_OneColour(READT_DN40);
+            break;
+        case READT_DN40 :
+            str = Read_Send_OneColour(READT_DN40);
+            break;
+        case READA_SCL :
+            str = Read_Thresholds();
+            break;
+        case WRITE_SCL :
+            str = Write_Thresholds();
             break;
         default:
            strncat(str,"No data requested!",18);
@@ -220,32 +231,21 @@ char str[64];
 unsigned int cct;
 int err;
        TCS3472_getRawData(RawData);
-       c =  (float)RawData[0];
-       r =  (float)RawData[1];
-       g =  (float)RawData[2];
-       b =  (float)RawData[3];
-       
-       r /= c;
-       r *= 256.0;
-       g /= c;
-       g *= 256.0;
-       b /= c;
-       b *= 256.0;
-       
+
        strcpy(str,"C || R | G | B | = || ");
        sprintf(txtR,"%u",RawData[0]);
        strcat(str,txtR);
        strcat(str," || ");
 
-       sprintf(txtR,"%3.2f",r);//RawData[1]);
+       sprintf(txtR,"%u",RawData[1]);
        strcat(str,txtR);
        strcat(str," | ");
 
-       sprintf(txtR,"%3.2f",g);//RawData[2]);
+       sprintf(txtR,"%u",RawData[2]);
        strcat(str,txtR);
        strcat(str," | ");
 
-       sprintf(txtR,"%3.2f",b);//RawData[3]);
+       sprintf(txtR,"%u",RawData[3]);
        strcat(str,txtR);
        strcat(str," || ");
 
@@ -322,6 +322,77 @@ int Get_Gain(){
     return 0;
 }
 
+/**********************************************************************
+*Read flash memory for Threshold values
+**********************************************************************/
+char* Read_Thresholds(){
+unsigned long *PtrPos;
+char txtR[10];
+char str[64];
+      PtrPos =  &FLASH_Settings_Addr;
+      NVMRead(PtrPos,&Threshold);
+    
+       strcpy(str,"Cth || Rth | Gth | Bth | = || ");
+       sprintf(txtR,"%u",Threshold.C_thresh);
+       strcat(str,txtR);
+       strcat(str," || ");
+
+       sprintf(txtR,"%u",Threshold.R_thresh);
+       strcat(str,txtR);
+       strcat(str," | ");
+
+       sprintf(txtR,"%u",Threshold.G_thresh);
+       strcat(str,txtR);
+       strcat(str," | ");
+
+       sprintf(txtR,"%u",Threshold.B_thresh);
+       strcat(str,txtR);
+       strcat(str," ||\r\n ");
+
+        return &str;
+}
+
+/*********************************************************************
+*write the Threshold values to flash and ream for use
+*********************************************************************/
+char* Write_Thresholds(){
+unsigned long *PtrPos;
+int i,err;
+char txtR[6];
+char str[64];
+         PtrPos =  &FLASH_Settings_Addr;
+         Flash_Erase_Page(FLASH_Settings_Addr);
+       //for(i = 0; i < 6; i++){
+       /*  if(string[2] != 0){
+             Threshold.R_thresh = atoi(string[2]);
+             Flash_Write_Word(*PtrPos,(unsigned long)Threshold.C_thresh);//NVMWriteDblWord(*PtrPos,(unsigned long)Threshold.C_thresh);
+         }
+         if(string[3] != 0){
+            Threshold.R_thresh = atoi(string[3]);
+             Flash_Write_Word(*PtrPos+4,(unsigned long)Threshold.C_thresh);//NVMWriteDblWord(*PtrPos+4,(unsigned long)Threshold.R_thresh);
+         }
+         if(string[4] != 0){
+            Threshold.G_thresh = atoi(string[4]);
+             Flash_Write_Word(*PtrPos+8,(unsigned long)Threshold.C_thresh);//NVMWriteDblWord(*PtrPos+8,(unsigned long)Threshold.G_thresh);
+         }
+         if(string[5] != 0){
+            Threshold.B_thresh = atoi(string[5]);
+             Flash_Write_Word(*PtrPos+12,(unsigned long)Threshold.C_thresh);//NVMWriteDblWord(*PtrPos+12,(unsigned long)Threshold.B_thresh);
+         }*/
+
+      /* if(err > 0){
+         for(i=0;i<err;i++){
+             LATE3_bit = !LATE3_bit;
+             Delay_ms(100);
+         }
+       }   */
+       
+       sprintf(txtR,"%4d",err);
+       strcpy(str,txtR);
+       strcat(str," ||\r\n ");
+       return str;
+}
+
  /*********************************************************************
 *Debug feature to write the split strings from the 2D matrix
 *********************************************************************/
@@ -348,6 +419,10 @@ void testStrings(char* writebuff){
    }
    if(strlen(string[5])!=0){
      strncat(writebuff,string[5],strlen(string[5]));
+     strcat(writebuff,":");
+   }
+   if(strlen(string[6])!=0){
+     strncat(writebuff,string[6],strlen(string[6]));
      strcat(writebuff,":");
    }
   // while(!HID_Write(&writebuff,64)) ;

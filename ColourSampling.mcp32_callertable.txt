@@ -153,12 +153,6 @@ main
 			sprintf
 			strcat
 			TCS3472_C2RGB_Error
-			_Unsigned16IntToFloat
-				_SignedIntegralToFloat
-				_UnsignedIntegralToFloat
-			_Div_FP
-			_Mul_FP
-			__CC2DW
 		Read_Send_OneColour
 			TCS3472_Read16
 			strcpy
@@ -167,6 +161,8 @@ main
 			TCS3472_getRawData
 			TCS3472_CalcColTemp
 				_Unsigned16IntToFloat
+					_SignedIntegralToFloat
+					_UnsignedIntegralToFloat
 				_Mul_FP
 				_Add_FP
 				_Div_FP
@@ -203,7 +199,22 @@ main
 						_Div_FP
 				_FloatToUnsignedIntegral
 			TCS3472_CalcColTemp_dn40
-			__CC2DW
+		Read_Thresholds
+			NVMRead
+			strcpy
+			sprintf
+			strcat
+		Write_Thresholds
+			Flash_Erase_Page
+				Flash_Do_Execute
+					RestoreInterrupts
+					DmaSuspend
+					Delay_1us
+					DmaResume
+						DmaSuspend
+			sprintf
+			strcpy
+			strcat
 		strncat
 		strlen
 		HID_Write

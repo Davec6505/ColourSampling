@@ -1,6 +1,7 @@
-#line 1 "C:/Users/GIT/ColourSampling/Config.c"
-#line 1 "c:/users/git/coloursampling/config.h"
-#line 1 "c:/users/git/coloursampling/tcs3472.h"
+#line 1 "C:/Users/GIT/ColourSampling/Flash_R_W.c"
+#line 1 "c:/users/git/coloursampling/flash_r_w.h"
+#line 1 "c:/users/git/coloursampling/string.h"
+#line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 
 
@@ -49,6 +50,8 @@ typedef unsigned long int uintptr_t;
 
 typedef signed long long intmax_t;
 typedef unsigned long long uintmax_t;
+#line 1 "c:/users/git/coloursampling/tcs3472.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 8 "c:/users/git/coloursampling/tcs3472.h"
 extern sfr TCS3472_Initialised;
 #line 73 "c:/users/git/coloursampling/tcs3472.h"
@@ -123,34 +126,6 @@ unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
 void GetScaledValues(char* CRGB);
-#line 1 "c:/users/git/coloursampling/_timers.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
-#line 5 "c:/users/git/coloursampling/_timers.h"
-typedef struct{
- uint32_t millis;
- uint16_t temp_ms;
- uint16_t ms;
- uint8_t sec;
-}Timers;
-
-
-void InitTimer1();
-void Get_Time();
-void I2C2_TimeoutCallback(char errorCode);
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 1 "c:/users/git/coloursampling/string.h"
-#line 1 "c:/users/git/coloursampling/flash_r_w.h"
-#line 1 "c:/users/git/coloursampling/string.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 15 "c:/users/git/coloursampling/flash_r_w.h"
-unsigned int NVMWriteWord (void* address, unsigned int _data);
-unsigned int NVMWriteDblWord (void* address, unsigned long data_);
-unsigned int NVMWriteRow (void* address, void* _data);
-unsigned int NVMErasePage(void* address);
-unsigned int NVMUnlock(unsigned int nvmop);
-void NVMRead(unsigned long* ptr,struct Thresh *vals);
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
-#line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 18 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 
@@ -212,50 +187,100 @@ char* Read_Thresholds();
 char* Write_Thresholds();
 int Get_It();
 int Get_Gain();
-#line 9 "c:/users/git/coloursampling/config.h"
-extern unsigned short i;
-extern char kk;
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
+#line 15 "c:/users/git/coloursampling/flash_r_w.h"
+unsigned int NVMWriteWord (void* address, unsigned int _data);
+unsigned int NVMWriteDblWord (void* address, unsigned long data_);
+unsigned int NVMWriteRow (void* address, void* _data);
+unsigned int NVMErasePage(void* address);
+unsigned int NVMUnlock(unsigned int nvmop);
+void NVMRead(unsigned long* ptr,struct Thresh *vals);
+#line 3 "C:/Users/GIT/ColourSampling/Flash_R_W.c"
+extern unsigned long FLASH_Settings_Addr;
 
+void NVMRead(unsigned long* ptr,struct Thresh *vals){
+unsigned long *ptrC;
 
-void ConfigPic();
-void InitVars();
-void InitISR();
-void WriteData(char *_data);
-void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
-#line 5 "C:/Users/GIT/ColourSampling/Config.c"
-void ConfigPic(){
- CHECON = 30;
- AD1PCFG = 0xFFFFFFFF;
- JTAGEN_bit = 0;
-
- TRISA = 0X0200;
- TRISB = 0X0000;
- TRISC = 0X0000;
- TRISD = 0X0000;
- TRISE = 0X0010;
- TRISF = 0X0000;
- TRISG = 0X0000;
-
-
- I2C2_Init_Advanced(80000,100000);
- I2C_Set_Active(&I2C2_Start, &I2C2_Restart, &I2C2_Read, &I2C2_Write,
- &I2C2_Stop,&I2C2_Is_Idle);
- I2C2_SetTimeoutCallback(1000, I2C2_TimeoutCallback);
- Delay_ms(100);
- UART2_Init(115200);
-
-
- USBIE_bit = 0;
- IPC11bits.USBIP = 7;
- HID_Enable(&readbuff,&writebuff);
-
-
- LATA10_bit = 0;
- LATE3_bit = 0;
- InitTimer1();
- InitISR();
+ ptrC = &ptr ;
+ vals->C_thresh = (unsigned int)*ptr ;
+ *ptr += 4;
+ vals->R_thresh = (unsigned int)*ptr;
+ *ptr += 4;
+ vals->G_thresh = (unsigned int)*ptr;
+ *ptr += 4;
+ vals->B_thresh = (unsigned int)*ptr;
 }
 
-void InitVars(){
+unsigned int NVMWriteWord (void* address, unsigned int _data){
+unsigned int res;
 
+NVMDATA = _data;
+
+
+NVMADDR = (unsigned long) address;
+
+res = NVMUnlock (0x4001);
+
+return res;
+}
+
+unsigned int NVMWriteDblWord (void* address, unsigned long data_){
+unsigned int res;
+
+NVMDATA = data_;
+
+NVMADDR = (unsigned long) address;
+
+res = NVMUnlock (0x4002);
+
+return res;
+}
+
+unsigned int NVMWriteRow (void* address, void* _data){
+unsigned int res;
+
+NVMADDR = (unsigned long) address;
+
+NVMSRCADDR = (unsigned int) _data;
+
+res = NVMUnlock(0x4003);
+
+return res;
+}
+
+unsigned int NVMErasePage(void* address)
+{
+unsigned int res;
+
+NVMADDR = (unsigned long) address;
+
+res = NVMUnlock(0x4004);
+
+return res;
+}
+
+unsigned int NVMUnlock (unsigned int nvmop){
+unsigned int status;
+
+ status = (unsigned int)DI();
+
+
+NVMCON = nvmop & 0x00004003;
+
+NVMKEY = 0xAA996655;
+NVMKEY = 0x556699AA;
+
+NVMCONSET = 0x8000;
+
+while (NVMCON & 0x8000);
+
+if (status & 0x0001)
+ EI();
+else
+ DI();
+
+NVMCONCLR = 0x0004000;
+
+
+return (NVMCON & 0x3000);
 }

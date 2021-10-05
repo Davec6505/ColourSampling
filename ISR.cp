@@ -1,4 +1,4 @@
-#line 1 "C:/Users/Git/ColourSampling/ISR.c"
+#line 1 "C:/Users/GIT/ColourSampling/ISR.c"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
@@ -122,6 +122,7 @@ unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
+void GetScaledValues(char* CRGB);
 #line 1 "c:/users/git/coloursampling/_timers.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 5 "c:/users/git/coloursampling/_timers.h"
@@ -138,8 +139,19 @@ void Get_Time();
 void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 1 "c:/users/git/coloursampling/string.h"
+#line 1 "c:/users/git/coloursampling/flash_r_w.h"
+#line 1 "c:/users/git/coloursampling/string.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
+#line 15 "c:/users/git/coloursampling/flash_r_w.h"
+unsigned int NVMWriteWord (void* address, unsigned int _data);
+unsigned int NVMWriteDblWord (void* address, unsigned long data_);
+unsigned int NVMWriteRow (void* address, void* _data);
+unsigned int NVMErasePage(void* address);
+unsigned int NVMUnlock(unsigned int nvmop);
+void NVMRead(unsigned long* ptr,struct Thresh *vals);
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
-#line 15 "c:/users/git/coloursampling/string.h"
+#line 18 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 
 enum ControlColorIO{
@@ -155,7 +167,9 @@ READG,
 READB,
 READC,
 READT,
-READT_DN40
+READT_DN40,
+READA_SCL,
+WRITE_SCL
 };
 
 struct Constants{
@@ -169,6 +183,14 @@ typedef struct pstrings_t{
  char string[ 20 ][ 64 ];
  int (*StrSplitFp)(char* str,char c);
 }PString;
+
+struct Thresh{
+ uint16_t C_thresh;
+ uint16_t R_thresh;
+ uint16_t G_thresh;
+ uint16_t B_thresh;
+};
+
 
 
 
@@ -186,6 +208,8 @@ char* setstr(char conf[64]);
 void clr_str_arrays(char *str[10]);
 char* Read_Send_AllColour();
 char* Read_Send_OneColour(int colr);
+char* Read_Thresholds();
+char* Write_Thresholds();
 int Get_It();
 int Get_Gain();
 #line 9 "c:/users/git/coloursampling/config.h"
@@ -198,7 +222,7 @@ void InitVars();
 void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
-#line 3 "C:/Users/Git/ColourSampling/ISR.c"
+#line 3 "C:/Users/GIT/ColourSampling/ISR.c"
 void (*Get_Timer_Values)();
 
 void USB1Interrupt() iv IVT_USB_1 ilevel 7 ics ICS_SRS{

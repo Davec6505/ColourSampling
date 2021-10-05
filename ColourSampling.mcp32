@@ -6,7 +6,7 @@ Value=0
 [BUILD_TYPE]
 Value=0
 [ACTIVE_TAB]
-Value=String.c
+Value=ColourSampling.c
 [USE_EEPROM]
 Value=0
 [USE_HEAP]
@@ -24,19 +24,21 @@ File4=_Timers.c
 File5=USBdsc.c
 File6=ColorMatch.c
 File7=String.c
-Count=8
+File8=Flash_R_W.c
+Count=9
 [BINARIES]
 Count=0
 [IMAGES]
 Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
-File0=ColourSampling.c
-File1=String.c
-File2=String.h
-File3=TCS3472.c
-File4=TCS3472.h
-Count=5
+File0=String.c
+File1=TCS3472.c
+File2=TCS3472.h
+File3=..\RGB_128_Scan_MikroC\FlashMemory.c
+File4=String.h
+File5=ColourSampling.c
+Count=6
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -44,16 +46,19 @@ Count=0
 [OTHER_FILES]
 Count=0
 [SEARCH_PATH]
-Count=0
+Path0=..\..\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Packages\Memory manager dlmalloc\Uses\
+Count=1
 [HEADER_PATH]
-Count=0
+Path0=..\..\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Packages\Memory manager dlmalloc\Uses\
+Count=1
 [HEADERS]
 File0=Config.h
 File1=TCS3472.h
 File2=_Timers.h
 File3=ColorMatch.h
 File4=String.h
-Count=5
+File5=Flash_R_W.h
+Count=6
 [PLDS]
 Count=0
 [Useses]
@@ -68,7 +73,8 @@ File7=C_Math
 File8=USB
 File9=MemManager
 File10=Memory_manager_dlmalloc
-Count=11
+File11=FLASH
+Count=12
 [INTERRUPT_DEFS]
 EBASE=9FC01000
 VECTOR_SPACEING=32
@@ -77,5 +83,12 @@ USE_SRS=7
 [EXPANDED_NODES]
 0=ColourSampling.mcp32
 1=Sources
-10=Header Files
-Count=3
+11=Header Files
+37=RGB_128_Scan_MikroC.mcp32
+38=Sources
+72=USB HID Bootloader.mcp32
+73=Sources
+74=..\
+77=..\
+78=Driver
+Count=10

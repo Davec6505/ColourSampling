@@ -140,4 +140,5 @@ unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
+void GetScaledValues(char* CRGB);
 #endif
