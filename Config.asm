@@ -33,14 +33,28 @@ SW	R2, Offset(TRISE+0)(GP)
 SW	R0, Offset(TRISF+0)(GP)
 ;Config.c,16 :: 		TRISG = 0X0000;
 SW	R0, Offset(TRISG+0)(GP)
-;Config.c,19 :: 		I2C2_Init_Advanced(80000,100000);//INIT I2C AT 100KHZ
+;Config.c,19 :: 		USBIE_bit = 0;
+LUI	R2, BitMask(USBIE_bit+0)
+ORI	R2, R2, BitMask(USBIE_bit+0)
+_SX	
+;Config.c,20 :: 		IPC11bits.USBIP = 7;
+ORI	R2, R0, 7168
+SH	R2, Offset(IPC11bits+8)(GP)
+;Config.c,21 :: 		HID_Enable(&readbuff,&writebuff);
+LUI	R26, hi_addr(_writebuff+0)
+ORI	R26, R26, lo_addr(_writebuff+0)
+LUI	R25, hi_addr(_readbuff+0)
+ORI	R25, R25, lo_addr(_readbuff+0)
+JAL	_HID_Enable+0
+NOP	
+;Config.c,23 :: 		I2C2_Init_Advanced(80000,100000);//INIT I2C AT 100KHZ
 LUI	R26, 1
 ORI	R26, R26, 34464
 LUI	R25, 1
 ORI	R25, R25, 14464
 JAL	_I2C2_Init_Advanced+0
 NOP	
-;Config.c,20 :: 		I2C_Set_Active(&I2C2_Start, &I2C2_Restart, &I2C2_Read, &I2C2_Write,
+;Config.c,24 :: 		I2C_Set_Active(&I2C2_Start, &I2C2_Restart, &I2C2_Read, &I2C2_Write,
 LUI	R28, hi_addr(_I2C2_Write+0)
 ORI	R28, R28, lo_addr(_I2C2_Write+0)
 LUI	R27, hi_addr(_I2C2_Read+0)
@@ -49,7 +63,7 @@ LUI	R26, hi_addr(_I2C2_Restart+0)
 ORI	R26, R26, lo_addr(_I2C2_Restart+0)
 LUI	R25, hi_addr(_I2C2_Start+0)
 ORI	R25, R25, lo_addr(_I2C2_Start+0)
-;Config.c,21 :: 		&I2C2_Stop,&I2C2_Is_Idle); // Sets the I2C2 module active
+;Config.c,25 :: 		&I2C2_Stop,&I2C2_Is_Idle); // Sets the I2C2 module active
 LUI	R2, hi_addr(_I2C2_Is_Idle+0)
 ORI	R2, R2, lo_addr(_I2C2_Is_Idle+0)
 ADDIU	SP, SP, -8
@@ -60,53 +74,39 @@ SW	R2, 0(SP)
 JAL	_I2C_Set_Active+0
 NOP	
 ADDIU	SP, SP, 8
-;Config.c,22 :: 		I2C2_SetTimeoutCallback(1000, I2C2_TimeoutCallback);
+;Config.c,26 :: 		I2C2_SetTimeoutCallback(1000, I2C2_TimeoutCallback);
 LUI	R26, hi_addr(_I2C2_TimeoutCallback+0)
 ORI	R26, R26, lo_addr(_I2C2_TimeoutCallback+0)
 ORI	R25, R0, 1000
 JAL	_I2C2_SetTimeoutCallback+0
 NOP	
-;Config.c,23 :: 		Delay_ms(100);
+;Config.c,27 :: 		Delay_ms(100);
 LUI	R24, 40
 ORI	R24, R24, 45226
 L_ConfigPic0:
 ADDIU	R24, R24, -1
 BNE	R24, R0, L_ConfigPic0
 NOP	
-;Config.c,24 :: 		UART2_Init(115200);              // Initialize UART module at 9600 bps
+;Config.c,28 :: 		UART2_Init(115200);              // Initialize UART module at 9600 bps
 LUI	R25, 1
 ORI	R25, R25, 49664
 JAL	_UART2_Init+0
 NOP	
-;Config.c,27 :: 		USBIE_bit = 0;
-LUI	R2, BitMask(USBIE_bit+0)
-ORI	R2, R2, BitMask(USBIE_bit+0)
-_SX	
-;Config.c,28 :: 		IPC11bits.USBIP = 7;
-ORI	R2, R0, 7168
-SH	R2, Offset(IPC11bits+8)(GP)
-;Config.c,29 :: 		HID_Enable(&readbuff,&writebuff);
-LUI	R26, hi_addr(_writebuff+0)
-ORI	R26, R26, lo_addr(_writebuff+0)
-LUI	R25, hi_addr(_readbuff+0)
-ORI	R25, R25, lo_addr(_readbuff+0)
-JAL	_HID_Enable+0
-NOP	
-;Config.c,32 :: 		LATA10_bit = 0;
+;Config.c,34 :: 		LATA10_bit = 0;
 LUI	R2, BitMask(LATA10_bit+0)
 ORI	R2, R2, BitMask(LATA10_bit+0)
 _SX	
-;Config.c,33 :: 		LATE3_bit = 0;
+;Config.c,35 :: 		LATE3_bit = 0;
 LUI	R2, BitMask(LATE3_bit+0)
 ORI	R2, R2, BitMask(LATE3_bit+0)
 _SX	
-;Config.c,34 :: 		InitTimer1();
+;Config.c,36 :: 		InitTimer1();
 JAL	_InitTimer1+0
 NOP	
-;Config.c,35 :: 		InitISR();
+;Config.c,37 :: 		InitISR();
 JAL	_InitISR+0
 NOP	
-;Config.c,36 :: 		}
+;Config.c,38 :: 		}
 L_end_ConfigPic:
 LW	R28, 16(SP)
 LW	R27, 12(SP)
@@ -118,8 +118,8 @@ JR	RA
 NOP	
 ; end of _ConfigPic
 _InitVars:
-;Config.c,38 :: 		void InitVars(){
-;Config.c,40 :: 		}
+;Config.c,40 :: 		void InitVars(){
+;Config.c,42 :: 		}
 L_end_InitVars:
 JR	RA
 NOP	

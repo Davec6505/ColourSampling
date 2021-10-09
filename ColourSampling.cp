@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/ColourSampling.c"
+#line 1 "C:/Users/Git/ColourSampling/ColourSampling.c"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
@@ -142,13 +142,17 @@ void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 15 "c:/users/git/coloursampling/flash_r_w.h"
-unsigned int NVMWriteWord (void* address, unsigned int _data);
-unsigned int NVMWriteDblWord (void* address, unsigned long data_);
+#line 17 "c:/users/git/coloursampling/flash_r_w.h"
+extern unsigned long FLASH_Settings_VAddr;
+extern unsigned long FLASH_Settings_PAddr;
+
+
+unsigned int NVMWriteWord (void* address, unsigned long _data);
 unsigned int NVMWriteRow (void* address, void* _data);
 unsigned int NVMErasePage(void* address);
 unsigned int NVMUnlock(unsigned int nvmop);
-void NVMRead(unsigned long* ptr,struct Thresh *vals);
+void NVMRead(void* addr,struct Thresh *vals);
+unsigned long ReadFlash();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 18 "c:/users/git/coloursampling/string.h"
@@ -212,6 +216,7 @@ char* Read_Thresholds();
 char* Write_Thresholds();
 int Get_It();
 int Get_Gain();
+char* TestFlash();
 #line 9 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
@@ -222,7 +227,7 @@ void InitVars();
 void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
-#line 2 "C:/Users/GIT/ColourSampling/ColourSampling.c"
+#line 2 "C:/Users/Git/ColourSampling/ColourSampling.c"
 PString str_t;
 char* (*testStr)(int i);
 

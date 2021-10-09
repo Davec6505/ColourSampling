@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 1 "C:/Users/Git/ColourSampling/TCS3472.c"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 
@@ -122,7 +122,7 @@ unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
 void GetScaledValues(char* CRGB);
-#line 3 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 3 "C:/Users/Git/ColourSampling/TCS3472.c"
 unsigned int RawData[4];
 unsigned int CCT;
 
@@ -254,7 +254,7 @@ unsigned int TCS3472_CalcColTemp(unsigned int r,unsigned int g,unsigned int b){
  if (r == 0 && g == 0 && b == 0) {
  return 0;
  }
-#line 145 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 145 "C:/Users/Git/ColourSampling/TCS3472.c"
  X = (-0.3895 * r) + (1.4933 * g) + (-0.0491 * b);
  Y = (-0.1212 * r) + (0.8890 * g) + (-0.1231 * b);
  Z = ( 0.0343 * r) + (-0.2657 * g) + (0.9438 * b);
@@ -283,7 +283,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime
  if (RGBC[0] == 0) {
  return 0;
  }
-#line 186 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 186 "C:/Users/Git/ColourSampling/TCS3472.c"
  if ((256 - It) > 63) {
 
  sat = 65535;
@@ -291,7 +291,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime
 
  sat = 1024 * (256 - It);
  }
-#line 211 "C:/Users/GIT/ColourSampling/TCS3472.c"
+#line 211 "C:/Users/Git/ColourSampling/TCS3472.c"
  if ((256 - It) <= 63) {
 
  sat -= sat / 4;

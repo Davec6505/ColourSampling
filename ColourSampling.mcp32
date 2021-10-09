@@ -6,7 +6,7 @@ Value=0
 [BUILD_TYPE]
 Value=0
 [ACTIVE_TAB]
-Value=ColourSampling.c
+Value=Flash_R_W.c
 [USE_EEPROM]
 Value=0
 [USE_HEAP]
@@ -33,12 +33,9 @@ Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
 File0=String.c
-File1=TCS3472.c
-File2=TCS3472.h
-File3=..\RGB_128_Scan_MikroC\FlashMemory.c
-File4=String.h
-File5=ColourSampling.c
-Count=6
+File1=Flash_R_W.c
+File2=Flash_R_W.h
+Count=3
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -46,11 +43,9 @@ Count=0
 [OTHER_FILES]
 Count=0
 [SEARCH_PATH]
-Path0=..\..\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Packages\Memory manager dlmalloc\Uses\
-Count=1
+Count=0
 [HEADER_PATH]
-Path0=..\..\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Packages\Memory manager dlmalloc\Uses\
-Count=1
+Count=0
 [HEADERS]
 File0=Config.h
 File1=TCS3472.h
@@ -84,11 +79,4 @@ USE_SRS=7
 0=ColourSampling.mcp32
 1=Sources
 11=Header Files
-37=RGB_128_Scan_MikroC.mcp32
-38=Sources
-72=USB HID Bootloader.mcp32
-73=Sources
-74=..\
-77=..\
-78=Driver
-Count=10
+Count=3

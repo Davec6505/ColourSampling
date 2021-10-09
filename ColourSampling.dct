@@ -2810,7 +2810,6 @@ bufs
 bufs
 bufs
 bufs_bit
-bulk_free
 busy
 busy
 busy
@@ -2927,7 +2926,6 @@ cal8
 cal8_bit
 cal9
 cal9_bit
-calloc
 cch
 cch
 cch
@@ -10904,7 +10902,8 @@ ferr_bit
 ferr_u2sta_bit
 filler1
 flash_erase_page
-flash_settings_addr
+flash_settings_paddr
+flash_settings_vaddr
 flash_write_row
 flash_write_word
 floattostr
@@ -10953,7 +10952,6 @@ frcdiv2
 frcdiv2
 frcdiv2
 frcdiv2_bit
-free
 free
 frexp
 frm0
@@ -12518,8 +12516,6 @@ incm1
 incm1
 incm1
 incm1_bit
-independent_calloc
-independent_comalloc
 initisr
 initstring
 inittimer1
@@ -13779,19 +13775,8 @@ lvdstat
 lvdstat
 lvdstat_bit
 main
-mallinfo
 malloc
-malloc
-malloc_footprint
-malloc_footprint_limit
-malloc_max_footprint
-malloc_set_footprint_limit
-malloc_stats
-malloc_trim
-malloc_usable_size
-mallopt
 max
-memalign
 memchr
 memcmp
 memcpy
@@ -14298,7 +14283,6 @@ nvmsrcaddr9
 nvmsrcaddr9_bit
 nvmsrcaddrbits
 nvmunlock
-nvmwritedblword
 nvmwriterow
 nvmwriteword
 ob0e
@@ -17383,7 +17367,6 @@ portginv
 portginvbits
 portgset
 portgsetbits
-posix_memalign
 pow
 ppbi
 ppbi
@@ -17940,7 +17923,6 @@ ptwren
 ptwren
 ptwren
 ptwren_bit
-pvalloc
 r_thresh
 r_thresh
 r_w
@@ -18410,8 +18392,7 @@ read_send_allcolour
 read_send_onecolour
 read_thresholds
 readbuff
-realloc
-realloc_in_place
+readflash
 report
 reset
 restoreinterrupts
@@ -20387,6 +20368,7 @@ tcs3472_setinterrupt_limits
 tcs3472_write
 tcs3472_write8
 temp_ms
+testflash
 teststr
 teststrings
 tgate
@@ -22666,7 +22648,6 @@ utxsel
 utxsel
 utxsel
 val
-valloc
 vbuschg
 vbuschg
 vbuschg

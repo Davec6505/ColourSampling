@@ -1,4 +1,4 @@
-#line 1 "C:/Users/GIT/ColourSampling/Flash_R_W.c"
+#line 1 "C:/Users/Git/ColourSampling/Flash_R_W.c"
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
@@ -187,69 +187,64 @@ char* Read_Thresholds();
 char* Write_Thresholds();
 int Get_It();
 int Get_Gain();
+char* TestFlash();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 15 "c:/users/git/coloursampling/flash_r_w.h"
-unsigned int NVMWriteWord (void* address, unsigned int _data);
-unsigned int NVMWriteDblWord (void* address, unsigned long data_);
+#line 17 "c:/users/git/coloursampling/flash_r_w.h"
+extern unsigned long FLASH_Settings_VAddr;
+extern unsigned long FLASH_Settings_PAddr;
+
+
+unsigned int NVMWriteWord (void* address, unsigned long _data);
 unsigned int NVMWriteRow (void* address, void* _data);
 unsigned int NVMErasePage(void* address);
 unsigned int NVMUnlock(unsigned int nvmop);
-void NVMRead(unsigned long* ptr,struct Thresh *vals);
-#line 3 "C:/Users/GIT/ColourSampling/Flash_R_W.c"
-extern unsigned long FLASH_Settings_Addr;
+void NVMRead(void* addr,struct Thresh *vals);
+unsigned long ReadFlash();
+#line 6 "C:/Users/Git/ColourSampling/Flash_R_W.c"
+unsigned long FLASH_Settings_VAddr = 0xBD079ff6;
+unsigned long FLASH_Settings_PAddr = 0x1D079ff6;
 
-void NVMRead(unsigned long* ptr,struct Thresh *vals){
-unsigned long *ptrC;
+void NVMRead(void* addr,struct Thresh *vals){
+unsigned char *ptrC;
+unsigned char Val[4];
 
- ptrC = &ptr ;
- vals->C_thresh = (unsigned int)*ptr ;
- *ptr += 4;
- vals->R_thresh = (unsigned int)*ptr;
- *ptr += 4;
- vals->G_thresh = (unsigned int)*ptr;
- *ptr += 4;
- vals->B_thresh = (unsigned int)*ptr;
+ ptrC = FLASH_Settings_VAddr;
+ Val[0] = *ptrC;
+ vals->C_thresh = (unsigned int)Val;
+#line 22 "C:/Users/Git/ColourSampling/Flash_R_W.c"
 }
 
-unsigned int NVMWriteWord (void* address, unsigned int _data){
+unsigned int NVMWriteWord (void* address, unsigned long _data){
 unsigned int res;
-
-NVMDATA = _data;
 
 
 NVMADDR = (unsigned long) address;
+
+
+NVMDATA = _data;
+
 
 res = NVMUnlock (0x4001);
 
 return res;
 }
 
-unsigned int NVMWriteDblWord (void* address, unsigned long data_){
-unsigned int res;
-
-NVMDATA = data_;
-
-NVMADDR = (unsigned long) address;
-
-res = NVMUnlock (0x4002);
-
-return res;
-}
 
 unsigned int NVMWriteRow (void* address, void* _data){
 unsigned int res;
 
 NVMADDR = (unsigned long) address;
 
+
 NVMSRCADDR = (unsigned int) _data;
+
 
 res = NVMUnlock(0x4003);
 
 return res;
 }
 
-unsigned int NVMErasePage(void* address)
-{
+unsigned int NVMErasePage(void* address){
 unsigned int res;
 
 NVMADDR = (unsigned long) address;
@@ -265,22 +260,48 @@ unsigned int status;
  status = (unsigned int)DI();
 
 
-NVMCON = nvmop & 0x00004003;
+NVMCON = nvmop & 0x00004007;
+
 
 NVMKEY = 0xAA996655;
 NVMKEY = 0x556699AA;
 
+
 NVMCONSET = 0x8000;
 
+
 while (NVMCON & 0x8000);
+
 
 if (status & 0x0001)
  EI();
 else
  DI();
 
+
 NVMCONCLR = 0x0004000;
 
 
 return (NVMCON & 0x3000);
+}
+
+unsigned long ReadFlash(){
+unsigned char buff[512];
+unsigned long i;
+unsigned char *ptr;
+unsigned long Val;
+
+
+
+
+ ptr = (char*)(FLASH_Settings_VAddr);
+ for(i=0;i<sizeof(buff);i++){
+ buff[i] = ptr[i];
+ }
+
+ Val = buff[1];
+ Val =(Val<<8)| buff[0];
+ Val =(Val<<8)| buff[3];
+ Val =(Val<<8)| buff[2];
+ return Val;
 }

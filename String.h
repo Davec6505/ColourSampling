@@ -75,4 +75,5 @@ char* Read_Thresholds();
 char* Write_Thresholds();
 int Get_It();
 int Get_Gain();
+char* TestFlash();
 #endif
