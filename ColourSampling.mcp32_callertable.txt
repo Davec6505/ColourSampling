@@ -202,10 +202,6 @@ main
 			TCS3472_CalcColTemp_dn40
 			__CC2DW
 		TestFlash
-			NVMErasePage
-				NVMUnlock
-			NVMWriteWord
-				NVMUnlock
 			ReadFlash
 			strcpy
 			LongWordToHex
@@ -213,8 +209,12 @@ main
 			sprintf
 			__CC2DW
 		Write_Thresholds
-			atoi
+			NVMErasePage
+				NVMUnlock
+			atol
+				isdigit
 			NVMWriteWord
+				NVMUnlock
 			sprintf
 			strcpy
 			strcat

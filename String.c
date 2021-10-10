@@ -121,7 +121,7 @@ char *str,err,i;
             str = Read_Send_OneColour(READT_DN40);
             break;
         case READA_SCL :
-            str = TestFlash();//Read_Thresholds();
+            str = TestFlash();// Read_Thresholds(); //
             break;
         case WRITE_SCL :
             str = Write_Thresholds();
@@ -330,13 +330,10 @@ char txtR[15];
 char str[64];
 unsigned long Val;
 
+       NVMRead(FLASH_Settings_VAddr,&Threshold);
 
-       Val = 321;
-       Val = ReadFlash();
-  /*vals->C_thresh*//*Val =  *ptrC;*/
-  //vals->C_thresh = (unsigned int)Val;
        strcpy(str,"Cth || Rth | Gth | Bth | = || ");
-       sprintf(txtR,"%u",Val);//Threshold.C_thresh);
+       sprintf(txtR,"%u",Threshold.C_thresh);
        strcat(str,txtR);
        strcat(str," || ");
 
@@ -359,37 +356,37 @@ unsigned long Val;
 *write the Threshold values to flash and ream for use
 *********************************************************************/
 char* Write_Thresholds(){
-unsigned int PtrPos;
+unsigned long val[128];
+unsigned long pos;
 int i,err;
 char txtR[15];
 char str[64];
+         pos =  FLASH_Settings_PAddr;
+        for(i=1;i<128;i++)
+           val[i] = 0x00000000;
+        err = NVMErasePage(pos);
+        
+        if(string[2] != 0){
+             val[0] = atol(string[2]);
+             err = NVMWriteWord(pos,val[0]);
+        }
+        pos += 4;
+        if(string[3] != 0){
+             val[1] = atol(string[3]);
+             err = NVMWriteWord(pos,val[1]);
+        }
+        pos += 4;
+        if(string[4] != 0){
+             val[2] = atol(string[4]);
+             err = NVMWriteWord(pos,val[2]);
+        }
+        pos += 4;
+        if(string[5] != 0){
+             val[3] = atol(string[5]);
+             err = NVMWriteWord(pos,val[3]);
+        }
 
-
-         PtrPos =  FLASH_Settings_PAddr;
-
-         if(string[2] != 0){
-             Threshold.R_thresh = atoi(string[2]);
-            err = NVMWriteWord(FLASH_Settings_PAddr,Threshold.C_thresh);
-         }
-        /* if(string[3] != 0){
-            Threshold.R_thresh = atoi(string[3]);
-             Flash_Write_Word(*PtrPos+4,(unsigned long)Threshold.C_thresh);//NVMWriteDblWord(*PtrPos+4,(unsigned long)Threshold.R_thresh);
-         }
-         if(string[4] != 0){
-            Threshold.G_thresh = atoi(string[4]);
-             Flash_Write_Word(*PtrPos+8,(unsigned long)Threshold.C_thresh);//NVMWriteDblWord(*PtrPos+8,(unsigned long)Threshold.G_thresh);
-         }
-         if(string[5] != 0){
-            Threshold.B_thresh = atoi(string[5]);
-             Flash_Write_Word(*PtrPos+12,(unsigned long)Threshold.C_thresh);//NVMWriteDblWord(*PtrPos+12,(unsigned long)Threshold.B_thresh);
-         }*/
-
-      /* if(err > 0){
-         for(i=0;i<err;i++){
-             LATE3_bit = !LATE3_bit;
-             Delay_ms(100);
-         }
-       }   */
+       //  err = NVMWriteRow(FLASH_Settings_PAddr,val);
        
        sprintf(txtR,"%x",err);
        strcpy(str,txtR);
@@ -438,14 +435,14 @@ char str[64];
 unsigned long val[128];
 unsigned long Val;
 unsigned int res,i;
+ char* tr = "112233";
+      // val[0] = atol(tr);//0x1234afaf;
+      // for(i=1;i<128;i++)
+      //     val[i] = 0xabcdef98;
 
-Val = 0x1234afaf;
-        for(i=0;i<128;i++)
-           val[i] = 0x1234bfaf;
-           
-       res = NVMErasePage(FLASH_Settings_PAddr);
+      // res = NVMErasePage(FLASH_Settings_PAddr);
       // res = NVMWriteRow(FLASH_Settings_PAddr,val);
-       res = NVMWriteWord(FLASH_Settings_PAddr,Val);
+      // res = NVMWriteWord(FLASH_Settings_PAddr,val[0]);
        Val =  ReadFlash();
 
 

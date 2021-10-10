@@ -1,24 +1,49 @@
 #include "Flash_R_W.h"
 
 
-//unsigned long  FLASH_Settings_VAddr = 0x9D078007;
-//unsigned long  FLASH_Settings_PAddr = 0x1D078007;
-unsigned long  FLASH_Settings_VAddr = 0xBD079ff6;
-unsigned long  FLASH_Settings_PAddr = 0x1D079ff6;
+unsigned long  FLASH_Settings_VAddr = 0x9D07A000;
+unsigned long  FLASH_Settings_PAddr = 0x1D07A000;
+//unsigned long  FLASH_Settings_VAddr = 0xBD079ff6;
+//unsigned long  FLASH_Settings_PAddr = 0x1D079ff6;
 
 void NVMRead(void* addr,struct Thresh *vals){
-unsigned char *ptrC;
-unsigned char Val[4];
+unsigned char buff[512];
+unsigned int i,j;
+unsigned char *ptr;
+unsigned long Val;
 
-  ptrC = FLASH_Settings_VAddr;
-  /*vals->C_thresh*/Val[0] =  *ptrC;
-  vals->C_thresh = (unsigned int)Val;
-/*ptrC++;
-  vals->R_thresh =  *(unsigned long*)ptrC;
-  ptrC++;
-  vals->G_thresh =  *(unsigned long*)ptrC;
-  ptrC++;
-  vals->B_thresh =  *(unsigned long*)ptrC;*/
+  ptr = (unsigned char*)addr;
+  i = 0;
+   //for(i = 0;i < 144;i++){
+       for(j = 0;j < 512;j++){
+          buff[j] = ptr[j];
+       }
+       Val = buff[1];
+       Val =(Val<<8)| buff[0];
+       Val =(Val<<8)| buff[3];
+       Val =(Val<<8)| buff[2];
+      vals->C_thresh = Val;
+
+       Val = buff[5];
+       Val =(Val<<8)| buff[4];
+       Val =(Val<<8)| buff[7];
+       Val =(Val<<8)| buff[6];
+      vals->R_thresh = Val;
+
+       Val = buff[9];
+       Val =(Val<<8)| buff[8];
+       Val =(Val<<8)| buff[11];
+       Val =(Val<<8)| buff[10];
+      vals->G_thresh = Val;
+
+       Val = buff[13];
+       Val =(Val<<8)| buff[12];
+       Val =(Val<<8)| buff[15];
+       Val =(Val<<8)| buff[14];
+      vals->B_thresh = Val;
+          
+   // i += 4;
+  //}
 }
 
 unsigned int NVMWriteWord (void* address, unsigned long _data){
@@ -101,14 +126,16 @@ unsigned long Val;
 ////////////////////////////////////////////////////////
 //reset the address and copy the flash to the strH array
 
-    ptr = (char*)(FLASH_Settings_VAddr);
-    for(i=0;i<sizeof(buff);i++){
-       buff[i] = ptr[i];
+    ptr = (unsigned char*)(FLASH_Settings_VAddr);
+   for(i=0;i<512;i++){
+       buff[i] = *ptr;
+       ptr++;
     }
   //  memcpy(buff,ptr,6);
-    Val = buff[1];
-    Val =(Val<<8)| buff[0];
-    Val =(Val<<8)| buff[3];
+    Val = buff[3];
     Val =(Val<<8)| buff[2];
+    Val =(Val<<8)| buff[1];
+    Val =(Val<<8)| buff[0];
+
    return Val;//0xafffafff;
 }

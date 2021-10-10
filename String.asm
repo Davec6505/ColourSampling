@@ -75,20 +75,20 @@ LUI	R25, hi_addr(_string+128)
 ORI	R25, R25, lo_addr(_string+128)
 JAL	_strcmp+0
 NOP	
-BEQ	R2, R0, L__DoStrings90
+BEQ	R2, R0, L__DoStrings93
 NOP	
 J	L_DoStrings3
 NOP	
-L__DoStrings90:
+L__DoStrings93:
 ;String.c,69 :: 		if(string[3] != 0){
 MOVZ	R3, R0, R0
 LUI	R2, hi_addr(_string+192)
 ORI	R2, R2, lo_addr(_string+192)
-BNE	R3, R2, L__DoStrings92
+BNE	R3, R2, L__DoStrings95
 NOP	
 J	L_DoStrings4
 NOP	
-L__DoStrings92:
+L__DoStrings95:
 ;String.c,70 :: 		Int_Time = atoi(string[3]);
 LUI	R25, hi_addr(_string+192)
 ORI	R25, R25, lo_addr(_string+192)
@@ -104,11 +104,11 @@ L_DoStrings5:
 ANDI	R3, R4, 255
 LH	R2, 24(SP)
 SLT	R2, R3, R2
-BNE	R2, R0, L__DoStrings93
+BNE	R2, R0, L__DoStrings96
 NOP	
 J	L_DoStrings6
 NOP	
-L__DoStrings93:
+L__DoStrings96:
 ;String.c,72 :: 		LATE3_bit = !LATE3_bit;
 _LX	
 EXT	R2, R2, BitPos(LATE3_bit+0), 1
@@ -144,11 +144,11 @@ ANDI	R4, R2, 255
 ;String.c,77 :: 		if(err > 0)
 ANDI	R2, R2, 255
 SLTIU	R2, R2, 1
-BEQ	R2, R0, L__DoStrings94
+BEQ	R2, R0, L__DoStrings97
 NOP	
 J	L_DoStrings10
 NOP	
-L__DoStrings94:
+L__DoStrings97:
 ;String.c,78 :: 		for(i=0;i<err;i++){
 ; i start address is: 20 (R5)
 MOVZ	R5, R0, R0
@@ -160,11 +160,11 @@ L_DoStrings11:
 ANDI	R3, R5, 255
 ANDI	R2, R4, 255
 SLTU	R2, R3, R2
-BNE	R2, R0, L__DoStrings95
+BNE	R2, R0, L__DoStrings98
 NOP	
 J	L_DoStrings12
 NOP	
-L__DoStrings95:
+L__DoStrings98:
 ;String.c,79 :: 		LATE3_bit = !LATE3_bit;
 _LX	
 EXT	R2, R2, BitPos(LATE3_bit+0), 1
@@ -200,20 +200,20 @@ LUI	R25, hi_addr(_string+128)
 ORI	R25, R25, lo_addr(_string+128)
 JAL	_strcmp+0
 NOP	
-BEQ	R2, R0, L__DoStrings96
+BEQ	R2, R0, L__DoStrings99
 NOP	
 J	L_DoStrings17
 NOP	
-L__DoStrings96:
+L__DoStrings99:
 ;String.c,83 :: 		if(string[3] != 0){
 MOVZ	R3, R0, R0
 LUI	R2, hi_addr(_string+192)
 ORI	R2, R2, lo_addr(_string+192)
-BNE	R3, R2, L__DoStrings98
+BNE	R3, R2, L__DoStrings101
 NOP	
 J	L_DoStrings18
 NOP	
-L__DoStrings98:
+L__DoStrings101:
 ;String.c,84 :: 		Gain = atoi(string[3]);
 LUI	R25, hi_addr(_string+192)
 ORI	R25, R25, lo_addr(_string+192)
@@ -229,11 +229,11 @@ L_DoStrings19:
 ANDI	R3, R4, 255
 LH	R2, 26(SP)
 SLT	R2, R3, R2
-BNE	R2, R0, L__DoStrings99
+BNE	R2, R0, L__DoStrings102
 NOP	
 J	L_DoStrings20
 NOP	
-L__DoStrings99:
+L__DoStrings102:
 ;String.c,86 :: 		LATE3_bit = !LATE3_bit;
 _LX	
 EXT	R2, R2, BitPos(LATE3_bit+0), 1
@@ -269,11 +269,11 @@ ANDI	R4, R2, 255
 ;String.c,91 :: 		if(err > 0)
 ANDI	R2, R2, 255
 SLTIU	R2, R2, 1
-BEQ	R2, R0, L__DoStrings100
+BEQ	R2, R0, L__DoStrings103
 NOP	
 J	L_DoStrings24
 NOP	
-L__DoStrings100:
+L__DoStrings103:
 ;String.c,92 :: 		for(i=0;i<err;i++){
 ; i start address is: 20 (R5)
 MOVZ	R5, R0, R0
@@ -285,11 +285,11 @@ L_DoStrings25:
 ANDI	R3, R5, 255
 ANDI	R2, R4, 255
 SLTU	R2, R3, R2
-BNE	R2, R0, L__DoStrings101
+BNE	R2, R0, L__DoStrings104
 NOP	
 J	L_DoStrings26
 NOP	
-L__DoStrings101:
+L__DoStrings104:
 ;String.c,93 :: 		LATE3_bit = !LATE3_bit;
 _LX	
 EXT	R2, R2, BitPos(LATE3_bit+0), 1
@@ -407,7 +407,7 @@ J	L_DoStrings1
 NOP	
 ;String.c,123 :: 		case READA_SCL :
 L_DoStrings38:
-;String.c,124 :: 		str = TestFlash();//Read_Thresholds();
+;String.c,124 :: 		str = TestFlash();// Read_Thresholds(); //
 JAL	_TestFlash+0
 NOP	
 SW	R2, 20(SP)
@@ -445,82 +445,82 @@ NOP
 L_DoStrings0:
 ; res1 start address is: 20 (R5)
 SEH	R2, R5
-BNE	R2, R0, L__DoStrings103
+BNE	R2, R0, L__DoStrings106
 NOP	
 J	L_DoStrings2
 NOP	
-L__DoStrings103:
+L__DoStrings106:
 SEH	R3, R5
 ORI	R2, R0, 6
-BNE	R3, R2, L__DoStrings105
+BNE	R3, R2, L__DoStrings108
 NOP	
 J	L_DoStrings30
 NOP	
-L__DoStrings105:
+L__DoStrings108:
 SEH	R3, R5
 ORI	R2, R0, 7
-BNE	R3, R2, L__DoStrings107
+BNE	R3, R2, L__DoStrings110
 NOP	
 J	L_DoStrings31
 NOP	
-L__DoStrings107:
+L__DoStrings110:
 SEH	R3, R5
 ORI	R2, R0, 8
-BNE	R3, R2, L__DoStrings109
+BNE	R3, R2, L__DoStrings112
 NOP	
 J	L_DoStrings32
 NOP	
-L__DoStrings109:
+L__DoStrings112:
 SEH	R3, R5
 ORI	R2, R0, 9
-BNE	R3, R2, L__DoStrings111
+BNE	R3, R2, L__DoStrings114
 NOP	
 J	L_DoStrings33
 NOP	
-L__DoStrings111:
+L__DoStrings114:
 SEH	R3, R5
 ORI	R2, R0, 10
-BNE	R3, R2, L__DoStrings113
+BNE	R3, R2, L__DoStrings116
 NOP	
 J	L_DoStrings34
 NOP	
-L__DoStrings113:
+L__DoStrings116:
 SEH	R3, R5
 ORI	R2, R0, 11
-BNE	R3, R2, L__DoStrings115
+BNE	R3, R2, L__DoStrings118
 NOP	
 J	L_DoStrings35
 NOP	
-L__DoStrings115:
+L__DoStrings118:
 SEH	R3, R5
 ORI	R2, R0, 12
-BNE	R3, R2, L__DoStrings117
+BNE	R3, R2, L__DoStrings120
 NOP	
 J	L_DoStrings36
 NOP	
-L__DoStrings117:
+L__DoStrings120:
 SEH	R3, R5
 ORI	R2, R0, 12
-BNE	R3, R2, L__DoStrings119
+BNE	R3, R2, L__DoStrings122
 NOP	
 J	L_DoStrings37
 NOP	
-L__DoStrings119:
+L__DoStrings122:
 SEH	R3, R5
 ORI	R2, R0, 13
-BNE	R3, R2, L__DoStrings121
+BNE	R3, R2, L__DoStrings124
 NOP	
 J	L_DoStrings38
 NOP	
-L__DoStrings121:
+L__DoStrings124:
 SEH	R3, R5
 ; res1 end address is: 20 (R5)
 ORI	R2, R0, 14
-BNE	R3, R2, L__DoStrings123
+BNE	R3, R2, L__DoStrings126
 NOP	
 J	L_DoStrings39
 NOP	
-L__DoStrings123:
+L__DoStrings126:
 J	L_DoStrings40
 NOP	
 L_DoStrings1:
@@ -543,11 +543,11 @@ ORI	R25, R25, lo_addr(_writebuff+0)
 JAL	_HID_Write+0
 NOP	
 LH	R25, 16(SP)
-BEQ	R2, R0, L__DoStrings124
+BEQ	R2, R0, L__DoStrings127
 NOP	
 J	L_DoStrings42
 NOP	
-L__DoStrings124:
+L__DoStrings127:
 J	L_DoStrings41
 NOP	
 L_DoStrings42:
@@ -575,11 +575,11 @@ L_clr_str_arrays43:
 ; i start address is: 16 (R4)
 SEH	R2, R4
 SLTI	R2, R2, 20
-BNE	R2, R0, L__clr_str_arrays126
+BNE	R2, R0, L__clr_str_arrays129
 NOP	
 J	L_clr_str_arrays44
 NOP	
-L__clr_str_arrays126:
+L__clr_str_arrays129:
 ;String.c,150 :: 		for(j = 0;j<64;j++){
 ; j start address is: 20 (R5)
 MOVZ	R5, R0, R0
@@ -590,11 +590,11 @@ L_clr_str_arrays46:
 ; i start address is: 16 (R4)
 SEH	R2, R5
 SLTI	R2, R2, 64
-BNE	R2, R0, L__clr_str_arrays127
+BNE	R2, R0, L__clr_str_arrays130
 NOP	
 J	L_clr_str_arrays47
 NOP	
-L__clr_str_arrays127:
+L__clr_str_arrays130:
 ;String.c,151 :: 		str[i][j] = 0;
 SEH	R2, R4
 SLL	R2, R2, 6
@@ -633,36 +633,36 @@ L_setstr49:
 ; i start address is: 16 (R4)
 SEH	R2, R4
 SLTI	R2, R2, 64
-BNE	R2, R0, L__setstr129
+BNE	R2, R0, L__setstr132
 NOP	
 J	L_setstr50
 NOP	
-L__setstr129:
+L__setstr132:
 ;String.c,163 :: 		if((conf[i] == 0x0D)|| (conf[i] == 0x0A))
 SEH	R2, R4
 ADDU	R2, R25, R2
 LBU	R2, 0(R2)
 ANDI	R3, R2, 255
 ORI	R2, R0, 13
-BNE	R3, R2, L__setstr131
+BNE	R3, R2, L__setstr134
 NOP	
-J	L__setstr87
+J	L__setstr90
 NOP	
-L__setstr131:
+L__setstr134:
 SEH	R2, R4
 ADDU	R2, R25, R2
 LBU	R2, 0(R2)
 ANDI	R3, R2, 255
 ORI	R2, R0, 10
-BNE	R3, R2, L__setstr133
+BNE	R3, R2, L__setstr136
 NOP	
-J	L__setstr86
+J	L__setstr89
 NOP	
-L__setstr133:
+L__setstr136:
 J	L_setstr54
 NOP	
-L__setstr87:
-L__setstr86:
+L__setstr90:
+L__setstr89:
 ;String.c,164 :: 		break;
 J	L_setstr50
 NOP	
@@ -706,22 +706,22 @@ L_strsplit55:
 ; kk start address is: 20 (R5)
 SEH	R2, R4
 SLTI	R2, R2, 64
-BNE	R2, R0, L__strsplit135
+BNE	R2, R0, L__strsplit138
 NOP	
 J	L_strsplit56
 NOP	
-L__strsplit135:
+L__strsplit138:
 ;String.c,178 :: 		if(str[i] == c){
 SEH	R2, R4
 ADDU	R2, R25, R2
 LBU	R2, 0(R2)
 ANDI	R3, R2, 255
 ANDI	R2, R26, 255
-BEQ	R3, R2, L__strsplit136
+BEQ	R3, R2, L__strsplit139
 NOP	
 J	L_strsplit58
 NOP	
-L__strsplit136:
+L__strsplit139:
 ;String.c,179 :: 		string[kk][ii] = 0;
 SEH	R2, R5
 SLL	R3, R2, 6
@@ -765,11 +765,11 @@ SEH	R2, R4
 ADDU	R2, R25, R2
 LBU	R2, 0(R2)
 ANDI	R2, R2, 255
-BEQ	R2, R0, L__strsplit137
+BEQ	R2, R0, L__strsplit140
 NOP	
 J	L_strsplit60
 NOP	
-L__strsplit137:
+L__strsplit140:
 ; ii end address is: 12 (R3)
 ; i end address is: 16 (R4)
 ;String.c,190 :: 		break;
@@ -811,11 +811,11 @@ SW	R26, 4(SP)
 SW	R27, 8(SP)
 LBU	R2, Offset(StrChecker_once_L0+0)(GP)
 EXT	R2, R2, BitPos(StrChecker_once_L0+0), 1
-BEQ	R2, R0, L__StrChecker139
+BEQ	R2, R0, L__StrChecker142
 NOP	
 J	L_StrChecker61
 NOP	
-L__StrChecker139:
+L__StrChecker142:
 ;String.c,203 :: 		once = 1;
 LBU	R2, Offset(StrChecker_once_L0+0)(GP)
 ORI	R2, R2, BitMask(StrChecker_once_L0+0)
@@ -834,11 +834,11 @@ L_StrChecker62:
 SEH	R3, R5
 LH	R2, Offset(StrChecker_enum_val_L0+0)(GP)
 SLT	R2, R3, R2
-BNE	R2, R0, L__StrChecker140
+BNE	R2, R0, L__StrChecker143
 NOP	
 J	L_StrChecker63
 NOP	
-L__StrChecker140:
+L__StrChecker143:
 ;String.c,207 :: 		if(strncmp(str,com[i],strlen(str)-1)==0)
 JAL	_strlen+0
 NOP	
@@ -856,11 +856,11 @@ JAL	_strncmp+0
 NOP	
 LW	R25, 12(SP)
 SEH	R2, R2
-BEQ	R2, R0, L__StrChecker141
+BEQ	R2, R0, L__StrChecker144
 NOP	
 J	L_StrChecker65
 NOP	
-L__StrChecker141:
+L__StrChecker144:
 ;String.c,208 :: 		break;
 J	L_StrChecker63
 NOP	
@@ -1546,46 +1546,46 @@ NOP
 L_Read_Send_OneColour66:
 SEH	R3, R25
 ORI	R2, R0, 7
-BNE	R3, R2, L__Read_Send_OneColour146
+BNE	R3, R2, L__Read_Send_OneColour149
 NOP	
 J	L_Read_Send_OneColour68
 NOP	
-L__Read_Send_OneColour146:
+L__Read_Send_OneColour149:
 SEH	R3, R25
 ORI	R2, R0, 8
-BNE	R3, R2, L__Read_Send_OneColour148
+BNE	R3, R2, L__Read_Send_OneColour151
 NOP	
 J	L_Read_Send_OneColour69
 NOP	
-L__Read_Send_OneColour148:
+L__Read_Send_OneColour151:
 SEH	R3, R25
 ORI	R2, R0, 9
-BNE	R3, R2, L__Read_Send_OneColour150
+BNE	R3, R2, L__Read_Send_OneColour153
 NOP	
 J	L_Read_Send_OneColour70
 NOP	
-L__Read_Send_OneColour150:
+L__Read_Send_OneColour153:
 SEH	R3, R25
 ORI	R2, R0, 10
-BNE	R3, R2, L__Read_Send_OneColour152
+BNE	R3, R2, L__Read_Send_OneColour155
 NOP	
 J	L_Read_Send_OneColour71
 NOP	
-L__Read_Send_OneColour152:
+L__Read_Send_OneColour155:
 SEH	R3, R25
 ORI	R2, R0, 11
-BNE	R3, R2, L__Read_Send_OneColour154
+BNE	R3, R2, L__Read_Send_OneColour157
 NOP	
 J	L_Read_Send_OneColour72
 NOP	
-L__Read_Send_OneColour154:
+L__Read_Send_OneColour157:
 SEH	R3, R25
 ORI	R2, R0, 12
-BNE	R3, R2, L__Read_Send_OneColour156
+BNE	R3, R2, L__Read_Send_OneColour159
 NOP	
 J	L_Read_Send_OneColour73
 NOP	
-L__Read_Send_OneColour156:
+L__Read_Send_OneColour159:
 L_Read_Send_OneColour67:
 ;String.c,314 :: 		return &str;
 ADDIU	R2, SP, 26
@@ -1623,14 +1623,15 @@ _Read_Thresholds:
 ;String.c,328 :: 		char* Read_Thresholds(){
 ADDIU	SP, SP, -144
 SW	RA, 0(SP)
-;String.c,335 :: 		Val = ReadFlash();
+;String.c,333 :: 		NVMRead(FLASH_Settings_VAddr,&Threshold);
 SW	R25, 4(SP)
 SW	R26, 8(SP)
-JAL	_ReadFlash+0
+LUI	R26, hi_addr(_Threshold+0)
+ORI	R26, R26, lo_addr(_Threshold+0)
+LW	R25, Offset(_FLASH_Settings_VAddr+0)(GP)
+JAL	_NVMRead+0
 NOP	
-; Val start address is: 24 (R6)
-MOVZ	R6, R2, R0
-;String.c,338 :: 		strcpy(str,"Cth || Rth | Gth | Bth | = || ");
+;String.c,335 :: 		strcpy(str,"Cth || Rth | Gth | Bth | = || ");
 ADDIU	R23, SP, 91
 ADDIU	R22, R23, 31
 LUI	R24, hi_addr(?ICS?lstr48_String+0)
@@ -1643,11 +1644,11 @@ MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcpy+0
 NOP	
-;String.c,339 :: 		sprintf(txtR,"%u",Val);//Threshold.C_thresh);
+;String.c,336 :: 		sprintf(txtR,"%u",Threshold.C_thresh);
 ADDIU	R3, SP, 12
+LHU	R2, Offset(_Threshold+0)(GP)
 ADDIU	SP, SP, -12
-SW	R6, 8(SP)
-; Val end address is: 24 (R6)
+SH	R2, 8(SP)
 LUI	R2, hi_addr(?lstr_49_String+0)
 ORI	R2, R2, lo_addr(?lstr_49_String+0)
 SW	R2, 4(SP)
@@ -1655,14 +1656,14 @@ SW	R3, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;String.c,340 :: 		strcat(str,txtR);
+;String.c,337 :: 		strcat(str,txtR);
 ADDIU	R3, SP, 12
 ADDIU	R2, SP, 27
 MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,341 :: 		strcat(str," || ");
+;String.c,338 :: 		strcat(str," || ");
 ORI	R30, R0, 32
 SB	R30, 122(SP)
 ORI	R30, R0, 124
@@ -1679,7 +1680,7 @@ MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,343 :: 		sprintf(txtR,"%u",Threshold.R_thresh);
+;String.c,340 :: 		sprintf(txtR,"%u",Threshold.R_thresh);
 ADDIU	R3, SP, 12
 LHU	R2, Offset(_Threshold+2)(GP)
 ADDIU	SP, SP, -12
@@ -1691,14 +1692,14 @@ SW	R3, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;String.c,344 :: 		strcat(str,txtR);
+;String.c,341 :: 		strcat(str,txtR);
 ADDIU	R3, SP, 12
 ADDIU	R2, SP, 27
 MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,345 :: 		strcat(str," | ");
+;String.c,342 :: 		strcat(str," | ");
 ORI	R30, R0, 32
 SB	R30, 127(SP)
 ORI	R30, R0, 124
@@ -1713,7 +1714,7 @@ MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,347 :: 		sprintf(txtR,"%u",Threshold.G_thresh);
+;String.c,344 :: 		sprintf(txtR,"%u",Threshold.G_thresh);
 ADDIU	R3, SP, 12
 LHU	R2, Offset(_Threshold+4)(GP)
 ADDIU	SP, SP, -12
@@ -1725,14 +1726,14 @@ SW	R3, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;String.c,348 :: 		strcat(str,txtR);
+;String.c,345 :: 		strcat(str,txtR);
 ADDIU	R3, SP, 12
 ADDIU	R2, SP, 27
 MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,349 :: 		strcat(str," | ");
+;String.c,346 :: 		strcat(str," | ");
 ORI	R30, R0, 32
 SB	R30, 131(SP)
 ORI	R30, R0, 124
@@ -1747,7 +1748,7 @@ MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,351 :: 		sprintf(txtR,"%u",Threshold.B_thresh);
+;String.c,348 :: 		sprintf(txtR,"%u",Threshold.B_thresh);
 ADDIU	R3, SP, 12
 LHU	R2, Offset(_Threshold+6)(GP)
 ADDIU	SP, SP, -12
@@ -1759,14 +1760,14 @@ SW	R3, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;String.c,352 :: 		strcat(str,txtR);
+;String.c,349 :: 		strcat(str,txtR);
 ADDIU	R3, SP, 12
 ADDIU	R2, SP, 27
 MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,353 :: 		strcat(str," ||\r\n ");
+;String.c,350 :: 		strcat(str," ||\r\n ");
 ORI	R30, R0, 32
 SB	R30, 135(SP)
 ORI	R30, R0, 124
@@ -1787,11 +1788,11 @@ MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,355 :: 		return &str;
+;String.c,352 :: 		return &str;
 ADDIU	R2, SP, 27
-;String.c,356 :: 		}
-;String.c,355 :: 		return &str;
-;String.c,356 :: 		}
+;String.c,353 :: 		}
+;String.c,352 :: 		return &str;
+;String.c,353 :: 		}
 L_end_Read_Thresholds:
 LW	R26, 8(SP)
 LW	R25, 4(SP)
@@ -1801,37 +1802,179 @@ JR	RA
 NOP	
 ; end of _Read_Thresholds
 _Write_Thresholds:
-;String.c,361 :: 		char* Write_Thresholds(){
-ADDIU	SP, SP, -100
+;String.c,358 :: 		char* Write_Thresholds(){
+ADDIU	SP, SP, -624
 SW	RA, 0(SP)
-;String.c,370 :: 		if(string[2] != 0){
+;String.c,364 :: 		pos =  FLASH_Settings_PAddr;
 SW	R25, 4(SP)
 SW	R26, 8(SP)
+LW	R2, Offset(_FLASH_Settings_PAddr+0)(GP)
+SW	R2, 524(SP)
+;String.c,365 :: 		for(i=1;i<128;i++)
+; i start address is: 20 (R5)
+ORI	R5, R0, 1
+; i end address is: 20 (R5)
+SEH	R4, R5
+L_Write_Thresholds74:
+; i start address is: 16 (R4)
+SEH	R2, R4
+SLTI	R2, R2, 128
+BNE	R2, R0, L__Write_Thresholds164
+NOP	
+J	L_Write_Thresholds75
+NOP	
+L__Write_Thresholds164:
+;String.c,366 :: 		val[i] = 0x00000000;
+ADDIU	R3, SP, 12
+SEH	R2, R4
+SLL	R2, R2, 2
+ADDU	R2, R3, R2
+SW	R0, 0(R2)
+;String.c,365 :: 		for(i=1;i<128;i++)
+ADDIU	R2, R4, 1
+; i end address is: 16 (R4)
+; i start address is: 20 (R5)
+SEH	R5, R2
+;String.c,366 :: 		val[i] = 0x00000000;
+SEH	R4, R5
+; i end address is: 20 (R5)
+J	L_Write_Thresholds74
+NOP	
+L_Write_Thresholds75:
+;String.c,367 :: 		err = NVMErasePage(pos);
+LW	R25, 524(SP)
+JAL	_NVMErasePage+0
+NOP	
+SH	R2, 528(SP)
+;String.c,369 :: 		if(string[2] != 0){
 MOVZ	R3, R0, R0
 LUI	R2, hi_addr(_string+128)
 ORI	R2, R2, lo_addr(_string+128)
-BNE	R3, R2, L__Write_Thresholds162
+BNE	R3, R2, L__Write_Thresholds166
 NOP	
-J	L_Write_Thresholds74
+J	L_Write_Thresholds77
 NOP	
-L__Write_Thresholds162:
-;String.c,371 :: 		Threshold.R_thresh = atoi(string[2]);
+L__Write_Thresholds166:
+;String.c,370 :: 		val[0] = atol(string[2]);
+ADDIU	R2, SP, 12
+SW	R2, 620(SP)
 LUI	R25, hi_addr(_string+128)
 ORI	R25, R25, lo_addr(_string+128)
-JAL	_atoi+0
+JAL	_atol+0
 NOP	
-SH	R2, Offset(_Threshold+2)(GP)
-;String.c,372 :: 		err = NVMWriteWord(FLASH_Settings_PAddr,Threshold.C_thresh);
-LHU	R26, Offset(_Threshold+0)(GP)
-LW	R25, Offset(_FLASH_Settings_PAddr+0)(GP)
+LW	R3, 620(SP)
+SW	R2, 0(R3)
+;String.c,371 :: 		err = NVMWriteWord(pos,val[0]);
+ADDIU	R2, SP, 12
+LW	R26, 0(R2)
+LW	R25, 524(SP)
 JAL	_NVMWriteWord+0
 NOP	
-SH	R2, 12(SP)
-;String.c,373 :: 		}
-L_Write_Thresholds74:
-;String.c,394 :: 		sprintf(txtR,"%x",err);
-ADDIU	R3, SP, 14
-LH	R2, 12(SP)
+SH	R2, 528(SP)
+;String.c,372 :: 		}
+L_Write_Thresholds77:
+;String.c,373 :: 		pos += 4;
+LW	R2, 524(SP)
+ADDIU	R2, R2, 4
+SW	R2, 524(SP)
+;String.c,374 :: 		if(string[3] != 0){
+MOVZ	R3, R0, R0
+LUI	R2, hi_addr(_string+192)
+ORI	R2, R2, lo_addr(_string+192)
+BNE	R3, R2, L__Write_Thresholds168
+NOP	
+J	L_Write_Thresholds78
+NOP	
+L__Write_Thresholds168:
+;String.c,375 :: 		val[1] = atol(string[3]);
+ADDIU	R2, SP, 12
+ADDIU	R2, R2, 4
+SW	R2, 620(SP)
+LUI	R25, hi_addr(_string+192)
+ORI	R25, R25, lo_addr(_string+192)
+JAL	_atol+0
+NOP	
+LW	R3, 620(SP)
+SW	R2, 0(R3)
+;String.c,376 :: 		err = NVMWriteWord(pos,val[1]);
+ADDIU	R2, SP, 12
+ADDIU	R2, R2, 4
+LW	R26, 0(R2)
+LW	R25, 524(SP)
+JAL	_NVMWriteWord+0
+NOP	
+SH	R2, 528(SP)
+;String.c,377 :: 		}
+L_Write_Thresholds78:
+;String.c,378 :: 		pos += 4;
+LW	R2, 524(SP)
+ADDIU	R2, R2, 4
+SW	R2, 524(SP)
+;String.c,379 :: 		if(string[4] != 0){
+MOVZ	R3, R0, R0
+LUI	R2, hi_addr(_string+256)
+ORI	R2, R2, lo_addr(_string+256)
+BNE	R3, R2, L__Write_Thresholds170
+NOP	
+J	L_Write_Thresholds79
+NOP	
+L__Write_Thresholds170:
+;String.c,380 :: 		val[2] = atol(string[4]);
+ADDIU	R2, SP, 12
+ADDIU	R2, R2, 8
+SW	R2, 620(SP)
+LUI	R25, hi_addr(_string+256)
+ORI	R25, R25, lo_addr(_string+256)
+JAL	_atol+0
+NOP	
+LW	R3, 620(SP)
+SW	R2, 0(R3)
+;String.c,381 :: 		err = NVMWriteWord(pos,val[2]);
+ADDIU	R2, SP, 12
+ADDIU	R2, R2, 8
+LW	R26, 0(R2)
+LW	R25, 524(SP)
+JAL	_NVMWriteWord+0
+NOP	
+SH	R2, 528(SP)
+;String.c,382 :: 		}
+L_Write_Thresholds79:
+;String.c,383 :: 		pos += 4;
+LW	R2, 524(SP)
+ADDIU	R2, R2, 4
+SW	R2, 524(SP)
+;String.c,384 :: 		if(string[5] != 0){
+MOVZ	R3, R0, R0
+LUI	R2, hi_addr(_string+320)
+ORI	R2, R2, lo_addr(_string+320)
+BNE	R3, R2, L__Write_Thresholds172
+NOP	
+J	L_Write_Thresholds80
+NOP	
+L__Write_Thresholds172:
+;String.c,385 :: 		val[3] = atol(string[5]);
+ADDIU	R2, SP, 12
+ADDIU	R2, R2, 12
+SW	R2, 620(SP)
+LUI	R25, hi_addr(_string+320)
+ORI	R25, R25, lo_addr(_string+320)
+JAL	_atol+0
+NOP	
+LW	R3, 620(SP)
+SW	R2, 0(R3)
+;String.c,386 :: 		err = NVMWriteWord(pos,val[3]);
+ADDIU	R2, SP, 12
+ADDIU	R2, R2, 12
+LW	R26, 0(R2)
+LW	R25, 524(SP)
+JAL	_NVMWriteWord+0
+NOP	
+SH	R2, 528(SP)
+;String.c,387 :: 		}
+L_Write_Thresholds80:
+;String.c,391 :: 		sprintf(txtR,"%x",err);
+ADDIU	R3, SP, 530
+LH	R2, 528(SP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
 LUI	R2, hi_addr(?lstr_57_String+0)
@@ -1841,52 +1984,52 @@ SW	R3, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;String.c,395 :: 		strcpy(str,txtR);
-ADDIU	R3, SP, 14
-ADDIU	R2, SP, 29
+;String.c,392 :: 		strcpy(str,txtR);
+ADDIU	R3, SP, 530
+ADDIU	R2, SP, 545
 MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcpy+0
 NOP	
-;String.c,396 :: 		strcat(str," ||\r\n ");
+;String.c,393 :: 		strcat(str," ||\r\n ");
 ORI	R30, R0, 32
-SB	R30, 93(SP)
+SB	R30, 609(SP)
 ORI	R30, R0, 124
-SB	R30, 94(SP)
+SB	R30, 610(SP)
 ORI	R30, R0, 124
-SB	R30, 95(SP)
+SB	R30, 611(SP)
 ORI	R30, R0, 13
-SB	R30, 96(SP)
+SB	R30, 612(SP)
 ORI	R30, R0, 10
-SB	R30, 97(SP)
+SB	R30, 613(SP)
 ORI	R30, R0, 32
-SB	R30, 98(SP)
+SB	R30, 614(SP)
 MOVZ	R30, R0, R0
-SB	R30, 99(SP)
-ADDIU	R3, SP, 93
-ADDIU	R2, SP, 29
+SB	R30, 615(SP)
+ADDIU	R3, SP, 609
+ADDIU	R2, SP, 545
 MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,397 :: 		return str;
-ADDIU	R2, SP, 29
-;String.c,398 :: 		}
-;String.c,397 :: 		return str;
-;String.c,398 :: 		}
+;String.c,394 :: 		return str;
+ADDIU	R2, SP, 545
+;String.c,395 :: 		}
+;String.c,394 :: 		return str;
+;String.c,395 :: 		}
 L_end_Write_Thresholds:
 LW	R26, 8(SP)
 LW	R25, 4(SP)
 LW	RA, 0(SP)
-ADDIU	SP, SP, 100
+ADDIU	SP, SP, 624
 JR	RA
 NOP	
 ; end of _Write_Thresholds
 _testStrings:
-;String.c,403 :: 		void testStrings(char* writebuff){
+;String.c,400 :: 		void testStrings(char* writebuff){
 ADDIU	SP, SP, -32
 SW	RA, 0(SP)
-;String.c,404 :: 		if(strlen(string[0])!=0){
+;String.c,401 :: 		if(strlen(string[0])!=0){
 SW	R26, 4(SP)
 SW	R27, 8(SP)
 SW	R25, 12(SP)
@@ -1896,12 +2039,12 @@ JAL	_strlen+0
 NOP	
 LW	R25, 12(SP)
 SEH	R2, R2
-BNE	R2, R0, L__testStrings165
+BNE	R2, R0, L__testStrings175
 NOP	
-J	L_testStrings75
+J	L_testStrings81
 NOP	
-L__testStrings165:
-;String.c,405 :: 		strncat(writebuff,string[0],strlen(string[0]));
+L__testStrings175:
+;String.c,402 :: 		strncat(writebuff,string[0],strlen(string[0]));
 SW	R25, 12(SP)
 LUI	R25, hi_addr(_string+0)
 ORI	R25, R25, lo_addr(_string+0)
@@ -1913,7 +2056,7 @@ LUI	R26, hi_addr(_string+0)
 ORI	R26, R26, lo_addr(_string+0)
 JAL	_strncat+0
 NOP	
-;String.c,406 :: 		strcat(writebuff,":");
+;String.c,403 :: 		strcat(writebuff,":");
 ORI	R30, R0, 58
 SB	R30, 16(SP)
 MOVZ	R30, R0, R0
@@ -1922,9 +2065,9 @@ ADDIU	R2, SP, 16
 MOVZ	R26, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,407 :: 		}
-L_testStrings75:
-;String.c,408 :: 		if(strlen(string[1])!=0){
+;String.c,404 :: 		}
+L_testStrings81:
+;String.c,405 :: 		if(strlen(string[1])!=0){
 SW	R25, 12(SP)
 LUI	R25, hi_addr(_string+64)
 ORI	R25, R25, lo_addr(_string+64)
@@ -1932,12 +2075,12 @@ JAL	_strlen+0
 NOP	
 LW	R25, 12(SP)
 SEH	R2, R2
-BNE	R2, R0, L__testStrings167
+BNE	R2, R0, L__testStrings177
 NOP	
-J	L_testStrings76
+J	L_testStrings82
 NOP	
-L__testStrings167:
-;String.c,409 :: 		strncat(writebuff,string[1],strlen(string[1]));
+L__testStrings177:
+;String.c,406 :: 		strncat(writebuff,string[1],strlen(string[1]));
 SW	R25, 12(SP)
 LUI	R25, hi_addr(_string+64)
 ORI	R25, R25, lo_addr(_string+64)
@@ -1949,7 +2092,7 @@ LUI	R26, hi_addr(_string+64)
 ORI	R26, R26, lo_addr(_string+64)
 JAL	_strncat+0
 NOP	
-;String.c,410 :: 		strcat(writebuff,":");
+;String.c,407 :: 		strcat(writebuff,":");
 ORI	R30, R0, 58
 SB	R30, 18(SP)
 MOVZ	R30, R0, R0
@@ -1958,9 +2101,9 @@ ADDIU	R2, SP, 18
 MOVZ	R26, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,411 :: 		}
-L_testStrings76:
-;String.c,412 :: 		if(strlen(string[2])!=0){
+;String.c,408 :: 		}
+L_testStrings82:
+;String.c,409 :: 		if(strlen(string[2])!=0){
 SW	R25, 12(SP)
 LUI	R25, hi_addr(_string+128)
 ORI	R25, R25, lo_addr(_string+128)
@@ -1968,12 +2111,12 @@ JAL	_strlen+0
 NOP	
 LW	R25, 12(SP)
 SEH	R2, R2
-BNE	R2, R0, L__testStrings169
+BNE	R2, R0, L__testStrings179
 NOP	
-J	L_testStrings77
+J	L_testStrings83
 NOP	
-L__testStrings169:
-;String.c,413 :: 		strncat(writebuff,string[2],strlen(string[2]));
+L__testStrings179:
+;String.c,410 :: 		strncat(writebuff,string[2],strlen(string[2]));
 SW	R25, 12(SP)
 LUI	R25, hi_addr(_string+128)
 ORI	R25, R25, lo_addr(_string+128)
@@ -1985,7 +2128,7 @@ LUI	R26, hi_addr(_string+128)
 ORI	R26, R26, lo_addr(_string+128)
 JAL	_strncat+0
 NOP	
-;String.c,414 :: 		strcat(writebuff,":");
+;String.c,411 :: 		strcat(writebuff,":");
 ORI	R30, R0, 58
 SB	R30, 20(SP)
 MOVZ	R30, R0, R0
@@ -1994,9 +2137,9 @@ ADDIU	R2, SP, 20
 MOVZ	R26, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,415 :: 		}
-L_testStrings77:
-;String.c,416 :: 		if(strlen(string[3])!=0){
+;String.c,412 :: 		}
+L_testStrings83:
+;String.c,413 :: 		if(strlen(string[3])!=0){
 SW	R25, 12(SP)
 LUI	R25, hi_addr(_string+192)
 ORI	R25, R25, lo_addr(_string+192)
@@ -2004,12 +2147,12 @@ JAL	_strlen+0
 NOP	
 LW	R25, 12(SP)
 SEH	R2, R2
-BNE	R2, R0, L__testStrings171
+BNE	R2, R0, L__testStrings181
 NOP	
-J	L_testStrings78
+J	L_testStrings84
 NOP	
-L__testStrings171:
-;String.c,417 :: 		strncat(writebuff,string[3],strlen(string[3]));
+L__testStrings181:
+;String.c,414 :: 		strncat(writebuff,string[3],strlen(string[3]));
 SW	R25, 12(SP)
 LUI	R25, hi_addr(_string+192)
 ORI	R25, R25, lo_addr(_string+192)
@@ -2021,7 +2164,7 @@ LUI	R26, hi_addr(_string+192)
 ORI	R26, R26, lo_addr(_string+192)
 JAL	_strncat+0
 NOP	
-;String.c,418 :: 		strcat(writebuff,":");
+;String.c,415 :: 		strcat(writebuff,":");
 ORI	R30, R0, 58
 SB	R30, 22(SP)
 MOVZ	R30, R0, R0
@@ -2030,9 +2173,9 @@ ADDIU	R2, SP, 22
 MOVZ	R26, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,419 :: 		}
-L_testStrings78:
-;String.c,420 :: 		if(strlen(string[4])!=0){
+;String.c,416 :: 		}
+L_testStrings84:
+;String.c,417 :: 		if(strlen(string[4])!=0){
 SW	R25, 12(SP)
 LUI	R25, hi_addr(_string+256)
 ORI	R25, R25, lo_addr(_string+256)
@@ -2040,12 +2183,12 @@ JAL	_strlen+0
 NOP	
 LW	R25, 12(SP)
 SEH	R2, R2
-BNE	R2, R0, L__testStrings173
+BNE	R2, R0, L__testStrings183
 NOP	
-J	L_testStrings79
+J	L_testStrings85
 NOP	
-L__testStrings173:
-;String.c,421 :: 		strncat(writebuff,string[4],strlen(string[4]));
+L__testStrings183:
+;String.c,418 :: 		strncat(writebuff,string[4],strlen(string[4]));
 SW	R25, 12(SP)
 LUI	R25, hi_addr(_string+256)
 ORI	R25, R25, lo_addr(_string+256)
@@ -2057,7 +2200,7 @@ LUI	R26, hi_addr(_string+256)
 ORI	R26, R26, lo_addr(_string+256)
 JAL	_strncat+0
 NOP	
-;String.c,422 :: 		strcat(writebuff,":");
+;String.c,419 :: 		strcat(writebuff,":");
 ORI	R30, R0, 58
 SB	R30, 24(SP)
 MOVZ	R30, R0, R0
@@ -2066,9 +2209,9 @@ ADDIU	R2, SP, 24
 MOVZ	R26, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,423 :: 		}
-L_testStrings79:
-;String.c,424 :: 		if(strlen(string[5])!=0){
+;String.c,420 :: 		}
+L_testStrings85:
+;String.c,421 :: 		if(strlen(string[5])!=0){
 SW	R25, 12(SP)
 LUI	R25, hi_addr(_string+320)
 ORI	R25, R25, lo_addr(_string+320)
@@ -2076,12 +2219,12 @@ JAL	_strlen+0
 NOP	
 LW	R25, 12(SP)
 SEH	R2, R2
-BNE	R2, R0, L__testStrings175
+BNE	R2, R0, L__testStrings185
 NOP	
-J	L_testStrings80
+J	L_testStrings86
 NOP	
-L__testStrings175:
-;String.c,425 :: 		strncat(writebuff,string[5],strlen(string[5]));
+L__testStrings185:
+;String.c,422 :: 		strncat(writebuff,string[5],strlen(string[5]));
 SW	R25, 12(SP)
 LUI	R25, hi_addr(_string+320)
 ORI	R25, R25, lo_addr(_string+320)
@@ -2093,7 +2236,7 @@ LUI	R26, hi_addr(_string+320)
 ORI	R26, R26, lo_addr(_string+320)
 JAL	_strncat+0
 NOP	
-;String.c,426 :: 		strcat(writebuff,":");
+;String.c,423 :: 		strcat(writebuff,":");
 ORI	R30, R0, 58
 SB	R30, 26(SP)
 MOVZ	R30, R0, R0
@@ -2102,9 +2245,9 @@ ADDIU	R2, SP, 26
 MOVZ	R26, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,427 :: 		}
-L_testStrings80:
-;String.c,428 :: 		if(strlen(string[6])!=0){
+;String.c,424 :: 		}
+L_testStrings86:
+;String.c,425 :: 		if(strlen(string[6])!=0){
 SW	R25, 12(SP)
 LUI	R25, hi_addr(_string+384)
 ORI	R25, R25, lo_addr(_string+384)
@@ -2112,12 +2255,12 @@ JAL	_strlen+0
 NOP	
 LW	R25, 12(SP)
 SEH	R2, R2
-BNE	R2, R0, L__testStrings177
+BNE	R2, R0, L__testStrings187
 NOP	
-J	L_testStrings81
+J	L_testStrings87
 NOP	
-L__testStrings177:
-;String.c,429 :: 		strncat(writebuff,string[6],strlen(string[6]));
+L__testStrings187:
+;String.c,426 :: 		strncat(writebuff,string[6],strlen(string[6]));
 SW	R25, 12(SP)
 LUI	R25, hi_addr(_string+384)
 ORI	R25, R25, lo_addr(_string+384)
@@ -2129,7 +2272,7 @@ LUI	R26, hi_addr(_string+384)
 ORI	R26, R26, lo_addr(_string+384)
 JAL	_strncat+0
 NOP	
-;String.c,430 :: 		strcat(writebuff,":");
+;String.c,427 :: 		strcat(writebuff,":");
 ORI	R30, R0, 58
 SB	R30, 28(SP)
 MOVZ	R30, R0, R0
@@ -2138,9 +2281,9 @@ ADDIU	R2, SP, 28
 MOVZ	R26, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,431 :: 		}
-L_testStrings81:
-;String.c,433 :: 		}
+;String.c,428 :: 		}
+L_testStrings87:
+;String.c,430 :: 		}
 L_end_testStrings:
 LW	R27, 8(SP)
 LW	R26, 4(SP)
@@ -2150,162 +2293,111 @@ JR	RA
 NOP	
 ; end of _testStrings
 _TestFlash:
-;String.c,435 :: 		char* TestFlash(){
-ADDIU	SP, SP, -636
+;String.c,432 :: 		char* TestFlash(){
+ADDIU	SP, SP, -120
 SW	RA, 0(SP)
-;String.c,442 :: 		Val = 0x1234afaf;
+;String.c,438 :: 		char* tr = "112233";
 SW	R25, 4(SP)
 SW	R26, 8(SP)
-; Val start address is: 12 (R3)
-LUI	R3, 4660
-ORI	R3, R3, 44975
-;String.c,443 :: 		for(i=0;i<128;i++)
-; i start address is: 20 (R5)
-MOVZ	R5, R0, R0
-; Val end address is: 12 (R3)
-; i end address is: 20 (R5)
-ANDI	R4, R5, 65535
-MOVZ	R5, R3, R0
-L_TestFlash82:
-; i start address is: 16 (R4)
-; Val start address is: 20 (R5)
-ANDI	R2, R4, 65535
-SLTIU	R2, R2, 128
-BNE	R2, R0, L__TestFlash179
-NOP	
-J	L_TestFlash83
-NOP	
-L__TestFlash179:
-;String.c,444 :: 		val[i] = 0x1234bfaf;
-ADDIU	R3, SP, 100
-ANDI	R2, R4, 65535
-SLL	R2, R2, 2
-ADDU	R3, R3, R2
-LUI	R2, 4660
-ORI	R2, R2, 49071
-SW	R2, 0(R3)
-;String.c,443 :: 		for(i=0;i<128;i++)
-ADDIU	R2, R4, 1
-; i end address is: 16 (R4)
-; i start address is: 8 (R2)
-;String.c,444 :: 		val[i] = 0x1234bfaf;
-; i end address is: 8 (R2)
-ANDI	R4, R2, 65535
-J	L_TestFlash82
-NOP	
-L_TestFlash83:
-;String.c,446 :: 		res = NVMErasePage(FLASH_Settings_PAddr);
-SW	R5, 12(SP)
-LW	R25, Offset(_FLASH_Settings_PAddr+0)(GP)
-JAL	_NVMErasePage+0
-NOP	
-LW	R5, 12(SP)
-;String.c,448 :: 		res = NVMWriteWord(FLASH_Settings_PAddr,Val);
-MOVZ	R26, R5, R0
-; Val end address is: 20 (R5)
-LW	R25, Offset(_FLASH_Settings_PAddr+0)(GP)
-JAL	_NVMWriteWord+0
-NOP	
-SH	R2, 612(SP)
-;String.c,449 :: 		Val =  ReadFlash();
+;String.c,446 :: 		Val =  ReadFlash();
 JAL	_ReadFlash+0
 NOP	
 ; Val start address is: 24 (R6)
 MOVZ	R6, R2, R0
-;String.c,452 :: 		strcpy(str,"Val || ");
-ADDIU	R23, SP, 614
+;String.c,449 :: 		strcpy(str,"Val || ");
+ADDIU	R23, SP, 98
 ADDIU	R22, R23, 8
-LUI	R24, hi_addr(?ICS?lstr66_String+0)
-ORI	R24, R24, lo_addr(?ICS?lstr66_String+0)
+LUI	R24, hi_addr(?ICS?lstr67_String+0)
+ORI	R24, R24, lo_addr(?ICS?lstr67_String+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R3, SP, 614
-ADDIU	R2, SP, 36
+ADDIU	R3, SP, 98
+ADDIU	R2, SP, 32
 MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcpy+0
 NOP	
-;String.c,453 :: 		LongWordToHex(Val,txtR);
-ADDIU	R2, SP, 16
+;String.c,450 :: 		LongWordToHex(Val,txtR);
+ADDIU	R2, SP, 12
 MOVZ	R26, R2, R0
 MOVZ	R25, R6, R0
 ; Val end address is: 24 (R6)
 JAL	_LongWordToHex+0
 NOP	
-;String.c,455 :: 		strcat(str,txtR);
-ADDIU	R3, SP, 16
-ADDIU	R2, SP, 36
+;String.c,452 :: 		strcat(str,txtR);
+ADDIU	R3, SP, 12
+ADDIU	R2, SP, 32
 MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,456 :: 		strcat(str," || ");
+;String.c,453 :: 		strcat(str," || ");
 ORI	R30, R0, 32
-SB	R30, 622(SP)
+SB	R30, 106(SP)
 ORI	R30, R0, 124
-SB	R30, 623(SP)
+SB	R30, 107(SP)
 ORI	R30, R0, 124
-SB	R30, 624(SP)
+SB	R30, 108(SP)
 ORI	R30, R0, 32
-SB	R30, 625(SP)
+SB	R30, 109(SP)
 MOVZ	R30, R0, R0
-SB	R30, 626(SP)
-ADDIU	R3, SP, 622
-ADDIU	R2, SP, 36
+SB	R30, 110(SP)
+ADDIU	R3, SP, 106
+ADDIU	R2, SP, 32
 MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,458 :: 		sprintf(txtR,"%u",res);//Threshold.R_thresh);
-ADDIU	R3, SP, 16
-LHU	R2, 612(SP)
+;String.c,455 :: 		sprintf(txtR,"%u",res);//Threshold.R_thresh);
+ADDIU	R3, SP, 12
+LHU	R2, 96(SP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_68_String+0)
-ORI	R2, R2, lo_addr(?lstr_68_String+0)
+LUI	R2, hi_addr(?lstr_69_String+0)
+ORI	R2, R2, lo_addr(?lstr_69_String+0)
 SW	R2, 4(SP)
 SW	R3, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;String.c,459 :: 		strcat(str,txtR);
-ADDIU	R3, SP, 16
-ADDIU	R2, SP, 36
+;String.c,456 :: 		strcat(str,txtR);
+ADDIU	R3, SP, 12
+ADDIU	R2, SP, 32
 MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,460 :: 		strcat(str," ||\r\n ");
+;String.c,457 :: 		strcat(str," ||\r\n ");
 ORI	R30, R0, 32
-SB	R30, 627(SP)
+SB	R30, 111(SP)
 ORI	R30, R0, 124
-SB	R30, 628(SP)
+SB	R30, 112(SP)
 ORI	R30, R0, 124
-SB	R30, 629(SP)
+SB	R30, 113(SP)
 ORI	R30, R0, 13
-SB	R30, 630(SP)
+SB	R30, 114(SP)
 ORI	R30, R0, 10
-SB	R30, 631(SP)
+SB	R30, 115(SP)
 ORI	R30, R0, 32
-SB	R30, 632(SP)
+SB	R30, 116(SP)
 MOVZ	R30, R0, R0
-SB	R30, 633(SP)
-ADDIU	R3, SP, 627
-ADDIU	R2, SP, 36
+SB	R30, 117(SP)
+ADDIU	R3, SP, 111
+ADDIU	R2, SP, 32
 MOVZ	R26, R3, R0
 MOVZ	R25, R2, R0
 JAL	_strcat+0
 NOP	
-;String.c,462 :: 		return &str;
-ADDIU	R2, SP, 36
-;String.c,463 :: 		}
-;String.c,462 :: 		return &str;
-;String.c,463 :: 		}
+;String.c,459 :: 		return &str;
+ADDIU	R2, SP, 32
+;String.c,460 :: 		}
+;String.c,459 :: 		return &str;
+;String.c,460 :: 		}
 L_end_TestFlash:
 LW	R26, 8(SP)
 LW	R25, 4(SP)
 LW	RA, 0(SP)
-ADDIU	SP, SP, 636
+ADDIU	SP, SP, 120
 JR	RA
 NOP	
 ; end of _TestFlash

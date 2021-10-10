@@ -502,13 +502,10 @@ char txtR[15];
 char str[64];
 unsigned long Val;
 
-
- Val = 321;
- Val = ReadFlash();
-
+ NVMRead(FLASH_Settings_VAddr,&Threshold);
 
  strcpy(str,"Cth || Rth | Gth | Bth | = || ");
- sprintf(txtR,"%u",Val);
+ sprintf(txtR,"%u",Threshold.C_thresh);
  strcat(str,txtR);
  strcat(str," || ");
 
@@ -526,27 +523,46 @@ unsigned long Val;
 
  return &str;
 }
-#line 361 "C:/Users/Git/ColourSampling/String.c"
+#line 358 "C:/Users/Git/ColourSampling/String.c"
 char* Write_Thresholds(){
-unsigned int PtrPos;
+unsigned long val[128];
+unsigned long pos;
 int i,err;
 char txtR[15];
 char str[64];
-
-
- PtrPos = FLASH_Settings_PAddr;
+ pos = FLASH_Settings_PAddr;
+ for(i=1;i<128;i++)
+ val[i] = 0x00000000;
+ err = NVMErasePage(pos);
 
  if(string[2] != 0){
- Threshold.R_thresh = atoi(string[2]);
- err = NVMWriteWord(FLASH_Settings_PAddr,Threshold.C_thresh);
+ val[0] = atol(string[2]);
+ err = NVMWriteWord(pos,val[0]);
  }
-#line 394 "C:/Users/Git/ColourSampling/String.c"
+ pos += 4;
+ if(string[3] != 0){
+ val[1] = atol(string[3]);
+ err = NVMWriteWord(pos,val[1]);
+ }
+ pos += 4;
+ if(string[4] != 0){
+ val[2] = atol(string[4]);
+ err = NVMWriteWord(pos,val[2]);
+ }
+ pos += 4;
+ if(string[5] != 0){
+ val[3] = atol(string[5]);
+ err = NVMWriteWord(pos,val[3]);
+ }
+
+
+
  sprintf(txtR,"%x",err);
  strcpy(str,txtR);
  strcat(str," ||\r\n ");
  return str;
 }
-#line 403 "C:/Users/Git/ColourSampling/String.c"
+#line 400 "C:/Users/Git/ColourSampling/String.c"
 void testStrings(char* writebuff){
  if(strlen(string[0])!=0){
  strncat(writebuff,string[0],strlen(string[0]));
@@ -585,14 +601,14 @@ char str[64];
 unsigned long val[128];
 unsigned long Val;
 unsigned int res,i;
+ char* tr = "112233";
 
-Val = 0x1234afaf;
- for(i=0;i<128;i++)
- val[i] = 0x1234bfaf;
 
- res = NVMErasePage(FLASH_Settings_PAddr);
 
- res = NVMWriteWord(FLASH_Settings_PAddr,Val);
+
+
+
+
  Val = ReadFlash();
 
 
