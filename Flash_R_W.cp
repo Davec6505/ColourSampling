@@ -125,7 +125,7 @@ unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
-void GetScaledValues(char* CRGB);
+void GetScaledValues(int* CRGB,float rgb[3]);
 #line 18 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 
@@ -144,7 +144,9 @@ READC,
 READT,
 READT_DN40,
 READA_SCL,
-WRITE_SCL
+READA_THV,
+WRITE_MAN,
+WRITE_RAW
 };
 
 struct Constants{
@@ -160,6 +162,7 @@ typedef struct pstrings_t{
 }PString;
 
 struct Thresh{
+
  uint16_t C_thresh;
  uint16_t R_thresh;
  uint16_t G_thresh;
@@ -181,10 +184,10 @@ int strsplit(char* str,char c);
 void testStrings(char* writebuff);
 char* setstr(char conf[64]);
 void clr_str_arrays(char *str[10]);
-char* Read_Send_AllColour();
+char* Read_Send_AllColour(short data_src);
 char* Read_Send_OneColour(int colr);
 char* Read_Thresholds();
-char* Write_Thresholds();
+char* Write_Thresholds(short data_src);
 int Get_It();
 int Get_Gain();
 char* TestFlash();
@@ -218,28 +221,28 @@ unsigned long Val;
  for(j = 0;j < 512;j++){
  buff[j] = ptr[j];
  }
- Val = buff[1];
- Val =(Val<<8)| buff[0];
- Val =(Val<<8)| buff[3];
+ Val = buff[3];
  Val =(Val<<8)| buff[2];
+ Val =(Val<<8)| buff[1];
+ Val =(Val<<8)| buff[0];
  vals->C_thresh = Val;
 
- Val = buff[5];
- Val =(Val<<8)| buff[4];
- Val =(Val<<8)| buff[7];
+ Val = buff[7];
  Val =(Val<<8)| buff[6];
+ Val =(Val<<8)| buff[5];
+ Val =(Val<<8)| buff[4];
  vals->R_thresh = Val;
 
- Val = buff[9];
- Val =(Val<<8)| buff[8];
- Val =(Val<<8)| buff[11];
+ Val = buff[11];
  Val =(Val<<8)| buff[10];
+ Val =(Val<<8)| buff[9];
+ Val =(Val<<8)| buff[8];
  vals->G_thresh = Val;
 
- Val = buff[13];
- Val =(Val<<8)| buff[12];
- Val =(Val<<8)| buff[15];
+ Val = buff[15];
  Val =(Val<<8)| buff[14];
+ Val =(Val<<8)| buff[13];
+ Val =(Val<<8)| buff[12];
  vals->B_thresh = Val;
 
 

@@ -137,7 +137,7 @@ unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
-void GetScaledValues(char* CRGB);
+void GetScaledValues(int* CRGB,float rgb[3]);
 #line 18 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 
@@ -156,7 +156,9 @@ READC,
 READT,
 READT_DN40,
 READA_SCL,
-WRITE_SCL
+READA_THV,
+WRITE_MAN,
+WRITE_RAW
 };
 
 struct Constants{
@@ -172,6 +174,7 @@ typedef struct pstrings_t{
 }PString;
 
 struct Thresh{
+
  uint16_t C_thresh;
  uint16_t R_thresh;
  uint16_t G_thresh;
@@ -193,10 +196,10 @@ int strsplit(char* str,char c);
 void testStrings(char* writebuff);
 char* setstr(char conf[64]);
 void clr_str_arrays(char *str[10]);
-char* Read_Send_AllColour();
+char* Read_Send_AllColour(short data_src);
 char* Read_Send_OneColour(int colr);
 char* Read_Thresholds();
-char* Write_Thresholds();
+char* Write_Thresholds(short data_src);
 int Get_It();
 int Get_Gain();
 char* TestFlash();
@@ -209,7 +212,7 @@ const code char *comc[13]={
  "T",
  "G"
 };
-const code char *com[15]={
+const code char *com[17]={
  "CONFIG",
  "SETA",
  "SETR",
@@ -224,7 +227,9 @@ const code char *com[15]={
  "READT",
  "READT_DN40",
  "READA_SCL",
- "WRITE_SCL"
+ "READA_THV",
+ "WRITE_MAN",
+ "WRITE_RAW"
 };
 
 
@@ -233,7 +238,7 @@ PString InitString(char cmp){
  str_t.c = cmp;
  str_t.StrSplitFp = strsplit;
 }
-#line 41 "C:/Users/Git/ColourSampling/String.c"
+#line 43 "C:/Users/Git/ColourSampling/String.c"
 int DoStrings(int num){
 char *str,err,i;
  char *result,conf[64] = "";
@@ -247,8 +252,10 @@ char *str,err,i;
  memcpy(conf,readbuff,num);
  result = setstr(conf);
  res0 = strsplit(result,'+');
+ if(res0 > 0)
  res1 = StrChecker(string[1]);
-
+ else
+ res1 =  ((WRITE_RAW - CONFIG)+1)  + 1;
  memset(writebuff,0,64);
 
 
@@ -293,7 +300,7 @@ char *str,err,i;
  LATE3_bit = 0;
  break;
  case READA :
- str = Read_Send_AllColour();
+ str = Read_Send_AllColour(0);
  break;
  case READR :
  str = Read_Send_OneColour(READR);
@@ -313,17 +320,20 @@ char *str,err,i;
  case READT_DN40 :
  str = Read_Send_OneColour(READT_DN40);
  break;
- case READT_DN40 :
- str = Read_Send_OneColour(READT_DN40);
- break;
  case READA_SCL :
- str = TestFlash();
+ str = Read_Send_AllColour(1);
  break;
- case WRITE_SCL :
- str = Write_Thresholds();
+ case READA_THV :
+ str = Read_Thresholds();
+ break;
+ case WRITE_MAN :
+ str = Write_Thresholds(1);
+ break;
+ case WRITE_RAW :
+ str = Write_Thresholds(0);
  break;
  default:
- strncat(str,"No data requested!",18);
+ str = "No data requested!\r\n";
  break;
  }
 
@@ -336,7 +346,7 @@ char *str,err,i;
 ret:
  return 0;
 }
-#line 147 "C:/Users/Git/ColourSampling/String.c"
+#line 154 "C:/Users/Git/ColourSampling/String.c"
 void clr_str_arrays(char str[20][64]){
 int i,j;
  for(i = 0;i < 20;i++){
@@ -346,7 +356,7 @@ int i,j;
 
  }
 }
-#line 160 "C:/Users/Git/ColourSampling/String.c"
+#line 167 "C:/Users/Git/ColourSampling/String.c"
 char* setstr(char conf[64]){
  int i;
  for(i=0;i < 64;i++){
@@ -357,7 +367,7 @@ char* setstr(char conf[64]){
 
  return conf;
 }
-#line 174 "C:/Users/Git/ColourSampling/String.c"
+#line 181 "C:/Users/Git/ColourSampling/String.c"
 int strsplit(char str[64], char c){
 int i,ii,kk;
  ii=kk=0;
@@ -372,20 +382,19 @@ int i,ii,kk;
  ii++;
  }
 
-endb:
  if(str[i]==0)
  break;
  }
  return kk;
 }
-#line 198 "C:/Users/Git/ColourSampling/String.c"
+#line 204 "C:/Users/Git/ColourSampling/String.c"
 int StrChecker(char *str){
 static int enum_val;
 static bit once;
 int i;
  if(!once){
  once = 1;
- enum_val =  (WRITE_SCL - CONFIG)+1 ;
+ enum_val =  ((WRITE_RAW - CONFIG)+1) ;
  }
  for(i = 0;i < enum_val;i++){
  if(strncmp(str,com[i],strlen(str)-1)==0)
@@ -393,7 +402,7 @@ int i;
  }
  return i;
 }
-#line 216 "C:/Users/Git/ColourSampling/String.c"
+#line 222 "C:/Users/Git/ColourSampling/String.c"
 void WriteData(char *_data){
 
 
@@ -401,41 +410,55 @@ void WriteData(char *_data){
  strncpy(writebuff,_data,strlen(_data));
  HID_Write(&writebuff,64);
 }
-#line 227 "C:/Users/Git/ColourSampling/String.c"
-char* Read_Send_AllColour(){
-float c,r,g,b;
+#line 233 "C:/Users/Git/ColourSampling/String.c"
+char* Read_Send_AllColour(short data_src){
+float FltData[3];
 char txtR[15];
 char str[64];
 unsigned int cct;
 int err;
+
+
  TCS3472_getRawData(RawData);
+ if(data_src)
+ GetScaledValues(RawData,&FltData);
 
  strcpy(str,"C || R | G | B | = || ");
+ if(!data_src )
  sprintf(txtR,"%u",RawData[0]);
+ else
+ sprintf(txtR,"%3.2f",FltData[0]);
  strcat(str,txtR);
  strcat(str," || ");
 
+ if(!data_src )
  sprintf(txtR,"%u",RawData[1]);
+ else
+ sprintf(txtR,"%3.2f",FltData[1]);
  strcat(str,txtR);
  strcat(str," | ");
 
+ if(!data_src )
  sprintf(txtR,"%u",RawData[2]);
+ else
+ sprintf(txtR,"%3.2f",FltData[2]);
  strcat(str,txtR);
  strcat(str," | ");
 
+ if(!data_src ) {
  sprintf(txtR,"%u",RawData[3]);
  strcat(str,txtR);
  strcat(str," || ");
 
-
  err = TCS3472_C2RGB_Error(RawData);
  sprintf(txtR,"%5d",err);
  strcat(str,txtR);
+ }
  strcat(str," ||\r\n");
 
  return &str;
 }
-#line 264 "C:/Users/Git/ColourSampling/String.c"
+#line 284 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_OneColour(int colr){
 unsigned int col;
 char txtR[10];
@@ -496,7 +519,7 @@ int Get_It(){
 int Get_Gain(){
  return 0;
 }
-#line 328 "C:/Users/Git/ColourSampling/String.c"
+#line 348 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Thresholds(){
 char txtR[15];
 char str[64];
@@ -523,8 +546,8 @@ unsigned long Val;
 
  return &str;
 }
-#line 358 "C:/Users/Git/ColourSampling/String.c"
-char* Write_Thresholds(){
+#line 378 "C:/Users/Git/ColourSampling/String.c"
+char* Write_Thresholds(short data_src){
 unsigned long val[128];
 unsigned long pos;
 int i,err;
@@ -535,25 +558,44 @@ char str[64];
  val[i] = 0x00000000;
  err = NVMErasePage(pos);
 
- if(string[2] != 0){
+
+ if(!data_src)
+ TCS3472_getRawData(RawData);
+
+ if(data_src){
+ if(string[2] != 0)
  val[0] = atol(string[2]);
+ }
+ else
+ val[0] = RawData[0];
  err = NVMWriteWord(pos,val[0]);
- }
+
  pos += 4;
- if(string[3] != 0){
+ if(data_src){
+ if(string[3] != 0)
  val[1] = atol(string[3]);
+ }else
+ val[1] = RawData[1];
  err = NVMWriteWord(pos,val[1]);
- }
+
  pos += 4;
- if(string[4] != 0){
+ if(data_src){
+ if(string[4] != 0)
  val[2] = atol(string[4]);
+ }
+ else
+ val[2] = RawData[2];
  err = NVMWriteWord(pos,val[2]);
- }
+
  pos += 4;
- if(string[5] != 0){
+ if(data_src){
+ if(string[5] != 0)
  val[3] = atol(string[5]);
- err = NVMWriteWord(pos,val[3]);
  }
+ else
+ val[3] = RawData[3];
+ err = NVMWriteWord(pos,val[3]);
+
 
 
 
@@ -562,7 +604,7 @@ char str[64];
  strcat(str," ||\r\n ");
  return str;
 }
-#line 400 "C:/Users/Git/ColourSampling/String.c"
+#line 439 "C:/Users/Git/ColourSampling/String.c"
 void testStrings(char* writebuff){
  if(strlen(string[0])!=0){
  strncat(writebuff,string[0],strlen(string[0]));

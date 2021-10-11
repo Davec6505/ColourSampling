@@ -20,6 +20,7 @@ main
 		UART2_Init
 			Get_Fosc_kHz
 			UART_Calc_BRG
+		MM_Init
 		InitTimer1
 		InitISR
 	TCS3472_Init
@@ -149,6 +150,10 @@ main
 						I2C2_TimeoutCallback
 					I2C2_Read
 					I2C2_Stop
+			GetScaledValues
+				_SignedIntegralToFloat
+				_Div_FP
+				_Mul_FP
 			strcpy
 			sprintf
 			strcat
@@ -201,16 +206,16 @@ main
 				_FloatToUnsignedIntegral
 			TCS3472_CalcColTemp_dn40
 			__CC2DW
-		TestFlash
-			ReadFlash
+		Read_Thresholds
+			NVMRead
 			strcpy
-			LongWordToHex
-			strcat
 			sprintf
+			strcat
 			__CC2DW
 		Write_Thresholds
 			NVMErasePage
 				NVMUnlock
+			TCS3472_getRawData
 			atol
 				isdigit
 			NVMWriteWord
@@ -218,8 +223,8 @@ main
 			sprintf
 			strcpy
 			strcat
-		strncat
 		strlen
+		strncat
 		HID_Write
 	__CC2DW
 	__FillZeros

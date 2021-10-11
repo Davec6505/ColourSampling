@@ -122,10 +122,39 @@ unsigned short TCS3472_SetInterrupt(char i);
 unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
-void GetScaledValues(char* CRGB);
+void GetScaledValues(int* CRGB,float rgb[3]);
 #line 1 "c:/users/git/coloursampling/_timers.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
-#line 5 "c:/users/git/coloursampling/_timers.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/time.h"
+
+
+
+struct tm {
+ unsigned long tm_sec;
+ unsigned long tm_min;
+ unsigned long tm_hour;
+ unsigned long tm_mday;
+ unsigned long tm_mon;
+ unsigned long tm_year;
+ unsigned long tm_wday;
+ unsigned long tm_yday;
+ unsigned long tm_isdst;
+};
+
+
+
+
+
+
+
+
+
+ typedef unsigned long size_t;
+
+
+typedef unsigned long clock_t;
+typedef unsigned long time_t;
+#line 7 "c:/users/git/coloursampling/_timers.h"
 typedef struct{
  uint32_t millis;
  uint16_t temp_ms;
@@ -173,7 +202,9 @@ READC,
 READT,
 READT_DN40,
 READA_SCL,
-WRITE_SCL
+READA_THV,
+WRITE_MAN,
+WRITE_RAW
 };
 
 struct Constants{
@@ -189,6 +220,7 @@ typedef struct pstrings_t{
 }PString;
 
 struct Thresh{
+
  uint16_t C_thresh;
  uint16_t R_thresh;
  uint16_t G_thresh;
@@ -210,10 +242,10 @@ int strsplit(char* str,char c);
 void testStrings(char* writebuff);
 char* setstr(char conf[64]);
 void clr_str_arrays(char *str[10]);
-char* Read_Send_AllColour();
+char* Read_Send_AllColour(short data_src);
 char* Read_Send_OneColour(int colr);
 char* Read_Thresholds();
-char* Write_Thresholds();
+char* Write_Thresholds(short data_src);
 int Get_It();
 int Get_Gain();
 char* TestFlash();

@@ -10,7 +10,7 @@ const code char *comc[13]={
    "T",
    "G"
 };
-const code char *com[15]={
+const code char *com[17]={
    "CONFIG",      //0
    "SETA",        //1
    "SETR",        //2
@@ -25,7 +25,9 @@ const code char *com[15]={
    "READT",       //11
    "READT_DN40",  //12
    "READA_SCL",   //13
-   "WRITE_SCL"    //14
+   "READA_THV",    //14
+   "WRITE_MAN",   //15
+   "WRITE_RAW"   //16
 };
 
 
@@ -51,8 +53,10 @@ char *str,err,i;
       memcpy(conf,readbuff,num);  //copy the USB buffer to a temp arrar
       result = setstr(conf);       //look for '\r' '\n' and move result to a string
       res0 = strsplit(result,'+'); //split the string into an array of strings return num of arr's
-      res1 = StrChecker(string[1]);//Test current string index for equality return index
-
+      if(res0 > 0)
+         res1 = StrChecker(string[1]);//Test current string index for equality return index
+      else
+          res1 = enum_num + 1;
       memset(writebuff,0,64);     //empty usb write buffer
 
 #ifdef StrDebug
@@ -97,7 +101,7 @@ char *str,err,i;
              LATE3_bit = 0;
              break;
         case READA :
-             str = Read_Send_AllColour();             
+             str = Read_Send_AllColour(0);
              break;
         case READR :
             str = Read_Send_OneColour(READR);
@@ -117,17 +121,20 @@ char *str,err,i;
         case READT_DN40 :
             str = Read_Send_OneColour(READT_DN40);
             break;
-        case READT_DN40 :
-            str = Read_Send_OneColour(READT_DN40);
-            break;
         case READA_SCL :
-            str = TestFlash();// Read_Thresholds(); //
+            str = Read_Send_AllColour(1);
             break;
-        case WRITE_SCL :
-            str = Write_Thresholds();
+        case READA_THV :
+            str =  Read_Thresholds(); //TestFlash();//
+            break;
+        case WRITE_MAN :
+            str = Write_Thresholds(1);
+            break;
+        case WRITE_RAW :
+            str = Write_Thresholds(0);
             break;
         default:
-           strncat(str,"No data requested!",18);
+            str = "No data requested!\r\n";
            break;
       }
          
@@ -184,8 +191,7 @@ int i,ii,kk;
           string[kk][ii] = str[i];
           ii++;
        }
-
-endb:
+//endb:
        if(str[i]==0)
           break;
     }
@@ -224,37 +230,51 @@ void WriteData(char *_data){
 /********************************************************************
 * Read TCS3472 and send RGBC Data
 ********************************************************************/
-char* Read_Send_AllColour(){
-float c,r,g,b;
+char* Read_Send_AllColour(short data_src){
+float FltData[3];//c,r,g,b;
 char txtR[15];
 char str[64];
 unsigned int cct;
 int err;
+      // FltData = (float*)Malloc(3);
+       //0 = get raw data 1 = get scaled data
        TCS3472_getRawData(RawData);
+       if(data_src)
+         GetScaledValues(RawData,&FltData);
 
        strcpy(str,"C || R | G | B | = || ");
-       sprintf(txtR,"%u",RawData[0]);
+       if(!data_src )
+          sprintf(txtR,"%u",RawData[0]); //C
+       else
+          sprintf(txtR,"%3.2f",FltData[0]); //R
        strcat(str,txtR);
        strcat(str," || ");
 
-       sprintf(txtR,"%u",RawData[1]);
+       if(!data_src )
+          sprintf(txtR,"%u",RawData[1]);  //R
+       else
+          sprintf(txtR,"%3.2f",FltData[1]); //G
        strcat(str,txtR);
        strcat(str," | ");
 
-       sprintf(txtR,"%u",RawData[2]);
+       if(!data_src )
+          sprintf(txtR,"%u",RawData[2]);  //G
+       else
+          sprintf(txtR,"%3.2f",FltData[2]);  //B
        strcat(str,txtR);
        strcat(str," | ");
 
-       sprintf(txtR,"%u",RawData[3]);
-       strcat(str,txtR);
-       strcat(str," || ");
-
+       if(!data_src ) {
+          sprintf(txtR,"%u",RawData[3]);  //ERR
+          strcat(str,txtR);
+          strcat(str," || ");
       //cct = TCS3472_CalcColTemp_dn40(RawData,it);
-       err = TCS3472_C2RGB_Error(RawData);
-       sprintf(txtR,"%5d",err);
-       strcat(str,txtR);
+         err = TCS3472_C2RGB_Error(RawData);
+         sprintf(txtR,"%5d",err);
+         strcat(str,txtR);
+       }
        strcat(str," ||\r\n");
-
+      // Free(FltData,sizeof(FltData));
         return &str;
 }
 
@@ -355,7 +375,7 @@ unsigned long Val;
 /*********************************************************************
 *write the Threshold values to flash and ream for use
 *********************************************************************/
-char* Write_Thresholds(){
+char* Write_Thresholds(short data_src){
 unsigned long val[128];
 unsigned long pos;
 int i,err;
@@ -366,25 +386,44 @@ char str[64];
            val[i] = 0x00000000;
         err = NVMErasePage(pos);
         
-        if(string[2] != 0){
-             val[0] = atol(string[2]);
-             err = NVMWriteWord(pos,val[0]);
-        }
+        //0 = get the values for thresholds from the sensor
+         if(!data_src)
+             TCS3472_getRawData(RawData);
+             
+         if(data_src){
+             if(string[2] != 0)
+                 val[0] = atol(string[2]);
+         }
+         else
+            val[0] = RawData[0];
+         err = NVMWriteWord(pos,val[0]);
+
         pos += 4;
-        if(string[3] != 0){
-             val[1] = atol(string[3]);
-             err = NVMWriteWord(pos,val[1]);
-        }
+        if(data_src){
+            if(string[3] != 0)
+               val[1] = atol(string[3]);
+        }else
+             val[1] = RawData[1];
+        err = NVMWriteWord(pos,val[1]);
+
         pos += 4;
-        if(string[4] != 0){
-             val[2] = atol(string[4]);
-             err = NVMWriteWord(pos,val[2]);
+        if(data_src){
+            if(string[4] != 0)
+               val[2] = atol(string[4]);
         }
+        else
+             val[2] = RawData[2];
+        err = NVMWriteWord(pos,val[2]);
+
         pos += 4;
-        if(string[5] != 0){
-             val[3] = atol(string[5]);
-             err = NVMWriteWord(pos,val[3]);
+        if(data_src){
+            if(string[5] != 0)
+                val[3] = atol(string[5]);
         }
+         else
+              val[3] = RawData[3];
+         err = NVMWriteWord(pos,val[3]);
+
 
        //  err = NVMWriteRow(FLASH_Settings_PAddr,val);
        

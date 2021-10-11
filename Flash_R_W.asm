@@ -38,107 +38,107 @@ ANDI	R5, R2, 65535
 J	L_NVMRead0
 NOP	
 L_NVMRead1:
-;Flash_R_W.c,21 :: 		Val = buff[1];
+;Flash_R_W.c,21 :: 		Val = buff[3];
 ADDIU	R4, SP, 0
-ADDIU	R2, R4, 1
+ADDIU	R2, R4, 3
 LBU	R2, 0(R2)
 ; Val start address is: 8 (R2)
 ANDI	R2, R2, 255
-;Flash_R_W.c,22 :: 		Val =(Val<<8)| buff[0];
+;Flash_R_W.c,22 :: 		Val =(Val<<8)| buff[2];
 SLL	R3, R2, 8
 ; Val end address is: 8 (R2)
-LBU	R2, 0(R4)
-ANDI	R2, R2, 255
-OR	R2, R3, R2
-;Flash_R_W.c,23 :: 		Val =(Val<<8)| buff[3];
-SLL	R3, R2, 8
-ADDIU	R2, R4, 3
-LBU	R2, 0(R2)
-ANDI	R2, R2, 255
-OR	R2, R3, R2
-;Flash_R_W.c,24 :: 		Val =(Val<<8)| buff[2];
-SLL	R3, R2, 8
 ADDIU	R2, R4, 2
 LBU	R2, 0(R2)
 ANDI	R2, R2, 255
 OR	R2, R3, R2
+;Flash_R_W.c,23 :: 		Val =(Val<<8)| buff[1];
+SLL	R3, R2, 8
+ADDIU	R2, R4, 1
+LBU	R2, 0(R2)
+ANDI	R2, R2, 255
+OR	R2, R3, R2
+;Flash_R_W.c,24 :: 		Val =(Val<<8)| buff[0];
+SLL	R3, R2, 8
+LBU	R2, 0(R4)
+ANDI	R2, R2, 255
+OR	R2, R3, R2
 ;Flash_R_W.c,25 :: 		vals->C_thresh = Val;
 SH	R2, 0(R26)
-;Flash_R_W.c,27 :: 		Val = buff[5];
-ADDIU	R2, R4, 5
+;Flash_R_W.c,27 :: 		Val = buff[7];
+ADDIU	R2, R4, 7
 LBU	R2, 0(R2)
 ; Val start address is: 8 (R2)
 ANDI	R2, R2, 255
-;Flash_R_W.c,28 :: 		Val =(Val<<8)| buff[4];
+;Flash_R_W.c,28 :: 		Val =(Val<<8)| buff[6];
 SLL	R3, R2, 8
 ; Val end address is: 8 (R2)
-ADDIU	R2, R4, 4
-LBU	R2, 0(R2)
-ANDI	R2, R2, 255
-OR	R2, R3, R2
-;Flash_R_W.c,29 :: 		Val =(Val<<8)| buff[7];
-SLL	R3, R2, 8
-ADDIU	R2, R4, 7
-LBU	R2, 0(R2)
-ANDI	R2, R2, 255
-OR	R2, R3, R2
-;Flash_R_W.c,30 :: 		Val =(Val<<8)| buff[6];
-SLL	R3, R2, 8
 ADDIU	R2, R4, 6
+LBU	R2, 0(R2)
+ANDI	R2, R2, 255
+OR	R2, R3, R2
+;Flash_R_W.c,29 :: 		Val =(Val<<8)| buff[5];
+SLL	R3, R2, 8
+ADDIU	R2, R4, 5
+LBU	R2, 0(R2)
+ANDI	R2, R2, 255
+OR	R2, R3, R2
+;Flash_R_W.c,30 :: 		Val =(Val<<8)| buff[4];
+SLL	R3, R2, 8
+ADDIU	R2, R4, 4
 LBU	R2, 0(R2)
 ANDI	R2, R2, 255
 OR	R3, R3, R2
 ;Flash_R_W.c,31 :: 		vals->R_thresh = Val;
 ADDIU	R2, R26, 2
 SH	R3, 0(R2)
-;Flash_R_W.c,33 :: 		Val = buff[9];
-ADDIU	R2, R4, 9
+;Flash_R_W.c,33 :: 		Val = buff[11];
+ADDIU	R2, R4, 11
 LBU	R2, 0(R2)
 ; Val start address is: 8 (R2)
 ANDI	R2, R2, 255
-;Flash_R_W.c,34 :: 		Val =(Val<<8)| buff[8];
+;Flash_R_W.c,34 :: 		Val =(Val<<8)| buff[10];
 SLL	R3, R2, 8
 ; Val end address is: 8 (R2)
-ADDIU	R2, R4, 8
-LBU	R2, 0(R2)
-ANDI	R2, R2, 255
-OR	R2, R3, R2
-;Flash_R_W.c,35 :: 		Val =(Val<<8)| buff[11];
-SLL	R3, R2, 8
-ADDIU	R2, R4, 11
-LBU	R2, 0(R2)
-ANDI	R2, R2, 255
-OR	R2, R3, R2
-;Flash_R_W.c,36 :: 		Val =(Val<<8)| buff[10];
-SLL	R3, R2, 8
 ADDIU	R2, R4, 10
+LBU	R2, 0(R2)
+ANDI	R2, R2, 255
+OR	R2, R3, R2
+;Flash_R_W.c,35 :: 		Val =(Val<<8)| buff[9];
+SLL	R3, R2, 8
+ADDIU	R2, R4, 9
+LBU	R2, 0(R2)
+ANDI	R2, R2, 255
+OR	R2, R3, R2
+;Flash_R_W.c,36 :: 		Val =(Val<<8)| buff[8];
+SLL	R3, R2, 8
+ADDIU	R2, R4, 8
 LBU	R2, 0(R2)
 ANDI	R2, R2, 255
 OR	R3, R3, R2
 ;Flash_R_W.c,37 :: 		vals->G_thresh = Val;
 ADDIU	R2, R26, 4
 SH	R3, 0(R2)
-;Flash_R_W.c,39 :: 		Val = buff[13];
-ADDIU	R2, R4, 13
+;Flash_R_W.c,39 :: 		Val = buff[15];
+ADDIU	R2, R4, 15
 LBU	R2, 0(R2)
 ; Val start address is: 8 (R2)
 ANDI	R2, R2, 255
-;Flash_R_W.c,40 :: 		Val =(Val<<8)| buff[12];
+;Flash_R_W.c,40 :: 		Val =(Val<<8)| buff[14];
 SLL	R3, R2, 8
 ; Val end address is: 8 (R2)
-ADDIU	R2, R4, 12
-LBU	R2, 0(R2)
-ANDI	R2, R2, 255
-OR	R2, R3, R2
-;Flash_R_W.c,41 :: 		Val =(Val<<8)| buff[15];
-SLL	R3, R2, 8
-ADDIU	R2, R4, 15
-LBU	R2, 0(R2)
-ANDI	R2, R2, 255
-OR	R2, R3, R2
-;Flash_R_W.c,42 :: 		Val =(Val<<8)| buff[14];
-SLL	R3, R2, 8
 ADDIU	R2, R4, 14
+LBU	R2, 0(R2)
+ANDI	R2, R2, 255
+OR	R2, R3, R2
+;Flash_R_W.c,41 :: 		Val =(Val<<8)| buff[13];
+SLL	R3, R2, 8
+ADDIU	R2, R4, 13
+LBU	R2, 0(R2)
+ANDI	R2, R2, 255
+OR	R2, R3, R2
+;Flash_R_W.c,42 :: 		Val =(Val<<8)| buff[12];
+SLL	R3, R2, 8
+ADDIU	R2, R4, 12
 LBU	R2, 0(R2)
 ANDI	R2, R2, 255
 OR	R3, R3, R2

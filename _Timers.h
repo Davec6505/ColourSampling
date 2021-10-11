@@ -2,6 +2,8 @@
 #define _TIMERS_H
 
 #include <stdint.h>
+#include<time.h>
+
 typedef struct{
  uint32_t millis;
  uint16_t temp_ms;

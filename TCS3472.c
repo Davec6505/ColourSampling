@@ -285,7 +285,7 @@ int err;
          return err;
 }
 
-void GetScaledValues(char* CRGB){
+void GetScaledValues(int* CRGB,float* rgb){
 float c,r,g,b;
        c =  (float)CRGB[0];
        r =  (float)CRGB[1];
@@ -294,8 +294,12 @@ float c,r,g,b;
 
        r /= c;
        r *= 256.0;
+       rgb[0] = r;
        g /= c;
        g *= 256.0;
+       rgb[1] = g;
        b /= c;
        b *= 256.0;
+       rgb[2] = b;
+       
 }

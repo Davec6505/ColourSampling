@@ -48,7 +48,36 @@ typedef unsigned long int uintptr_t;
 
 typedef signed long long intmax_t;
 typedef unsigned long long uintmax_t;
-#line 5 "c:/users/git/coloursampling/_timers.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/time.h"
+
+
+
+struct tm {
+ unsigned long tm_sec;
+ unsigned long tm_min;
+ unsigned long tm_hour;
+ unsigned long tm_mday;
+ unsigned long tm_mon;
+ unsigned long tm_year;
+ unsigned long tm_wday;
+ unsigned long tm_yday;
+ unsigned long tm_isdst;
+};
+
+
+
+
+
+
+
+
+
+ typedef unsigned long size_t;
+
+
+typedef unsigned long clock_t;
+typedef unsigned long time_t;
+#line 7 "c:/users/git/coloursampling/_timers.h"
 typedef struct{
  uint32_t millis;
  uint16_t temp_ms;

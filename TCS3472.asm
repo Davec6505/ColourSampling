@@ -816,18 +816,18 @@ LHU	R2, 0(R25)
 SUBU	R2, R3, R2
 ANDI	R2, R2, 65535
 SRL	R2, R2, 1
-; ?FLOC___TCS3472_CalcColTemp_dn40?T123 start address is: 20 (R5)
+; ?FLOC___TCS3472_CalcColTemp_dn40?T124 start address is: 20 (R5)
 ANDI	R5, R2, 65535
-; ?FLOC___TCS3472_CalcColTemp_dn40?T123 end address is: 20 (R5)
+; ?FLOC___TCS3472_CalcColTemp_dn40?T124 end address is: 20 (R5)
 J	L_TCS3472_CalcColTemp_dn4015
 NOP	
 L_TCS3472_CalcColTemp_dn4014:
-; ?FLOC___TCS3472_CalcColTemp_dn40?T123 start address is: 20 (R5)
+; ?FLOC___TCS3472_CalcColTemp_dn40?T124 start address is: 20 (R5)
 MOVZ	R5, R0, R0
-; ?FLOC___TCS3472_CalcColTemp_dn40?T123 end address is: 20 (R5)
+; ?FLOC___TCS3472_CalcColTemp_dn40?T124 end address is: 20 (R5)
 L_TCS3472_CalcColTemp_dn4015:
 ;TCS3472.c,226 :: 		r2 = RGBC[1] - ir;
-; ?FLOC___TCS3472_CalcColTemp_dn40?T123 start address is: 20 (R5)
+; ?FLOC___TCS3472_CalcColTemp_dn40?T124 start address is: 20 (R5)
 ADDIU	R2, R25, 2
 LHU	R2, 0(R2)
 SUBU	R3, R2, R5
@@ -837,7 +837,7 @@ ANDI	R4, R3, 65535
 ADDIU	R2, R25, 6
 LHU	R2, 0(R2)
 SUBU	R2, R2, R5
-; ?FLOC___TCS3472_CalcColTemp_dn40?T123 end address is: 20 (R5)
+; ?FLOC___TCS3472_CalcColTemp_dn40?T124 end address is: 20 (R5)
 ; b2 start address is: 20 (R5)
 ANDI	R5, R2, 65535
 ;TCS3472.c,230 :: 		if (r2 == 0) {
@@ -1078,9 +1078,89 @@ JR	RA
 NOP	
 ; end of _TCS3472_C2RGB_Error
 _GetScaledValues:
-;TCS3472.c,288 :: 		void GetScaledValues(char* CRGB){
-;TCS3472.c,301 :: 		}
+;TCS3472.c,288 :: 		void GetScaledValues(int* CRGB,float* rgb){
+ADDIU	SP, SP, -4
+SW	RA, 0(SP)
+;TCS3472.c,290 :: 		c =  (float)CRGB[0];
+LH	R2, 0(R25)
+SEH	R4, R2
+JAL	__SignedIntegralToFloat+0
+NOP	
+; c start address is: 64 (R16)
+MOVZ	R16, R2, R0
+;TCS3472.c,291 :: 		r =  (float)CRGB[1];
+ADDIU	R2, R25, 2
+LH	R2, 0(R2)
+SEH	R4, R2
+JAL	__SignedIntegralToFloat+0
+NOP	
+; r start address is: 36 (R9)
+MOVZ	R9, R2, R0
+;TCS3472.c,292 :: 		g =  (float)CRGB[2];
+ADDIU	R2, R25, 4
+LH	R2, 0(R2)
+SEH	R4, R2
+JAL	__SignedIntegralToFloat+0
+NOP	
+; g start address is: 72 (R18)
+MOVZ	R18, R2, R0
+;TCS3472.c,293 :: 		b =  (float)CRGB[3];
+ADDIU	R2, R25, 6
+LH	R2, 0(R2)
+SEH	R4, R2
+JAL	__SignedIntegralToFloat+0
+NOP	
+; b start address is: 68 (R17)
+MOVZ	R17, R2, R0
+;TCS3472.c,295 :: 		r /= c;
+MOVZ	R6, R16, R0
+MOVZ	R4, R9, R0
+JAL	__Div_FP+0
+NOP	
+; r end address is: 36 (R9)
+;TCS3472.c,296 :: 		r *= 256.0;
+LUI	R4, 17280
+ORI	R4, R4, 0
+MOVZ	R6, R2, R0
+JAL	__Mul_FP+0
+NOP	
+;TCS3472.c,297 :: 		rgb[0] = r;
+SW	R2, 0(R26)
+;TCS3472.c,298 :: 		g /= c;
+MOVZ	R6, R16, R0
+MOVZ	R4, R18, R0
+JAL	__Div_FP+0
+NOP	
+; g end address is: 72 (R18)
+;TCS3472.c,299 :: 		g *= 256.0;
+LUI	R4, 17280
+ORI	R4, R4, 0
+MOVZ	R6, R2, R0
+JAL	__Mul_FP+0
+NOP	
+;TCS3472.c,300 :: 		rgb[1] = g;
+ADDIU	R3, R26, 4
+SW	R2, 0(R3)
+;TCS3472.c,301 :: 		b /= c;
+MOVZ	R6, R16, R0
+MOVZ	R4, R17, R0
+JAL	__Div_FP+0
+NOP	
+; c end address is: 64 (R16)
+; b end address is: 68 (R17)
+;TCS3472.c,302 :: 		b *= 256.0;
+LUI	R4, 17280
+ORI	R4, R4, 0
+MOVZ	R6, R2, R0
+JAL	__Mul_FP+0
+NOP	
+;TCS3472.c,303 :: 		rgb[2] = b;
+ADDIU	R3, R26, 8
+SW	R2, 0(R3)
+;TCS3472.c,305 :: 		}
 L_end_GetScaledValues:
+LW	RA, 0(SP)
+ADDIU	SP, SP, 4
 JR	RA
 NOP	
 ; end of _GetScaledValues

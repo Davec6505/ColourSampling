@@ -18,29 +18,29 @@ unsigned long Val;
        for(j = 0;j < 512;j++){
           buff[j] = ptr[j];
        }
-       Val = buff[1];
-       Val =(Val<<8)| buff[0];
-       Val =(Val<<8)| buff[3];
+       Val = buff[3];
        Val =(Val<<8)| buff[2];
+       Val =(Val<<8)| buff[1];
+       Val =(Val<<8)| buff[0];
       vals->C_thresh = Val;
 
-       Val = buff[5];
-       Val =(Val<<8)| buff[4];
-       Val =(Val<<8)| buff[7];
+       Val = buff[7];
        Val =(Val<<8)| buff[6];
+       Val =(Val<<8)| buff[5];
+       Val =(Val<<8)| buff[4];
       vals->R_thresh = Val;
 
-       Val = buff[9];
-       Val =(Val<<8)| buff[8];
-       Val =(Val<<8)| buff[11];
+       Val = buff[11];
        Val =(Val<<8)| buff[10];
+       Val =(Val<<8)| buff[9];
+       Val =(Val<<8)| buff[8];
       vals->G_thresh = Val;
 
-       Val = buff[13];
-       Val =(Val<<8)| buff[12];
-       Val =(Val<<8)| buff[15];
+       Val = buff[15];
        Val =(Val<<8)| buff[14];
-      vals->B_thresh = Val;
+       Val =(Val<<8)| buff[13];
+       Val =(Val<<8)| buff[12];
+       vals->B_thresh = Val;
           
    // i += 4;
   //}
@@ -131,7 +131,7 @@ unsigned long Val;
        buff[i] = *ptr;
        ptr++;
     }
-  //  memcpy(buff,ptr,6);
+
     Val = buff[3];
     Val =(Val<<8)| buff[2];
     Val =(Val<<8)| buff[1];

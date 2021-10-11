@@ -92,6 +92,9 @@ LUI	R25, 1
 ORI	R25, R25, 49664
 JAL	_UART2_Init+0
 NOP	
+;Config.c,31 :: 		MM_Init();
+JAL	_MM_Init+0
+NOP	
 ;Config.c,34 :: 		LATA10_bit = 0;
 LUI	R2, BitMask(LATA10_bit+0)
 ORI	R2, R2, BitMask(LATA10_bit+0)

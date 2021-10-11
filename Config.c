@@ -28,7 +28,7 @@ void ConfigPic(){
    UART2_Init(115200);              // Initialize UART module at 9600 bps
    //ADC1_Init();
    
-
+   MM_Init();
 
 
   LATA10_bit = 0;
