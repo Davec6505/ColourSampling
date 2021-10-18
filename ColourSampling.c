@@ -1,4 +1,7 @@
 #include "Config.h"
+
+
+
 PString str_t;
 char* (*testStr)(int i);
 //USB
@@ -22,20 +25,27 @@ char txtR[6];
  //testStr = StrChecker;
  ConfigPic();
 
- Delay_ms(5000);
+ Delay_ms(2000);
+
  it = TCS3472_INTEGRATIONTIME_24MS;//TCS3472_INTEGRATIONTIME_2_4MS;
  G  = TCS3472_GAIN_1X;
- device_Id = TCS3472_1_5;
+ device_Id = TCS347_11_15;//TCS3472_1_5;
  i = 0;
  i = TCS3472_Init(it,G,device_Id);
   sprintf(txtR,"%2x",i);
   strcat(writebuff,txtR);
   while(!HID_Write(&writebuff,64));
 
+ // RD = GR = BL = 1;
+
+  UART1_Write_Text("Start");
+  UART1_Write(13);
+  UART1_Write(10);
 
  while(1){
    ///////////////////////////////////////////////
    //Get input from USB to set up thresholds
+
    num = HID_Read();
    if(num != 0){
       DoStrings(num);

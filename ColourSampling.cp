@@ -73,7 +73,9 @@ typedef enum {
 
 typedef enum{
  TCS3472_1_5 = 0x44,
- TCS3472_3_7 = 0x4D
+ TCS3472_3_7 = 0x4D,
+ TCS347_11_15 = 0x14,
+ TCS347_13_17 = 0x1D
 } TCS3472x;
 
 typedef enum{
@@ -166,6 +168,36 @@ typedef struct{
 void InitTimer1();
 void Get_Time();
 void I2C2_TimeoutCallback(char errorCode);
+#line 1 "c:/users/git/coloursampling/sim800.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
+#line 11 "c:/users/git/coloursampling/sim800.h"
+extern sfr sbit RTS;
+extern sfr sbit CRS;
+extern sfr sbit RST;
+extern sfr sbit PWR;
+extern sfr sbit STAT;
+
+
+
+
+
+
+extern char rcvSimTxt[50];
+extern char rcvPcTxt[50];
+
+
+
+
+typedef struct{
+int initial_str;
+}Sim800Vars;
+
+extern Sim800Vars SimVars;
+
+
+void InitGSM3();
+void PwrUpGSM3();
+void SendData();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
@@ -249,17 +281,27 @@ char* Write_Thresholds(short data_src);
 int Get_It();
 int Get_Gain();
 char* TestFlash();
-#line 9 "c:/users/git/coloursampling/config.h"
+#line 10 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
+extern sfr sbit RD;
+extern sfr sbit GR;
+extern sfr sbit BL;
+
+
+
+
+
 
 void ConfigPic();
+void InitUart1();
+void InitUart2();
 void InitVars();
 void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
-#line 2 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 5 "C:/Users/Git/ColourSampling/ColourSampling.c"
 PString str_t;
 char* (*testStr)(int i);
 
@@ -283,10 +325,11 @@ char txtR[6];
 
  ConfigPic();
 
- Delay_ms(5000);
+ Delay_ms(2000);
+
  it = TCS3472_INTEGRATIONTIME_24MS;
  G = TCS3472_GAIN_1X;
- device_Id = TCS3472_1_5;
+ device_Id = TCS347_11_15;
  i = 0;
  i = TCS3472_Init(it,G,device_Id);
  sprintf(txtR,"%2x",i);
@@ -294,7 +337,13 @@ char txtR[6];
  while(!HID_Write(&writebuff,64));
 
 
+
+ UART1_Write_Text("Start");
+ UART1_Write(13);
+ UART1_Write(10);
+
  while(1){
+
 
 
  num = HID_Read();

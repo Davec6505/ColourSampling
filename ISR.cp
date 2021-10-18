@@ -73,7 +73,9 @@ typedef enum {
 
 typedef enum{
  TCS3472_1_5 = 0x44,
- TCS3472_3_7 = 0x4D
+ TCS3472_3_7 = 0x4D,
+ TCS347_11_15 = 0x14,
+ TCS347_13_17 = 0x1D
 } TCS3472x;
 
 typedef enum{
@@ -166,6 +168,36 @@ typedef struct{
 void InitTimer1();
 void Get_Time();
 void I2C2_TimeoutCallback(char errorCode);
+#line 1 "c:/users/git/coloursampling/sim800.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
+#line 11 "c:/users/git/coloursampling/sim800.h"
+extern sfr sbit RTS;
+extern sfr sbit CRS;
+extern sfr sbit RST;
+extern sfr sbit PWR;
+extern sfr sbit STAT;
+
+
+
+
+
+
+extern char rcvSimTxt[50];
+extern char rcvPcTxt[50];
+
+
+
+
+typedef struct{
+int initial_str;
+}Sim800Vars;
+
+extern Sim800Vars SimVars;
+
+
+void InitGSM3();
+void PwrUpGSM3();
+void SendData();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
@@ -249,17 +281,27 @@ char* Write_Thresholds(short data_src);
 int Get_It();
 int Get_Gain();
 char* TestFlash();
-#line 9 "c:/users/git/coloursampling/config.h"
+#line 10 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
+extern sfr sbit RD;
+extern sfr sbit GR;
+extern sfr sbit BL;
+
+
+
+
+
 
 void ConfigPic();
+void InitUart1();
+void InitUart2();
 void InitVars();
 void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
-#line 3 "C:/Users/Git/ColourSampling/ISR.c"
+#line 4 "C:/Users/Git/ColourSampling/ISR.c"
 void (*Get_Timer_Values)();
 
 void USB1Interrupt() iv IVT_USB_1 ilevel 7 ics ICS_SRS{
@@ -275,4 +317,46 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
  T1IF_bit = 0;
 
  Get_Timer_Values();
+}
+
+
+void PC_Uart1() iv IVT_UART_1 ilevel 6 ics ICS_AUTO {
+int i,j;
+ U1RXIF_bit = 0;
+ i = 0;
+ while (UART1_Data_Ready()) {
+ rcvPcTxt[i] = U1RXREG;
+ i++;
+ }
+ rcvPcTxt[i] = 0;
+ for(j= 0; j<i ;j++){
+ U2TXREG = rcvPcTxt[j];
+ while(!TRMT_bit);
+ }
+}
+
+void PC_Uart2() iv IVT_UART_2 ilevel 6 ics ICS_AUTO {
+int i,j;
+
+ U2RXIF_bit = 0;
+ i = 0;
+ while(UART2_Data_Ready()) {
+ rcvSimTxt[i] = U2RXREG;
+ i++;
+ }
+ rcvSimTxt[i] = 0;
+ for(j= 0; j<i;j++){
+ U1TXREG = rcvSimTxt[j];
+ while(!TRMT_bit);
+ }
+ if(SimVars.initial_str == 1)
+ goto end;
+
+ if((SimVars.initial_str == 0) && (i != 0))
+ SimVars.initial_str = -1;
+ else if(SimVars.initial_str == -1)
+ SimVars.initial_str = 1;
+
+end:
+ return;
 }

@@ -73,7 +73,9 @@ typedef enum {
 
 typedef enum{
  TCS3472_1_5 = 0x44,
- TCS3472_3_7 = 0x4D
+ TCS3472_3_7 = 0x4D,
+ TCS347_11_15 = 0x14,
+ TCS347_13_17 = 0x1D
 } TCS3472x;
 
 typedef enum{
@@ -166,6 +168,36 @@ typedef struct{
 void InitTimer1();
 void Get_Time();
 void I2C2_TimeoutCallback(char errorCode);
+#line 1 "c:/users/git/coloursampling/sim800.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
+#line 11 "c:/users/git/coloursampling/sim800.h"
+extern sfr sbit RTS;
+extern sfr sbit CRS;
+extern sfr sbit RST;
+extern sfr sbit PWR;
+extern sfr sbit STAT;
+
+
+
+
+
+
+extern char rcvSimTxt[50];
+extern char rcvPcTxt[50];
+
+
+
+
+typedef struct{
+int initial_str;
+}Sim800Vars;
+
+extern Sim800Vars SimVars;
+
+
+void InitGSM3();
+void PwrUpGSM3();
+void SendData();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
@@ -249,29 +281,48 @@ char* Write_Thresholds(short data_src);
 int Get_It();
 int Get_Gain();
 char* TestFlash();
-#line 9 "c:/users/git/coloursampling/config.h"
+#line 10 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
+extern sfr sbit RD;
+extern sfr sbit GR;
+extern sfr sbit BL;
+
+
+
+
+
 
 void ConfigPic();
+void InitUart1();
+void InitUart2();
 void InitVars();
 void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
-#line 5 "C:/Users/Git/ColourSampling/Config.c"
+#line 3 "C:/Users/Git/ColourSampling/Config.c"
+sbit RD at LATB0_bit;
+sbit GR at LATG13_bit;
+sbit BL at LATD4_bit;
+
+
+
 void ConfigPic(){
+
  CHECON = 30;
  AD1PCFG = 0xFFFFFFFF;
  JTAGEN_bit = 0;
 
  TRISA = 0X0200;
- TRISB = 0X0000;
+ TRISB = 0X0010;
  TRISC = 0X0000;
  TRISD = 0X0000;
- TRISE = 0X0010;
+ TRISE = 0X0210;
  TRISF = 0X0000;
  TRISG = 0X0000;
+
+
 
 
  USBIE_bit = 0;
@@ -283,7 +334,9 @@ void ConfigPic(){
  &I2C2_Stop,&I2C2_Is_Idle);
  I2C2_SetTimeoutCallback(1000, I2C2_TimeoutCallback);
  Delay_ms(100);
- UART2_Init(115200);
+ InitUart1();
+ Delay_ms(100);
+ InitUart2();
 
 
  MM_Init();
@@ -293,6 +346,26 @@ void ConfigPic(){
  LATE3_bit = 0;
  InitTimer1();
  InitISR();
+ InitGSM3();
+ PwrUpGSM3();
+}
+
+void InitUart1(){
+ UART1_Init(9600);
+ URXISEL0_bit = 0;
+ URXISEL1_bit = 0;
+ IPC6CLR = 0X1F;
+ IPC6SET = 0X1B;
+ U1RXIE_bit = 1;
+ U1RXIF_bit = 0;
+}
+
+void InitUart2(){
+ UART2_Init(9600);
+ IPC8CLR = 0X1F;
+ IPC8SET = 0X1A;
+ U2RXIE_bit = 1;
+ U2RXIF_bit = 0;
 }
 
 void InitVars(){

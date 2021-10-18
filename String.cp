@@ -88,7 +88,9 @@ typedef enum {
 
 typedef enum{
  TCS3472_1_5 = 0x44,
- TCS3472_3_7 = 0x4D
+ TCS3472_3_7 = 0x4D,
+ TCS347_11_15 = 0x14,
+ TCS347_13_17 = 0x1D
 } TCS3472x;
 
 typedef enum{

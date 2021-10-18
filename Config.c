@@ -1,20 +1,27 @@
 #include "Config.h"
 
+sbit RD at LATB0_bit;
+sbit GR at LATG13_bit;
+sbit BL at LATD4_bit;
+
 
 
 void ConfigPic(){
+
    CHECON = 30;
    AD1PCFG = 0xFFFFFFFF;
    JTAGEN_bit = 0;
 
   TRISA = 0X0200;
-  TRISB = 0X0000;
+  TRISB = 0X0010;
   TRISC = 0X0000;
   TRISD = 0X0000;
-  TRISE = 0X0010;
+  TRISE = 0X0210;
   TRISF = 0X0000;
   TRISG = 0X0000;
+  
 
+ 
 
   USBIE_bit = 0;
   IPC11bits.USBIP = 7;
@@ -25,7 +32,9 @@ void ConfigPic(){
                   &I2C2_Stop,&I2C2_Is_Idle); // Sets the I2C2 module active
    I2C2_SetTimeoutCallback(1000, I2C2_TimeoutCallback);
    Delay_ms(100);
-   UART2_Init(115200);              // Initialize UART module at 9600 bps
+   InitUart1();
+   Delay_ms(100);
+   InitUart2();
    //ADC1_Init();
    
    MM_Init();
@@ -35,6 +44,26 @@ void ConfigPic(){
   LATE3_bit = 0;
   InitTimer1();
   InitISR();
+  InitGSM3();
+  PwrUpGSM3();
+}
+
+void InitUart1(){
+     UART1_Init(9600);              // Initialize UART module at 9600 bps
+     URXISEL0_bit  = 0;
+     URXISEL1_bit  = 0;
+     IPC6CLR = 0X1F;
+     IPC6SET = 0X1B;                //PRIORITY LEVEL 6  recieve
+     U1RXIE_bit = 1;
+     U1RXIF_bit = 0;
+}
+
+void InitUart2(){
+     UART2_Init(9600);              // Initialize UART module at 9600 bps
+     IPC8CLR = 0X1F;
+     IPC8SET = 0X1A;                //PRIORITY LEVEL 6 recieve
+     U2RXIE_bit = 1;
+     U2RXIF_bit = 0;
 }
 
 void InitVars(){

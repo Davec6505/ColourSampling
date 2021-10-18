@@ -52,7 +52,7 @@ extern sfr TCS3472_Initialised;
 #define TCS3472_CONFIG 0x0D          /**< Configuration **/
 #define TCS3472_CONFIG_WLONG 0x02    /**< Choose between short and long (12x) wait times via TCS3472_WTIME */
 #define TCS3472_CONTROL 0x0F         /**< Set the gain level for the sensor */
-#define TCS3472_ID 0x12              /**< 0x44 = TCS34721/TCS34725, 0x4D = TCS34723/TCS34727 */
+#define TCS3472_ID 0x12              /**< 0x44 = TCS34721/TCS34725, 0x4D = TCS34723/TCS34727 , 0x14 = TCS34711 & TCS34715,0x1D = TCS34713 & TCS34717 */
 #define TCS3472_STATUS 0x13          /**< Device status **/
 #define TCS3472_STATUS_AINT 0x10     /**< RGBC Clean channel interrupt */
 #define TCS3472_STATUS_AVALID 0x01   /**< Indicates that the RGBC channels have completed an integration cycle */
@@ -90,8 +90,10 @@ typedef enum {
 
 /** Device ID **/
 typedef enum{
-  TCS3472_1_5 = 0x44,
-  TCS3472_3_7 = 0x4D
+  TCS3472_1_5  = 0x44,
+  TCS3472_3_7  = 0x4D,
+  TCS347_11_15 = 0x14,
+  TCS347_13_17 = 0x1D
 } TCS3472x;
 
 typedef enum{

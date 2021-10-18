@@ -17,12 +17,19 @@ main
 				I2C2_TimeoutCallback
 		I2C_Set_Active
 		I2C2_SetTimeoutCallback
-		UART2_Init
-			Get_Fosc_kHz
-			UART_Calc_BRG
+		InitUart1
+			UART1_Init
+				Get_Fosc_kHz
+				UART_Calc_BRG
+		InitUart2
+			UART2_Init
+				Get_Fosc_kHz
+				UART_Calc_BRG
 		MM_Init
 		InitTimer1
 		InitISR
+		InitGSM3
+		PwrUpGSM3
 	TCS3472_Init
 		TCS3472_Read8
 			I2C2_Start
@@ -121,6 +128,9 @@ main
 							I2C2_Stop
 							Get_Time
 							I2C1_Stop
+	UART1_Write_Text
+		UART1_Write
+	UART1_Write
 	HID_Read
 		Gen_Read
 			USB_Handle_Busy
@@ -228,10 +238,14 @@ main
 		HID_Write
 	__CC2DW
 	__FillZeros
+PC_Uart1
+	UART1_Data_Ready
+PC_Uart2
+	UART2_Data_Ready
+USB1Interrupt
+	USB_Interrupt_Proc
+		USB_Device_Service
 Timer1Interrupt
 	I2C2_Stop
 	Get_Time
 	I2C1_Stop
-USB1Interrupt
-	USB_Interrupt_Proc
-		USB_Device_Service

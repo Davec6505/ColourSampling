@@ -34,7 +34,7 @@ READT_DN40,         //12
 READA_SCL,          //13
 READA_THV,          //14
 WRITE_MAN,          //15
-WRITE_RAW           //16
+WRITE_RAW          //16
 };
 
 struct Constants{

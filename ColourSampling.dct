@@ -1999,6 +1999,7 @@ bito
 bito
 bito
 bito_bit
+bl
 blength
 blength
 blength
@@ -2816,6 +2817,7 @@ busy
 busy
 busy
 busy_bit
+button
 bytetohex
 bytetostr
 bytetostrwithzeros
@@ -8542,6 +8544,7 @@ ctis0
 ctis0_bit
 ctis1
 ctis1_bit
+cts
 cvr
 cvr
 cvr
@@ -11112,6 +11115,7 @@ get_time
 get_timer_values
 getscaledvalues
 gp
+gr
 halfsec
 halfsec
 halfsec
@@ -12516,9 +12520,13 @@ incm1
 incm1
 incm1
 incm1_bit
+initgsm3
+initial_str
 initisr
 initstring
 inittimer1
+inituart1
+inituart2
 initvars
 int0ep
 int0ep
@@ -16646,6 +16654,8 @@ pbdiv1
 pbdiv1
 pbdiv1
 pbdiv1_bit
+pc_uart1
+pc_uart2
 pcfg
 pcfg
 pcfg
@@ -17923,6 +17933,8 @@ ptwren
 ptwren
 ptwren
 ptwren_bit
+pwr
+pwrupgsm3
 r_thresh
 r_thresh
 r_w
@@ -18216,6 +18228,9 @@ rconinv
 rconinvbits
 rconset
 rconsetbits
+rcvpctxt
+rcvsimtxt
+rd
 rd0
 rd0
 rd0
@@ -18584,6 +18599,7 @@ rsen
 rsen
 rsen_bit
 rsen_i2c2con_bit
+rst
 rswrst
 rswrstbits
 rswrstclr
@@ -18679,6 +18695,7 @@ rtcwren
 rtcwren
 rtcwren_bit
 rtrim
+rts
 rtsecsel
 rtsecsel
 rtsecsel
@@ -18822,6 +18839,7 @@ sen
 sen
 sen_bit
 sen_i2c2con_bit
+senddata
 sesend
 sesend
 sesend
@@ -19064,6 +19082,7 @@ sidl_t4con_bit
 sidl_t5con_bit
 sidl_u1mode_bit
 sidl_u2mode_bit
+simvars
 sin
 sinh
 sirqen
@@ -19562,6 +19581,7 @@ stallif
 stallif
 stallif
 stallif_bit
+stat
 stov
 stov
 stov
