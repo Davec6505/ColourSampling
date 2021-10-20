@@ -160,17 +160,24 @@ typedef unsigned long time_t;
 typedef struct{
  uint32_t millis;
  uint16_t temp_ms;
+ uint8_t temp_sec;
+ uint8_t temp_min;
+ uint8_t temp_hr;
  uint16_t ms;
  uint8_t sec;
+ uint8_t min;
+ uint8_t hr;
 }Timers;
 
 
 void InitTimer1();
 void Get_Time();
+void Update_ThingSpeak(unsigned int* rgbc);
 void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/git/coloursampling/sim800.h"
+#line 1 "c:/users/git/coloursampling/_timers.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 11 "c:/users/git/coloursampling/sim800.h"
+#line 12 "c:/users/git/coloursampling/sim800.h"
 extern sfr sbit RTS;
 extern sfr sbit CRS;
 extern sfr sbit RST;
@@ -182,8 +189,8 @@ extern sfr sbit STAT;
 
 
 
-extern char rcvSimTxt[50];
-extern char rcvPcTxt[50];
+extern char rcvSimTxt[150];
+extern char rcvPcTxt[150];
 
 
 
@@ -197,7 +204,7 @@ extern Sim800Vars SimVars;
 
 void InitGSM3();
 void PwrUpGSM3();
-void SendData();
+void SendData(unsigned int* rgbc);
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
@@ -216,16 +223,17 @@ void NVMRead(void* addr,struct Thresh *vals);
 unsigned long ReadFlash();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
-#line 18 "c:/users/git/coloursampling/string.h"
+#line 1 "c:/users/git/coloursampling/sim800.h"
+#line 19 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 
 enum ControlColorIO{
 CONFIG,
-SETA,
-SETR,
-SETG,
-SETB,
-SETC,
+SENDC,
+SENDR,
+SENDG,
+SENDB,
+SENDA,
 READA,
 READR,
 READG,
@@ -329,7 +337,7 @@ char txtR[6];
 
  it = TCS3472_INTEGRATIONTIME_24MS;
  G = TCS3472_GAIN_1X;
- device_Id = TCS347_11_15;
+ device_Id = TCS3472_1_5;
  i = 0;
  i = TCS3472_Init(it,G,device_Id);
  sprintf(txtR,"%2x",i);
@@ -341,14 +349,15 @@ char txtR[6];
  UART1_Write_Text("Start");
  UART1_Write(13);
  UART1_Write(10);
-
+#line 50 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
-
 
 
  num = HID_Read();
  if(num != 0){
  DoStrings(num);
  }
+
+
  }
 }

@@ -128,16 +128,95 @@ unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
 void GetScaledValues(int* CRGB,float rgb[3]);
-#line 18 "c:/users/git/coloursampling/string.h"
+#line 1 "c:/users/git/coloursampling/sim800.h"
+#line 1 "c:/users/git/coloursampling/_timers.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/time.h"
+
+
+
+struct tm {
+ unsigned long tm_sec;
+ unsigned long tm_min;
+ unsigned long tm_hour;
+ unsigned long tm_mday;
+ unsigned long tm_mon;
+ unsigned long tm_year;
+ unsigned long tm_wday;
+ unsigned long tm_yday;
+ unsigned long tm_isdst;
+};
+
+
+
+
+
+
+
+
+
+ typedef unsigned long size_t;
+
+
+typedef unsigned long clock_t;
+typedef unsigned long time_t;
+#line 7 "c:/users/git/coloursampling/_timers.h"
+typedef struct{
+ uint32_t millis;
+ uint16_t temp_ms;
+ uint8_t temp_sec;
+ uint8_t temp_min;
+ uint8_t temp_hr;
+ uint16_t ms;
+ uint8_t sec;
+ uint8_t min;
+ uint8_t hr;
+}Timers;
+
+
+void InitTimer1();
+void Get_Time();
+void Update_ThingSpeak(unsigned int* rgbc);
+void I2C2_TimeoutCallback(char errorCode);
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
+#line 12 "c:/users/git/coloursampling/sim800.h"
+extern sfr sbit RTS;
+extern sfr sbit CRS;
+extern sfr sbit RST;
+extern sfr sbit PWR;
+extern sfr sbit STAT;
+
+
+
+
+
+
+extern char rcvSimTxt[150];
+extern char rcvPcTxt[150];
+
+
+
+
+typedef struct{
+int initial_str;
+}Sim800Vars;
+
+extern Sim800Vars SimVars;
+
+
+void InitGSM3();
+void PwrUpGSM3();
+void SendData(unsigned int* rgbc);
+#line 19 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 
 enum ControlColorIO{
 CONFIG,
-SETA,
-SETR,
-SETG,
-SETB,
-SETC,
+SENDC,
+SENDR,
+SENDG,
+SENDB,
+SENDA,
 READA,
 READR,
 READG,

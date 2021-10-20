@@ -81,13 +81,19 @@ typedef unsigned long time_t;
 typedef struct{
  uint32_t millis;
  uint16_t temp_ms;
+ uint8_t temp_sec;
+ uint8_t temp_min;
+ uint8_t temp_hr;
  uint16_t ms;
  uint8_t sec;
+ uint8_t min;
+ uint8_t hr;
 }Timers;
 
 
 void InitTimer1();
 void Get_Time();
+void Update_ThingSpeak(unsigned int* rgbc);
 void I2C2_TimeoutCallback(char errorCode);
 #line 3 "C:/Users/Git/ColourSampling/_Timers.c"
 Timers TMR0;
@@ -103,12 +109,29 @@ void InitTimer1(){
  TMR1 = 0;
 }
 
+
 void Get_Time(){
+ TMR0.millis++;
  TMR0.ms++;
  if(TMR0.ms > 999){
  TMR0.ms = 0;
+ TMR0.sec++;
+ if(TMR0.sec > 59){
+ TMR0.sec = 0;
+ TMR0.min++;
+ if(TMR0.min > 590){
+ TMR0.min = 0;
+ TMR0.hr++;
+ if(TMR0.hr > 23)
+ TMR0.hr = 0;
+ }
+ }
  LATA10_bit = !LATA10_bit;
  }
+}
+
+void Update_ThingSpeak(unsigned int* rgbc){
+
 }
 
 

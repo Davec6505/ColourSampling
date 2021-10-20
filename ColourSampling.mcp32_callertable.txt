@@ -150,6 +150,12 @@ main
 			isdigit
 		TCS3472_SetIntergration_Time
 		TCS3472_SetGain
+		SendData
+			sprintf
+			UART2_Write_Text
+				UART2_Write
+			UART2_Write
+			__CC2DW
 		Read_Send_AllColour
 			TCS3472_getRawData
 				TCS3472_Read16
@@ -240,7 +246,7 @@ main
 	__FillZeros
 PC_Uart1
 	UART1_Data_Ready
-PC_Uart2
+Sim800_Uart2
 	UART2_Data_Ready
 USB1Interrupt
 	USB_Interrupt_Proc

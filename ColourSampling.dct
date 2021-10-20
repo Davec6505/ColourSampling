@@ -11135,6 +11135,7 @@ hosten
 hosten
 hosten
 hosten_bit
+hr
 hr01
 hr01
 hr01
@@ -13791,6 +13792,7 @@ memcpy
 memmove
 memset
 millis
+min
 min
 min01
 min01
@@ -16655,7 +16657,6 @@ pbdiv1
 pbdiv1
 pbdiv1_bit
 pc_uart1
-pc_uart2
 pcfg
 pcfg
 pcfg
@@ -19082,6 +19083,7 @@ sidl_t4con_bit
 sidl_t5con_bit
 sidl_u1mode_bit
 sidl_u2mode_bit
+sim800_uart2
 simvars
 sin
 sinh
@@ -20387,7 +20389,10 @@ tcs3472_setinterrupt
 tcs3472_setinterrupt_limits
 tcs3472_write
 tcs3472_write8
+temp_hr
+temp_min
 temp_ms
+temp_sec
 testflash
 teststr
 teststrings
@@ -22254,6 +22259,8 @@ uoemon
 uoemon
 uoemon
 uoemon_bit
+update_thing
+update_thingspeak
 urstie
 urstie
 urstie

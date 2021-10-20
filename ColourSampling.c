@@ -29,7 +29,7 @@ char txtR[6];
 
  it = TCS3472_INTEGRATIONTIME_24MS;//TCS3472_INTEGRATIONTIME_2_4MS;
  G  = TCS3472_GAIN_1X;
- device_Id = TCS347_11_15;//TCS3472_1_5;
+ device_Id = TCS3472_1_5;  //TCS347_11_15;
  i = 0;
  i = TCS3472_Init(it,G,device_Id);
   sprintf(txtR,"%2x",i);
@@ -41,15 +41,21 @@ char txtR[6];
   UART1_Write_Text("Start");
   UART1_Write(13);
   UART1_Write(10);
+  
+/*************************************************
+*main => loop forever and call all functions*
+*keep main free from code
+*************************************************/
 
  while(1){
    ///////////////////////////////////////////////
    //Get input from USB to set up thresholds
-
    num = HID_Read();
    if(num != 0){
       DoStrings(num);
    }
+   //////////////////////////////////////////////
+   //Get sms input
  }
 }
 

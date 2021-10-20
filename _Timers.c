@@ -13,12 +13,29 @@ void InitTimer1(){
   TMR1                 = 0;
 }
 
+//run time
 void Get_Time(){
+      TMR0.millis++;
       TMR0.ms++;
       if(TMR0.ms > 999){
           TMR0.ms = 0;
+          TMR0.sec++;
+          if(TMR0.sec > 59){
+             TMR0.sec = 0;
+             TMR0.min++;
+             if(TMR0.min > 590){
+                TMR0.min = 0;
+                TMR0.hr++;
+                if(TMR0.hr > 23)
+                   TMR0.hr = 0;
+             }
+          }
           LATA10_bit = !LATA10_bit;
       }
+}
+
+void Update_ThingSpeak(unsigned int* rgbc){
+
 }
 
 // define callback function

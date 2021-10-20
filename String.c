@@ -12,11 +12,11 @@ const code char *comc[13]={
 };
 const code char *com[17]={
    "CONFIG",      //0
-   "SETA",        //1
-   "SETR",        //2
-   "SETG",        //3
-   "SETB",        //4
-   "SETC",        //5
+   "SENDC",        //1
+   "SENDR",        //2
+   "SENDG",        //3
+   "SENDB",        //4
+   "SENDA",        //5
    "READA",       //6
    "READR",       //7
    "READG",       //8
@@ -99,6 +99,9 @@ char *str,err,i;
                }
              }
              LATE3_bit = 0;
+             break;
+        case SENDA :
+             SendData(RawData);
              break;
         case READA :
              str = Read_Send_AllColour(0);

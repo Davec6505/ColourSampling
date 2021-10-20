@@ -4,6 +4,7 @@
 
 //////////////////////////////////////////////////////
 //includes
+#include "_Timers.h"
 #include "built_in.h"
 
 /////////////////////////////////////////////////////
@@ -19,8 +20,8 @@ extern sfr sbit STAT;
 
 //////////////////////////////////////////////////////
 //constants and vars
-extern char rcvSimTxt[50];
-extern char rcvPcTxt[50];
+extern char rcvSimTxt[150];
+extern char rcvPcTxt[150];
 
 
 //////////////////////////////////////////////////////
@@ -34,6 +35,6 @@ extern Sim800Vars SimVars;
 //function prototypes
 void InitGSM3();
 void PwrUpGSM3();
-void SendData();
+void SendData(unsigned int* rgbc);
 
 #endif

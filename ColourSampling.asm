@@ -18,11 +18,11 @@ ORI	R2, R0, 246
 SB	R2, Offset(_it+0)(GP)
 ;ColourSampling.c,31 :: 		G  = TCS3472_GAIN_1X;
 SB	R0, Offset(_G+0)(GP)
-;ColourSampling.c,32 :: 		device_Id = TCS347_11_15;//TCS3472_1_5;
-ORI	R2, R0, 20
+;ColourSampling.c,32 :: 		device_Id = TCS3472_1_5;  //TCS347_11_15;
+ORI	R2, R0, 68
 SB	R2, Offset(_device_Id+0)(GP)
 ;ColourSampling.c,34 :: 		i = TCS3472_Init(it,G,device_Id);
-ORI	R27, R0, 20
+ORI	R27, R0, 68
 MOVZ	R26, R0, R0
 ORI	R25, R0, 246
 JAL	_TCS3472_Init+0
@@ -85,31 +85,31 @@ NOP
 ORI	R25, R0, 10
 JAL	_UART1_Write+0
 NOP	
-;ColourSampling.c,45 :: 		while(1){
+;ColourSampling.c,50 :: 		while(1){
 L_main4:
-;ColourSampling.c,49 :: 		num = HID_Read();
+;ColourSampling.c,53 :: 		num = HID_Read();
 JAL	_HID_Read+0
 NOP	
 ; num start address is: 12 (R3)
 ANDI	R3, R2, 255
-;ColourSampling.c,50 :: 		if(num != 0){
+;ColourSampling.c,54 :: 		if(num != 0){
 ANDI	R2, R2, 255
 BNE	R2, R0, L__main10
 NOP	
 J	L_main6
 NOP	
 L__main10:
-;ColourSampling.c,51 :: 		DoStrings(num);
+;ColourSampling.c,55 :: 		DoStrings(num);
 ANDI	R25, R3, 255
 ; num end address is: 12 (R3)
 JAL	_DoStrings+0
 NOP	
-;ColourSampling.c,52 :: 		}
+;ColourSampling.c,56 :: 		}
 L_main6:
-;ColourSampling.c,53 :: 		}
+;ColourSampling.c,59 :: 		}
 J	L_main4
 NOP	
-;ColourSampling.c,54 :: 		}
+;ColourSampling.c,60 :: 		}
 L_end_main:
 L__main_end_loop:
 J	L__main_end_loop

@@ -6,6 +6,7 @@
 #include "Flash_R_W.h"
 #include <stdint.h>
 #include "TCS3472.h"
+#include "Sim800.h"
 
 //////////////////////////////////////////////////
 //defines
@@ -19,11 +20,11 @@ extern char string[size][str_size];//={"HELLO WORLD","HELLO WORLD","HELLO WORLD"
 
 enum ControlColorIO{
 CONFIG,             //0
-SETA,
-SETR,
-SETG,
-SETB,
-SETC,
+SENDC,              //1
+SENDR,              //2
+SENDG,              //3
+SENDB,              //4
+SENDA,              //5
 READA,              //6
 READR,              //7
 READG,              //8

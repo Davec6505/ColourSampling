@@ -205,8 +205,8 @@ LW	R30, 12(SP)
 ADDIU	SP, SP, 16
 ERET	
 ; end of _PC_Uart1
-_PC_Uart2:
-;ISR.c,37 :: 		void PC_Uart2() iv IVT_UART_2 ilevel 6 ics ICS_AUTO {
+_Sim800_Uart2:
+;ISR.c,37 :: 		void Sim800_Uart2() iv IVT_UART_2 ilevel 6 ics ICS_AUTO {
 ADDIU	SP, SP, -16
 SW	R30, 12(SP)
 MFC0	R30, 12, 2
@@ -229,15 +229,15 @@ _SX
 MOVZ	R5, R0, R0
 ; i end address is: 20 (R5)
 ;ISR.c,42 :: 		while(UART2_Data_Ready()) {     // If data is received
-L_PC_Uart27:
+L_Sim800_Uart27:
 ; i start address is: 20 (R5)
 JAL	_UART2_Data_Ready+0
 NOP	
-BNE	R2, R0, L__PC_Uart233
+BNE	R2, R0, L__Sim800_Uart233
 NOP	
-J	L_PC_Uart28
+J	L_Sim800_Uart28
 NOP	
-L__PC_Uart233:
+L__Sim800_Uart233:
 ;ISR.c,43 :: 		rcvSimTxt[i] = U2RXREG;
 SEH	R3, R5
 LUI	R2, hi_addr(_rcvSimTxt+0)
@@ -249,9 +249,9 @@ SB	R2, 0(R3)
 ADDIU	R2, R5, 1
 SEH	R5, R2
 ;ISR.c,45 :: 		}
-J	L_PC_Uart27
+J	L_Sim800_Uart27
 NOP	
-L_PC_Uart28:
+L_Sim800_Uart28:
 ;ISR.c,46 :: 		rcvSimTxt[i] = 0;
 SEH	R3, R5
 LUI	R2, hi_addr(_rcvSimTxt+0)
@@ -263,17 +263,17 @@ SB	R0, 0(R2)
 MOVZ	R4, R0, R0
 ; i end address is: 20 (R5)
 ; j end address is: 16 (R4)
-L_PC_Uart29:
+L_Sim800_Uart29:
 ; j start address is: 16 (R4)
 ; i start address is: 20 (R5)
 SEH	R3, R4
 SEH	R2, R5
 SLT	R2, R3, R2
-BNE	R2, R0, L__PC_Uart234
+BNE	R2, R0, L__Sim800_Uart234
 NOP	
-J	L_PC_Uart210
+J	L_Sim800_Uart210
 NOP	
-L__PC_Uart234:
+L__Sim800_Uart234:
 ;ISR.c,48 :: 		U1TXREG =  rcvSimTxt[j];
 SEH	R3, R4
 LUI	R2, hi_addr(_rcvSimTxt+0)
@@ -286,19 +286,19 @@ SW	R2, Offset(U1TXREG+0)(GP)
 ; j end address is: 16 (R4)
 SEH	R3, R4
 ;ISR.c,49 :: 		while(!TRMT_bit);
-L_PC_Uart212:
+L_Sim800_Uart212:
 ; i start address is: 20 (R5)
 ; j start address is: 12 (R3)
 _LX	
 EXT	R2, R2, BitPos(TRMT_bit+0), 1
-BEQ	R2, R0, L__PC_Uart235
+BEQ	R2, R0, L__Sim800_Uart235
 NOP	
-J	L_PC_Uart213
+J	L_Sim800_Uart213
 NOP	
-L__PC_Uart235:
-J	L_PC_Uart212
+L__Sim800_Uart235:
+J	L_Sim800_Uart212
 NOP	
-L_PC_Uart213:
+L_Sim800_Uart213:
 ;ISR.c,47 :: 		for(j= 0; j<i;j++){
 ADDIU	R2, R3, 1
 ; j end address is: 12 (R3)
@@ -306,65 +306,65 @@ ADDIU	R2, R3, 1
 SEH	R4, R2
 ;ISR.c,50 :: 		}
 ; j end address is: 16 (R4)
-J	L_PC_Uart29
+J	L_Sim800_Uart29
 NOP	
-L_PC_Uart210:
-;ISR.c,51 :: 		if(SimVars.initial_str == 1)
+L_Sim800_Uart210:
+;ISR.c,52 :: 		if(SimVars.initial_str == 1)
 LH	R3, Offset(_SimVars+0)(GP)
 ORI	R2, R0, 1
-BEQ	R3, R2, L__PC_Uart236
+BEQ	R3, R2, L__Sim800_Uart236
 NOP	
-J	L_PC_Uart214
+J	L_Sim800_Uart214
 NOP	
-L__PC_Uart236:
+L__Sim800_Uart236:
 ; i end address is: 20 (R5)
-;ISR.c,52 :: 		goto end;
-J	___PC_Uart2_end
+;ISR.c,53 :: 		goto end;
+J	___Sim800_Uart2_end
 NOP	
-L_PC_Uart214:
-;ISR.c,54 :: 		if((SimVars.initial_str == 0) && (i != 0))
+L_Sim800_Uart214:
+;ISR.c,55 :: 		if((SimVars.initial_str == 0) && (i != 0))
 ; i start address is: 20 (R5)
 LH	R2, Offset(_SimVars+0)(GP)
-BEQ	R2, R0, L__PC_Uart237
+BEQ	R2, R0, L__Sim800_Uart237
 NOP	
-J	L__PC_Uart222
+J	L__Sim800_Uart222
 NOP	
-L__PC_Uart237:
+L__Sim800_Uart237:
 SEH	R2, R5
 ; i end address is: 20 (R5)
-BNE	R2, R0, L__PC_Uart239
+BNE	R2, R0, L__Sim800_Uart239
 NOP	
-J	L__PC_Uart221
+J	L__Sim800_Uart221
 NOP	
-L__PC_Uart239:
-L__PC_Uart220:
-;ISR.c,55 :: 		SimVars.initial_str = -1;    //in initialisation
+L__Sim800_Uart239:
+L__Sim800_Uart220:
+;ISR.c,56 :: 		SimVars.initial_str = -1;    //in initialisation
 ORI	R2, R0, 65535
 SH	R2, Offset(_SimVars+0)(GP)
-J	L_PC_Uart218
+J	L_Sim800_Uart218
 NOP	
-;ISR.c,54 :: 		if((SimVars.initial_str == 0) && (i != 0))
-L__PC_Uart222:
-L__PC_Uart221:
-;ISR.c,56 :: 		else if(SimVars.initial_str == -1)// && (i == 0))
+;ISR.c,55 :: 		if((SimVars.initial_str == 0) && (i != 0))
+L__Sim800_Uart222:
+L__Sim800_Uart221:
+;ISR.c,57 :: 		else if(SimVars.initial_str == -1)// && (i == 0))
 LH	R3, Offset(_SimVars+0)(GP)
 LUI	R2, 65535
 ORI	R2, R2, 65535
-BEQ	R3, R2, L__PC_Uart240
+BEQ	R3, R2, L__Sim800_Uart240
 NOP	
-J	L_PC_Uart219
+J	L_Sim800_Uart219
 NOP	
-L__PC_Uart240:
-;ISR.c,57 :: 		SimVars.initial_str = 1;     //initialised
+L__Sim800_Uart240:
+;ISR.c,58 :: 		SimVars.initial_str = 1;     //initialised
 ORI	R2, R0, 1
 SH	R2, Offset(_SimVars+0)(GP)
-L_PC_Uart219:
-L_PC_Uart218:
-;ISR.c,59 :: 		end:
-___PC_Uart2_end:
-;ISR.c,60 :: 		return;
-;ISR.c,61 :: 		}
-L_end_PC_Uart2:
+L_Sim800_Uart219:
+L_Sim800_Uart218:
+;ISR.c,60 :: 		end:
+___Sim800_Uart2_end:
+;ISR.c,61 :: 		return;
+;ISR.c,62 :: 		}
+L_end_Sim800_Uart2:
 LW	RA, 0(SP)
 ADDIU	SP, SP, 4
 DI	
@@ -378,4 +378,4 @@ MTC0	R30, 12, 2
 LW	R30, 12(SP)
 ADDIU	SP, SP, 16
 ERET	
-; end of _PC_Uart2
+; end of _Sim800_Uart2

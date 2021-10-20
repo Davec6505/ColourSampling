@@ -34,7 +34,7 @@ int i,j;
     }
 }
 
-void PC_Uart2() iv IVT_UART_2 ilevel 6 ics ICS_AUTO {
+void Sim800_Uart2() iv IVT_UART_2 ilevel 6 ics ICS_AUTO {
 int i,j;
 
     U2RXIF_bit = 0;
@@ -48,6 +48,7 @@ int i,j;
          U1TXREG =  rcvSimTxt[j];
          while(!TRMT_bit);
     }
+    
     if(SimVars.initial_str == 1)
        goto end;
        
