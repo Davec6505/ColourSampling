@@ -118,6 +118,10 @@ main
 								USBCtrlEPAllowStatusStage
 								I2C2_Stop
 								Get_Time
+									sprintf
+									UART1_Write_Text
+										UART1_Write
+									UART1_Write
 								I2C1_Stop
 									I2C1_Wait_For_Idle
 										I2C1_Is_Idle
@@ -129,8 +133,17 @@ main
 							Get_Time
 							I2C1_Stop
 	UART1_Write_Text
-		UART1_Write
 	UART1_Write
+	SetupIOT
+		UART1_Write_Text
+		UART1_Write
+		UART2_Write_Text
+			UART2_Write
+		UART2_Write
+		strsplit
+		atoi
+			isdigit
+		sprintf
 	HID_Read
 		Gen_Read
 			USB_Handle_Busy
@@ -147,15 +160,12 @@ main
 		memset
 		strcmp
 		atoi
-			isdigit
 		TCS3472_SetIntergration_Time
 		TCS3472_SetGain
 		SendData
 			sprintf
 			UART2_Write_Text
-				UART2_Write
 			UART2_Write
-			__CC2DW
 		Read_Send_AllColour
 			TCS3472_getRawData
 				TCS3472_Read16
@@ -174,7 +184,6 @@ main
 			sprintf
 			strcat
 			TCS3472_C2RGB_Error
-			__CC2DW
 		Read_Send_OneColour
 			TCS3472_Read16
 			strcpy
@@ -221,13 +230,11 @@ main
 						_Div_FP
 				_FloatToUnsignedIntegral
 			TCS3472_CalcColTemp_dn40
-			__CC2DW
 		Read_Thresholds
 			NVMRead
 			strcpy
 			sprintf
 			strcat
-			__CC2DW
 		Write_Thresholds
 			NVMErasePage
 				NVMUnlock
@@ -242,8 +249,14 @@ main
 		strlen
 		strncat
 		HID_Write
+	SendSMS
+		UART2_Write_Text
+		UART2_Write
 	__CC2DW
 	__FillZeros
+	Test_Update_ThingSpeak
+		TCS3472_getRawData
+		SendData
 PC_Uart1
 	UART1_Data_Ready
 Sim800_Uart2

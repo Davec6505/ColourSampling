@@ -220,6 +220,8 @@ ORI	R30, R0, 6144
 MTC0	R30, 12, 0
 ADDIU	SP, SP, -4
 SW	RA, 0(SP)
+;ISR.c,39 :: 		SimVars.num_of_sms_bytes = 0;
+SH	R0, Offset(_SimVars+4)(GP)
 ;ISR.c,40 :: 		U2RXIF_bit = 0;
 LUI	R2, BitMask(U2RXIF_bit+0)
 ORI	R2, R2, BitMask(U2RXIF_bit+0)
@@ -252,13 +254,15 @@ SEH	R5, R2
 J	L_Sim800_Uart27
 NOP	
 L_Sim800_Uart28:
-;ISR.c,46 :: 		rcvSimTxt[i] = 0;
+;ISR.c,46 :: 		rcvSimTxt[i] = 0;               //retain the recieved bytes
 SEH	R3, R5
 LUI	R2, hi_addr(_rcvSimTxt+0)
 ORI	R2, R2, lo_addr(_rcvSimTxt+0)
 ADDU	R2, R2, R3
 SB	R0, 0(R2)
-;ISR.c,47 :: 		for(j= 0; j<i;j++){
+;ISR.c,47 :: 		SimVars.num_of_sms_bytes = i;  //log the amount of bytes recieved
+SH	R5, Offset(_SimVars+4)(GP)
+;ISR.c,48 :: 		for(j= 0; j<i;j++){
 ; j start address is: 16 (R4)
 MOVZ	R4, R0, R0
 ; i end address is: 20 (R5)
@@ -274,7 +278,7 @@ NOP
 J	L_Sim800_Uart210
 NOP	
 L__Sim800_Uart234:
-;ISR.c,48 :: 		U1TXREG =  rcvSimTxt[j];
+;ISR.c,49 :: 		U1TXREG =  rcvSimTxt[j];
 SEH	R3, R4
 LUI	R2, hi_addr(_rcvSimTxt+0)
 ORI	R2, R2, lo_addr(_rcvSimTxt+0)
@@ -285,7 +289,7 @@ SW	R2, Offset(U1TXREG+0)(GP)
 ; i end address is: 20 (R5)
 ; j end address is: 16 (R4)
 SEH	R3, R4
-;ISR.c,49 :: 		while(!TRMT_bit);
+;ISR.c,50 :: 		while(!TRMT_bit);
 L_Sim800_Uart212:
 ; i start address is: 20 (R5)
 ; j start address is: 12 (R3)
@@ -299,18 +303,18 @@ L__Sim800_Uart235:
 J	L_Sim800_Uart212
 NOP	
 L_Sim800_Uart213:
-;ISR.c,47 :: 		for(j= 0; j<i;j++){
+;ISR.c,48 :: 		for(j= 0; j<i;j++){
 ADDIU	R2, R3, 1
 ; j end address is: 12 (R3)
 ; j start address is: 16 (R4)
 SEH	R4, R2
-;ISR.c,50 :: 		}
+;ISR.c,51 :: 		}
 ; j end address is: 16 (R4)
 J	L_Sim800_Uart29
 NOP	
 L_Sim800_Uart210:
-;ISR.c,52 :: 		if(SimVars.initial_str == 1)
-LH	R3, Offset(_SimVars+0)(GP)
+;ISR.c,53 :: 		if(SimVars.initial_str == 1)
+LBU	R3, Offset(_SimVars+0)(GP)
 ORI	R2, R0, 1
 BEQ	R3, R2, L__Sim800_Uart236
 NOP	
@@ -318,13 +322,13 @@ J	L_Sim800_Uart214
 NOP	
 L__Sim800_Uart236:
 ; i end address is: 20 (R5)
-;ISR.c,53 :: 		goto end;
+;ISR.c,54 :: 		goto end;
 J	___Sim800_Uart2_end
 NOP	
 L_Sim800_Uart214:
-;ISR.c,55 :: 		if((SimVars.initial_str == 0) && (i != 0))
+;ISR.c,56 :: 		if((SimVars.initial_str == 0) && (i != 0))
 ; i start address is: 20 (R5)
-LH	R2, Offset(_SimVars+0)(GP)
+LBU	R2, Offset(_SimVars+0)(GP)
 BEQ	R2, R0, L__Sim800_Uart237
 NOP	
 J	L__Sim800_Uart222
@@ -338,16 +342,16 @@ J	L__Sim800_Uart221
 NOP	
 L__Sim800_Uart239:
 L__Sim800_Uart220:
-;ISR.c,56 :: 		SimVars.initial_str = -1;    //in initialisation
-ORI	R2, R0, 65535
-SH	R2, Offset(_SimVars+0)(GP)
+;ISR.c,57 :: 		SimVars.initial_str = -1;    //in initialisation
+ORI	R2, R0, 255
+SB	R2, Offset(_SimVars+0)(GP)
 J	L_Sim800_Uart218
 NOP	
-;ISR.c,55 :: 		if((SimVars.initial_str == 0) && (i != 0))
+;ISR.c,56 :: 		if((SimVars.initial_str == 0) && (i != 0))
 L__Sim800_Uart222:
 L__Sim800_Uart221:
-;ISR.c,57 :: 		else if(SimVars.initial_str == -1)// && (i == 0))
-LH	R3, Offset(_SimVars+0)(GP)
+;ISR.c,58 :: 		else if(SimVars.initial_str == -1)// && (i == 0))
+LBU	R3, Offset(_SimVars+0)(GP)
 LUI	R2, 65535
 ORI	R2, R2, 65535
 BEQ	R3, R2, L__Sim800_Uart240
@@ -355,15 +359,15 @@ NOP
 J	L_Sim800_Uart219
 NOP	
 L__Sim800_Uart240:
-;ISR.c,58 :: 		SimVars.initial_str = 1;     //initialised
+;ISR.c,59 :: 		SimVars.initial_str = 1;     //initialised
 ORI	R2, R0, 1
-SH	R2, Offset(_SimVars+0)(GP)
+SB	R2, Offset(_SimVars+0)(GP)
 L_Sim800_Uart219:
 L_Sim800_Uart218:
-;ISR.c,60 :: 		end:
+;ISR.c,61 :: 		end:
 ___Sim800_Uart2_end:
-;ISR.c,61 :: 		return;
-;ISR.c,62 :: 		}
+;ISR.c,62 :: 		return;
+;ISR.c,63 :: 		}
 L_end_Sim800_Uart2:
 LW	RA, 0(SP)
 ADDIU	SP, SP, 4

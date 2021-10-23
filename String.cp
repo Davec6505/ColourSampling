@@ -141,6 +141,7 @@ void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
 void GetScaledValues(int* CRGB,float rgb[3]);
 #line 1 "c:/users/git/coloursampling/sim800.h"
+#line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/_timers.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/time.h"
@@ -172,26 +173,37 @@ struct tm {
 
 typedef unsigned long clock_t;
 typedef unsigned long time_t;
-#line 7 "c:/users/git/coloursampling/_timers.h"
+#line 1 "c:/users/git/coloursampling/sim800.h"
+#line 20 "c:/users/git/coloursampling/_timers.h"
 typedef struct{
- uint32_t millis;
- uint16_t temp_ms;
- uint8_t temp_sec;
- uint8_t temp_min;
- uint8_t temp_hr;
- uint16_t ms;
- uint8_t sec;
- uint8_t min;
- uint8_t hr;
+unsigned long millis;
+unsigned int ms;
+unsigned int sec;
+unsigned int min;
+unsigned int hr;
 }Timers;
 
+extern Timers TMR0;
 
+typedef struct{
+unsigned int ms;
+unsigned int sec;
+unsigned int min;
+unsigned int hr;
+unsigned short one_per_sec;
+}Timer_Setpoint;
+
+
+
+
+
+extern Timer_Setpoint T0_SP;
 void InitTimer1();
 void Get_Time();
-void Update_ThingSpeak(unsigned int* rgbc);
+
 void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 12 "c:/users/git/coloursampling/sim800.h"
+#line 13 "c:/users/git/coloursampling/sim800.h"
 extern sfr sbit RTS;
 extern sfr sbit CRS;
 extern sfr sbit RST;
@@ -203,14 +215,18 @@ extern sfr sbit STAT;
 
 
 
-extern char rcvSimTxt[150];
+
+
+extern char rcvSimTxt[250];
 extern char rcvPcTxt[150];
 
 
 
 
 typedef struct{
-int initial_str;
+ uint8_t initial_str;
+ uint16_t time_to_log;
+ uint16_t num_of_sms_bytes;
 }Sim800Vars;
 
 extern Sim800Vars SimVars;
@@ -218,7 +234,10 @@ extern Sim800Vars SimVars;
 
 void InitGSM3();
 void PwrUpGSM3();
+char SetupIOT();
+int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
+char SendSMS(char sms_type);
 #line 19 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 
@@ -452,7 +471,7 @@ char* setstr(char conf[64]){
  return conf;
 }
 #line 184 "C:/Users/Git/ColourSampling/String.c"
-int strsplit(char str[64], char c){
+int strsplit(char str[250], char c){
 int i,ii,kk;
  ii=kk=0;
  for (i = 0; i < 64;i++){

@@ -77,28 +77,243 @@ struct tm {
 
 typedef unsigned long clock_t;
 typedef unsigned long time_t;
-#line 7 "c:/users/git/coloursampling/_timers.h"
+#line 1 "c:/users/git/coloursampling/sim800.h"
+#line 1 "c:/users/git/coloursampling/string.h"
+#line 1 "c:/users/git/coloursampling/flash_r_w.h"
+#line 1 "c:/users/git/coloursampling/string.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
+#line 17 "c:/users/git/coloursampling/flash_r_w.h"
+extern unsigned long FLASH_Settings_VAddr;
+extern unsigned long FLASH_Settings_PAddr;
+
+
+unsigned int NVMWriteWord (void* address, unsigned long _data);
+unsigned int NVMWriteRow (void* address, void* _data);
+unsigned int NVMErasePage(void* address);
+unsigned int NVMUnlock(unsigned int nvmop);
+void NVMRead(void* addr,struct Thresh *vals);
+unsigned long ReadFlash();
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
+#line 1 "c:/users/git/coloursampling/tcs3472.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
+#line 8 "c:/users/git/coloursampling/tcs3472.h"
+extern sfr TCS3472_Initialised;
+#line 73 "c:/users/git/coloursampling/tcs3472.h"
+typedef enum {
+ TCS3472_INTEGRATIONTIME_2_4MS = 0xFF,
+ TCS3472_INTEGRATIONTIME_24MS = 0xF6,
+ TCS3472_INTEGRATIONTIME_50MS = 0xEB,
+ TCS3472_INTEGRATIONTIME_101MS = 0xD5,
+ TCS3472_INTEGRATIONTIME_154MS = 0xC0,
+ TCS3472_INTEGRATIONTIME_700MS = 0x00
+} TCS3472_IntegrationTime_t;
+
+
+
+typedef enum {
+ TCS3472_GAIN_1X = 0x00,
+ TCS3472_GAIN_4X = 0x01,
+ TCS3472_GAIN_16X = 0x02,
+ TCS3472_GAIN_60X = 0x03
+} TCS3472_Gain_t;
+
+
+typedef enum{
+ TCS3472_1_5 = 0x44,
+ TCS3472_3_7 = 0x4D,
+ TCS347_11_15 = 0x14,
+ TCS347_13_17 = 0x1D
+} TCS3472x;
+
+typedef enum{
+ error = 0,
+ Ok
+ }TCS3472_Error;
+
 typedef struct{
- uint32_t millis;
- uint16_t temp_ms;
- uint8_t temp_sec;
- uint8_t temp_min;
- uint8_t temp_hr;
- uint16_t ms;
- uint8_t sec;
- uint8_t min;
- uint8_t hr;
+ uint16_t R_Thresh;
+ uint16_t G_Thresh;
+ uint16_t B_Thresh;
+ uint16_t C_Thresh;
+}TCS3472x_Threshold;
+
+
+
+
+extern TCS3472_IntegrationTime_t it;
+extern TCS3472_Gain_t G;
+extern TCS3472x device_Id;
+extern TCS3472_Error device_Error;
+
+
+
+extern unsigned int RawData[4];
+extern unsigned int CCT;
+
+
+
+
+unsigned short TCS3472_Init(TCS3472_IntegrationTime_t It,TCS3472_Gain_t gain , TCS3472x Id );
+void TCS3472_Write(unsigned short cmd);
+void TCS3472_Write8(unsigned short reg_add,unsigned short value);
+unsigned short TCS3472_Read8(unsigned short reg_add);
+unsigned int TCS3472_Read16(unsigned short reg_add);
+void TCS3472_Enable();
+void TCS3472_Disable();
+unsigned short TCS3472_SetIntergration_Time(TCS3472_IntegrationTime_t It);
+unsigned short TCS3472_SetGain(TCS3472_Gain_t gain);
+void TCS3472_getRawData(unsigned int *RGBC);
+void TCS3472_getRawDataOnce(unsigned int *RGBC);
+unsigned int TCS3472_CalcColTemp(unsigned int R,unsigned int G,unsigned int B);
+unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime_t It);
+unsigned int TCS3472_Calc_Lux(unsigned int R,unsigned int G,unsigned int B);
+unsigned short TCS3472_SetInterrupt(char i);
+unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
+void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
+int TCS3472_C2RGB_Error(unsigned int* RGBC);
+void GetScaledValues(int* CRGB,float rgb[3]);
+#line 1 "c:/users/git/coloursampling/sim800.h"
+#line 19 "c:/users/git/coloursampling/string.h"
+extern char string[ 20 ][ 64 ];
+
+enum ControlColorIO{
+CONFIG,
+SENDC,
+SENDR,
+SENDG,
+SENDB,
+SENDA,
+READA,
+READR,
+READG,
+READB,
+READC,
+READT,
+READT_DN40,
+READA_SCL,
+READA_THV,
+WRITE_MAN,
+WRITE_RAW
+};
+
+struct Constants{
+ unsigned int num_string;
+};
+
+
+typedef struct pstrings_t{
+ char* str;
+ char c;
+ char string[ 20 ][ 64 ];
+ int (*StrSplitFp)(char* str,char c);
+}PString;
+
+struct Thresh{
+
+ uint16_t C_thresh;
+ uint16_t R_thresh;
+ uint16_t G_thresh;
+ uint16_t B_thresh;
+};
+
+
+
+
+extern char readbuff[64];
+extern char writebuff[64];
+
+
+
+int DoStrings(int num);
+PString InitString(char cmp);
+int StrChecker(char **arr);
+int strsplit(char* str,char c);
+void testStrings(char* writebuff);
+char* setstr(char conf[64]);
+void clr_str_arrays(char *str[10]);
+char* Read_Send_AllColour(short data_src);
+char* Read_Send_OneColour(int colr);
+char* Read_Thresholds();
+char* Write_Thresholds(short data_src);
+int Get_It();
+int Get_Gain();
+char* TestFlash();
+#line 1 "c:/users/git/coloursampling/_timers.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
+#line 13 "c:/users/git/coloursampling/sim800.h"
+extern sfr sbit RTS;
+extern sfr sbit CRS;
+extern sfr sbit RST;
+extern sfr sbit PWR;
+extern sfr sbit STAT;
+
+
+
+
+
+
+
+
+extern char rcvSimTxt[250];
+extern char rcvPcTxt[150];
+
+
+
+
+typedef struct{
+ uint8_t initial_str;
+ uint16_t time_to_log;
+ uint16_t num_of_sms_bytes;
+}Sim800Vars;
+
+extern Sim800Vars SimVars;
+
+
+void InitGSM3();
+void PwrUpGSM3();
+char SetupIOT();
+int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
+void SendData(unsigned int* rgbc);
+char SendSMS(char sms_type);
+#line 20 "c:/users/git/coloursampling/_timers.h"
+typedef struct{
+unsigned long millis;
+unsigned int ms;
+unsigned int sec;
+unsigned int min;
+unsigned int hr;
 }Timers;
 
+extern Timers TMR0;
 
+typedef struct{
+unsigned int ms;
+unsigned int sec;
+unsigned int min;
+unsigned int hr;
+unsigned short one_per_sec;
+}Timer_Setpoint;
+
+
+
+
+
+extern Timer_Setpoint T0_SP;
 void InitTimer1();
 void Get_Time();
-void Update_ThingSpeak(unsigned int* rgbc);
-void I2C2_TimeoutCallback(char errorCode);
-#line 3 "C:/Users/Git/ColourSampling/_Timers.c"
-Timers TMR0;
-void InitTimer1(){
 
+void I2C2_TimeoutCallback(char errorCode);
+#line 4 "C:/Users/Git/ColourSampling/_Timers.c"
+Timers TMR0 ={
+ 0,
+ 0,
+ 0,
+ 0,
+ 0
+};
+
+void InitTimer1(){
+ char txt[6];
  T1CON = 0x8010;
  T1IP0_bit = 1;
  T1IP1_bit = 1;
@@ -107,32 +322,55 @@ void InitTimer1(){
  T1IE_bit = 1;
  PR1 = 10000;
  TMR1 = 0;
+#line 27 "C:/Users/Git/ColourSampling/_Timers.c"
 }
 
 
 void Get_Time(){
+char txt[6];
+int res;
  TMR0.millis++;
  TMR0.ms++;
+
+
  if(TMR0.ms > 999){
  TMR0.ms = 0;
  TMR0.sec++;
+ T0_SP.sec++;
+
  if(TMR0.sec > 59){
+ T0_SP.sec = 0;
  TMR0.sec = 0;
  TMR0.min++;
- if(TMR0.min > 590){
+ T0_SP.min++;
+
+ sprintf(txt,"%u",T0_SP.min);
+ UART1_Write_Text(txt);
+ UART1_Write(0x0d);
+ UART1_Write(0x0a);
+
+
+ if(TMR0.min > 59){
+ T0_SP.min = 0;
  TMR0.min = 0;
  TMR0.hr++;
- if(TMR0.hr > 23)
+ T0_SP.hr++;
+
+ if(TMR0.hr > 23){
  TMR0.hr = 0;
+ T0_SP.hr = 0;
  }
  }
+
+ }
+ T0_SP.one_per_sec = 1;
  LATA10_bit = !LATA10_bit;
  }
-}
 
-void Update_ThingSpeak(unsigned int* rgbc){
 
 }
+
+
 
 
 void I2C2_TimeoutCallback(char errorCode) {

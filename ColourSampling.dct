@@ -11136,6 +11136,7 @@ hosten
 hosten
 hosten_bit
 hr
+hr
 hr01
 hr01
 hr01
@@ -13794,6 +13795,7 @@ memset
 millis
 min
 min
+min
 min01
 min01
 min01
@@ -13914,6 +13916,7 @@ month103
 month103_alrmdate_bit
 month103_bit
 ms
+ms
 msten
 msten
 msten
@@ -13948,6 +13951,7 @@ nosc2
 nosc2
 nosc2_bit
 nr_free_blocks
+num_of_sms_bytes
 num_string
 nvmaddr
 nvmaddr0
@@ -16564,6 +16568,7 @@ on__t5con_bit
 on__u1mode_bit
 on__u2mode_bit
 on_bit
+one_per_sec
 osccon
 oscconbits
 oscconclr
@@ -18795,6 +18800,7 @@ se0
 se0
 se0_bit
 sec
+sec
 sec01
 sec01
 sec01
@@ -18841,6 +18847,7 @@ sen
 sen_bit
 sen_i2c2con_bit
 senddata
+sendsms
 sesend
 sesend
 sesend
@@ -18871,6 +18878,7 @@ sesvdif
 sesvdif_bit
 setcolourthresholds
 setstr
+setupiot
 shorttohex
 shorttostr
 shorttostrwithzeros
@@ -19814,6 +19822,7 @@ syskeyset
 syskeysetbits
 systemlock
 systemunlock
+t0_sp
 t1con
 t1conbits
 t1conclr
@@ -20389,10 +20398,7 @@ tcs3472_setinterrupt
 tcs3472_setinterrupt_limits
 tcs3472_write
 tcs3472_write8
-temp_hr
-temp_min
-temp_ms
-temp_sec
+test_update_thingspeak
 testflash
 teststr
 teststrings
@@ -20463,6 +20469,7 @@ tgate_t3con_bit
 tgate_t4con_bit
 tgate_t5con_bit
 threshold
+time_to_log
 timer1interrupt
 tmr0
 tmr1
@@ -22259,8 +22266,7 @@ uoemon
 uoemon
 uoemon
 uoemon_bit
-update_thing
-update_thingspeak
+update_test
 urstie
 urstie
 urstie

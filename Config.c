@@ -18,7 +18,7 @@ void ConfigPic(){
   TRISD = 0X0000;
   TRISE = 0X0210;
   TRISF = 0X0000;
-  TRISG = 0X0000;
+  TRISG = 0X0200;
   
 
  

@@ -32,8 +32,9 @@ ORI	R2, R0, 528
 SW	R2, Offset(TRISE+0)(GP)
 ;Config.c,20 :: 		TRISF = 0X0000;
 SW	R0, Offset(TRISF+0)(GP)
-;Config.c,21 :: 		TRISG = 0X0000;
-SW	R0, Offset(TRISG+0)(GP)
+;Config.c,21 :: 		TRISG = 0X0200;
+ORI	R2, R0, 512
+SW	R2, Offset(TRISG+0)(GP)
 ;Config.c,26 :: 		USBIE_bit = 0;
 LUI	R2, BitMask(USBIE_bit+0)
 ORI	R2, R2, BitMask(USBIE_bit+0)

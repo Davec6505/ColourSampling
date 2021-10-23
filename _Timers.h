@@ -1,24 +1,47 @@
 #ifndef _TIMERS_H
 #define _TIMERS_H
 
+
+/////////////////////////////////////////////
+//includes
 #include <stdint.h>
 #include<time.h>
+#include "Sim800.h"
+
+////////////////////////////////////////////
+//defines
+#define TmrDebug
+
+
+
+///////////////////////////////////////////
+//Structs Enums and unions
 
 typedef struct{
- uint32_t millis;
- uint16_t temp_ms;
- uint8_t temp_sec;
- uint8_t temp_min;
- uint8_t temp_hr;
- uint16_t ms;
- uint8_t sec;
- uint8_t min;
- uint8_t hr;
+unsigned long millis;
+unsigned int ms;
+unsigned int sec;
+unsigned int min;
+unsigned int hr;
 }Timers;
 
+extern Timers TMR0;
 
+typedef struct{
+unsigned int ms;
+unsigned int sec;
+unsigned int min;
+unsigned int hr;
+unsigned short one_per_sec;
+}Timer_Setpoint;
+
+
+
+//////////////////////////////////////////////////////
+//function prototypes
+extern  Timer_Setpoint T0_SP;
 void InitTimer1();
 void Get_Time();
-void Update_ThingSpeak(unsigned int* rgbc);
+
 void I2C2_TimeoutCallback(char errorCode);
 #endif

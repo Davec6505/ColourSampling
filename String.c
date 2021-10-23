@@ -181,7 +181,7 @@ char* setstr(char conf[64]){
 /*********************************************************************
 * Split the string according to the char
 *********************************************************************/
-int strsplit(char str[64], char c){
+int strsplit(char str[250], char c){
 int i,ii,kk;
     ii=kk=0;
     for (i = 0; i < 64;i++){

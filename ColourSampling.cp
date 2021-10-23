@@ -156,56 +156,7 @@ struct tm {
 
 typedef unsigned long clock_t;
 typedef unsigned long time_t;
-#line 7 "c:/users/git/coloursampling/_timers.h"
-typedef struct{
- uint32_t millis;
- uint16_t temp_ms;
- uint8_t temp_sec;
- uint8_t temp_min;
- uint8_t temp_hr;
- uint16_t ms;
- uint8_t sec;
- uint8_t min;
- uint8_t hr;
-}Timers;
-
-
-void InitTimer1();
-void Get_Time();
-void Update_ThingSpeak(unsigned int* rgbc);
-void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/git/coloursampling/sim800.h"
-#line 1 "c:/users/git/coloursampling/_timers.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 12 "c:/users/git/coloursampling/sim800.h"
-extern sfr sbit RTS;
-extern sfr sbit CRS;
-extern sfr sbit RST;
-extern sfr sbit PWR;
-extern sfr sbit STAT;
-
-
-
-
-
-
-extern char rcvSimTxt[150];
-extern char rcvPcTxt[150];
-
-
-
-
-typedef struct{
-int initial_str;
-}Sim800Vars;
-
-extern Sim800Vars SimVars;
-
-
-void InitGSM3();
-void PwrUpGSM3();
-void SendData(unsigned int* rgbc);
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/git/coloursampling/string.h"
@@ -289,13 +240,83 @@ char* Write_Thresholds(short data_src);
 int Get_It();
 int Get_Gain();
 char* TestFlash();
-#line 10 "c:/users/git/coloursampling/config.h"
+#line 1 "c:/users/git/coloursampling/_timers.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
+#line 13 "c:/users/git/coloursampling/sim800.h"
+extern sfr sbit RTS;
+extern sfr sbit CRS;
+extern sfr sbit RST;
+extern sfr sbit PWR;
+extern sfr sbit STAT;
+
+
+
+
+
+
+
+
+extern char rcvSimTxt[250];
+extern char rcvPcTxt[150];
+
+
+
+
+typedef struct{
+ uint8_t initial_str;
+ uint16_t time_to_log;
+ uint16_t num_of_sms_bytes;
+}Sim800Vars;
+
+extern Sim800Vars SimVars;
+
+
+void InitGSM3();
+void PwrUpGSM3();
+char SetupIOT();
+int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
+void SendData(unsigned int* rgbc);
+char SendSMS(char sms_type);
+#line 20 "c:/users/git/coloursampling/_timers.h"
+typedef struct{
+unsigned long millis;
+unsigned int ms;
+unsigned int sec;
+unsigned int min;
+unsigned int hr;
+}Timers;
+
+extern Timers TMR0;
+
+typedef struct{
+unsigned int ms;
+unsigned int sec;
+unsigned int min;
+unsigned int hr;
+unsigned short one_per_sec;
+}Timer_Setpoint;
+
+
+
+
+
+extern Timer_Setpoint T0_SP;
+void InitTimer1();
+void Get_Time();
+
+void I2C2_TimeoutCallback(char errorCode);
+#line 1 "c:/users/git/coloursampling/sim800.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
+#line 1 "c:/users/git/coloursampling/string.h"
+#line 20 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
 extern sfr sbit RD;
 extern sfr sbit GR;
 extern sfr sbit BL;
+
+
 
 
 
@@ -309,8 +330,17 @@ void InitVars();
 void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
-#line 5 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 4 "C:/Users/Git/ColourSampling/ColourSampling.c"
+int (*Update_Test)(uint16_t s,uint16_t m, uint16_t h);
+
 PString str_t;
+Timer_Setpoint T0_SP={
+ 0,
+ 0,
+ 0,
+ 0,
+ 0
+};
 char* (*testStr)(int i);
 
 char cnt;
@@ -325,11 +355,13 @@ char txt[] = "00000";
 
 
 void main() {
-char num;
+char num,res;
 unsigned short i;
 unsigned int R,str_num;
 unsigned int deg;
 char txtR[6];
+
+ Update_Test = Test_Update_ThingSpeak;
 
  ConfigPic();
 
@@ -346,11 +378,15 @@ char txtR[6];
 
 
 
+
  UART1_Write_Text("Start");
  UART1_Write(13);
  UART1_Write(10);
-#line 50 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 61 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ SetupIOT();
+#line 68 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
+ int res;
 
 
  num = HID_Read();
@@ -359,5 +395,17 @@ char txtR[6];
  }
 
 
+ if(T0_SP.one_per_sec){
+ T0_SP.one_per_sec = 0;
+ res = Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
+ if(res >= 1){
+ T0_SP.sec = 0;
+ T0_SP.min = 0;
+ T0_SP.hr = 0;
+ }
+ }
+
+ if(!RG9_bit)
+ SendSMS(0);
  }
 }
