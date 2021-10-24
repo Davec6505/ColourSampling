@@ -217,7 +217,8 @@ extern sfr sbit STAT;
 
 
 
-extern char rcvSimTxt[250];
+extern char rcvSimTxt[150];
+extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
 
 
@@ -227,14 +228,30 @@ typedef struct{
  uint8_t initial_str;
  uint16_t time_to_log;
  uint16_t num_of_sms_bytes;
+ char init_inc;
 }Sim800Vars;
-
 extern Sim800Vars SimVars;
+
+struct RingBuffer{
+char rcv_txt_fin;
+char buff[1000];
+unsigned int head;
+unsigned int tail;
+unsigned int last_head;
+unsigned int last_tail;
+};
+
+extern struct RingBuffer RB;
+
+
+
 
 
 void InitGSM3();
+void RcvSimTxt();
 void PwrUpGSM3();
 char SetupIOT();
+char WaitForSetupSMS();
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
@@ -292,9 +309,10 @@ extern char writebuff[64];
 int DoStrings(int num);
 PString InitString(char cmp);
 int StrChecker(char **arr);
+void remove_whitespaces(char* str);
 int strsplit(char* str,char c);
 void testStrings(char* writebuff);
-char* setstr(char conf[64]);
+char* setstr(char conf[250]);
 void clr_str_arrays(char *str[10]);
 char* Read_Send_AllColour(short data_src);
 char* Read_Send_OneColour(int colr);
@@ -460,7 +478,7 @@ int i,j;
  }
 }
 #line 170 "C:/Users/Git/ColourSampling/String.c"
-char* setstr(char conf[64]){
+char* setstr(char conf[250]){
  int i;
  for(i=0;i < 64;i++){
  if((conf[i] == 0x0D)|| (conf[i] == 0x0A))
@@ -470,7 +488,25 @@ char* setstr(char conf[64]){
 
  return conf;
 }
-#line 184 "C:/Users/Git/ColourSampling/String.c"
+
+void remove_whitespaces(char* src){
+char* dst = src;
+int i,j;
+
+ for(i=0,j=0;i<strlen(dst);i++){
+ if(dst[j] == 0x32){
+ j++;
+ continue;
+ }
+ src[i] = dst[j];
+ };
+ src[i] = 0;
+ UART1_Write_Text("White Space:= ");
+ UART1_Write_Text(src);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+}
+#line 202 "C:/Users/Git/ColourSampling/String.c"
 int strsplit(char str[250], char c){
 int i,ii,kk;
  ii=kk=0;
@@ -490,7 +526,7 @@ int i,ii,kk;
  }
  return kk;
 }
-#line 207 "C:/Users/Git/ColourSampling/String.c"
+#line 227 "C:/Users/Git/ColourSampling/String.c"
 int StrChecker(char *str){
 static int enum_val;
 static bit once;
@@ -505,7 +541,7 @@ int i;
  }
  return i;
 }
-#line 225 "C:/Users/Git/ColourSampling/String.c"
+#line 245 "C:/Users/Git/ColourSampling/String.c"
 void WriteData(char *_data){
 
 
@@ -513,7 +549,7 @@ void WriteData(char *_data){
  strncpy(writebuff,_data,strlen(_data));
  HID_Write(&writebuff,64);
 }
-#line 236 "C:/Users/Git/ColourSampling/String.c"
+#line 256 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_AllColour(short data_src){
 float FltData[3];
 char txtR[15];
@@ -561,7 +597,7 @@ int err;
 
  return &str;
 }
-#line 287 "C:/Users/Git/ColourSampling/String.c"
+#line 307 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_OneColour(int colr){
 unsigned int col;
 char txtR[10];
@@ -622,7 +658,7 @@ int Get_It(){
 int Get_Gain(){
  return 0;
 }
-#line 351 "C:/Users/Git/ColourSampling/String.c"
+#line 371 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Thresholds(){
 char txtR[15];
 char str[64];
@@ -649,7 +685,7 @@ unsigned long Val;
 
  return &str;
 }
-#line 381 "C:/Users/Git/ColourSampling/String.c"
+#line 401 "C:/Users/Git/ColourSampling/String.c"
 char* Write_Thresholds(short data_src){
 unsigned long val[128];
 unsigned long pos;
@@ -707,7 +743,7 @@ char str[64];
  strcat(str," ||\r\n ");
  return str;
 }
-#line 442 "C:/Users/Git/ColourSampling/String.c"
+#line 462 "C:/Users/Git/ColourSampling/String.c"
 void testStrings(char* writebuff){
  if(strlen(string[0])!=0){
  strncat(writebuff,string[0],strlen(string[0]));

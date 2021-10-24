@@ -196,9 +196,10 @@ extern char writebuff[64];
 int DoStrings(int num);
 PString InitString(char cmp);
 int StrChecker(char **arr);
+void remove_whitespaces(char* str);
 int strsplit(char* str,char c);
 void testStrings(char* writebuff);
-char* setstr(char conf[64]);
+char* setstr(char conf[250]);
 void clr_str_arrays(char *str[10]);
 char* Read_Send_AllColour(short data_src);
 char* Read_Send_OneColour(int colr);
@@ -282,7 +283,8 @@ extern sfr sbit STAT;
 
 
 
-extern char rcvSimTxt[250];
+extern char rcvSimTxt[150];
+extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
 
 
@@ -292,14 +294,30 @@ typedef struct{
  uint8_t initial_str;
  uint16_t time_to_log;
  uint16_t num_of_sms_bytes;
+ char init_inc;
 }Sim800Vars;
-
 extern Sim800Vars SimVars;
+
+struct RingBuffer{
+char rcv_txt_fin;
+char buff[1000];
+unsigned int head;
+unsigned int tail;
+unsigned int last_head;
+unsigned int last_tail;
+};
+
+extern struct RingBuffer RB;
+
+
+
 
 
 void InitGSM3();
+void RcvSimTxt();
 void PwrUpGSM3();
 char SetupIOT();
+char WaitForSetupSMS();
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
@@ -311,25 +329,51 @@ sbit PWR at LATG7_bit;
 sbit STAT at RB4_bit;
 
 
-char rcvSimTxt[250];
+char rcvSimTxt[150];
+char SimTestTxt[150];
 char rcvPcTxt[150];
 
 Sim800Vars SimVars = {
  0,
  9,
+ 0,
  0
 };
 
-
+struct RingBuffer RB;
+#line 28 "C:/Users/Git/ColourSampling/Sim800.c"
 void InitGSM3(){
  SimVars.initial_str = 0;
+ SimVars.init_inc = 0;
+ *SimTestTxt = "Hello World this is a test";
+ RB.head = 0;
+ RB.tail = 0;
+ RB.rcv_txt_fin = -1;
 }
+#line 40 "C:/Users/Git/ColourSampling/Sim800.c"
+void RcvSimTxt(){
 
+ while(UART2_Data_Ready()) {
+ U1TXREG = U2RXREG;
 
+ if(U2RXREG >= 0x20){
+ RB.buff[RB.head] = U2RXREG;
+ RB.head++;
+ }else if(U2RXREG == 0x0A){
+ RB.buff[RB.head] = ',';
+ RB.head++;
+ }
 
+ if(RB.head > 999)
+ RB.head = 0;
+
+ }
+ RB.buff[RB.head] = U2RXREG;
+ RB.rcv_txt_fin = 1;
+}
+#line 64 "C:/Users/Git/ColourSampling/Sim800.c"
 void PwrUpGSM3(){
  RST = 0;
-start:
  PWR = 0;
  Delay_ms(1000);
  PWR = 1;
@@ -339,70 +383,189 @@ start:
  Delay_ms(100);
  }
  Delay_ms(5000);
-
- if(SimVars.initial_str == -1)
- goto start;
 }
 
 
 
 
 char SetupIOT(){
-static unsigned long last_millis;
-int test,res;
-char txt[6];
-#line 57 "C:/Users/Git/ColourSampling/Sim800.c"
+int num_strs,res,i;
+char txtA[6];
+char* str_rcv;
+#line 88 "C:/Users/Git/ColourSampling/Sim800.c"
+ res = -1;
+ UART1_Write_Text("ATE0");
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+
+ RB.rcv_txt_fin = 0;
+ RB.last_head = RB.head;
+ do{
+ LATE3_bit = !LATE3_bit;
+ UART2_Write_Text("ATE0");
+ UART2_Write(0x0D);
+ UART2_Write(0x0A);
+ Delay_ms(1000);
+ }while(!RB.rcv_txt_fin);
+ Delay_ms(4000);
+ i=0;
+ RB.tail = RB.last_tail;
+ if(RB.head > RB.last_head){
+ while(RB.tail != RB.head){
+ SimTestTxt[i] = RB.buff[RB.tail];
+ UART1_Write(SimTestTxt[i]);
+ UART1_Write(0x3A);
+ i++;
+ RB.tail++;
+ RB.tail = (RB.tail > 999)? 0: RB.tail;
+ };
+ SimTestTxt[i] = 0;
+ }
+ RB.last_tail = RB.tail++;
+
+
+ UART1_Write_Text("1st Result:= ");
+ UART1_Write_Text(SimTestTxt);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
  UART1_Write_Text("Check if Sim is Registered");
  UART1_Write(0x0D);
  UART1_Write(0x0A);
 
 wait:
+
+ RB.rcv_txt_fin = 0;
+ RB.last_head = RB.head;
+ do{
  LATE3_bit = !LATE3_bit;
  UART2_Write_Text("AT+CREG?");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
- T0_SP.sec = 0;
- SimVars.num_of_sms_bytes = 0;
- while(!SimVars.num_of_sms_bytes){
- if(TMR0.millis > last_millis){
- last_millis = TMR0.millis + 20000;
- test = 0;
- break;
+ Delay_ms(500);
+ }while(!RB.rcv_txt_fin);
+ Delay_ms(5000);
+ i=0;
+ RB.tail = RB.last_tail++;
+ if(RB.head > RB.last_head){
+ while(RB.tail != RB.head){
+ SimTestTxt[i] = RB.buff[RB.tail];
+ i++;
+ RB.tail++;
+ RB.tail = (RB.tail > 999)? 0: RB.tail;
+ };
+ SimTestTxt[i] = 0;
  }
- }
+ RB.last_tail = RB.tail++;
 
-
- UART2_Write_Text("string[1]");
- UART2_Write_Text(string[1]);
- UART2_Write(0x0D);
- UART2_Write(0x0A);
-
- test = strsplit(rcvSimTxt,',');
- if(test > 0){
- res = atoi(string[1]);
-
- sprintf(txt,"u",res);
- UART1_Write_Text("Registered with:= ");
- UART1_Write_Text(txt);
+ UART1_Write_Text("2n Result:= ");
+ UART1_Write_Text(SimTestTxt);
  UART1_Write(0x0D);
  UART1_Write(0x0A);
 
- }
- else{
+
+
+ if(RB.head > RB.last_head){
+ str_rcv = setstr(SimTestTxt);
+
+ num_strs = strsplit(str_rcv,',');
+
+
+ UART1_Write_Text("string[3]");
+ UART1_Write_Text(string[3]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+ sprintf(txtA,"%d",num_strs);
+ UART1_Write_Text("num_strs:= ");
+ UART1_Write_Text(txtA);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+
+
+ res = atoi(string[3]);
+ if(res == 1){
+
+ sprintf(txtA,"%d",res);
+ UART1_Write_Text("Registered with:= ");
+ UART1_Write_Text(txtA);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+
+ SimVars.init_inc = 0;
+ }else{
 
  UART1_Write_Text("Sim Not Registered");
  UART1_Write(0x0D);
  UART1_Write(0x0A);
 
-
+ Delay_ms(500);
  goto wait;
+ }
  }
 
  UART1_Write_Text("Sim Registered");
  UART1_Write(0x0D);
  UART1_Write(0x0A);
 
+ return 1;
+}
+#line 209 "C:/Users/Git/ColourSampling/Sim800.c"
+char WaitForSetupSMS(){
+int i,num_strs;
+char* str_rcv;
+char txtA[6];
 
+ RB.rcv_txt_fin = 0;
+ RB.last_head = RB.head;
+
+
+ do{
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(150);
+ }while(!RB.rcv_txt_fin);
+ clr_str_arrays(string);
+ Delay_ms(2000);
+
+ i=0;
+ RB.tail = RB.last_tail++;
+ if(RB.head > RB.last_head){
+ while(RB.tail != RB.head){
+ RB.tail++;
+ RB.tail = (RB.tail > 999)? 0: RB.tail;
+ SimTestTxt[i] = RB.buff[RB.tail];
+ i++;
+ };
+ SimTestTxt[i] = 0;
+ }
+ RB.last_tail = RB.tail++;
+ str_rcv = setstr(SimTestTxt);
+
+ num_strs = strsplit(str_rcv,',');
+
+
+ sprintf(txtA,"%d",num_strs);
+ UART1_Write_Text("num_strs:= ");
+ UART1_Write_Text(txtA);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+ UART1_Write_Text("string[0]");
+ UART1_Write_Text(string[0]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+ UART1_Write_Text("string[1]");
+ UART1_Write_Text(string[1]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+ UART1_Write_Text("string[2]");
+ UART1_Write_Text(string[2]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+ UART1_Write_Text("string[3]");
+ UART1_Write_Text(string[3]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+
+
+ return 2;
 }
 
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h){
@@ -415,15 +578,15 @@ static unsigned short hLast;
 
  if(s != sLast){
  sLast = s;
-#line 125 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 283 "C:/Users/Git/ColourSampling/Sim800.c"
  }
  if(m != mLast){
  mLast = m;
-#line 133 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 291 "C:/Users/Git/ColourSampling/Sim800.c"
  }
  if(h != hLast){
  hLast = h;
-#line 141 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 299 "C:/Users/Git/ColourSampling/Sim800.c"
  }
 
  if(s == 1 &&

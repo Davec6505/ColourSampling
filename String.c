@@ -167,7 +167,7 @@ int i,j;
 /**********************************************************************
 * check the usb buffer and test for line feed or carrage return
 **********************************************************************/
-char* setstr(char conf[64]){
+char* setstr(char conf[250]){
  int i;
       for(i=0;i < 64;i++){
          if((conf[i] == 0x0D)|| (conf[i] == 0x0A))
@@ -176,6 +176,24 @@ char* setstr(char conf[64]){
       conf[i+1] = 0;
 
       return conf;
+}
+
+void remove_whitespaces(char* src){
+char* dst = src;
+int i,j;
+
+      for(i=0,j=0;i<strlen(dst);i++){
+          if(dst[j] == 0x32){
+             j++;
+             continue;
+          }
+          src[i] = dst[j];
+      };
+      src[i] = 0;
+      UART1_Write_Text("White Space:= ");
+      UART1_Write_Text(src);
+      UART1_Write(0x0D);
+      UART1_Write(0x0A);
 }
 
 /*********************************************************************
@@ -200,6 +218,8 @@ int i,ii,kk;
     }
     return kk;
 }
+
+
 
 /*********************************************************************
 * check strings for equality and return the index

@@ -229,9 +229,10 @@ extern char writebuff[64];
 int DoStrings(int num);
 PString InitString(char cmp);
 int StrChecker(char **arr);
+void remove_whitespaces(char* str);
 int strsplit(char* str,char c);
 void testStrings(char* writebuff);
-char* setstr(char conf[64]);
+char* setstr(char conf[250]);
 void clr_str_arrays(char *str[10]);
 char* Read_Send_AllColour(short data_src);
 char* Read_Send_OneColour(int colr);
@@ -256,7 +257,8 @@ extern sfr sbit STAT;
 
 
 
-extern char rcvSimTxt[250];
+extern char rcvSimTxt[150];
+extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
 
 
@@ -266,14 +268,30 @@ typedef struct{
  uint8_t initial_str;
  uint16_t time_to_log;
  uint16_t num_of_sms_bytes;
+ char init_inc;
 }Sim800Vars;
-
 extern Sim800Vars SimVars;
+
+struct RingBuffer{
+char rcv_txt_fin;
+char buff[1000];
+unsigned int head;
+unsigned int tail;
+unsigned int last_head;
+unsigned int last_tail;
+};
+
+extern struct RingBuffer RB;
+
+
+
 
 
 void InitGSM3();
+void RcvSimTxt();
 void PwrUpGSM3();
 char SetupIOT();
+char WaitForSetupSMS();
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
@@ -332,6 +350,7 @@ void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
 #line 4 "C:/Users/Git/ColourSampling/ISR.c"
 void (*Get_Timer_Values)();
+void (*Sim800Text)();
 
 void USB1Interrupt() iv IVT_USB_1 ilevel 7 ics ICS_SRS{
  USB_Interrupt_Proc();
@@ -339,6 +358,7 @@ void USB1Interrupt() iv IVT_USB_1 ilevel 7 ics ICS_SRS{
 
 void InitISR(){
  Get_Timer_Values = &Get_Time;
+ Sim800Text = &RcvSimTxt;
  EI();
 }
 
@@ -365,29 +385,8 @@ int i,j;
 }
 
 void Sim800_Uart2() iv IVT_UART_2 ilevel 6 ics ICS_AUTO {
-int i,j;
- SimVars.num_of_sms_bytes = 0;
+
  U2RXIF_bit = 0;
- i = 0;
- while(UART2_Data_Ready()) {
- rcvSimTxt[i] = U2RXREG;
- i++;
- }
- rcvSimTxt[i] = 0;
- SimVars.num_of_sms_bytes = i;
- for(j= 0; j<i;j++){
- U1TXREG = rcvSimTxt[j];
- while(!TRMT_bit);
- }
+ Sim800Text();
 
- if(SimVars.initial_str == 1)
- goto end;
-
- if((SimVars.initial_str == 0) && (i != 0))
- SimVars.initial_str = -1;
- else if(SimVars.initial_str == -1)
- SimVars.initial_str = 1;
-
-end:
- return;
 }

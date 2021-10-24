@@ -42,7 +42,8 @@ File5=ISR.c
 File6=_Timers.c
 File7=_Timers.h
 File8=Config.c
-Count=9
+File9=Config.h
+Count=10
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]

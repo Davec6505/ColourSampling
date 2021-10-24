@@ -2,6 +2,7 @@
 
 
 void (*Get_Timer_Values)();
+void (*Sim800Text)();
 
 void USB1Interrupt() iv IVT_USB_1 ilevel 7 ics ICS_SRS{
   USB_Interrupt_Proc();
@@ -9,6 +10,7 @@ void USB1Interrupt() iv IVT_USB_1 ilevel 7 ics ICS_SRS{
 
 void InitISR(){
    Get_Timer_Values = &Get_Time;
+   Sim800Text = &RcvSimTxt;
    EI();
 }
 
@@ -35,29 +37,8 @@ int i,j;
 }
 
 void Sim800_Uart2() iv IVT_UART_2 ilevel 6 ics ICS_AUTO {
-int i,j;
-    SimVars.num_of_sms_bytes = 0;
+
     U2RXIF_bit = 0;
-    i = 0;
-    while(UART2_Data_Ready()) {     // If data is received
-       rcvSimTxt[i] = U2RXREG;
-       i++;
-    }
-    rcvSimTxt[i] = 0;               //retain the recieved bytes
-    SimVars.num_of_sms_bytes = i;  //log the amount of bytes recieved
-    for(j= 0; j<i;j++){
-         U1TXREG =  rcvSimTxt[j];
-         while(!TRMT_bit);
-    }
+    Sim800Text();
     
-    if(SimVars.initial_str == 1)
-       goto end;
-       
-    if((SimVars.initial_str == 0) && (i != 0))
-         SimVars.initial_str = -1;    //in initialisation
-    else if(SimVars.initial_str == -1)// && (i == 0))
-         SimVars.initial_str = 1;     //initialised
-         
-end:
-    return;
 }

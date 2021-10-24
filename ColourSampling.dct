@@ -2799,6 +2799,7 @@ btsef
 btsef
 btsef
 btsef_bit
+buff
 bufm
 bufm
 bufm
@@ -11122,6 +11123,7 @@ halfsec
 halfsec
 halfsec
 halfsec_bit
+head
 hid_disable
 hid_enable
 hid_input_report_bytes
@@ -12522,6 +12524,7 @@ incm1
 incm1
 incm1
 incm1_bit
+init_inc
 initgsm3
 initial_str
 initisr
@@ -12993,6 +12996,8 @@ jtagen
 jtagen_bit
 kk
 labs
+last_head
+last_tail
 lata
 lata0
 lata0
@@ -18062,6 +18067,7 @@ ra9
 ra9_bit
 rand
 rawdata
+rb
 rb0
 rb0
 rb0
@@ -18234,7 +18240,9 @@ rconinv
 rconinvbits
 rconset
 rconsetbits
+rcv_txt_fin
 rcvpctxt
+rcvsimtxt
 rcvsimtxt
 rd
 rd0
@@ -18414,6 +18422,7 @@ read_send_onecolour
 read_thresholds
 readbuff
 readflash
+remove_whitespaces
 report
 reset
 restoreinterrupts
@@ -19092,6 +19101,8 @@ sidl_t5con_bit
 sidl_u1mode_bit
 sidl_u2mode_bit
 sim800_uart2
+sim800text
+simtesttxt
 simvars
 sin
 sinh
@@ -20050,6 +20061,7 @@ t5is0
 t5is0_bit
 t5is1
 t5is1_bit
+tail
 tan
 tanh
 tbf
@@ -23526,6 +23538,7 @@ waite1
 waite1
 waite1
 waite1_bit
+waitforsetupsms
 waitm
 waitm
 waitm

@@ -9,25 +9,59 @@ sbit PWR at LATG7_bit;     //LATD0_bit;
 sbit STAT at RB4_bit;      //Status input
 
 
-char rcvSimTxt[250];
+char rcvSimTxt[150];
+char SimTestTxt[150];
 char rcvPcTxt[150];
 
 Sim800Vars SimVars = {
    0,
    9,
+   0,
    0
 };
-///////////////////////////////////////
-//initialize the variables
+
+struct RingBuffer RB;
+
+/*************************************************
+*initialize the variables
+*************************************************/
 void InitGSM3(){
    SimVars.initial_str = 0;
+   SimVars.init_inc    = 0;
+   *SimTestTxt = "Hello World this is a test";
+   RB.head = 0;
+   RB.tail = 0;
+   RB.rcv_txt_fin = -1;
 }
 
-////////////////////////////////////////
-//keep trying until poer up
+/*************************************************
+*function pointe called from ISR Uart2
+*************************************************/
+void RcvSimTxt(){
+
+    while(UART2_Data_Ready()) {     // If data is received
+       U1TXREG = U2RXREG;
+       
+       if(U2RXREG >= 0x20){
+          RB.buff[RB.head] = U2RXREG;
+          RB.head++;
+       }else if(U2RXREG == 0x0A){
+          RB.buff[RB.head] = ',';
+          RB.head++;
+       }
+
+       if(RB.head > 999)
+           RB.head = 0;             //rest head when buffer is full
+       
+    }
+    RB.rcv_txt_fin = 1;
+}
+
+/*******************************************************
+*keep trying until power up
+*******************************************************/
 void PwrUpGSM3(){
  RST = 0;
-start:
  PWR = 0;
  Delay_ms(1000);
  PWR = 1;
@@ -37,74 +71,197 @@ start:
      Delay_ms(100);
  }
  Delay_ms(5000);
-
- if(SimVars.initial_str == -1)
-        goto start;
 }
 
 ////////////////////////////////////////
 //Setup GSM IOT by sending Initial SMS
 //and waiting for responses from
 char SetupIOT(){
-static unsigned long last_millis;
-int test,res;
-char txt[6];
+int num_strs,res,i;
+char txtA[6];
+char* str_rcv;
 /*******************************************************
 *check to see if network is registered AT+CREG? = 0,[1/5]
 * 1= home / 5 = Roaming network wait in a loop until reg
 *******************************************************/
+    res = -1;
+    UART1_Write_Text("ATE0");
+    UART1_Write(0x0D);
+    UART1_Write(0x0A);
+    
+    RB.rcv_txt_fin = 0;
+    RB.last_head = RB.head;
+    do{
+        LATE3_bit = !LATE3_bit;
+        UART2_Write_Text("ATE0");
+        UART2_Write(0x0D);
+        UART2_Write(0x0A);
+        Delay_ms(1000);
+    }while(!RB.rcv_txt_fin);
+    Delay_ms(4000);
+    i=0;
+    RB.tail = RB.last_tail;
+    if(RB.head > RB.last_head){
+      while(RB.tail != RB.head){
+         SimTestTxt[i] = RB.buff[RB.tail];
+         UART1_Write(SimTestTxt[i]);
+         UART1_Write(0x3A);
+         i++;
+         RB.tail++;
+         RB.tail = (RB.tail > 999)? 0: RB.tail;
+      };
+      SimTestTxt[i] = 0;
+    }
+    RB.last_tail = RB.tail++;
+    
 #ifdef SimConfDebug
+     UART1_Write_Text("1st Result:= ");
+     UART1_Write_Text(SimTestTxt);
+     UART1_Write(0x0D);
+     UART1_Write(0x0A);
      UART1_Write_Text("Check if Sim is Registered");
      UART1_Write(0x0D);
      UART1_Write(0x0A);
 #endif
 wait:
-   LATE3_bit = !LATE3_bit;
-   UART2_Write_Text("AT+CREG?");
-   UART2_Write(0x0D);
-   UART2_Write(0x0A);
-   T0_SP.sec = 0;
-   SimVars.num_of_sms_bytes = 0;
-   while(!SimVars.num_of_sms_bytes){
-       if(TMR0.millis > last_millis){
-           last_millis = TMR0.millis + 20000;
-           test = 0;
-           break;
-       }
+
+   RB.rcv_txt_fin   = 0;
+   RB.last_head     = RB.head;
+   do{
+       LATE3_bit = !LATE3_bit;
+       UART2_Write_Text("AT+CREG?");
+       UART2_Write(0x0D);
+       UART2_Write(0x0A);
+       Delay_ms(500);
+   }while(!RB.rcv_txt_fin);
+   Delay_ms(5000);
+   i=0;
+   RB.tail = RB.last_tail++;
+   if(RB.head > RB.last_head){
+      while(RB.tail != RB.head){
+         SimTestTxt[i] = RB.buff[RB.tail];
+         i++;
+         RB.tail++;
+         RB.tail = (RB.tail > 999)? 0: RB.tail;
+      };
+      SimTestTxt[i] = 0;
    }
+   RB.last_tail = RB.tail++;
+#ifdef SimConfDebug
+      UART1_Write_Text("2n Result:= ");
+      UART1_Write_Text(SimTestTxt);//string[0]);
+      UART1_Write(0x0D);
+      UART1_Write(0x0A);
+#endif
+ // Delay_ms(5000);
+
+  if(RB.head > RB.last_head){//(SimVars.num_of_sms_bytes > 0){
+     str_rcv = setstr(SimTestTxt);
+     //remove_whitespaces(str_rcv);
+     num_strs = strsplit(str_rcv,',');
 
 #ifdef SimConfDebug
-  UART2_Write_Text("string[1]");
-  UART2_Write_Text(string[1]);
-  UART2_Write(0x0D);
-  UART2_Write(0x0A);
+      UART1_Write_Text("string[3]");
+      UART1_Write_Text(string[3]);
+      UART1_Write(0x0D);
+      UART1_Write(0x0A);
+      sprintf(txtA,"%d",num_strs);
+      UART1_Write_Text("num_strs:= ");
+      UART1_Write_Text(txtA);
+      UART1_Write(0x0D);
+      UART1_Write(0x0A);
 #endif
-     test = strsplit(rcvSimTxt,',');
-   if(test > 0){
-     res = atoi(string[1]);
+
+     res = atoi(string[3]);
+   if(res == 1){
 #ifdef SimConfDebug
-     sprintf(txt,"u",res);
+     sprintf(txtA,"%d",res);
      UART1_Write_Text("Registered with:= ");
-     UART1_Write_Text(txt);
+     UART1_Write_Text(txtA);
      UART1_Write(0x0D);
      UART1_Write(0x0A);
 #endif
-   }
-   else{
+      SimVars.init_inc = 0;
+   }else{
 #ifdef SimConfDebug
      UART1_Write_Text("Sim Not Registered");
      UART1_Write(0x0D);
      UART1_Write(0x0A);
 #endif
-
+     Delay_ms(500);
      goto wait;
    }
+  }
 #ifdef SimConfDebug
      UART1_Write_Text("Sim Registered");
      UART1_Write(0x0D);
      UART1_Write(0x0A);
 #endif
+  return 1;
+}
 
+/*******************************************************
+*Once sim has been registered wait for incoming text to
+*complete setup of the application an register the cell
+*phone that the device need to talk to
+*******************************************************/
+char WaitForSetupSMS(){
+int i,num_strs;
+char* str_rcv;
+char txtA[6];
+
+  RB.rcv_txt_fin = 0;
+  RB.last_head   = RB.head;
+  
+  //wait for sms to register phone number
+  do{
+     LATE3_bit = !LATE3_bit;
+     Delay_ms(150);
+  }while(!RB.rcv_txt_fin);
+  clr_str_arrays(string);
+  Delay_ms(2000);
+  
+  i=0;
+  RB.tail = RB.last_tail++;
+  if(RB.head > RB.last_head){
+     while(RB.tail != RB.head){
+         RB.tail++;
+         RB.tail = (RB.tail > 999)? 0: RB.tail;
+         SimTestTxt[i] = RB.buff[RB.tail];
+         i++;
+     };
+     SimTestTxt[i] = 0;
+  }
+   RB.last_tail = RB.tail++;
+      str_rcv = setstr(SimTestTxt);
+     //remove_whitespaces(str_rcv);
+     num_strs = strsplit(str_rcv,',');
+
+#ifdef SimConfDebug
+      sprintf(txtA,"%d",num_strs);
+      UART1_Write_Text("num_strs:= ");
+      UART1_Write_Text(txtA);
+      UART1_Write(0x0D);
+      UART1_Write(0x0A);
+      UART1_Write_Text("string[0]");
+      UART1_Write_Text(string[0]);
+      UART1_Write(0x0D);
+      UART1_Write(0x0A);
+      UART1_Write_Text("string[1]");
+      UART1_Write_Text(string[1]);
+      UART1_Write(0x0D);
+      UART1_Write(0x0A);
+      UART1_Write_Text("string[2]");
+      UART1_Write_Text(string[2]);
+      UART1_Write(0x0D);
+      UART1_Write(0x0A);
+      UART1_Write_Text("string[3]");
+      UART1_Write_Text(string[3]);
+      UART1_Write(0x0D);
+      UART1_Write(0x0A);
+
+#endif
+  return 2;
 }
 
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h){

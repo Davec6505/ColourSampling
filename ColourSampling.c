@@ -58,8 +58,9 @@ char txtR[6];
 *check if simcard is registered and setup the sim
 *for logging
 *************************************************/
- SetupIOT();
- 
+ SimVars.init_inc = 0;
+ SimVars.init_inc = SetupIOT();
+ SimVars.init_inc = WaitForSetupSMS();
 /*************************************************
 *main => loop forever and call all functions*
 *keep main free from code
@@ -75,14 +76,16 @@ char txtR[6];
    }
    //////////////////////////////////////////////
    //Get sms input
-   if(T0_SP.one_per_sec){
-       T0_SP.one_per_sec = 0;
-       res =  Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
-       if(res >= 1){
-             T0_SP.sec = 0;
-             T0_SP.min = 0;
-             T0_SP.hr = 0;
-       }
+   if(SimVars.init_inc >= 5){
+     if(T0_SP.one_per_sec){
+         T0_SP.one_per_sec = 0;
+         res =  Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
+         if(res >= 1){
+               T0_SP.sec = 0;
+               T0_SP.min = 0;
+               T0_SP.hr = 0;
+         }
+     }
    }
    
    if(!RG9_bit)

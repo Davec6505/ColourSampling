@@ -122,6 +122,8 @@ main
 									UART1_Write_Text
 										UART1_Write
 									UART1_Write
+								RcvSimTxt
+									UART2_Data_Ready
 								I2C1_Stop
 									I2C1_Wait_For_Idle
 										I2C1_Is_Idle
@@ -131,6 +133,7 @@ main
 							USB_CtrlTrf_Tx_Service
 							I2C2_Stop
 							Get_Time
+							RcvSimTxt
 							I2C1_Stop
 	UART1_Write_Text
 	UART1_Write
@@ -140,10 +143,18 @@ main
 		UART2_Write_Text
 			UART2_Write
 		UART2_Write
+		setstr
 		strsplit
+		sprintf
 		atoi
 			isdigit
+	WaitForSetupSMS
+		clr_str_arrays
+		setstr
+		strsplit
 		sprintf
+		UART1_Write_Text
+		UART1_Write
 	HID_Read
 		Gen_Read
 			USB_Handle_Busy
@@ -260,11 +271,15 @@ main
 PC_Uart1
 	UART1_Data_Ready
 Sim800_Uart2
-	UART2_Data_Ready
+	I2C2_Stop
+	Get_Time
+	RcvSimTxt
+	I2C1_Stop
 USB1Interrupt
 	USB_Interrupt_Proc
 		USB_Device_Service
 Timer1Interrupt
 	I2C2_Stop
 	Get_Time
+	RcvSimTxt
 	I2C1_Stop

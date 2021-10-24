@@ -229,9 +229,10 @@ extern char writebuff[64];
 int DoStrings(int num);
 PString InitString(char cmp);
 int StrChecker(char **arr);
+void remove_whitespaces(char* str);
 int strsplit(char* str,char c);
 void testStrings(char* writebuff);
-char* setstr(char conf[64]);
+char* setstr(char conf[250]);
 void clr_str_arrays(char *str[10]);
 char* Read_Send_AllColour(short data_src);
 char* Read_Send_OneColour(int colr);
@@ -256,7 +257,8 @@ extern sfr sbit STAT;
 
 
 
-extern char rcvSimTxt[250];
+extern char rcvSimTxt[150];
+extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
 
 
@@ -266,14 +268,30 @@ typedef struct{
  uint8_t initial_str;
  uint16_t time_to_log;
  uint16_t num_of_sms_bytes;
+ char init_inc;
 }Sim800Vars;
-
 extern Sim800Vars SimVars;
+
+struct RingBuffer{
+char rcv_txt_fin;
+char buff[1000];
+unsigned int head;
+unsigned int tail;
+unsigned int last_head;
+unsigned int last_tail;
+};
+
+extern struct RingBuffer RB;
+
+
+
 
 
 void InitGSM3();
+void RcvSimTxt();
 void PwrUpGSM3();
 char SetupIOT();
+char WaitForSetupSMS();
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
@@ -383,8 +401,10 @@ char txtR[6];
  UART1_Write(13);
  UART1_Write(10);
 #line 61 "C:/Users/Git/ColourSampling/ColourSampling.c"
- SetupIOT();
-#line 68 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ SimVars.init_inc = 0;
+ SimVars.init_inc = SetupIOT();
+ SimVars.init_inc = WaitForSetupSMS();
+#line 69 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
  int res;
 
@@ -395,6 +415,7 @@ char txtR[6];
  }
 
 
+ if(SimVars.init_inc >= 5){
  if(T0_SP.one_per_sec){
  T0_SP.one_per_sec = 0;
  res = Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
@@ -402,6 +423,7 @@ char txtR[6];
  T0_SP.sec = 0;
  T0_SP.min = 0;
  T0_SP.hr = 0;
+ }
  }
  }
 
