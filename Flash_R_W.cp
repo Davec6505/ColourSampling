@@ -298,6 +298,7 @@ int DoStrings(int num);
 PString InitString(char cmp);
 int StrChecker(char **arr);
 void remove_whitespaces(char* str);
+char* findnumber(char* str);
 int strsplit(char* str,char c);
 void testStrings(char* writebuff);
 char* setstr(char conf[250]);

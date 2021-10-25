@@ -178,6 +178,9 @@ char* setstr(char conf[250]){
       return conf;
 }
 
+/********************************************************************
+*remove all white spaces from the string
+********************************************************************/
 void remove_whitespaces(char* src){
 char* dst = src;
 int i,j;
@@ -219,6 +222,24 @@ int i,ii,kk;
     return kk;
 }
 
+/*********************************************************************
+* seperate numeric fro string   0x30 - 0x39
+*********************************************************************/
+char* findnumber(char* str){
+char* temp;
+int i,j;
+
+  temp = (char*)Malloc(strlen(str));
+    
+  for(i = 0;i < strlen(str);i++){
+    if((str[i] > 0x29)&& (str[i] < 0x40)){
+      temp[i] = str[i];
+    }
+  }
+  temp[i] = 0;
+  Free(temp,sizeof(temp));
+  return temp;
+}
 
 
 /*********************************************************************

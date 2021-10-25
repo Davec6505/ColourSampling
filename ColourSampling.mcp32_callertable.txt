@@ -146,15 +146,26 @@ main
 		setstr
 		strsplit
 		sprintf
+		findnumber
+			strlen
+			Malloc
+				MM_GetMemAlign
+				MM_Defragment
+					MM_CheckBlocks
+			Free
+				MM_CheckBlocks
+				MM_Defragment
 		atoi
 			isdigit
 	WaitForSetupSMS
-		clr_str_arrays
-		setstr
+		UART2_Write_Text
+		UART2_Write
 		strsplit
 		sprintf
 		UART1_Write_Text
 		UART1_Write
+		atoi
+		setstr
 	HID_Read
 		Gen_Read
 			USB_Handle_Busy

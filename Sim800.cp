@@ -197,6 +197,7 @@ int DoStrings(int num);
 PString InitString(char cmp);
 int StrChecker(char **arr);
 void remove_whitespaces(char* str);
+char* findnumber(char* str);
 int strsplit(char* str,char c);
 void testStrings(char* writebuff);
 char* setstr(char conf[250]);
@@ -352,26 +353,24 @@ void InitGSM3(){
 }
 #line 40 "C:/Users/Git/ColourSampling/Sim800.c"
 void RcvSimTxt(){
-
+unsigned char txt;
  while(UART2_Data_Ready()) {
- U1TXREG = U2RXREG;
-
- if(U2RXREG >= 0x20){
- RB.buff[RB.head] = U2RXREG;
+ txt = U2RXREG;
+ U1TXREG = txt;
+ if(txt >= 0x20){
+ RB.buff[RB.head] = txt;
  RB.head++;
  }else if(U2RXREG == 0x0A){
  RB.buff[RB.head] = ',';
  RB.head++;
  }
-
  if(RB.head > 999)
  RB.head = 0;
 
  }
- RB.buff[RB.head] = U2RXREG;
  RB.rcv_txt_fin = 1;
 }
-#line 64 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 62 "C:/Users/Git/ColourSampling/Sim800.c"
 void PwrUpGSM3(){
  RST = 0;
  PWR = 0;
@@ -384,15 +383,15 @@ void PwrUpGSM3(){
  }
  Delay_ms(5000);
 }
-
-
-
-
+#line 79 "C:/Users/Git/ColourSampling/Sim800.c"
 char SetupIOT(){
 int num_strs,res,i;
 char txtA[6];
 char* str_rcv;
-#line 88 "C:/Users/Git/ColourSampling/Sim800.c"
+
+
+
+
  res = -1;
  UART1_Write_Text("ATE0");
  UART1_Write(0x0D);
@@ -409,9 +408,9 @@ char* str_rcv;
  }while(!RB.rcv_txt_fin);
  Delay_ms(4000);
  i=0;
- RB.tail = RB.last_tail;
+ RB.tail = RB.last_tail++;
  if(RB.head > RB.last_head){
- while(RB.tail != RB.head){
+ while(RB.tail <= RB.head){
  SimTestTxt[i] = RB.buff[RB.tail];
  UART1_Write(SimTestTxt[i]);
  UART1_Write(0x3A);
@@ -419,9 +418,9 @@ char* str_rcv;
  RB.tail++;
  RB.tail = (RB.tail > 999)? 0: RB.tail;
  };
- SimTestTxt[i] = 0;
+ SimTestTxt[i++] = 0;
  }
- RB.last_tail = RB.tail++;
+ RB.last_tail = RB.tail;
 
 
  UART1_Write_Text("1st Result:= ");
@@ -447,15 +446,15 @@ wait:
  i=0;
  RB.tail = RB.last_tail++;
  if(RB.head > RB.last_head){
- while(RB.tail != RB.head){
+ while(RB.tail <= RB.head){
  SimTestTxt[i] = RB.buff[RB.tail];
  i++;
  RB.tail++;
  RB.tail = (RB.tail > 999)? 0: RB.tail;
  };
- SimTestTxt[i] = 0;
+ SimTestTxt[i++] = 0;
  }
- RB.last_tail = RB.tail++;
+ RB.last_tail = RB.tail;
 
  UART1_Write_Text("2n Result:= ");
  UART1_Write_Text(SimTestTxt);
@@ -466,22 +465,29 @@ wait:
 
  if(RB.head > RB.last_head){
  str_rcv = setstr(SimTestTxt);
-
  num_strs = strsplit(str_rcv,',');
 
 
- UART1_Write_Text("string[3]");
- UART1_Write_Text(string[3]);
- UART1_Write(0x0D);
- UART1_Write(0x0A);
  sprintf(txtA,"%d",num_strs);
  UART1_Write_Text("num_strs:= ");
  UART1_Write_Text(txtA);
  UART1_Write(0x0D);
  UART1_Write(0x0A);
+ UART1_Write_Text("string[0]");
+ UART1_Write_Text(string[0]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+ UART1_Write_Text("string[1]");
+ UART1_Write_Text(string[1]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+ UART1_Write_Text("string[2]");
+ UART1_Write_Text(string[2]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
 
-
- res = atoi(string[3]);
+ str_rcv = findnumber(string[1]);
+ res = atoi(str_rcv);
  if(res == 1){
 
  sprintf(txtA,"%d",res);
@@ -490,7 +496,7 @@ wait:
  UART1_Write(0x0D);
  UART1_Write(0x0A);
 
- SimVars.init_inc = 0;
+
  }else{
 
  UART1_Write_Text("Sim Not Registered");
@@ -508,38 +514,61 @@ wait:
 
  return 1;
 }
-#line 209 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 215 "C:/Users/Git/ColourSampling/Sim800.c"
 char WaitForSetupSMS(){
-int i,num_strs;
+int i,num_strs,res;
 char* str_rcv;
 char txtA[6];
 
+ UART2_Write_Text("AT+CMGF=1");
+ UART2_Write(0x0D);
+ UART2_Write(0x0A);
+
+
  RB.rcv_txt_fin = 0;
- RB.last_head = RB.head;
-
-
+ RB.last_head = RB.head++;
  do{
  LATE3_bit = !LATE3_bit;
  Delay_ms(150);
  }while(!RB.rcv_txt_fin);
- clr_str_arrays(string);
- Delay_ms(2000);
+ i=0;
+ RB.tail = RB.last_tail++;
+ if(RB.head > RB.last_head){
+ while(RB.tail <= RB.head){
+ RB.tail = (RB.tail > 999)? 0: RB.tail;
+ SimTestTxt[i] = RB.buff[RB.tail];
+ RB.tail++;
+ i++;
+ };
+ SimTestTxt[i++] = 0;
+ }
+ RB.last_tail = RB.tail;
+
+ Delay_ms(1000);
+
+ RB.rcv_txt_fin = 0;
+ RB.last_head = RB.head++;
+ do{
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(150);
+ }while(!RB.rcv_txt_fin);
+ Delay_ms(1000);
 
  i=0;
  RB.tail = RB.last_tail++;
  if(RB.head > RB.last_head){
- while(RB.tail != RB.head){
- RB.tail++;
+ while(RB.tail <= RB.head){
  RB.tail = (RB.tail > 999)? 0: RB.tail;
  SimTestTxt[i] = RB.buff[RB.tail];
+ RB.tail++;
  i++;
  };
- SimTestTxt[i] = 0;
+ SimTestTxt[i++] = 0;
  }
- RB.last_tail = RB.tail++;
- str_rcv = setstr(SimTestTxt);
+ RB.last_tail = RB.tail;
 
- num_strs = strsplit(str_rcv,',');
+
+ num_strs = strsplit(SimTestTxt,',');
 
 
  sprintf(txtA,"%d",num_strs);
@@ -565,9 +594,91 @@ char txtA[6];
  UART1_Write(0x0A);
 
 
+
+ res = atoi(string[1]);
+ sprintf(txtA,"%d",res);
+ UART1_Write_Text("res= ");
+ UART1_Write_Text(txtA);
+
+
+ UART2_Write_Text("AT+CMGR=");
+ UART2_Write_Text(txtA);
+ UART2_Write(0x0D);
+ UART2_Write(0x0A);
+
+ RB.rcv_txt_fin = 0;
+ RB.last_head = RB.head;
+ do{
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(350);
+ }while(!RB.rcv_txt_fin);
+ Delay_ms(500);
+ i=0;
+ RB.tail = RB.last_tail;
+ if(RB.head > RB.last_head){
+ while(RB.tail <= RB.head){
+ RB.tail = (RB.tail > 999)? 0: RB.tail;
+ SimTestTxt[i] = RB.buff[RB.tail];
+ RB.tail++;
+ i++;
+ };
+ SimTestTxt[i++] = 0;
+ }
+ RB.last_tail = RB.tail++;
+ str_rcv = setstr(SimTestTxt);
+ num_strs = strsplit(str_rcv,',');
+
+ sprintf(txtA,"%d",num_strs);
+ UART1_Write_Text("num_strs:= ");
+ UART1_Write_Text(txtA);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+ UART1_Write_Text("string[0]");
+ UART1_Write_Text(string[0]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+ UART1_Write_Text("string[1]");
+ UART1_Write_Text(string[1]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+ UART1_Write_Text("string[2]");
+ UART1_Write_Text(string[2]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+ UART1_Write_Text("string[3]");
+ UART1_Write_Text(string[3]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+
+
+
+ UART2_Write_Text("AT+CMGD=");
+ UART2_Write_Text(txtA);
+ UART2_Write(0x0D);
+ UART2_Write(0x0A);
+
+
+ RB.rcv_txt_fin = 0;
+ RB.last_head = RB.head++;
+ do{
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(150);
+ }while(!RB.rcv_txt_fin);
+ i=0;
+ RB.tail = RB.last_tail++;
+ if(RB.head > RB.last_head){
+ while(RB.tail <= RB.head){
+ RB.tail = (RB.tail > 999)? 0: RB.tail;
+ SimTestTxt[i] = RB.buff[RB.tail];
+ RB.tail++;
+ i++;
+ };
+ SimTestTxt[i++] = 0;
+ }
+ RB.last_tail = RB.tail;
  return 2;
 }
-
+#line 382 "C:/Users/Git/ColourSampling/Sim800.c"
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h){
 char txtS[6];
 char txtM[6];
@@ -578,15 +689,15 @@ static unsigned short hLast;
 
  if(s != sLast){
  sLast = s;
-#line 283 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 397 "C:/Users/Git/ColourSampling/Sim800.c"
  }
  if(m != mLast){
  mLast = m;
-#line 291 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 405 "C:/Users/Git/ColourSampling/Sim800.c"
  }
  if(h != hLast){
  hLast = h;
-#line 299 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 413 "C:/Users/Git/ColourSampling/Sim800.c"
  }
 
  if(s == 1 &&

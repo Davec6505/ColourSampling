@@ -310,6 +310,7 @@ int DoStrings(int num);
 PString InitString(char cmp);
 int StrChecker(char **arr);
 void remove_whitespaces(char* str);
+char* findnumber(char* str);
 int strsplit(char* str,char c);
 void testStrings(char* writebuff);
 char* setstr(char conf[250]);
@@ -488,7 +489,7 @@ char* setstr(char conf[250]){
 
  return conf;
 }
-
+#line 184 "C:/Users/Git/ColourSampling/String.c"
 void remove_whitespaces(char* src){
 char* dst = src;
 int i,j;
@@ -506,7 +507,7 @@ int i,j;
  UART1_Write(0x0D);
  UART1_Write(0x0A);
 }
-#line 202 "C:/Users/Git/ColourSampling/String.c"
+#line 205 "C:/Users/Git/ColourSampling/String.c"
 int strsplit(char str[250], char c){
 int i,ii,kk;
  ii=kk=0;
@@ -526,7 +527,23 @@ int i,ii,kk;
  }
  return kk;
 }
-#line 227 "C:/Users/Git/ColourSampling/String.c"
+#line 228 "C:/Users/Git/ColourSampling/String.c"
+char* findnumber(char* str){
+char* temp;
+int i,j;
+
+ temp = (char*)Malloc(strlen(str));
+
+ for(i = 0;i < strlen(str);i++){
+ if((str[i] > 0x29)&& (str[i] < 0x40)){
+ temp[i] = str[i];
+ }
+ }
+ temp[i] = 0;
+ Free(temp,sizeof(temp));
+ return temp;
+}
+#line 248 "C:/Users/Git/ColourSampling/String.c"
 int StrChecker(char *str){
 static int enum_val;
 static bit once;
@@ -541,7 +558,7 @@ int i;
  }
  return i;
 }
-#line 245 "C:/Users/Git/ColourSampling/String.c"
+#line 266 "C:/Users/Git/ColourSampling/String.c"
 void WriteData(char *_data){
 
 
@@ -549,7 +566,7 @@ void WriteData(char *_data){
  strncpy(writebuff,_data,strlen(_data));
  HID_Write(&writebuff,64);
 }
-#line 256 "C:/Users/Git/ColourSampling/String.c"
+#line 277 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_AllColour(short data_src){
 float FltData[3];
 char txtR[15];
@@ -597,7 +614,7 @@ int err;
 
  return &str;
 }
-#line 307 "C:/Users/Git/ColourSampling/String.c"
+#line 328 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_OneColour(int colr){
 unsigned int col;
 char txtR[10];
@@ -658,7 +675,7 @@ int Get_It(){
 int Get_Gain(){
  return 0;
 }
-#line 371 "C:/Users/Git/ColourSampling/String.c"
+#line 392 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Thresholds(){
 char txtR[15];
 char str[64];
@@ -685,7 +702,7 @@ unsigned long Val;
 
  return &str;
 }
-#line 401 "C:/Users/Git/ColourSampling/String.c"
+#line 422 "C:/Users/Git/ColourSampling/String.c"
 char* Write_Thresholds(short data_src){
 unsigned long val[128];
 unsigned long pos;
@@ -743,7 +760,7 @@ char str[64];
  strcat(str," ||\r\n ");
  return str;
 }
-#line 462 "C:/Users/Git/ColourSampling/String.c"
+#line 483 "C:/Users/Git/ColourSampling/String.c"
 void testStrings(char* writebuff){
  if(strlen(string[0])!=0){
  strncat(writebuff,string[0],strlen(string[0]));

@@ -10905,6 +10905,7 @@ ferr
 ferr_bit
 ferr_u2sta_bit
 filler1
+findnumber
 flash_erase_page
 flash_settings_paddr
 flash_settings_vaddr

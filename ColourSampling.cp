@@ -230,6 +230,7 @@ int DoStrings(int num);
 PString InitString(char cmp);
 int StrChecker(char **arr);
 void remove_whitespaces(char* str);
+char* findnumber(char* str);
 int strsplit(char* str,char c);
 void testStrings(char* writebuff);
 char* setstr(char conf[250]);
@@ -404,7 +405,7 @@ char txtR[6];
  SimVars.init_inc = 0;
  SimVars.init_inc = SetupIOT();
  SimVars.init_inc = WaitForSetupSMS();
-#line 69 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 70 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
  int res;
 
