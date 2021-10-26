@@ -46,8 +46,17 @@ unsigned int tail;
 unsigned int last_head;
 unsigned int last_tail;
 };
-
 extern struct RingBuffer RB;
+
+struct Sim800Flash{
+unsigned char SimCelNum[17];
+unsigned char SimDate[9];
+unsigned char SimTime[9];
+unsigned char SimFlashBuff[256];
+unsigned int SimFlashPtr;
+};
+
+
 
 
 
@@ -58,7 +67,9 @@ void RcvSimTxt();
 void PwrUpGSM3();
 char SetupIOT();
 char WaitForSetupSMS();
+char SendResponseSMS();
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
+
 #endif

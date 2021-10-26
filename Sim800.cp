@@ -209,6 +209,7 @@ char* Write_Thresholds(short data_src);
 int Get_It();
 int Get_Gain();
 char* TestFlash();
+void PrintHandler(char c);
 #line 1 "c:/users/git/coloursampling/_timers.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/time.h"
@@ -307,8 +308,17 @@ unsigned int tail;
 unsigned int last_head;
 unsigned int last_tail;
 };
-
 extern struct RingBuffer RB;
+
+struct Sim800Flash{
+unsigned char SimCelNum[17];
+unsigned char SimDate[9];
+unsigned char SimTime[9];
+unsigned char SimFlashBuff[256];
+unsigned int SimFlashPtr;
+};
+
+
 
 
 
@@ -319,10 +329,14 @@ void RcvSimTxt();
 void PwrUpGSM3();
 char SetupIOT();
 char WaitForSetupSMS();
+char SendResponseSMS();
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
-#line 5 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 6 "C:/Users/Git/ColourSampling/Sim800.c"
+unsigned long FLASH_Settings_VAddr_Sim800 = 0x9D07A100;
+unsigned long FLASH_Settings_PAddr_Sim800 = 0x1D07A100;
+#line 14 "C:/Users/Git/ColourSampling/Sim800.c"
 sbit RTS at LATB1_bit;
 sbit CTS at RE9_bit;
 sbit RST at LATB2_bit;
@@ -342,7 +356,8 @@ Sim800Vars SimVars = {
 };
 
 struct RingBuffer RB;
-#line 28 "C:/Users/Git/ColourSampling/Sim800.c"
+struct Sim800Flash SF;
+#line 37 "C:/Users/Git/ColourSampling/Sim800.c"
 void InitGSM3(){
  SimVars.initial_str = 0;
  SimVars.init_inc = 0;
@@ -350,8 +365,9 @@ void InitGSM3(){
  RB.head = 0;
  RB.tail = 0;
  RB.rcv_txt_fin = -1;
+ SF.SimFlashPtr = 0;
 }
-#line 40 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 50 "C:/Users/Git/ColourSampling/Sim800.c"
 void RcvSimTxt(){
 unsigned char txt;
  while(UART2_Data_Ready()) {
@@ -370,7 +386,7 @@ unsigned char txt;
  }
  RB.rcv_txt_fin = 1;
 }
-#line 62 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 72 "C:/Users/Git/ColourSampling/Sim800.c"
 void PwrUpGSM3(){
  RST = 0;
  PWR = 0;
@@ -383,7 +399,7 @@ void PwrUpGSM3(){
  }
  Delay_ms(5000);
 }
-#line 79 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 89 "C:/Users/Git/ColourSampling/Sim800.c"
 char SetupIOT(){
 int num_strs,res,i;
 char txtA[6];
@@ -514,11 +530,12 @@ wait:
 
  return 1;
 }
-#line 215 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 225 "C:/Users/Git/ColourSampling/Sim800.c"
 char WaitForSetupSMS(){
 int i,num_strs,res;
 char* str_rcv;
 char txtA[6];
+char sms[4];
 
  UART2_Write_Text("AT+CMGF=1");
  UART2_Write(0x0D);
@@ -596,13 +613,13 @@ char txtA[6];
 
 
  res = atoi(string[1]);
- sprintf(txtA,"%d",res);
+ sprintf(sms,"%d",res);
  UART1_Write_Text("res= ");
- UART1_Write_Text(txtA);
+ UART1_Write_Text(sms);
 
 
  UART2_Write_Text("AT+CMGR=");
- UART2_Write_Text(txtA);
+ UART2_Write_Text(sms);
  UART2_Write(0x0D);
  UART2_Write(0x0A);
 
@@ -649,11 +666,33 @@ char txtA[6];
  UART1_Write_Text(string[3]);
  UART1_Write(0x0D);
  UART1_Write(0x0A);
+ UART1_Write_Text("string[4]");
+ UART1_Write_Text(string[4]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
 
 
 
+ SF.SimFlashPtr = strlen(string[1])+1;
+ memcpy(SF.SimFlashBuff,string[1],SF.SimFlashPtr);
+ strncpy(SF.SimCelNum,string[1],strlen(string[1])+1);
+ strncpy(SF.SimDate,string[3]+1,strlen(string[3]));
+ strncpy(SF.SimTime,string[4],8);
+ SF.SimFlashPtr++;
+
+
+
+ PrintOut(PrintHandler, "\r\n"
+ " * SF.SimCelNum: %s\r\n"
+ " * SF.SimDate: %s\r\n"
+ " * SF.SimTime: %s\r\n"
+ ,SF.SimCelNum,SF.SimDate,SF.SimTime);
+
+
+
+ Delay_ms(1000);
  UART2_Write_Text("AT+CMGD=");
- UART2_Write_Text(txtA);
+ UART2_Write_Text(sms);
  UART2_Write(0x0D);
  UART2_Write(0x0A);
 
@@ -678,7 +717,12 @@ char txtA[6];
  RB.last_tail = RB.tail;
  return 2;
 }
-#line 382 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 415 "C:/Users/Git/ColourSampling/Sim800.c"
+char SendResponseSMS(){
+
+ return 3;
+}
+#line 423 "C:/Users/Git/ColourSampling/Sim800.c"
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h){
 char txtS[6];
 char txtM[6];
@@ -689,15 +733,15 @@ static unsigned short hLast;
 
  if(s != sLast){
  sLast = s;
-#line 397 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 438 "C:/Users/Git/ColourSampling/Sim800.c"
  }
  if(m != mLast){
  mLast = m;
-#line 405 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 446 "C:/Users/Git/ColourSampling/Sim800.c"
  }
  if(h != hLast){
  hLast = h;
-#line 413 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 454 "C:/Users/Git/ColourSampling/Sim800.c"
  }
 
  if(s == 1 &&

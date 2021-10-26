@@ -242,6 +242,7 @@ char* Write_Thresholds(short data_src);
 int Get_It();
 int Get_Gain();
 char* TestFlash();
+void PrintHandler(char c);
 #line 1 "c:/users/git/coloursampling/_timers.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 13 "c:/users/git/coloursampling/sim800.h"
@@ -281,8 +282,17 @@ unsigned int tail;
 unsigned int last_head;
 unsigned int last_tail;
 };
-
 extern struct RingBuffer RB;
+
+struct Sim800Flash{
+unsigned char SimCelNum[17];
+unsigned char SimDate[9];
+unsigned char SimTime[9];
+unsigned char SimFlashBuff[256];
+unsigned int SimFlashPtr;
+};
+
+
 
 
 
@@ -293,6 +303,7 @@ void RcvSimTxt();
 void PwrUpGSM3();
 char SetupIOT();
 char WaitForSetupSMS();
+char SendResponseSMS();
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
@@ -405,6 +416,7 @@ char txtR[6];
  SimVars.init_inc = 0;
  SimVars.init_inc = SetupIOT();
  SimVars.init_inc = WaitForSetupSMS();
+ SimVars.init_inc = SendResponseSMS();
 #line 70 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
  int res;

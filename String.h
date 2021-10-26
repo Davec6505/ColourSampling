@@ -82,4 +82,5 @@ char* Write_Thresholds(short data_src);
 int Get_It();
 int Get_Gain();
 char* TestFlash();
+void PrintHandler(char c);
 #endif

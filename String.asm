@@ -2566,6 +2566,21 @@ ADDIU	SP, SP, 100
 JR	RA
 NOP	
 ; end of _TestFlash
+_PrintHandler:
+;String.c,545 :: 		void PrintHandler(char c){
+ADDIU	SP, SP, -4
+SW	RA, 0(SP)
+;String.c,547 :: 		UART1_Write(c);
+ANDI	R25, R25, 255
+JAL	_UART1_Write+0
+NOP	
+;String.c,549 :: 		}
+L_end_PrintHandler:
+LW	RA, 0(SP)
+ADDIU	SP, SP, 4
+JR	RA
+NOP	
+; end of _PrintHandler
 String____?ag:
 L_end_String___?ag:
 JR	RA

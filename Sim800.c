@@ -1,7 +1,16 @@
 #include "Sim800.h"
 
+/******************************************************
+*Flash memory region for Sim800 module
+******************************************************/
+unsigned long  FLASH_Settings_VAddr_Sim800 = 0x9D07A100;
+unsigned long  FLASH_Settings_PAddr_Sim800 = 0x1D07A100;
 
 
+
+/*****************************************************
+*
+*****************************************************/
 sbit RTS at LATB1_bit;
 sbit CTS at  RE9_bit;
 sbit RST at LATB2_bit;
@@ -21,7 +30,7 @@ Sim800Vars SimVars = {
 };
 
 struct RingBuffer RB;
-
+struct Sim800Flash SF;
 /*************************************************
 *initialize the variables
 *************************************************/
@@ -32,6 +41,7 @@ void InitGSM3(){
    RB.head = 0;
    RB.tail = 0;
    RB.rcv_txt_fin = -1;
+   SF.SimFlashPtr = 0;
 }
 
 /*************************************************
@@ -216,6 +226,7 @@ char WaitForSetupSMS(){
 int i,num_strs,res;
 char* str_rcv;
 char txtA[6];
+char sms[4];
   //Set sms to text mode = 1
   UART2_Write_Text("AT+CMGF=1");
   UART2_Write(0x0D);
@@ -293,13 +304,13 @@ char txtA[6];
 #endif
    //get the phone number from a response;
      res = atoi(string[1]);
-     sprintf(txtA,"%d",res);
+     sprintf(sms,"%d",res);
      UART1_Write_Text("res= ");
-     UART1_Write_Text(txtA);
+     UART1_Write_Text(sms);
   //wait for sms to register phone number
 
      UART2_Write_Text("AT+CMGR=");
-     UART2_Write_Text(txtA);
+     UART2_Write_Text(sms);
      UART2_Write(0x0D);
      UART2_Write(0x0A);
 
@@ -346,11 +357,33 @@ char txtA[6];
       UART1_Write_Text(string[3]);
       UART1_Write(0x0D);
       UART1_Write(0x0A);
+      UART1_Write_Text("string[4]");
+      UART1_Write_Text(string[4]);
+      UART1_Write(0x0D);
+      UART1_Write(0x0A);
 
 #endif
+//save cell number to flash buffer
+  SF.SimFlashPtr = strlen(string[1])+1;
+  memcpy(SF.SimFlashBuff,string[1],SF.SimFlashPtr);
+  strncpy(SF.SimCelNum,string[1],strlen(string[1])+1);
+  strncpy(SF.SimDate,string[3]+1,strlen(string[3]));
+  strncpy(SF.SimTime,string[4],8);
+  SF.SimFlashPtr++;
+
+
+#ifdef SimConfDebug
+    PrintOut(PrintHandler, "\r\n"
+                           " * SF.SimCelNum: %s\r\n"
+                           " * SF.SimDate: %s\r\n"
+                           " * SF.SimTime: %s\r\n"
+                           ,SF.SimCelNum,SF.SimDate,SF.SimTime);
+#endif
+  
 //delete sms from sm
+  Delay_ms(1000);
   UART2_Write_Text("AT+CMGD=");
-  UART2_Write_Text(txtA);
+  UART2_Write_Text(sms);
   UART2_Write(0x0D);
   UART2_Write(0x0A);
 
@@ -374,6 +407,14 @@ char txtA[6];
   }
    RB.last_tail = RB.tail;
   return 2;
+}
+
+/**********************************************************************
+*Next phase of Sim setup
+**********************************************************************/
+char SendResponseSMS(){
+
+   return 3;
 }
 
 /***********************************************************************

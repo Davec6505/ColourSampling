@@ -240,8 +240,17 @@ unsigned int tail;
 unsigned int last_head;
 unsigned int last_tail;
 };
-
 extern struct RingBuffer RB;
+
+struct Sim800Flash{
+unsigned char SimCelNum[17];
+unsigned char SimDate[9];
+unsigned char SimTime[9];
+unsigned char SimFlashBuff[256];
+unsigned int SimFlashPtr;
+};
+
+
 
 
 
@@ -252,6 +261,7 @@ void RcvSimTxt();
 void PwrUpGSM3();
 char SetupIOT();
 char WaitForSetupSMS();
+char SendResponseSMS();
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
@@ -322,6 +332,7 @@ char* Write_Thresholds(short data_src);
 int Get_It();
 int Get_Gain();
 char* TestFlash();
+void PrintHandler(char c);
 #line 5 "C:/Users/Git/ColourSampling/String.c"
 struct Constants str_vars;
 struct Thresh Threshold;
@@ -821,4 +832,10 @@ unsigned int res,i;
  strcat(str," ||\r\n ");
 
  return &str;
+}
+
+void PrintHandler(char c){
+
+ UART1_Write(c);
+
 }

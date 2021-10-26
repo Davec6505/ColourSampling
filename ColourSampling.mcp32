@@ -43,7 +43,10 @@ File6=_Timers.c
 File7=_Timers.h
 File8=Config.c
 File9=Config.h
-Count=10
+File10=Flash_R_W.c
+File11=Flash_R_W.h
+File12=TCS3472.c
+Count=13
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -79,7 +82,8 @@ File9=MemManager
 File10=Memory_manager_dlmalloc
 File11=FLASH
 File12=Button
-Count=13
+File13=PrintOut
+Count=14
 [INTERRUPT_DEFS]
 EBASE=9FC01000
 VECTOR_SPACEING=32

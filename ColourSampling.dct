@@ -162,6 +162,7 @@ _div_64x64_s
 _div_64x64_u
 _div_dp
 _div_fp
+_doprntout
 _exccode_adel
 _exccode_ades
 _exccode_bp
@@ -10908,7 +10909,9 @@ filler1
 findnumber
 flash_erase_page
 flash_settings_paddr
+flash_settings_paddr_sim800
 flash_settings_vaddr
+flash_settings_vaddr_sim800
 flash_write_row
 flash_write_word
 floattostr
@@ -17774,6 +17777,8 @@ prefen0
 prefen0_bit
 prefen1
 prefen1_bit
+printhandler
+printout
 progop
 progop
 progop
@@ -18857,6 +18862,7 @@ sen
 sen_bit
 sen_i2c2con_bit
 senddata
+sendresponsesms
 sendsms
 sesend
 sesend
@@ -18889,6 +18895,7 @@ sesvdif_bit
 setcolourthresholds
 setstr
 setupiot
+sf
 shorttohex
 shorttostr
 shorttostrwithzeros
@@ -19103,7 +19110,12 @@ sidl_u1mode_bit
 sidl_u2mode_bit
 sim800_uart2
 sim800text
+simcelnum
+simdate
+simflashbuff
+simflashptr
 simtesttxt
+simtime
 simvars
 sin
 sinh

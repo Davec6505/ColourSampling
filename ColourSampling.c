@@ -61,7 +61,7 @@ char txtR[6];
  SimVars.init_inc = 0;
  SimVars.init_inc = SetupIOT();        //ret 1
  SimVars.init_inc = WaitForSetupSMS(); //ret 2
- //SimVars.init_inc = GetMsgFrmSMS();    //ret 3
+ SimVars.init_inc = SendResponseSMS();    //ret 3
 /*************************************************
 *main => loop forever and call all functions*
 *keep main free from code

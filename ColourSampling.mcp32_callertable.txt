@@ -15,6 +15,8 @@ main
 			I2C2_Wait_For_Idle
 				I2C2_Is_Idle
 				I2C2_TimeoutCallback
+				PrintHandler
+					UART1_Write
 		I2C_Set_Active
 		I2C2_SetTimeoutCallback
 		InitUart1
@@ -35,15 +37,19 @@ main
 			I2C2_Start
 				I2C2_Wait_For_Idle
 				I2C2_TimeoutCallback
+				PrintHandler
 			I2C2_Write
 				I2C2_Wait_For_Idle
 				I2C2_TimeoutCallback
+				PrintHandler
 			I2C2_Stop
 				I2C2_Wait_For_Idle
 				I2C2_TimeoutCallback
+				PrintHandler
 			I2C2_Read
 				I2C2_Wait_For_Idle
 				I2C2_TimeoutCallback
+				PrintHandler
 		TCS3472_SetIntergration_Time
 			TCS3472_Write8
 				I2C2_Start
@@ -128,7 +134,9 @@ main
 									I2C1_Wait_For_Idle
 										I2C1_Is_Idle
 										I2C2_TimeoutCallback
+										PrintHandler
 									I2C2_TimeoutCallback
+									PrintHandler
 						USB_CtrlTrf_In_Handler
 							USB_CtrlTrf_Tx_Service
 							I2C2_Stop
@@ -166,6 +174,27 @@ main
 		UART1_Write
 		atoi
 		setstr
+		strlen
+		memcpy
+		strncpy
+		PrintOut
+			_doprntout
+				isdigit
+				_Compare_FP
+				scale
+					_Mul_FP
+				_Mul_FP
+				_Div_FP
+				_FloatToUnsignedIntegral
+				_Unsigned32IntToFloat
+				_Sub_FP
+				_Add_FP
+				fround
+					_Mul_FP
+				_FloatToSignedIntegral
+				I2C2_TimeoutCallback
+				PrintHandler
+	SendResponseSMS
 	HID_Read
 		Gen_Read
 			USB_Handle_Busy
@@ -196,6 +225,7 @@ main
 					I2C2_Restart
 						I2C2_Wait_For_Idle
 						I2C2_TimeoutCallback
+						PrintHandler
 					I2C2_Read
 					I2C2_Stop
 			GetScaledValues

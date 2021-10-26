@@ -541,3 +541,9 @@ unsigned int res,i;
 
         return &str;
 }
+
+void PrintHandler(char c){
+
+  UART1_Write(c);
+
+}

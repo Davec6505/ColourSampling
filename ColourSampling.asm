@@ -87,6 +87,10 @@ SB	R2, Offset(_SimVars+6)(GP)
 JAL	_WaitForSetupSMS+0
 NOP	
 SB	R2, Offset(_SimVars+6)(GP)
+;ColourSampling.c,64 :: 		SimVars.init_inc = SendResponseSMS();    //ret 3
+JAL	_SendResponseSMS+0
+NOP	
+SB	R2, Offset(_SimVars+6)(GP)
 ;ColourSampling.c,70 :: 		while(1){
 L_main4:
 ;ColourSampling.c,74 :: 		num = HID_Read();
