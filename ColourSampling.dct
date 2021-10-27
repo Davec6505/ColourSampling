@@ -11118,6 +11118,7 @@ get_gain
 get_it
 get_time
 get_timer_values
+getapi_key_sms
 getscaledvalues
 gp
 gr
@@ -18426,6 +18427,7 @@ re9_bit
 read_send_allcolour
 read_send_onecolour
 read_thresholds
+readapikey
 readbuff
 readflash
 remove_whitespaces
@@ -18862,7 +18864,6 @@ sen
 sen_bit
 sen_i2c2con_bit
 senddata
-sendresponsesms
 sendsms
 sesend
 sesend
@@ -19114,6 +19115,7 @@ simcelnum
 simdate
 simflashbuff
 simflashptr
+simreadindx
 simtesttxt
 simtime
 simvars
@@ -23698,6 +23700,7 @@ wrerr
 wrerr
 wrerr_bit
 write_thresholds
+writeapikey
 writebuff
 writedata
 wrsp

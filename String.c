@@ -205,7 +205,7 @@ int i,j;
 int strsplit(char str[250], char c){
 int i,ii,kk;
     ii=kk=0;
-    for (i = 0; i < 64;i++){
+    for (i = 0; i < 250;i++){
         if(str[i] == c){
           string[kk][ii] = 0;
           kk++;

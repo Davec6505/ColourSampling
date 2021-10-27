@@ -314,8 +314,11 @@ struct Sim800Flash{
 unsigned char SimCelNum[17];
 unsigned char SimDate[9];
 unsigned char SimTime[9];
+unsigned char WriteAPIKey[17];
+unsigned char ReadAPIKey[17];
 unsigned char SimFlashBuff[256];
 unsigned int SimFlashPtr;
+unsigned int SimReadIndx;
 };
 
 
@@ -328,8 +331,8 @@ void InitGSM3();
 void RcvSimTxt();
 void PwrUpGSM3();
 char SetupIOT();
-char WaitForSetupSMS();
-char SendResponseSMS();
+char WaitForSetupSMS(unsigned int Indx);
+char GetAPI_Key_SMS();
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
@@ -399,7 +402,7 @@ void PwrUpGSM3(){
  }
  Delay_ms(5000);
 }
-#line 89 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 94 "C:/Users/Git/ColourSampling/Sim800.c"
 char SetupIOT(){
 int num_strs,res,i;
 char txtA[6];
@@ -530,8 +533,8 @@ wait:
 
  return 1;
 }
-#line 225 "C:/Users/Git/ColourSampling/Sim800.c"
-char WaitForSetupSMS(){
+#line 230 "C:/Users/Git/ColourSampling/Sim800.c"
+char WaitForSetupSMS(unsigned int Indx){
 int i,num_strs,res;
 char* str_rcv;
 char txtA[6];
@@ -609,6 +612,14 @@ char sms[4];
  UART1_Write_Text(string[3]);
  UART1_Write(0x0D);
  UART1_Write(0x0A);
+ UART1_Write_Text("string[4]");
+ UART1_Write_Text(string[4]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+ UART1_Write_Text("string[5]");
+ UART1_Write_Text(string[5]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
 
 
 
@@ -670,9 +681,14 @@ char sms[4];
  UART1_Write_Text(string[4]);
  UART1_Write(0x0D);
  UART1_Write(0x0A);
+ UART1_Write_Text("string[5]");
+ UART1_Write_Text(string[5]);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
 
 
 
+ if(Indx == 0){
  SF.SimFlashPtr = strlen(string[1])+1;
  memcpy(SF.SimFlashBuff,string[1],SF.SimFlashPtr);
  strncpy(SF.SimCelNum,string[1],strlen(string[1])+1);
@@ -681,12 +697,31 @@ char sms[4];
  SF.SimFlashPtr++;
 
 
-
  PrintOut(PrintHandler, "\r\n"
  " * SF.SimCelNum: %s\r\n"
  " * SF.SimDate: %s\r\n"
  " * SF.SimTime: %s\r\n"
  ,SF.SimCelNum,SF.SimDate,SF.SimTime);
+
+ }else if(Indx == 1){
+
+ int indx = SF.SimFlashPtr + strlen(string[1])+1;
+ memcpy(SF.SimFlashBuff+indx,string[1],strlen(string[1])+1);
+ indx = SF.SimFlashPtr + strlen(string[2])+1;
+ memcpy(SF.SimFlashBuff+indx,string[2],strlen(string[2])+1);
+ strncpy(SF.WriteAPIKey,string[1],strlen(string[1])+1);
+ strncpy(SF.ReadAPIKey,string[2]+1,strlen(string[3])+1);
+ SF.SimFlashPtr = strlen(string[1])+1;
+
+
+ PrintOut(PrintHandler, "\r\n"
+ " * SF.WriteAPIKey: %s\r\n"
+ " * SF.ReadAPIKey:  %s\r\n"
+ ,SF.WriteAPIKey,SF.ReadAPIKey);
+
+ }
+
+
 
 
 
@@ -717,12 +752,51 @@ char sms[4];
  RB.last_tail = RB.tail;
  return 2;
 }
-#line 415 "C:/Users/Git/ColourSampling/Sim800.c"
-char SendResponseSMS(){
+#line 452 "C:/Users/Git/ColourSampling/Sim800.c"
+char GetAPI_Key_SMS(){
+int i,str_rcv,num_strs;
+char txtA[6];
+
+ UART2_Write_Text("AT+CMGS=");
+ UART2_Write_Text(SF.SimCelNum);
+ UART2_Write(0x0D);
+ UART2_Write(0x0A);
+
+
+ RB.rcv_txt_fin = 0;
+ RB.last_head = RB.head++;
+ do{
+ Delay_ms(100);
+ }while(!RB.rcv_txt_fin);
+ i=0;
+ RB.tail = RB.last_tail++;
+ if(RB.head > RB.last_head){
+ while(RB.tail <= RB.head){
+ RB.tail = (RB.tail > 999)? 0: RB.tail;
+ SimTestTxt[i] = RB.buff[RB.tail];
+ RB.tail++;
+ i++;
+ };
+ SimTestTxt[i] = 0;
+ }
+ RB.last_tail = RB.tail;
+
+ UART1_Write_Text(SimTestTxt);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+
+
+ UART2_Write_Text("Reply with the API Write Key from ThingSpeak starting with a ,");
+ UART2_Write(0x0D);
+ UART2_Write(0x0A);
+ UART2_Write(0x1A);
+
+ WaitForSetupSMS(1);
+
 
  return 3;
 }
-#line 423 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 499 "C:/Users/Git/ColourSampling/Sim800.c"
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h){
 char txtS[6];
 char txtM[6];
@@ -733,15 +807,15 @@ static unsigned short hLast;
 
  if(s != sLast){
  sLast = s;
-#line 438 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 514 "C:/Users/Git/ColourSampling/Sim800.c"
  }
  if(m != mLast){
  mLast = m;
-#line 446 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 522 "C:/Users/Git/ColourSampling/Sim800.c"
  }
  if(h != hLast){
  hLast = h;
-#line 454 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 530 "C:/Users/Git/ColourSampling/Sim800.c"
  }
 
  if(s == 1 &&
@@ -753,7 +827,7 @@ static unsigned short hLast;
 
  return -1;
 }
-
+#line 545 "C:/Users/Git/ColourSampling/Sim800.c"
 void SendData(unsigned int* rgbc){
 char txtC[15];
 char txtR[15];

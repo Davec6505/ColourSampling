@@ -83,6 +83,11 @@ void PwrUpGSM3(){
 }
 
 /*******************************************************
+*wait for a response from Sim800
+*******************************************************/
+
+
+/*******************************************************
 *Setup GSM IOT by sending Initial SMS
 *and waiting for responses from
 *******************************************************/
@@ -222,7 +227,7 @@ wait:
 *complete setup of the application an register the cell
 *phone that the device need to talk to
 *******************************************************/
-char WaitForSetupSMS(){
+char WaitForSetupSMS(unsigned int Indx){
 int i,num_strs,res;
 char* str_rcv;
 char txtA[6];
@@ -300,6 +305,14 @@ char sms[4];
       UART1_Write_Text(string[3]);
       UART1_Write(0x0D);
       UART1_Write(0x0A);
+      UART1_Write_Text("string[4]");
+      UART1_Write_Text(string[4]);
+      UART1_Write(0x0D);
+      UART1_Write(0x0A);
+      UART1_Write_Text("string[5]");
+      UART1_Write_Text(string[5]);
+      UART1_Write(0x0D);
+      UART1_Write(0x0A);
 
 #endif
    //get the phone number from a response;
@@ -361,17 +374,21 @@ char sms[4];
       UART1_Write_Text(string[4]);
       UART1_Write(0x0D);
       UART1_Write(0x0A);
+      UART1_Write_Text("string[5]");
+      UART1_Write_Text(string[5]);
+      UART1_Write(0x0D);
+      UART1_Write(0x0A);
 
 #endif
 //save cell number to flash buffer
-  SF.SimFlashPtr = strlen(string[1])+1;
-  memcpy(SF.SimFlashBuff,string[1],SF.SimFlashPtr);
-  strncpy(SF.SimCelNum,string[1],strlen(string[1])+1);
-  strncpy(SF.SimDate,string[3]+1,strlen(string[3]));
-  strncpy(SF.SimTime,string[4],8);
-  SF.SimFlashPtr++;
-
-
+  if(Indx == 0){
+      SF.SimFlashPtr = strlen(string[1])+1;
+      memcpy(SF.SimFlashBuff,string[1],SF.SimFlashPtr);
+      strncpy(SF.SimCelNum,string[1],strlen(string[1])+1);
+      strncpy(SF.SimDate,string[3]+1,strlen(string[3]));
+      strncpy(SF.SimTime,string[4],8);
+      SF.SimFlashPtr++;
+      
 #ifdef SimConfDebug
     PrintOut(PrintHandler, "\r\n"
                            " * SF.SimCelNum: %s\r\n"
@@ -379,6 +396,26 @@ char sms[4];
                            " * SF.SimTime: %s\r\n"
                            ,SF.SimCelNum,SF.SimDate,SF.SimTime);
 #endif
+  }else if(Indx == 1){
+  //write API keys to Flash buff first
+  int indx = SF.SimFlashPtr + strlen(string[1])+1;
+  memcpy(SF.SimFlashBuff+indx,string[1],strlen(string[1])+1);
+  indx = SF.SimFlashPtr + strlen(string[2])+1;
+  memcpy(SF.SimFlashBuff+indx,string[2],strlen(string[2])+1);
+  strncpy(SF.WriteAPIKey,string[1],strlen(string[1])+1);
+  strncpy(SF.ReadAPIKey,string[2]+1,strlen(string[3])+1);
+  SF.SimFlashPtr = strlen(string[1])+1;
+
+#ifdef SimConfDebug
+    PrintOut(PrintHandler, "\r\n"
+                           " * SF.WriteAPIKey: %s\r\n"
+                           " * SF.ReadAPIKey:  %s\r\n"
+                           ,SF.WriteAPIKey,SF.ReadAPIKey);
+#endif
+  }
+
+
+
   
 //delete sms from sm
   Delay_ms(1000);
@@ -410,10 +447,49 @@ char sms[4];
 }
 
 /**********************************************************************
-*Next phase of Sim setup
+*Ask for the API key and wait for it
 **********************************************************************/
-char SendResponseSMS(){
+char GetAPI_Key_SMS(){
+int i,str_rcv,num_strs;
+char txtA[6];
+  //set up a send sms
+  UART2_Write_Text("AT+CMGS=");
+  UART2_Write_Text(SF.SimCelNum);
+  UART2_Write(0x0D);
+  UART2_Write(0x0A);
 
+  //let '>' inc pointers
+  RB.rcv_txt_fin = 0;
+  RB.last_head   = RB.head++;
+  do{
+     Delay_ms(100);
+  }while(!RB.rcv_txt_fin);
+  i=0;
+  RB.tail = RB.last_tail++;
+  if(RB.head > RB.last_head){
+     while(RB.tail <= RB.head){
+         RB.tail = (RB.tail > 999)? 0: RB.tail;
+         SimTestTxt[i] = RB.buff[RB.tail];
+         RB.tail++;
+         i++;
+     };
+     SimTestTxt[i] = 0;
+  }
+   RB.last_tail = RB.tail;
+#ifdef SimConfDebug
+   UART1_Write_Text(SimTestTxt);
+   UART1_Write(0x0D);
+   UART1_Write(0x0A);
+#endif
+  //one the '>' has been recieved send msg and wait the response
+  UART2_Write_Text("Reply with the API Write Key from ThingSpeak starting with a ,");
+  UART2_Write(0x0D);
+  UART2_Write(0x0A);
+  UART2_Write(0x1A);
+  
+  WaitForSetupSMS(1);
+
+  
    return 3;
 }
 
@@ -463,6 +539,9 @@ static unsigned short hLast;
     return -1;
 }
 
+/****************************************************
+*Send the data to thingspeak
+****************************************************/
 void SendData(unsigned int* rgbc){
 char txtC[15];
 char txtR[15];

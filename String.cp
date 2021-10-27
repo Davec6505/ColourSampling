@@ -246,8 +246,11 @@ struct Sim800Flash{
 unsigned char SimCelNum[17];
 unsigned char SimDate[9];
 unsigned char SimTime[9];
+unsigned char WriteAPIKey[17];
+unsigned char ReadAPIKey[17];
 unsigned char SimFlashBuff[256];
 unsigned int SimFlashPtr;
+unsigned int SimReadIndx;
 };
 
 
@@ -260,8 +263,8 @@ void InitGSM3();
 void RcvSimTxt();
 void PwrUpGSM3();
 char SetupIOT();
-char WaitForSetupSMS();
-char SendResponseSMS();
+char WaitForSetupSMS(unsigned int Indx);
+char GetAPI_Key_SMS();
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
@@ -522,7 +525,7 @@ int i,j;
 int strsplit(char str[250], char c){
 int i,ii,kk;
  ii=kk=0;
- for (i = 0; i < 64;i++){
+ for (i = 0; i < 250;i++){
  if(str[i] == c){
  string[kk][ii] = 0;
  kk++;

@@ -842,7 +842,7 @@ _strsplit:
 MOVZ	R5, R0, R0
 ; ii start address is: 24 (R6)
 MOVZ	R6, R0, R0
-;String.c,208 :: 		for (i = 0; i < 64;i++){
+;String.c,208 :: 		for (i = 0; i < 250;i++){
 ; i start address is: 16 (R4)
 MOVZ	R4, R0, R0
 ; ii end address is: 24 (R6)
@@ -853,7 +853,7 @@ L_strsplit63:
 ; ii start address is: 24 (R6)
 ; kk start address is: 20 (R5)
 SEH	R2, R4
-SLTI	R2, R2, 64
+SLTI	R2, R2, 250
 BNE	R2, R0, L__strsplit180
 NOP	
 J	L_strsplit64
@@ -931,7 +931,7 @@ L_strsplit68:
 SEH	R6, R3
 L_strsplit65:
 ; ii end address is: 12 (R3)
-;String.c,208 :: 		for (i = 0; i < 64;i++){
+;String.c,208 :: 		for (i = 0; i < 250;i++){
 ; ii start address is: 24 (R6)
 ; kk start address is: 20 (R5)
 ADDIU	R2, R4, 1

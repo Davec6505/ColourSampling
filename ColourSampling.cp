@@ -288,8 +288,11 @@ struct Sim800Flash{
 unsigned char SimCelNum[17];
 unsigned char SimDate[9];
 unsigned char SimTime[9];
+unsigned char WriteAPIKey[17];
+unsigned char ReadAPIKey[17];
 unsigned char SimFlashBuff[256];
 unsigned int SimFlashPtr;
+unsigned int SimReadIndx;
 };
 
 
@@ -302,8 +305,8 @@ void InitGSM3();
 void RcvSimTxt();
 void PwrUpGSM3();
 char SetupIOT();
-char WaitForSetupSMS();
-char SendResponseSMS();
+char WaitForSetupSMS(unsigned int Indx);
+char GetAPI_Key_SMS();
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
@@ -415,9 +418,9 @@ char txtR[6];
 #line 61 "C:/Users/Git/ColourSampling/ColourSampling.c"
  SimVars.init_inc = 0;
  SimVars.init_inc = SetupIOT();
- SimVars.init_inc = WaitForSetupSMS();
- SimVars.init_inc = SendResponseSMS();
-#line 70 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ SimVars.init_inc = WaitForSetupSMS(0);
+ SimVars.init_inc = GetAPI_Key_SMS();
+#line 71 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
  int res;
 
