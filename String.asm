@@ -670,14 +670,14 @@ NOP
 ; end of _clr_str_arrays
 _setstr:
 ;String.c,170 :: 		char* setstr(char conf[250]){
-;String.c,172 :: 		for(i=0;i < 64;i++){
+;String.c,172 :: 		for(i=0;i < 100;i++){
 ; i start address is: 16 (R4)
 MOVZ	R4, R0, R0
 ; i end address is: 16 (R4)
 L_setstr53:
 ; i start address is: 16 (R4)
 SEH	R2, R4
-SLTI	R2, R2, 64
+SLTI	R2, R2, 100
 BNE	R2, R0, L__setstr171
 NOP	
 J	L_setstr54
@@ -712,7 +712,7 @@ L__setstr120:
 J	L_setstr54
 NOP	
 L_setstr58:
-;String.c,172 :: 		for(i=0;i < 64;i++){
+;String.c,172 :: 		for(i=0;i < 100;i++){
 ADDIU	R2, R4, 1
 SEH	R4, R2
 ;String.c,175 :: 		}

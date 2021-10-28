@@ -191,7 +191,6 @@ main
 		sprintf
 		PrintOut
 		atoi
-		UART1_Write_Text
 		setstr
 		strlen
 		memcpy

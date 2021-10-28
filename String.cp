@@ -498,7 +498,7 @@ int i,j;
 #line 170 "C:/Users/Git/ColourSampling/String.c"
 char* setstr(char conf[250]){
  int i;
- for(i=0;i < 64;i++){
+ for(i=0;i < 100;i++){
  if((conf[i] == 0x0D)|| (conf[i] == 0x0A))
  break;
  }
