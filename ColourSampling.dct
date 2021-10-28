@@ -18606,6 +18606,7 @@ ridle
 ridle
 ridle_bit
 ridle_u2sta_bit
+ringtotempbuf
 ripl
 ripl
 ripl
@@ -23553,6 +23554,7 @@ waite1
 waite1
 waite1
 waite1_bit
+waitforresponse
 waitforsetupsms
 waitm
 waitm

@@ -82,10 +82,45 @@ void PwrUpGSM3(){
  Delay_ms(5000);
 }
 
+/******************************************************
+*Move new data from ring buffer to temp buffer
+******************************************************/
+void RingToTempBuf(){
+int i;
+    i=0;
+    RB.tail = RB.last_tail++;
+    if(RB.head > RB.last_head){
+      while(RB.tail <= RB.head){
+         SimTestTxt[i] = RB.buff[RB.tail];
+#ifdef RingBuffDeBug
+         UART1_Write(SimTestTxt[i]);
+         UART1_Write(0x3A);
+#endif
+         i++;
+         RB.tail++;
+         RB.tail = (RB.tail > 999)? 0: RB.tail;
+      };
+      SimTestTxt[i++] = 0;
+    }
+    RB.last_tail = RB.tail;
+}
+
 /*******************************************************
 *wait for a response from Sim800
 *******************************************************/
-
+void WaitForResponse(short dly){
+   RB.rcv_txt_fin   = 0;
+   RB.last_head     = RB.head;
+   do{
+     LATE3_bit = !LATE3_bit;
+     if(dly == 0)
+      Delay_ms(100);
+     else if(dly == 1)
+      Delay_ms(500);
+     else
+      Delay_ms(1000);
+   }while(!RB.rcv_txt_fin);
+}
 
 /*******************************************************
 *Setup GSM IOT by sending Initial SMS
@@ -95,15 +130,15 @@ char SetupIOT(){
 int num_strs,res,i;
 char txtA[6];
 char* str_rcv;
-////////////////////////////////////////////////////////
-//check to see if network is registered AT+CREG? = 0,[1/5]
-//1= home / 5 = Roaming network wait in a loop until reg
-
+/*******************************************************
+*check to see if network is registered AT+CREG? = 0,[1/5]
+*1= home / 5 = Roaming network wait in a loop until reg
+*******************************************************/
     res = -1;
-    UART1_Write_Text("ATE0");
-    UART1_Write(0x0D);
-    UART1_Write(0x0A);
-    
+#ifdef SimConfDebug
+  PrintOut(PrintHandler, "\r\n"
+                         " * ATE0\r\n");
+#endif
     RB.rcv_txt_fin = 0;
     RB.last_head = RB.head;
     do{
@@ -114,59 +149,34 @@ char* str_rcv;
         Delay_ms(1000);
     }while(!RB.rcv_txt_fin);
     Delay_ms(4000);
-    i=0;
-    RB.tail = RB.last_tail++;
-    if(RB.head > RB.last_head){
-      while(RB.tail <= RB.head){
-         SimTestTxt[i] = RB.buff[RB.tail];
-         UART1_Write(SimTestTxt[i]);
-         UART1_Write(0x3A);
-         i++;
-         RB.tail++;
-         RB.tail = (RB.tail > 999)? 0: RB.tail;
-      };
-      SimTestTxt[i++] = 0;
-    }
-    RB.last_tail = RB.tail;
-    
+    RingToTempBuf();
+
 #ifdef SimConfDebug
-     UART1_Write_Text("1st Result:= ");
-     UART1_Write_Text(SimTestTxt);
-     UART1_Write(0x0D);
-     UART1_Write(0x0A);
-     UART1_Write_Text("Check if Sim is Registered");
-     UART1_Write(0x0D);
-     UART1_Write(0x0A);
+  PrintOut(PrintHandler, "\r\n"
+                         " * %s\r\n"
+                         " * Check if Sim is Registered\r\n"
+                         ,SimTestTxt);
 #endif
 wait:
 
-   RB.rcv_txt_fin   = 0;
+   UART2_Write_Text("AT+CREG?");
+   UART2_Write(0x0D);
+   UART2_Write(0x0A);
+   WaitForResponse(1);
+ /*  RB.rcv_txt_fin   = 0;
    RB.last_head     = RB.head;
    do{
-       LATE3_bit = !LATE3_bit;
-       UART2_Write_Text("AT+CREG?");
-       UART2_Write(0x0D);
-       UART2_Write(0x0A);
-       Delay_ms(500);
+     LATE3_bit = !LATE3_bit;
+     Delay_ms(500);
    }while(!RB.rcv_txt_fin);
+ */
    Delay_ms(5000);
-   i=0;
-   RB.tail = RB.last_tail++;
-   if(RB.head > RB.last_head){
-      while(RB.tail <= RB.head){
-         SimTestTxt[i] = RB.buff[RB.tail];
-         i++;
-         RB.tail++;
-         RB.tail = (RB.tail > 999)? 0: RB.tail;
-      };
-      SimTestTxt[i++] = 0;
-   }
-   RB.last_tail = RB.tail;
+   RingToTempBuf();
+
 #ifdef SimConfDebug
-      UART1_Write_Text("2n Result:= ");
-      UART1_Write_Text(SimTestTxt);//string[0]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
+      PrintOut(PrintHandler, "\r\n"
+                             " * %s\r\n"
+                            ,SimTestTxt);
 #endif
  // Delay_ms(5000);
 
@@ -176,48 +186,37 @@ wait:
 
 #ifdef SimConfDebug
       sprintf(txtA,"%d",num_strs);
-      UART1_Write_Text("num_strs:= ");
-      UART1_Write_Text(txtA);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-      UART1_Write_Text("string[0]");
-      UART1_Write_Text(string[0]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-       UART1_Write_Text("string[1]");
-      UART1_Write_Text(string[1]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-      UART1_Write_Text("string[2]");
-      UART1_Write_Text(string[2]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
+      PrintOut(PrintHandler, "\r\n"
+                           " *num_strs:= %s\r\n"
+                           " *string[0]  %s\r\n"
+                           " *string[1]  %s\r\n"
+                           " *string[2]  %s\r\n"
+                           " *string[3]  %s\r\n"
+                           " *string[4]  %s\r\n"
+                           ,txtA,string[0],string[1],string[2],string[3],string[4]);
 #endif
      str_rcv = findnumber(string[1]);
      res = atoi(str_rcv);
    if(res == 1){
 #ifdef SimConfDebug
      sprintf(txtA,"%d",res);
-     UART1_Write_Text("Registered with:= ");
-     UART1_Write_Text(txtA);
-     UART1_Write(0x0D);
-     UART1_Write(0x0A);
+     PrintOut(PrintHandler, "\r\n"
+                            " *Registered with:= %s\r\n"
+                           ,txtA);
 #endif
 
    }else{
 #ifdef SimConfDebug
-     UART1_Write_Text("Sim Not Registered");
-     UART1_Write(0x0D);
-     UART1_Write(0x0A);
+     PrintOut(PrintHandler, "\r\n"
+                            " *Sim Not Registered\r\n");
 #endif
      Delay_ms(500);
      goto wait;
    }
   }
 #ifdef SimConfDebug
-     UART1_Write_Text("Sim Registered");
-     UART1_Write(0x0D);
-     UART1_Write(0x0A);
+     PrintOut(PrintHandler, "\r\n"
+                            " *Sim Registered\r\n");
 #endif
   return 1;
 }
@@ -238,25 +237,16 @@ char sms[4];
   UART2_Write(0x0A);
 
  //let OK inc pointers
-  RB.rcv_txt_fin = 0;
+  WaitForResponse(0);
+ /* RB.rcv_txt_fin = 0;
   RB.last_head   = RB.head++;
   do{
      LATE3_bit = !LATE3_bit;
      Delay_ms(150);
-  }while(!RB.rcv_txt_fin);
-  i=0;
-  RB.tail = RB.last_tail++;
-  if(RB.head > RB.last_head){
-     while(RB.tail <= RB.head){
-         RB.tail = (RB.tail > 999)? 0: RB.tail;
-         SimTestTxt[i] = RB.buff[RB.tail];
-         RB.tail++;
-         i++;
-     };
-     SimTestTxt[i++] = 0;
-  }
-   RB.last_tail = RB.tail;
+  }while(!RB.rcv_txt_fin); */
   
+  RingToTempBuf();
+
   Delay_ms(1000);
   //wait for sms
   RB.rcv_txt_fin = 0;
@@ -267,53 +257,24 @@ char sms[4];
   }while(!RB.rcv_txt_fin);
   Delay_ms(1000);
   
-  i=0;
-  RB.tail = RB.last_tail++;
-  if(RB.head > RB.last_head){
-     while(RB.tail <= RB.head){
-         RB.tail = (RB.tail > 999)? 0: RB.tail;
-         SimTestTxt[i] = RB.buff[RB.tail];
-         RB.tail++;
-         i++;
-     };
-     SimTestTxt[i++] = 0;
-  }
-   RB.last_tail = RB.tail;
-     //clr_str_arrays(string);
-     //str_rcv = setstr(SimTestTxt);
-     num_strs = strsplit(SimTestTxt,',');
+  RingToTempBuf();
+
+  num_strs = strsplit(SimTestTxt,',');
 
 #ifdef SimConfDebug
       sprintf(txtA,"%d",num_strs);
-      UART1_Write_Text("num_strs:= ");
-      UART1_Write_Text(txtA);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-      UART1_Write_Text("string[0]");
-      UART1_Write_Text(string[0]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-      UART1_Write_Text("string[1]");
-      UART1_Write_Text(string[1]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-      UART1_Write_Text("string[2]");
-      UART1_Write_Text(string[2]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-      UART1_Write_Text("string[3]");
-      UART1_Write_Text(string[3]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-      UART1_Write_Text("string[4]");
-      UART1_Write_Text(string[4]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-      UART1_Write_Text("string[5]");
-      UART1_Write_Text(string[5]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-
+       sprintf(txtA,"%d",num_strs);
+      PrintOut(PrintHandler, "\r\n"
+                           " *num_strs:= %s\r\n"
+                           " *string[0]  %s\r\n"
+                           " *string[1]  %s\r\n"
+                           " *string[2]  %s\r\n"
+                           " *string[3]  %s\r\n"
+                           " *string[4]  %s\r\n"
+                           " *string[5]  %s\r\n"
+                           ,txtA,string[0],string[1],
+                           string[2],string[3],
+                           string[4],string[5]);
 #endif
    //get the phone number from a response;
      res = atoi(string[1]);
@@ -327,58 +288,32 @@ char sms[4];
      UART2_Write(0x0D);
      UART2_Write(0x0A);
 
-     RB.rcv_txt_fin = 0; //reset bit and wait for response
+     WaitForResponse(1);
+ /*  RB.rcv_txt_fin = 0; //reset bit and wait for response
      RB.last_head   = RB.head;
-  do{
-     LATE3_bit = !LATE3_bit;
-     Delay_ms(350);
-  }while(!RB.rcv_txt_fin);
-  Delay_ms(500);
-  i=0;
-  RB.tail = RB.last_tail;
-  if(RB.head > RB.last_head){
-     while(RB.tail <= RB.head){
-         RB.tail = (RB.tail > 999)? 0: RB.tail;
-         SimTestTxt[i] = RB.buff[RB.tail];
-         RB.tail++;
-         i++;
-     };
-     SimTestTxt[i++] = 0;
-  }
-   RB.last_tail = RB.tail++;
-     str_rcv = setstr(SimTestTxt);
-     num_strs = strsplit(str_rcv,',');
+     do{
+       LATE3_bit = !LATE3_bit;
+       Delay_ms(350);
+     }while(!RB.rcv_txt_fin);   */
+    Delay_ms(500);
+  
+    RingToTempBuf(); //??
+  
+    str_rcv = setstr(SimTestTxt);
+    num_strs = strsplit(str_rcv,',');
  #ifdef SimConfDebug
       sprintf(txtA,"%d",num_strs);
-      UART1_Write_Text("num_strs:= ");
-      UART1_Write_Text(txtA);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-      UART1_Write_Text("string[0]");
-      UART1_Write_Text(string[0]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-      UART1_Write_Text("string[1]");
-      UART1_Write_Text(string[1]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-      UART1_Write_Text("string[2]");
-      UART1_Write_Text(string[2]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-      UART1_Write_Text("string[3]");
-      UART1_Write_Text(string[3]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-      UART1_Write_Text("string[4]");
-      UART1_Write_Text(string[4]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-      UART1_Write_Text("string[5]");
-      UART1_Write_Text(string[5]);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
-
+      PrintOut(PrintHandler, "\r\n"
+                           " *num_strs:= %s\r\n"
+                           " *string[0]  %s\r\n"
+                           " *string[1]  %s\r\n"
+                           " *string[2]  %s\r\n"
+                           " *string[3]  %s\r\n"
+                           " *string[4]  %s\r\n"
+                           " *string[5]  %s\r\n"
+                           ,txtA,string[0],string[1],
+                           string[2],string[3],
+                           string[4],string[5]);
 #endif
 //save cell number to flash buffer
   if(Indx == 0){
@@ -388,7 +323,7 @@ char sms[4];
       strncpy(SF.SimDate,string[3]+1,strlen(string[3]));
       strncpy(SF.SimTime,string[4],8);
       SF.SimFlashPtr++;
-      
+
 #ifdef SimConfDebug
     PrintOut(PrintHandler, "\r\n"
                            " * SF.SimCelNum: %s\r\n"
@@ -414,9 +349,6 @@ char sms[4];
 #endif
   }
 
-
-
-  
 //delete sms from sm
   Delay_ms(1000);
   UART2_Write_Text("AT+CMGD=");
@@ -425,24 +357,16 @@ char sms[4];
   UART2_Write(0x0A);
 
  //let OK inc pointers
-  RB.rcv_txt_fin = 0;
+  WaitForResponse(0);
+ /* RB.rcv_txt_fin = 0;
   RB.last_head   = RB.head++;
   do{
      LATE3_bit = !LATE3_bit;
      Delay_ms(150);
   }while(!RB.rcv_txt_fin);
-  i=0;
-  RB.tail = RB.last_tail++;
-  if(RB.head > RB.last_head){
-     while(RB.tail <= RB.head){
-         RB.tail = (RB.tail > 999)? 0: RB.tail;
-         SimTestTxt[i] = RB.buff[RB.tail];
-         RB.tail++;
-         i++;
-     };
-     SimTestTxt[i++] = 0;
-  }
-   RB.last_tail = RB.tail;
+  */
+    RingToTempBuf();//??
+
   return 2;
 }
 
@@ -459,12 +383,14 @@ char txtA[6];
   UART2_Write(0x0A);
 
   //let '>' inc pointers
-  RB.rcv_txt_fin = 0;
+  WaitForResponse(0);
+ /* RB.rcv_txt_fin = 0;
   RB.last_head   = RB.head++;
   do{
      Delay_ms(100);
-  }while(!RB.rcv_txt_fin);
-  i=0;
+  }while(!RB.rcv_txt_fin); */
+  RingToTempBuf();
+ /* i=0;
   RB.tail = RB.last_tail++;
   if(RB.head > RB.last_head){
      while(RB.tail <= RB.head){
@@ -475,11 +401,11 @@ char txtA[6];
      };
      SimTestTxt[i] = 0;
   }
-   RB.last_tail = RB.tail;
+   RB.last_tail = RB.tail;  */
 #ifdef SimConfDebug
-   UART1_Write_Text(SimTestTxt);
-   UART1_Write(0x0D);
-   UART1_Write(0x0A);
+    PrintOut(PrintHandler, "\r\n"
+                           " * %s\r\n"
+                           ,SimTestTxt);
 #endif
   //one the '>' has been recieved send msg and wait the response
   UART2_Write_Text("Reply with the API Write Key from ThingSpeak starting with a ,");
@@ -489,11 +415,50 @@ char txtA[6];
   
   WaitForSetupSMS(1);
 
-  
+
    return 3;
 }
 
 /***********************************************************************
+* Send SMS
+***********************************************************************/
+char SendSMS(char sms_type){
+int res;
+char txt[6];
+    UART2_Write_Text("AT+CNMI=2,2,0,0,0");
+    UART2_Write(0x0D);
+    UART2_Write(0x0A);
+    Delay_ms(1000);
+    UART2_Write_Text("AT+CMGF=1");
+    UART2_Write(0x0D);
+    UART2_Write(0x0A);
+    Delay_ms(1000);
+    UART2_Write_Text("AT+CMGS=\"+447946455348\"");
+    UART2_Write(0x0D);
+    UART2_Write(0x0A);
+    Delay_ms(2000);
+    switch(sms_type){
+      case 0:
+             UART2_Write_Text("Reply Start");
+             break;
+      case 1:
+             UART2_Write_Text("Reply WebSite");
+             break;
+      case 2:
+             UART2_Write_Text("Reply API Key");
+             break;
+    }
+    UART2_Write(0x1A);
+    Delay_ms(5000);
+    UART2_Write(0x1A);
+    Delay_ms(500);
+    UART2_Write_Text("AT+CIPSHUT");
+    UART2_Write(0x0D);
+    UART2_Write(0x0A);
+}
+
+/***********************************************************************
+*TCP connection
 *test to update thingspeak at req interval
 ***********************************************************************/
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h){
@@ -611,40 +576,5 @@ char txtB[15];
     UART2_Write_Text(txtB);
     UART2_Write(0x0D);
     UART2_Write(0x0A);
-    Delay_ms(5000);
-    UART2_Write(0x1A);
-    Delay_ms(500);
-    UART2_Write_Text("AT+CIPSHUT");
-    UART2_Write(0x0D);
-    UART2_Write(0x0A);
 }
 
-char SendSMS(char sms_type){
-int res;
-char txt[6];
-    UART2_Write_Text("AT+CNMI=2,2,0,0,0");
-    UART2_Write(0x0D);
-    UART2_Write(0x0A);
-    Delay_ms(1000);
-    UART2_Write_Text("AT+CMGF=1");
-    UART2_Write(0x0D);
-    UART2_Write(0x0A);
-    Delay_ms(1000);
-    UART2_Write_Text("AT+CMGS=\"+447946455348\"");
-    UART2_Write(0x0D);
-    UART2_Write(0x0A);
-    Delay_ms(2000);
-    switch(sms_type){
-      case 0:
-             UART2_Write_Text("Reply Start");
-             break;
-      case 1:
-             UART2_Write_Text("Reply WebSite");
-             break;
-       case 2:
-             UART2_Write_Text("Reply API Key");
-             break;
-    }
-    UART2_Write(0x1A);
-
-}

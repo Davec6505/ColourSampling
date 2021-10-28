@@ -300,6 +300,9 @@ unsigned int SimReadIndx;
 
 
 void InitGSM3();
+void RingToTempBuf();
+void WaitForResponse(short dly);
+void Load_Head_Tail_Pointers();
 void RcvSimTxt();
 void PwrUpGSM3();
 char SetupIOT();

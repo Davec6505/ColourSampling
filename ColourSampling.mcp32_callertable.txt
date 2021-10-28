@@ -146,37 +146,6 @@ main
 	UART1_Write_Text
 	UART1_Write
 	SetupIOT
-		UART1_Write_Text
-		UART1_Write
-		UART2_Write_Text
-			UART2_Write
-		UART2_Write
-		setstr
-		strsplit
-		sprintf
-		findnumber
-			strlen
-			Malloc
-				MM_GetMemAlign
-				MM_Defragment
-					MM_CheckBlocks
-			Free
-				MM_CheckBlocks
-				MM_Defragment
-		atoi
-			isdigit
-	WaitForSetupSMS
-		UART2_Write_Text
-		UART2_Write
-		strsplit
-		sprintf
-		UART1_Write_Text
-		UART1_Write
-		atoi
-		setstr
-		strlen
-		memcpy
-		strncpy
 		PrintOut
 			_doprntout
 				isdigit
@@ -194,11 +163,45 @@ main
 				_FloatToSignedIntegral
 				I2C2_TimeoutCallback
 				PrintHandler
+		UART2_Write_Text
+			UART2_Write
+		UART2_Write
+		RingToTempBuf
+		WaitForResponse
+		setstr
+		strsplit
+		sprintf
+		findnumber
+			strlen
+			Malloc
+				MM_GetMemAlign
+				MM_Defragment
+					MM_CheckBlocks
+			Free
+				MM_CheckBlocks
+				MM_Defragment
+		atoi
+			isdigit
+	WaitForSetupSMS
+		UART2_Write_Text
+		UART2_Write
+		WaitForResponse
+		RingToTempBuf
+		strsplit
+		sprintf
+		PrintOut
+		atoi
+		UART1_Write_Text
+		setstr
+		strlen
+		memcpy
+		strncpy
 	GetAPI_Key_SMS
 		UART2_Write_Text
 		UART2_Write
-		UART1_Write_Text
-		UART1_Write
+		WaitForResponse
+		RingToTempBuf
+		PrintOut
 		WaitForSetupSMS
 	HID_Read
 		Gen_Read
