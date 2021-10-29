@@ -195,6 +195,7 @@ main
 		strlen
 		memcpy
 		strncpy
+		UART1_Write
 	GetAPI_Key_SMS
 		UART2_Write_Text
 		UART2_Write
