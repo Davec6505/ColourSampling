@@ -58,12 +58,15 @@ char txtR[6];
 *check if simcard is registered and setup the sim
 *for logging
 *************************************************/
+
  SimVars.init_inc = 0;
  SimVars.init_inc = SetupIOT();           //ret 1
- SimVars.init_inc = WaitForSetupSMS(0);    //ret 2
- SimVars.init_inc = GetAPI_Key_SMS();    //ret 3
- 
- 
+ SimVars.init_inc = WaitForSetupSMS(0);   //ret 2
+ SimVars.init_inc = GetAPI_Key_SMS();     //ret 3
+ if(SimVars.init_inc == -1)
+        SimVars.init_inc = SendSMS(SimVars.init_inc);
+ else
+        SimVars.init_inc = SendSMS(SimVars.init_inc);
 /*************************************************
 *main => loop forever and call all functions*
 *keep main free from code

@@ -418,12 +418,16 @@ char txtR[6];
  UART1_Write_Text("Start");
  UART1_Write(13);
  UART1_Write(10);
-#line 61 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 62 "C:/Users/Git/ColourSampling/ColourSampling.c"
  SimVars.init_inc = 0;
  SimVars.init_inc = SetupIOT();
  SimVars.init_inc = WaitForSetupSMS(0);
  SimVars.init_inc = GetAPI_Key_SMS();
-#line 71 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ if(SimVars.init_inc == -1)
+ SimVars.init_inc = SendSMS(SimVars.init_inc);
+ else
+ SimVars.init_inc = SendSMS(SimVars.init_inc);
+#line 74 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
  int res;
 

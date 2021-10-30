@@ -88,9 +88,9 @@ void PwrUpGSM3(){
 void RingToTempBuf(){
 int i;
     i=0;
-    RB.tail = RB.last_tail++;
+    RB.tail = RB.last_tail;
     if(RB.head > RB.last_head){
-      while(RB.tail <= RB.head){
+      while(RB.tail < RB.head){
          SimTestTxt[i] = RB.buff[RB.tail];
 #ifdef RingBuffDeBug
          UART1_Write(SimTestTxt[i]);
@@ -117,6 +117,12 @@ void WaitForResponse(short dly){
       Delay_ms(100);
      else if(dly == 1)
       Delay_ms(500);
+     else if(dly == 3){
+      UART2_Write_Text("ATE0");
+      UART2_Write(0x0D);
+      UART2_Write(0x0A);
+      Delay_ms(1000);
+     }
      else
       Delay_ms(1000);
    }while(!RB.rcv_txt_fin);
@@ -139,15 +145,8 @@ char* str_rcv;
   PrintOut(PrintHandler, "\r\n"
                          " * ATE0\r\n");
 #endif
-    RB.rcv_txt_fin = 0;
-    RB.last_head = RB.head;
-    do{
-        LATE3_bit = !LATE3_bit;
-        UART2_Write_Text("ATE0");
-        UART2_Write(0x0D);
-        UART2_Write(0x0A);
-        Delay_ms(1000);
-    }while(!RB.rcv_txt_fin);
+    //ATE0 at startup
+    WaitForResponse(3);
     Delay_ms(4000);
     RingToTempBuf();
 
@@ -173,7 +172,7 @@ wait:
 #endif
  // Delay_ms(5000);
 
-  if(RB.head > RB.last_head){//(SimVars.num_of_sms_bytes > 0){
+  if(RB.head > RB.last_head){
      str_rcv = setstr(SimTestTxt);
      num_strs = strsplit(str_rcv,',');
 
@@ -189,7 +188,7 @@ wait:
                            ,txtA,string[0],string[1],string[2],string[3],string[4]);
 #endif
      str_rcv = findnumber(string[1]);
-     res = atoi(str_rcv);
+     res = atoi(str_rcv);  //get the sms rec number
    if(res == 1){
 #ifdef SimConfDebug
      sprintf(txtA,"%d",res);
@@ -235,14 +234,8 @@ char sms[4];
 
   Delay_ms(1000);
   //wait for sms
-  RB.rcv_txt_fin = 0;
-  RB.last_head   = RB.head++;
-  do{
-     LATE3_bit = !LATE3_bit;
-     Delay_ms(150);
-  }while(!RB.rcv_txt_fin);
+  WaitForResponse(0);
   Delay_ms(1000);
-  
   RingToTempBuf();
 
   num_strs = strsplit(SimTestTxt,',');
@@ -267,7 +260,7 @@ char sms[4];
     sprintf(sms,"%d",res);
  #ifdef SimConfDebug
     PrintOut(PrintHandler, "\r\n"
-                           " *Result:= %s\r\n"
+                           " *sms no:= %s\r\n"
                            ,sms);
  #endif
   //wait for sms to register phone number
@@ -278,7 +271,7 @@ char sms[4];
     UART2_Write(0x0A);
 
     WaitForResponse(1);
-    Delay_ms(500);
+    Delay_ms(1000);
     RingToTempBuf();
     str_rcv = setstr(SimTestTxt);
     num_strs = strsplit(str_rcv,',');
@@ -303,7 +296,7 @@ char sms[4];
         SF.SimFlashPtr = strlen(string[1])+1;
         memcpy(SF.SimFlashBuff,string[1],SF.SimFlashPtr);
         strncpy(SF.SimCelNum,string[1],strlen(string[1])+1);
-        strncpy(SF.SimDate,string[3]+1,strlen(string[3]));
+        strncpy(SF.SimDate,string[3],strlen(string[3]));
         strncpy(SF.SimTime,string[4],8);
         
 #ifdef SimConfDebug
@@ -319,7 +312,7 @@ char sms[4];
       strncpy(SF.WriteAPIKey,string[5],strlen(string[5])+1);
       SF.SimFlashPtr += strlen(string[5])+1;
     //read API keys to Flash buff first
-      memcpy(SF.SimFlashBuff+SF.SimFlashPtr,string[6],strlen(string[6])+1);
+      memcpy(SF.SimFlashBuff+SF.SimFlashPtr,string[6],strlen(string[6]));
       strncpy(SF.ReadAPIKey,string[6],strlen(string[6])+1);
       SF.SimFlashPtr += strlen(string[6])+1;
 #ifdef SimConfDebug
@@ -339,17 +332,36 @@ char sms[4];
     }
 
 //delete sms from sm
-    Delay_ms(1000);
-    UART2_Write_Text("AT+CMGD=");
-    UART2_Write_Text(sms);
-    UART2_Write(0x0D);
-    UART2_Write(0x0A);
+    Delay_ms(500);
+    do{
+      UART2_Write_Text("AT+CMGD=");
+      UART2_Write_Text(sms);
+      UART2_Write(0x0D);
+      UART2_Write(0x0A);
 
- //let OK inc pointers
-    WaitForResponse(0);
-    RingToTempBuf();//??
+   //let OK inc pointers
+      WaitForResponse(1);
+      Delay_ms(500);
+      RingToTempBuf();
+      res--;
+      sprintf(sms,"%d",res);
+    }while(res > 0);
+    
+    str_rcv = setstr(SimTestTxt);
+    res = strcmp(str_rcv,"OK,");
+    sprintf(txtA,"%d",res);
+#ifdef SimConfDebug
+      PrintOut(PrintHandler, "\r\n"
+                             " * SimTestTxt: %s\r\n"
+                             " * str_rcv: %s\r\n"
+                             " * res: %s\r\n"
+                             ,SimTestTxt,str_rcv,txtA);
+#endif
 
-  return 2;
+   if(res == 0)
+       return 3;
+   else
+       return 0;
 }
 
 /**********************************************************************
@@ -358,6 +370,7 @@ char sms[4];
 char GetAPI_Key_SMS(){
 int i,str_rcv,num_strs;
 char txtA[6];
+char response;
   //set up a send sms
   UART2_Write_Text("AT+CMGS=");
   UART2_Write_Text(SF.SimCelNum);
@@ -367,7 +380,7 @@ char txtA[6];
   //let '>' inc pointers
   WaitForResponse(0);
   RingToTempBuf();
-
+  Delay_ms(500);
 #ifdef SimConfDebug
     PrintOut(PrintHandler, "\r\n"
                            " * %s\r\n"
@@ -379,13 +392,12 @@ char txtA[6];
   UART2_Write(0x0A);
   UART2_Write(0x1A);
   
-  WaitForSetupSMS(1);
-
-
-   return 3;
+  response = WaitForSetupSMS(0);
+  
+  return response;
 }
 
-/***********************************************************************
+/**********************************************************************
 * Send SMS
 ***********************************************************************/
 char SendSMS(char sms_type){
@@ -405,13 +417,19 @@ char txt[6];
     Delay_ms(2000);
     switch(sms_type){
       case 0:
-             UART2_Write_Text("Reply Start");
+             UART2_Write_Text("ERROR in setup Power down and start again!");
              break;
       case 1:
              UART2_Write_Text("Reply WebSite");
              break;
       case 2:
              UART2_Write_Text("Reply API Key");
+             break;
+      case 3:
+             UART2_Write_Text("Setup Complete!");
+             break;
+      default:
+             UART2_Write_Text("ERROR in setup Power down and start again!");
              break;
     }
     UART2_Write(0x1A);

@@ -163,11 +163,13 @@ main
 				_FloatToSignedIntegral
 				I2C2_TimeoutCallback
 				PrintHandler
-		UART2_Write_Text
-			UART2_Write
-		UART2_Write
-		RingToTempBuf
 		WaitForResponse
+			UART2_Write_Text
+				UART2_Write
+			UART2_Write
+		RingToTempBuf
+		UART2_Write_Text
+		UART2_Write
 		setstr
 		strsplit
 		sprintf
@@ -196,6 +198,7 @@ main
 		memcpy
 		strncpy
 		UART1_Write
+		strcmp
 	GetAPI_Key_SMS
 		UART2_Write_Text
 		UART2_Write
@@ -203,6 +206,9 @@ main
 		RingToTempBuf
 		PrintOut
 		WaitForSetupSMS
+	SendSMS
+		UART2_Write_Text
+		UART2_Write
 	HID_Read
 		Gen_Read
 			USB_Handle_Busy
@@ -309,9 +315,6 @@ main
 		strlen
 		strncat
 		HID_Write
-	SendSMS
-		UART2_Write_Text
-		UART2_Write
 	__CC2DW
 	__FillZeros
 	Test_Update_ThingSpeak
