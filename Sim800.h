@@ -31,6 +31,7 @@ extern char rcvPcTxt[150];
 //////////////////////////////////////////////////////
 //structs and enuum
 typedef struct{
+ uint8_t flash_val[512];
  uint8_t  initial_str;
  uint16_t time_to_log;
  uint16_t num_of_sms_bytes;
@@ -54,9 +55,14 @@ unsigned char SimDate[9];
 unsigned char SimTime[9];
 unsigned char WriteAPIKey[17];
 unsigned char ReadAPIKey[17];
-unsigned char SimFlashBuff[256];
+unsigned char SimFlashBuff[512];
 unsigned int SimFlashPtr;
 unsigned int SimReadIndx;
+unsigned int SimFlashCellByteCount;
+unsigned int SimFlashAPIWriteCount;
+unsigned int SimFlashAPIReadCount;
+unsigned int SimFlashAPIWriteIndx;
+unsigned int SimFlashAPIReadIndx;
 };
 
 
@@ -66,6 +72,7 @@ unsigned int SimReadIndx;
 //////////////////////////////////////////////////////
 //function prototypes
 void InitGSM3();
+char* GetValuesFromFlash();
 void RingToTempBuf();
 void WaitForResponse(short dly);
 void Load_Head_Tail_Pointers();

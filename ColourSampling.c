@@ -20,7 +20,7 @@ char writebuff[64];
 
 //Serial
 char txt[] = "00000";
-
+char sub_txt[] = "\"+44";
 
 
 //program
@@ -30,6 +30,7 @@ unsigned short i;
 unsigned int R,str_num;
 unsigned int deg;
 char txtR[6];
+char cel_num[17];
 
  Update_Test = Test_Update_ThingSpeak;
  //testStr = StrChecker;
@@ -58,15 +59,19 @@ char txtR[6];
 *check if simcard is registered and setup the sim
 *for logging
 *************************************************/
-
- SimVars.init_inc = 0;
- SimVars.init_inc = SetupIOT();           //ret 1
- SimVars.init_inc = WaitForSetupSMS(0);   //ret 2
- SimVars.init_inc = GetAPI_Key_SMS();     //ret 3
- if(SimVars.init_inc == -1)
-        SimVars.init_inc = SendSMS(SimVars.init_inc);
- else
-        SimVars.init_inc = SendSMS(SimVars.init_inc);
+ *cel_num = GetValuesFromFlash();
+ str_num = memcmp(cel_num,sub_txt,4);
+ if(str_num > 0){
+   SimVars.init_inc = 0;
+   SimVars.init_inc = SetupIOT();           //ret 1
+   SimVars.init_inc = WaitForSetupSMS(0);   //ret 2
+   SimVars.init_inc = GetAPI_Key_SMS();     //ret 3
+   if(SimVars.init_inc == -1)
+          SimVars.init_inc = SendSMS(SimVars.init_inc);
+   else
+          SimVars.init_inc = SendSMS(SimVars.init_inc);
+ }
+ 
 /*************************************************
 *main => loop forever and call all functions*
 *keep main free from code

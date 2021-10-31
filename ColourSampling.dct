@@ -10912,6 +10912,7 @@ flash_settings_paddr
 flash_settings_paddr_sim800
 flash_settings_vaddr
 flash_settings_vaddr_sim800
+flash_val
 flash_write_row
 flash_write_word
 floattostr
@@ -11120,6 +11121,7 @@ get_time
 get_timer_values
 getapi_key_sms
 getscaledvalues
+getvaluesfromflash
 gp
 gr
 halfsec
@@ -18429,7 +18431,7 @@ read_send_onecolour
 read_thresholds
 readapikey
 readbuff
-readflash
+readflashword
 remove_whitespaces
 report
 reset
@@ -19114,7 +19116,12 @@ sim800_uart2
 sim800text
 simcelnum
 simdate
+simflashapireadcount
+simflashapireadindx
+simflashapiwritecount
+simflashapiwriteindx
 simflashbuff
+simflashcellbytecount
 simflashptr
 simreadindx
 simtesttxt
@@ -19722,6 +19729,7 @@ stsel
 stsel
 stsel_bit
 stsel_u2mode_bit
+sub_txt
 suspend
 suspend
 suspend

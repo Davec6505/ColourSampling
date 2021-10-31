@@ -284,8 +284,8 @@ L_end_NVMUnlock:
 JR	RA
 NOP	
 ; end of _NVMUnlock
-_ReadFlash:
-;Flash_R_W.c,120 :: 		unsigned long ReadFlash(){
+_ReadFlashWord:
+;Flash_R_W.c,120 :: 		unsigned long ReadFlashWord(){
 ADDIU	SP, SP, -512
 ;Flash_R_W.c,129 :: 		ptr = (unsigned char*)(FLASH_Settings_VAddr);
 ; ptr start address is: 20 (R5)
@@ -296,15 +296,15 @@ LWL	R5, Offset(_FLASH_Settings_VAddr+3)(GP)
 MOVZ	R4, R0, R0
 ; ptr end address is: 20 (R5)
 ; i end address is: 16 (R4)
-L_ReadFlash7:
+L_ReadFlashWord7:
 ; i start address is: 16 (R4)
 ; ptr start address is: 20 (R5)
 SLTIU	R2, R4, 512
-BNE	R2, R0, L__ReadFlash21
+BNE	R2, R0, L__ReadFlashWord21
 NOP	
-J	L_ReadFlash8
+J	L_ReadFlashWord8
 NOP	
-L__ReadFlash21:
+L__ReadFlashWord21:
 ;Flash_R_W.c,131 :: 		buff[i] = *ptr;
 ADDIU	R2, SP, 0
 ADDU	R3, R2, R4
@@ -319,9 +319,9 @@ MOVZ	R4, R2, R0
 ;Flash_R_W.c,133 :: 		}
 ; ptr end address is: 20 (R5)
 ; i end address is: 16 (R4)
-J	L_ReadFlash7
+J	L_ReadFlashWord7
 NOP	
-L_ReadFlash8:
+L_ReadFlashWord8:
 ;Flash_R_W.c,135 :: 		Val = buff[3];
 ADDIU	R4, SP, 0
 ADDIU	R2, R4, 3
@@ -348,8 +348,8 @@ ANDI	R2, R2, 255
 OR	R2, R3, R2
 ;Flash_R_W.c,140 :: 		return Val;//0xafffafff;
 ;Flash_R_W.c,141 :: 		}
-L_end_ReadFlash:
+L_end_ReadFlashWord:
 ADDIU	SP, SP, 512
 JR	RA
 NOP	
-; end of _ReadFlash
+; end of _ReadFlashWord

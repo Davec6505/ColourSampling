@@ -213,6 +213,7 @@ extern char rcvPcTxt[150];
 
 
 typedef struct{
+ uint8_t flash_val[512];
  uint8_t initial_str;
  uint16_t time_to_log;
  uint16_t num_of_sms_bytes;
@@ -236,9 +237,14 @@ unsigned char SimDate[9];
 unsigned char SimTime[9];
 unsigned char WriteAPIKey[17];
 unsigned char ReadAPIKey[17];
-unsigned char SimFlashBuff[256];
+unsigned char SimFlashBuff[512];
 unsigned int SimFlashPtr;
 unsigned int SimReadIndx;
+unsigned int SimFlashCellByteCount;
+unsigned int SimFlashAPIWriteCount;
+unsigned int SimFlashAPIReadCount;
+unsigned int SimFlashAPIWriteIndx;
+unsigned int SimFlashAPIReadIndx;
 };
 
 
@@ -248,6 +254,7 @@ unsigned int SimReadIndx;
 
 
 void InitGSM3();
+char* GetValuesFromFlash();
 void RingToTempBuf();
 void WaitForResponse(short dly);
 void Load_Head_Tail_Pointers();
@@ -338,7 +345,7 @@ unsigned int NVMWriteRow (void* address, void* _data);
 unsigned int NVMErasePage(void* address);
 unsigned int NVMUnlock(unsigned int nvmop);
 void NVMRead(void* addr,struct Thresh *vals);
-unsigned long ReadFlash();
+unsigned long ReadFlashWord();
 #line 4 "C:/Users/Git/ColourSampling/Flash_R_W.c"
 unsigned long FLASH_Settings_VAddr = 0x9D07A000;
 unsigned long FLASH_Settings_PAddr = 0x1D07A000;
@@ -456,7 +463,7 @@ NVMCONCLR = 0x0004000;
 return (NVMCON & 0x3000);
 }
 
-unsigned long ReadFlash(){
+unsigned long ReadFlashWord(){
 unsigned char buff[512];
 unsigned long i;
 unsigned char *ptr;

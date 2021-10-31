@@ -23,5 +23,5 @@ unsigned int NVMWriteRow (void* address, void* _data);
 unsigned int NVMErasePage(void* address);
 unsigned int NVMUnlock(unsigned int nvmop);
 void NVMRead(void* addr,struct Thresh *vals);
-unsigned long ReadFlash();
+unsigned long ReadFlashWord();
 #endif

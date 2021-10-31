@@ -1994,12 +1994,6 @@ SEH	R4, R5
 J	L_Write_Thresholds96
 NOP	
 L_Write_Thresholds97:
-;String.c,431 :: 		err = NVMErasePage(pos);
-SB	R25, 8(SP)
-LW	R25, 524(SP)
-JAL	_NVMErasePage+0
-NOP	
-LB	R25, 8(SP)
 ;String.c,434 :: 		if(!data_src)
 BEQ	R25, R0, L__Write_Thresholds217
 NOP	
@@ -2494,8 +2488,8 @@ SW	RA, 0(SP)
 ;String.c,521 :: 		char* tr = "112233";
 SW	R25, 4(SP)
 SW	R26, 8(SP)
-;String.c,529 :: 		Val =  ReadFlash();
-JAL	_ReadFlash+0
+;String.c,529 :: 		Val =  ReadFlashWord();
+JAL	_ReadFlashWord+0
 NOP	
 ; Val start address is: 24 (R6)
 MOVZ	R6, R2, R0

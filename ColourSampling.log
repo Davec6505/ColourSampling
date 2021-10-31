@@ -9,13 +9,14 @@ warning: 155	1506	Implicit conversion of pointer to int	__Lib_MemManager.c
 warning: 174	1508	Implicit conversion of int to ptr	__Lib_MemManager.c
 diagnostics: 297	123	Compiled Successfully	__Lib_MemManager.c
 diagnostics: 0	122	Compilation Started	stdint.h
+warning: 62	1506	Implicit conversion of pointer to int	ColourSampling.c
 hint: 28	1163	Variable 'res' has been declared, but not used	ColourSampling.c
 hint: 30	1163	Variable 'R' has been declared, but not used	ColourSampling.c
-hint: 30	1163	Variable 'str_num' has been declared, but not used	ColourSampling.c
 hint: 31	1163	Variable 'deg' has been declared, but not used	ColourSampling.c
-diagnostics: 99	123	Compiled Successfully	ColourSampling.c
-hint: 75	1164	Variable 'res' has been eliminated by optimizer	ColourSampling.c
+diagnostics: 104	123	Compiled Successfully	ColourSampling.c
+hint: 80	1164	Variable 'res' has been eliminated by optimizer	ColourSampling.c
 hint: 29	1164	Variable 'i' has been eliminated by optimizer	ColourSampling.c
+hint: 30	1164	Variable 'str_num' has been eliminated by optimizer	ColourSampling.c
 diagnostics: 0	122	Compilation Started	stdint.h
 diagnostics: 71	123	Compiled Successfully	Config.c
 diagnostics: 0	122	Compilation Started	stdint.h
@@ -54,7 +55,6 @@ warning: 287	1505	Suspicious pointer conversion	String.c
 hint: 281	1163	Variable 'cct' has been declared, but not used	String.c
 warning: 397	1508	Implicit conversion of int to ptr	String.c
 hint: 395	1163	Variable 'Val' has been declared, but not used	String.c
-warning: 431	1508	Implicit conversion of int to ptr	String.c
 warning: 443	1508	Implicit conversion of int to ptr	String.c
 warning: 451	1508	Implicit conversion of int to ptr	String.c
 warning: 460	1508	Implicit conversion of int to ptr	String.c
@@ -76,28 +76,29 @@ hint: 66	1164	Variable 'res' has been eliminated by optimizer	Flash_R_W.c
 hint: 80	1164	Variable 'res' has been eliminated by optimizer	Flash_R_W.c
 diagnostics: 0	122	Compilation Started	flash_r_w.h
 warning: 40	1506	Implicit conversion of pointer to int	Sim800.c
-hint: 136	1163	Variable 'i' has been declared, but not used	Sim800.c
-hint: 371	1163	Variable 'i' has been declared, but not used	Sim800.c
-hint: 371	1163	Variable 'str_rcv' has been declared, but not used	Sim800.c
-hint: 371	1163	Variable 'num_strs' has been declared, but not used	Sim800.c
-hint: 372	1163	Variable 'txtA' has been declared, but not used	Sim800.c
-hint: 404	1163	Variable 'res' has been declared, but not used	Sim800.c
-hint: 405	1163	Variable 'txt' has been declared, but not used	Sim800.c
-warning: 442	1503	Result is not defined in function: 'SendSMS'	Sim800.c
-hint: 449	1163	Variable 'txtS' has been declared, but not used	Sim800.c
-hint: 450	1163	Variable 'txtM' has been declared, but not used	Sim800.c
-hint: 451	1163	Variable 'txtH' has been declared, but not used	Sim800.c
-diagnostics: 563	123	Compiled Successfully	Sim800.c
-hint: 136	1164	Variable 'num_strs' has been eliminated by optimizer	Sim800.c
-hint: 138	1164	Variable 'str_rcv' has been eliminated by optimizer	Sim800.c
-hint: 373	1164	Variable 'response' has been eliminated by optimizer	Sim800.c
-diagnostics: 0	127	All files Compiled in 1485 ms	 
+hint: 164	1163	Variable 'i' has been declared, but not used	Sim800.c
+warning: 395	1508	Implicit conversion of int to ptr	Sim800.c
+hint: 406	1163	Variable 'i' has been declared, but not used	Sim800.c
+hint: 406	1163	Variable 'str_rcv' has been declared, but not used	Sim800.c
+hint: 406	1163	Variable 'num_strs' has been declared, but not used	Sim800.c
+hint: 407	1163	Variable 'txtA' has been declared, but not used	Sim800.c
+hint: 439	1163	Variable 'res' has been declared, but not used	Sim800.c
+hint: 440	1163	Variable 'txt' has been declared, but not used	Sim800.c
+warning: 477	1503	Result is not defined in function: 'SendSMS'	Sim800.c
+hint: 484	1163	Variable 'txtS' has been declared, but not used	Sim800.c
+hint: 485	1163	Variable 'txtM' has been declared, but not used	Sim800.c
+hint: 486	1163	Variable 'txtH' has been declared, but not used	Sim800.c
+diagnostics: 598	123	Compiled Successfully	Sim800.c
+hint: 164	1164	Variable 'num_strs' has been eliminated by optimizer	Sim800.c
+hint: 166	1164	Variable 'str_rcv' has been eliminated by optimizer	Sim800.c
+hint: 408	1164	Variable 'response' has been eliminated by optimizer	Sim800.c
+diagnostics: 0	127	All files Compiled in 1454 ms	 
 hint: 0	1144	Used RX: 32 (100%)   Free RX: 0 (0%)	Used RX: 32 (100%)   Free RX: 0 (0%)
-hint: 0	1144	Static RAM (bytes): 4475   Dynamic RAM (bytes): 22289	Static RAM (bytes): 4475   Dynamic RAM (bytes): 22289
+hint: 0	1144	Static RAM (bytes): 5262   Dynamic RAM (bytes): 21501	Static RAM (bytes): 5262   Dynamic RAM (bytes): 21501
 hint: 0	1144	HEAP RAM (bytes): 6000	HEAP RAM (bytes): 6000
-hint: 0	1144	Used ROM (bytes): 59211 (11%)  Free ROM (bytes): 465077 (89%)	Used ROM (bytes): 59211 (11%)  Free ROM (bytes): 465077 (89%)
+hint: 0	1144	Used ROM (bytes): 60325 (12%)  Free ROM (bytes): 463963 (88%)	Used ROM (bytes): 60325 (12%)  Free ROM (bytes): 463963 (88%)
 hint: 0	1144	Used BOOTROM (bytes): 1912 (16%)  Free BOOTROM (bytes): 10361 (84%)	Used BOOTROM (bytes): 1912 (16%)  Free BOOTROM (bytes): 10361 (84%)
 diagnostics: 0	125	Project Linked Successfully	ColourSampling.mcp32
-diagnostics: 0	128	Linked in 500 ms	 
-diagnostics: 0	129	Project 'ColourSampling.mcp32' completed: 2657 ms	 
-diagnostics: 0	103	Finished successfully: 31 Oct 2021, 00:00:20	ColourSampling.mcp32
+diagnostics: 0	128	Linked in 484 ms	 
+diagnostics: 0	129	Project 'ColourSampling.mcp32' completed: 2641 ms	 
+diagnostics: 0	103	Finished successfully: 31 Oct 2021, 10:40:02	ColourSampling.mcp32

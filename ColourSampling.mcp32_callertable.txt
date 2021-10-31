@@ -145,7 +145,8 @@ main
 							I2C1_Stop
 	UART1_Write_Text
 	UART1_Write
-	SetupIOT
+	GetValuesFromFlash
+		strncpy
 		PrintOut
 			_doprntout
 				isdigit
@@ -163,6 +164,9 @@ main
 				_FloatToSignedIntegral
 				I2C2_TimeoutCallback
 				PrintHandler
+	memcmp
+	SetupIOT
+		PrintOut
 		WaitForResponse
 			UART2_Write_Text
 				UART2_Write
@@ -199,6 +203,8 @@ main
 		strncpy
 		UART1_Write
 		strcmp
+		NVMWriteRow
+			NVMUnlock
 	GetAPI_Key_SMS
 		UART2_Write_Text
 		UART2_Write
@@ -302,8 +308,6 @@ main
 			sprintf
 			strcat
 		Write_Thresholds
-			NVMErasePage
-				NVMUnlock
 			TCS3472_getRawData
 			atol
 				isdigit

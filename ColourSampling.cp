@@ -171,7 +171,7 @@ unsigned int NVMWriteRow (void* address, void* _data);
 unsigned int NVMErasePage(void* address);
 unsigned int NVMUnlock(unsigned int nvmop);
 void NVMRead(void* addr,struct Thresh *vals);
-unsigned long ReadFlash();
+unsigned long ReadFlashWord();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/git/coloursampling/sim800.h"
@@ -267,6 +267,7 @@ extern char rcvPcTxt[150];
 
 
 typedef struct{
+ uint8_t flash_val[512];
  uint8_t initial_str;
  uint16_t time_to_log;
  uint16_t num_of_sms_bytes;
@@ -290,9 +291,14 @@ unsigned char SimDate[9];
 unsigned char SimTime[9];
 unsigned char WriteAPIKey[17];
 unsigned char ReadAPIKey[17];
-unsigned char SimFlashBuff[256];
+unsigned char SimFlashBuff[512];
 unsigned int SimFlashPtr;
 unsigned int SimReadIndx;
+unsigned int SimFlashCellByteCount;
+unsigned int SimFlashAPIWriteCount;
+unsigned int SimFlashAPIReadCount;
+unsigned int SimFlashAPIWriteIndx;
+unsigned int SimFlashAPIReadIndx;
 };
 
 
@@ -302,6 +308,7 @@ unsigned int SimReadIndx;
 
 
 void InitGSM3();
+char* GetValuesFromFlash();
 void RingToTempBuf();
 void WaitForResponse(short dly);
 void Load_Head_Tail_Pointers();
@@ -386,7 +393,7 @@ char writebuff[64];
 
 
 char txt[] = "00000";
-
+char sub_txt[] = "\"+44";
 
 
 
@@ -396,6 +403,7 @@ unsigned short i;
 unsigned int R,str_num;
 unsigned int deg;
 char txtR[6];
+char cel_num[17];
 
  Update_Test = Test_Update_ThingSpeak;
 
@@ -419,6 +427,9 @@ char txtR[6];
  UART1_Write(13);
  UART1_Write(10);
 #line 62 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ *cel_num = GetValuesFromFlash();
+ str_num = memcmp(cel_num,sub_txt,4);
+ if(str_num > 0){
  SimVars.init_inc = 0;
  SimVars.init_inc = SetupIOT();
  SimVars.init_inc = WaitForSetupSMS(0);
@@ -427,7 +438,8 @@ char txtR[6];
  SimVars.init_inc = SendSMS(SimVars.init_inc);
  else
  SimVars.init_inc = SendSMS(SimVars.init_inc);
-#line 74 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ }
+#line 79 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
  int res;
 

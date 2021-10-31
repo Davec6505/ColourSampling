@@ -428,7 +428,7 @@ char str[64];
          pos =  FLASH_Settings_PAddr;
         for(i=1;i<128;i++)
            val[i] = 0x00000000;
-        err = NVMErasePage(pos);
+       // err = NVMErasePage(pos);
         
         //0 = get the values for thresholds from the sensor
          if(!data_src)
@@ -526,7 +526,7 @@ unsigned int res,i;
       // res = NVMErasePage(FLASH_Settings_PAddr);
       // res = NVMWriteRow(FLASH_Settings_PAddr,val);
       // res = NVMWriteWord(FLASH_Settings_PAddr,val[0]);
-       Val =  ReadFlash();
+       Val =  ReadFlashWord();
 
 
        strcpy(str,"Val || ");

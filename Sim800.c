@@ -1,13 +1,12 @@
 #include "Sim800.h"
 
 /******************************************************
-*Flash memory region for Sim800 module
+*Flash memory region for Sim800 module  
+*V =  Read Virtual address
+*P =  Write Physical address
 ******************************************************/
 unsigned long  FLASH_Settings_VAddr_Sim800 = 0x9D07A100;
 unsigned long  FLASH_Settings_PAddr_Sim800 = 0x1D07A100;
-
-
-
 /*****************************************************
 *
 *****************************************************/
@@ -31,6 +30,7 @@ Sim800Vars SimVars = {
 
 struct RingBuffer RB;
 struct Sim800Flash SF;
+
 /*************************************************
 *initialize the variables
 *************************************************/
@@ -42,8 +42,36 @@ void InitGSM3(){
    RB.tail = 0;
    RB.rcv_txt_fin = -1;
    SF.SimFlashPtr = 0;
+   SF.SimFlashCellByteCount = 17;
+   SF.SimFlashAPIWriteIndx  = 18;
+   SF.SimFlashAPIWriteCount = 18;
+   SF.SimFlashAPIReadIndx   = 35;
+   SF.SimFlashAPIReadCount  = 18;
 }
 
+/*************************************************
+*get the Sim800 values from flash memory
+*************************************************/
+char* GetValuesFromFlash(){
+unsigned long i;
+unsigned char *ptr;
+   ptr = (unsigned char*)(FLASH_Settings_VAddr_Sim800);
+   for(i=0;i<512;i++){
+       SF.SimFlashBuff[i] = *ptr;
+       ptr++;
+    }
+    strncpy(SF.SimCelNum,SF.SimFlashBuff,SF.SimFlashCellByteCount);
+    strncpy(SF.WriteAPIKey,SF.SimFlashBuff+SF.SimFlashAPIWriteIndx,SF.SimFlashAPIWriteCount);
+    strncpy(SF.ReadAPIKey,SF.SimFlashBuff+SF.SimFlashAPIReadIndx,SF.SimFlashAPIReadCount);
+#ifdef SimConfDebug
+      PrintOut(PrintHandler, "\r\n"
+                             " * SF.SimCelNum: %s\r\n"
+                             " * SF.WriteAPIKey: %s\r\n"
+                             " * SF.ReadAPIKey: %s\r\n"
+                             ,SF.SimCelNum,SF.WriteAPIKey,SF.ReadAPIKey);
+#endif
+  return SF.SimCelNum;
+}
 /*************************************************
 *function pointe called from ISR Uart2
 *************************************************/
@@ -294,6 +322,7 @@ char sms[4];
 //save cell number to flash buffer
     if(Indx == 0){
         SF.SimFlashPtr = strlen(string[1])+1;
+        SF.SimFlashCellByteCount = SF.SimFlashPtr;
         memcpy(SF.SimFlashBuff,string[1],SF.SimFlashPtr);
         strncpy(SF.SimCelNum,string[1],strlen(string[1])+1);
         strncpy(SF.SimDate,string[3],strlen(string[3]));
@@ -308,13 +337,17 @@ char sms[4];
 #endif
     }else if(Indx == 1){
     //write API keys to Flash buff first
+      SF.SimFlashAPIWriteIndx = SF.SimFlashPtr;
+      SF.SimFlashAPIWriteCount = strlen(string[5])+1;
       memcpy(SF.SimFlashBuff+SF.SimFlashPtr,string[5],strlen(string[5])+1);
       strncpy(SF.WriteAPIKey,string[5],strlen(string[5])+1);
       SF.SimFlashPtr += strlen(string[5])+1;
     //read API keys to Flash buff first
+      SF.SimFlashAPIReadIndx = SF.SimFlashPtr;
       memcpy(SF.SimFlashBuff+SF.SimFlashPtr,string[6],strlen(string[6]));
       strncpy(SF.ReadAPIKey,string[6],strlen(string[6])+1);
       SF.SimFlashPtr += strlen(string[6])+1;
+      SF.SimFlashAPIReadCount = strlen(string[6])+1;
 #ifdef SimConfDebug
       PrintOut(PrintHandler, "\r\n"
                              " * SF.WriteAPIKey: %s\r\n"
@@ -351,15 +384,17 @@ char sms[4];
     res = strcmp(str_rcv,"OK,");
     sprintf(txtA,"%d",res);
 #ifdef SimConfDebug
-      PrintOut(PrintHandler, "\r\n"
-                             " * SimTestTxt: %s\r\n"
-                             " * str_rcv: %s\r\n"
-                             " * res: %s\r\n"
-                             ,SimTestTxt,str_rcv,txtA);
+    PrintOut(PrintHandler, "\r\n"
+                           " * SimTestTxt: %s\r\n"
+                           " * str_rcv: %s\r\n"
+                           " * res: %s\r\n"
+                           ,SimTestTxt,str_rcv,txtA);
 #endif
 
-   if(res == 0)
-       return 3;
+   if(res == 0){
+      NVMWriteRow (FLASH_Settings_VAddr_Sim800, SF.SimFlashBuff);
+      return 3;
+   }
    else
        return 0;
 }

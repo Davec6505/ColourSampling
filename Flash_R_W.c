@@ -117,7 +117,7 @@ NVMCONCLR = 0x0004000;
 return (NVMCON & 0x3000);
 }
 
-unsigned long ReadFlash(){
+unsigned long ReadFlashWord(){
 unsigned char buff[512];
 unsigned long i;
 unsigned char *ptr;
