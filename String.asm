@@ -1994,6 +1994,12 @@ SEH	R4, R5
 J	L_Write_Thresholds96
 NOP	
 L_Write_Thresholds97:
+;String.c,431 :: 		err = NVMErasePage(pos);
+SB	R25, 8(SP)
+LW	R25, 524(SP)
+JAL	_NVMErasePage+0
+NOP	
+LB	R25, 8(SP)
 ;String.c,434 :: 		if(!data_src)
 BEQ	R25, R0, L__Write_Thresholds217
 NOP	

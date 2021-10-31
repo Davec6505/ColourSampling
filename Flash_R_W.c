@@ -68,7 +68,7 @@ unsigned int res;
 NVMADDR = (unsigned long) address;
 
 // Set NVMSRCADDR to the SRAM data buffer Address
-NVMSRCADDR = (unsigned int) _data;
+NVMSRCADDR = (unsigned long) _data;
 
 // Unlock and Write Row
 res = NVMUnlock(0x4003);

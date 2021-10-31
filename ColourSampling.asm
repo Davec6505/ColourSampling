@@ -77,14 +77,25 @@ NOP
 ORI	R25, R0, 10
 JAL	_UART1_Write+0
 NOP	
-;ColourSampling.c,62 :: 		*cel_num = GetValuesFromFlash();
+;ColourSampling.c,57 :: 		T0_SP.sec = 0;
+SH	R0, Offset(_T0_SP+2)(GP)
+;ColourSampling.c,58 :: 		T0_SP.min = 0;
+SH	R0, Offset(_T0_SP+4)(GP)
+;ColourSampling.c,59 :: 		T0_SP.hr = 0;
+SH	R0, Offset(_T0_SP+6)(GP)
+;ColourSampling.c,65 :: 		SimVars.init_inc = 0;
+SB	R0, Offset(_SimVars+518)(GP)
+;ColourSampling.c,67 :: 		WriteToFlashTemp();
+JAL	_WriteToFlashTemp+0
+NOP	
+;ColourSampling.c,68 :: 		*cel_num = GetValuesFromFlash();
 ADDIU	R2, SP, 6
 SW	R2, 24(SP)
 JAL	_GetValuesFromFlash+0
 NOP	
 LW	R3, 24(SP)
 SB	R2, 0(R3)
-;ColourSampling.c,63 :: 		str_num = memcmp(cel_num,sub_txt,4);
+;ColourSampling.c,69 :: 		str_num = memcmp(cel_num,sub_txt,4);
 ADDIU	R2, SP, 6
 ORI	R27, R0, 4
 LUI	R26, hi_addr(_sub_txt+0)
@@ -92,7 +103,7 @@ ORI	R26, R26, lo_addr(_sub_txt+0)
 MOVZ	R25, R2, R0
 JAL	_memcmp+0
 NOP	
-;ColourSampling.c,64 :: 		if(str_num > 0){
+;ColourSampling.c,70 :: 		if(str_num > 0){
 ANDI	R2, R2, 65535
 SLTIU	R2, R2, 1
 BEQ	R2, R0, L__main16
@@ -100,22 +111,20 @@ NOP
 J	L_main4
 NOP	
 L__main16:
-;ColourSampling.c,65 :: 		SimVars.init_inc = 0;
-SB	R0, Offset(_SimVars+518)(GP)
-;ColourSampling.c,66 :: 		SimVars.init_inc = SetupIOT();           //ret 1
+;ColourSampling.c,71 :: 		SimVars.init_inc = SetupIOT();           //ret 1
 JAL	_SetupIOT+0
 NOP	
 SB	R2, Offset(_SimVars+518)(GP)
-;ColourSampling.c,67 :: 		SimVars.init_inc = WaitForSetupSMS(0);   //ret 2
+;ColourSampling.c,72 :: 		SimVars.init_inc = WaitForSetupSMS(0);   //ret 2
 MOVZ	R25, R0, R0
 JAL	_WaitForSetupSMS+0
 NOP	
 SB	R2, Offset(_SimVars+518)(GP)
-;ColourSampling.c,68 :: 		SimVars.init_inc = GetAPI_Key_SMS();     //ret 3
+;ColourSampling.c,73 :: 		SimVars.init_inc = GetAPI_Key_SMS();     //ret 3
 JAL	_GetAPI_Key_SMS+0
 NOP	
 SB	R2, Offset(_SimVars+518)(GP)
-;ColourSampling.c,69 :: 		if(SimVars.init_inc == -1)
+;ColourSampling.c,74 :: 		if(SimVars.init_inc == -1)
 ANDI	R3, R2, 255
 LUI	R2, 65535
 ORI	R2, R2, 65535
@@ -124,7 +133,7 @@ NOP
 J	L_main5
 NOP	
 L__main17:
-;ColourSampling.c,70 :: 		SimVars.init_inc = SendSMS(SimVars.init_inc);
+;ColourSampling.c,75 :: 		SimVars.init_inc = SendSMS(SimVars.init_inc);
 LBU	R25, Offset(_SimVars+518)(GP)
 JAL	_SendSMS+0
 NOP	
@@ -132,36 +141,36 @@ SB	R2, Offset(_SimVars+518)(GP)
 J	L_main6
 NOP	
 L_main5:
-;ColourSampling.c,72 :: 		SimVars.init_inc = SendSMS(SimVars.init_inc);
+;ColourSampling.c,77 :: 		SimVars.init_inc = SendSMS(SimVars.init_inc);
 LBU	R25, Offset(_SimVars+518)(GP)
 JAL	_SendSMS+0
 NOP	
 SB	R2, Offset(_SimVars+518)(GP)
 L_main6:
-;ColourSampling.c,73 :: 		}
+;ColourSampling.c,78 :: 		}
 L_main4:
-;ColourSampling.c,79 :: 		while(1){
+;ColourSampling.c,84 :: 		while(1){
 L_main7:
-;ColourSampling.c,83 :: 		num = HID_Read();
+;ColourSampling.c,88 :: 		num = HID_Read();
 JAL	_HID_Read+0
 NOP	
 ; num start address is: 12 (R3)
 ANDI	R3, R2, 255
-;ColourSampling.c,84 :: 		if(num != 0){
+;ColourSampling.c,89 :: 		if(num != 0){
 ANDI	R2, R2, 255
 BNE	R2, R0, L__main19
 NOP	
 J	L_main9
 NOP	
 L__main19:
-;ColourSampling.c,85 :: 		DoStrings(num);
+;ColourSampling.c,90 :: 		DoStrings(num);
 ANDI	R25, R3, 255
 ; num end address is: 12 (R3)
 JAL	_DoStrings+0
 NOP	
-;ColourSampling.c,86 :: 		}
+;ColourSampling.c,91 :: 		}
 L_main9:
-;ColourSampling.c,89 :: 		if(SimVars.init_inc >= 5){
+;ColourSampling.c,94 :: 		if(SimVars.init_inc >= 5){
 LBU	R2, Offset(_SimVars+518)(GP)
 SLTIU	R2, R2, 5
 BEQ	R2, R0, L__main20
@@ -169,23 +178,23 @@ NOP
 J	L_main10
 NOP	
 L__main20:
-;ColourSampling.c,90 :: 		if(T0_SP.one_per_sec){
+;ColourSampling.c,95 :: 		if(T0_SP.one_per_sec){
 LBU	R2, Offset(_T0_SP+8)(GP)
 BNE	R2, R0, L__main22
 NOP	
 J	L_main11
 NOP	
 L__main22:
-;ColourSampling.c,91 :: 		T0_SP.one_per_sec = 0;
+;ColourSampling.c,96 :: 		T0_SP.one_per_sec = 0;
 SB	R0, Offset(_T0_SP+8)(GP)
-;ColourSampling.c,92 :: 		res =  Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
+;ColourSampling.c,97 :: 		res =  Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
 LHU	R27, Offset(_T0_SP+6)(GP)
 LHU	R26, Offset(_T0_SP+4)(GP)
 LHU	R25, Offset(_T0_SP+2)(GP)
 LW	R30, Offset(_Update_Test+0)(GP)
 JALR	RA, R30
 NOP	
-;ColourSampling.c,93 :: 		if(res >= 1){
+;ColourSampling.c,98 :: 		if(res >= 1){
 SEH	R2, R2
 SLTI	R2, R2, 1
 BEQ	R2, R0, L__main23
@@ -193,19 +202,19 @@ NOP
 J	L_main12
 NOP	
 L__main23:
-;ColourSampling.c,94 :: 		T0_SP.sec = 0;
+;ColourSampling.c,99 :: 		T0_SP.sec = 0;
 SH	R0, Offset(_T0_SP+2)(GP)
-;ColourSampling.c,95 :: 		T0_SP.min = 0;
+;ColourSampling.c,100 :: 		T0_SP.min = 0;
 SH	R0, Offset(_T0_SP+4)(GP)
-;ColourSampling.c,96 :: 		T0_SP.hr = 0;
+;ColourSampling.c,101 :: 		T0_SP.hr = 0;
 SH	R0, Offset(_T0_SP+6)(GP)
-;ColourSampling.c,97 :: 		}
+;ColourSampling.c,102 :: 		}
 L_main12:
-;ColourSampling.c,98 :: 		}
+;ColourSampling.c,103 :: 		}
 L_main11:
-;ColourSampling.c,99 :: 		}
+;ColourSampling.c,104 :: 		}
 L_main10:
-;ColourSampling.c,101 :: 		if(!RG9_bit)
+;ColourSampling.c,106 :: 		if(!RG9_bit)
 _LX	
 EXT	R2, R2, BitPos(RG9_bit+0), 1
 BEQ	R2, R0, L__main24
@@ -213,15 +222,15 @@ NOP
 J	L_main13
 NOP	
 L__main24:
-;ColourSampling.c,102 :: 		SendSMS(0);
+;ColourSampling.c,107 :: 		SendSMS(0);
 MOVZ	R25, R0, R0
 JAL	_SendSMS+0
 NOP	
 L_main13:
-;ColourSampling.c,103 :: 		}
+;ColourSampling.c,108 :: 		}
 J	L_main7
 NOP	
-;ColourSampling.c,104 :: 		}
+;ColourSampling.c,109 :: 		}
 L_end_main:
 L__main_end_loop:
 J	L__main_end_loop

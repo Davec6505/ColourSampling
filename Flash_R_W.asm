@@ -182,9 +182,8 @@ SW	RA, 0(SP)
 ;Flash_R_W.c,68 :: 		NVMADDR = (unsigned long) address;
 SW	R25, 4(SP)
 SW	R25, Offset(NVMADDR+0)(GP)
-;Flash_R_W.c,71 :: 		NVMSRCADDR = (unsigned int) _data;
-ANDI	R2, R26, 65535
-SW	R2, Offset(NVMSRCADDR+0)(GP)
+;Flash_R_W.c,71 :: 		NVMSRCADDR = (unsigned long) _data;
+SW	R26, Offset(NVMSRCADDR+0)(GP)
 ;Flash_R_W.c,74 :: 		res = NVMUnlock(0x4003);
 ORI	R25, R0, 16387
 JAL	_NVMUnlock+0

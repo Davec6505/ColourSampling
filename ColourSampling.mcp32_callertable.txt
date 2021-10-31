@@ -31,6 +31,7 @@ main
 		InitTimer1
 		InitISR
 		InitGSM3
+			strcpy
 		PwrUpGSM3
 	TCS3472_Init
 		TCS3472_Read8
@@ -145,8 +146,14 @@ main
 							I2C1_Stop
 	UART1_Write_Text
 	UART1_Write
+	WriteToFlashTemp
+		NVMErasePage
+			NVMUnlock
+		NVMWriteRow
+			NVMUnlock
 	GetValuesFromFlash
-		strncpy
+		ReadFlashWord
+		sprintf
 		PrintOut
 			_doprntout
 				isdigit
@@ -204,7 +211,6 @@ main
 		UART1_Write
 		strcmp
 		NVMWriteRow
-			NVMUnlock
 	GetAPI_Key_SMS
 		UART2_Write_Text
 		UART2_Write
@@ -308,6 +314,7 @@ main
 			sprintf
 			strcat
 		Write_Thresholds
+			NVMErasePage
 			TCS3472_getRawData
 			atol
 				isdigit

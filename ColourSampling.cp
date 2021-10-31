@@ -286,7 +286,7 @@ unsigned int last_tail;
 extern struct RingBuffer RB;
 
 struct Sim800Flash{
-unsigned char SimCelNum[17];
+unsigned char SimCelNum[20];
 unsigned char SimDate[9];
 unsigned char SimTime[9];
 unsigned char WriteAPIKey[17];
@@ -308,6 +308,7 @@ unsigned int SimFlashAPIReadIndx;
 
 
 void InitGSM3();
+void WriteToFlashTemp();
 char* GetValuesFromFlash();
 void RingToTempBuf();
 void WaitForResponse(short dly);
@@ -426,11 +427,17 @@ char cel_num[17];
  UART1_Write_Text("Start");
  UART1_Write(13);
  UART1_Write(10);
-#line 62 "C:/Users/Git/ColourSampling/ColourSampling.c"
+
+ T0_SP.sec = 0;
+ T0_SP.min = 0;
+ T0_SP.hr = 0;
+#line 65 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ SimVars.init_inc = 0;
+
+ WriteToFlashTemp();
  *cel_num = GetValuesFromFlash();
  str_num = memcmp(cel_num,sub_txt,4);
  if(str_num > 0){
- SimVars.init_inc = 0;
  SimVars.init_inc = SetupIOT();
  SimVars.init_inc = WaitForSetupSMS(0);
  SimVars.init_inc = GetAPI_Key_SMS();
@@ -439,7 +446,7 @@ char cel_num[17];
  else
  SimVars.init_inc = SendSMS(SimVars.init_inc);
  }
-#line 79 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 84 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
  int res;
 

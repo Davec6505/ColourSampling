@@ -54,15 +54,20 @@ char cel_num[17];
   UART1_Write(13);
   UART1_Write(10);
 #endif
-
+               T0_SP.sec = 0;
+               T0_SP.min = 0;
+               T0_SP.hr = 0;
 /*************************************************
 *check if simcard is registered and setup the sim
 *for logging
 *************************************************/
+
+ SimVars.init_inc = 0;
+ //NVMErasePage(0x9D07A000);
+ WriteToFlashTemp();
  *cel_num = GetValuesFromFlash();
  str_num = memcmp(cel_num,sub_txt,4);
  if(str_num > 0){
-   SimVars.init_inc = 0;
    SimVars.init_inc = SetupIOT();           //ret 1
    SimVars.init_inc = WaitForSetupSMS(0);   //ret 2
    SimVars.init_inc = GetAPI_Key_SMS();     //ret 3
@@ -104,53 +109,3 @@ char cel_num[17];
 }
 
 
-
-
-/*   WriteData(txtR);
-      WriteData("\r\n");
-      if(str_num == 3 || str_num == 6){
-         for(i = 0;i < 5;i++){
-           res = strncmp(conf,testStr(i),str_num);
-
-           sprintf(txtR,"%u",res);
-           WriteData(txtR);
-           WriteData("\r\n");
-           if(res == 0)
-              break;
-         }
-       }  */
-      // sprintf(txtR,"%d",res);
-     /*  if(res == 0){
-         WriteData(conf);
-         WriteData("\r\n");
-       } */
-
-   /* if(!res){
-       TCS3472_getRawData(RawData);
-      // R = TCS3472_Read16(TCS3472_RDATAL);
-       WriteData("C || R | G | B | = || ");
-       sprintf(txtR,"%u",RawData[0]);
-       WriteData(txtR);
-       WriteData(" || ");
-      // UART2_Write('\t');
-       sprintf(txtR,"%u",RawData[1]);
-       WriteData(txtR);
-       WriteData(" | ");
-      // UART2_Write('\t');
-       sprintf(txtR,"%u",RawData[2]);
-       WriteData(txtR);
-       WriteData(" | ");
-      // UART2_Write('\t');
-       sprintf(txtR,"%u",RawData[3]);
-       WriteData(txtR);
-       WriteData(" || ");
-      // UART2_Write('\r');
-      // UART2_Write('\n');
-      // WriteData(txt);
-      CCT =TCS3472_CalcColTemp_dn40(&RawData,it);
-       sprintf(txtR,"%u",CCT);
-       WriteData(txtR);
-       WriteData(" ||\r\n");
-<<<<<<< HEAD
-   }
-   Delay_ms(1000);*/

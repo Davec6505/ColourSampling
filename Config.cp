@@ -286,7 +286,7 @@ unsigned int last_tail;
 extern struct RingBuffer RB;
 
 struct Sim800Flash{
-unsigned char SimCelNum[17];
+unsigned char SimCelNum[20];
 unsigned char SimDate[9];
 unsigned char SimTime[9];
 unsigned char WriteAPIKey[17];
@@ -308,6 +308,7 @@ unsigned int SimFlashAPIReadIndx;
 
 
 void InitGSM3();
+void WriteToFlashTemp();
 char* GetValuesFromFlash();
 void RingToTempBuf();
 void WaitForResponse(short dly);
