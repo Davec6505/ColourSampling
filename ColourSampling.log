@@ -77,37 +77,33 @@ hint: 66	1164	Variable 'res' has been eliminated by optimizer	Flash_R_W.c
 hint: 80	1164	Variable 'res' has been eliminated by optimizer	Flash_R_W.c
 diagnostics: 0	122	Compilation Started	flash_r_w.h
 warning: 41	1506	Implicit conversion of pointer to int	Sim800.c
-warning: 71	1508	Implicit conversion of int to ptr	Sim800.c
-warning: 78	1508	Implicit conversion of int to ptr	Sim800.c
-hint: 64	1163	Variable 'c' has been declared, but not used	Sim800.c
-hint: 65	1163	Variable 'j' has been declared, but not used	Sim800.c
-hint: 82	1163	Variable 'ptr' has been declared, but not used	Sim800.c
-hint: 83	1163	Variable 'buff' has been declared, but not used	Sim800.c
-hint: 84	1163	Variable 'c' has been declared, but not used	Sim800.c
-hint: 195	1163	Variable 'i' has been declared, but not used	Sim800.c
-warning: 426	1508	Implicit conversion of int to ptr	Sim800.c
-hint: 437	1163	Variable 'i' has been declared, but not used	Sim800.c
-hint: 437	1163	Variable 'str_rcv' has been declared, but not used	Sim800.c
-hint: 437	1163	Variable 'num_strs' has been declared, but not used	Sim800.c
-hint: 438	1163	Variable 'txtA' has been declared, but not used	Sim800.c
-hint: 470	1163	Variable 'res' has been declared, but not used	Sim800.c
-hint: 471	1163	Variable 'txt' has been declared, but not used	Sim800.c
-warning: 508	1503	Result is not defined in function: 'SendSMS'	Sim800.c
-hint: 515	1163	Variable 'txtS' has been declared, but not used	Sim800.c
-hint: 516	1163	Variable 'txtM' has been declared, but not used	Sim800.c
-hint: 517	1163	Variable 'txtH' has been declared, but not used	Sim800.c
-diagnostics: 629	123	Compiled Successfully	Sim800.c
-hint: 81	1164	Variable 'i' has been eliminated by optimizer	Sim800.c
-hint: 195	1164	Variable 'num_strs' has been eliminated by optimizer	Sim800.c
-hint: 197	1164	Variable 'str_rcv' has been eliminated by optimizer	Sim800.c
-hint: 439	1164	Variable 'response' has been eliminated by optimizer	Sim800.c
-diagnostics: 0	127	All files Compiled in 1375 ms	 
-hint: 0	1144	Used RX: 32 (100%)   Free RX: 0 (0%)	Used RX: 32 (100%)   Free RX: 0 (0%)
-hint: 0	1144	Static RAM (bytes): 5320   Dynamic RAM (bytes): 21445	Static RAM (bytes): 5320   Dynamic RAM (bytes): 21445
+warning: 79	1508	Implicit conversion of int to ptr	Sim800.c
+hint: 65	1163	Variable 'mod' has been declared, but not used	Sim800.c
+hint: 94	1163	Variable 'j' has been declared, but not used	Sim800.c
+hint: 97	1163	Variable 'c' has been declared, but not used	Sim800.c
+hint: 213	1163	Variable 'i' has been declared, but not used	Sim800.c
+warning: 444	1508	Implicit conversion of int to ptr	Sim800.c
+hint: 455	1163	Variable 'i' has been declared, but not used	Sim800.c
+hint: 455	1163	Variable 'str_rcv' has been declared, but not used	Sim800.c
+hint: 455	1163	Variable 'num_strs' has been declared, but not used	Sim800.c
+hint: 456	1163	Variable 'txtA' has been declared, but not used	Sim800.c
+hint: 488	1163	Variable 'res' has been declared, but not used	Sim800.c
+hint: 489	1163	Variable 'txt' has been declared, but not used	Sim800.c
+warning: 526	1503	Result is not defined in function: 'SendSMS'	Sim800.c
+hint: 533	1163	Variable 'txtS' has been declared, but not used	Sim800.c
+hint: 534	1163	Variable 'txtM' has been declared, but not used	Sim800.c
+hint: 535	1163	Variable 'txtH' has been declared, but not used	Sim800.c
+diagnostics: 647	123	Compiled Successfully	Sim800.c
+hint: 213	1164	Variable 'num_strs' has been eliminated by optimizer	Sim800.c
+hint: 215	1164	Variable 'str_rcv' has been eliminated by optimizer	Sim800.c
+hint: 457	1164	Variable 'response' has been eliminated by optimizer	Sim800.c
+diagnostics: 0	127	All files Compiled in 921 ms	 
+hint: 0	1144	Used RX: 31 (97%)   Free RX: 1 (3%)	Used RX: 31 (97%)   Free RX: 1 (3%)
+hint: 0	1144	Static RAM (bytes): 5734   Dynamic RAM (bytes): 21029	Static RAM (bytes): 5734   Dynamic RAM (bytes): 21029
 hint: 0	1144	HEAP RAM (bytes): 6000	HEAP RAM (bytes): 6000
-hint: 0	1144	Used ROM (bytes): 60610 (12%)  Free ROM (bytes): 463678 (88%)	Used ROM (bytes): 60610 (12%)  Free ROM (bytes): 463678 (88%)
+hint: 0	1144	Used ROM (bytes): 54188 (10%)  Free ROM (bytes): 470100 (90%)	Used ROM (bytes): 54188 (10%)  Free ROM (bytes): 470100 (90%)
 hint: 0	1144	Used BOOTROM (bytes): 1912 (16%)  Free BOOTROM (bytes): 10361 (84%)	Used BOOTROM (bytes): 1912 (16%)  Free BOOTROM (bytes): 10361 (84%)
 diagnostics: 0	125	Project Linked Successfully	ColourSampling.mcp32
-diagnostics: 0	128	Linked in 297 ms	 
-diagnostics: 0	129	Project 'ColourSampling.mcp32' completed: 2437 ms	 
-diagnostics: 0	103	Finished successfully: 31 Oct 2021, 22:22:37	ColourSampling.mcp32
+diagnostics: 0	128	Linked in 235 ms	 
+diagnostics: 0	129	Project 'ColourSampling.mcp32' completed: 1672 ms	 
+diagnostics: 0	103	Finished successfully: 02 Nov 2021, 11:46:54	ColourSampling.mcp32

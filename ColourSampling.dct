@@ -20434,6 +20434,7 @@ tcs3472_setinterrupt
 tcs3472_setinterrupt_limits
 tcs3472_write
 tcs3472_write8
+temp
 test_update_thingspeak
 testflash
 teststr

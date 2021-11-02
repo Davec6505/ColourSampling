@@ -289,8 +289,8 @@ struct Sim800Flash{
 unsigned char SimCelNum[20];
 unsigned char SimDate[9];
 unsigned char SimTime[9];
-unsigned char WriteAPIKey[17];
-unsigned char ReadAPIKey[17];
+unsigned char WriteAPIKey[24];
+unsigned char ReadAPIKey[24];
 unsigned char SimFlashBuff[512];
 unsigned int SimFlashPtr;
 unsigned int SimReadIndx;
@@ -437,15 +437,6 @@ char cel_num[17];
  WriteToFlashTemp();
  *cel_num = GetValuesFromFlash();
  str_num = memcmp(cel_num,sub_txt,4);
- if(str_num > 0){
- SimVars.init_inc = SetupIOT();
- SimVars.init_inc = WaitForSetupSMS(0);
- SimVars.init_inc = GetAPI_Key_SMS();
- if(SimVars.init_inc == -1)
- SimVars.init_inc = SendSMS(SimVars.init_inc);
- else
- SimVars.init_inc = SendSMS(SimVars.init_inc);
- }
 #line 84 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
  int res;

@@ -7,7 +7,7 @@
 ******************************************************/
 unsigned long  FLASH_Settings_VAddr_Sim800 = 0x9D07A000;
 unsigned long  FLASH_Settings_PAddr_Sim800 = 0x1D07A000;
-
+unsigned long temp[128];
 /*****************************************************
 *
 *****************************************************/
@@ -49,8 +49,8 @@ void InitGSM3(){
    SF.SimFlashAPIReadIndx   = 36;
    SF.SimFlashAPIReadCount  = 18;
    strcpy(SF.SimCelNum,"\"+447946455348\"");
-   strcpy(SF.WriteAPIKey,"W2N015EASX7P7CDK");
-   strcpy(SF.ReadAPIKey,"W2N015EASX7P7CDK");
+   strcpy(SF.WriteAPIKey,"\"W2N015EASX7P7CDK\"");
+   strcpy(SF.ReadAPIKey,"\"TEST15EASX7P7CDK\"");
 }
 
 /*************************************************
@@ -58,42 +58,60 @@ void InitGSM3(){
 *************************************************/
 
 void WriteToFlashTemp(){
-unsigned long temp[128];
+char holding_buff[64];
 unsigned long pos;
-static unsigned int i;
+static unsigned long i;
  char c[6];
- int j;
+ int j,mod;
 
-  //  strcpy(SF.SimFlashBuff,SF.SimCelNum);
-  //  memcpy(SF.SimFlashBuff+SF.SimFlashAPIWriteIndx,SF.WriteAPIKey,SF.SimFlashAPIWriteCount);
-  //  memcpy(SF.SimFlashBuff+SF.SimFlashAPIReadIndx,SF.ReadAPIKey,SF.SimFlashAPIReadCount);
+  memset(holding_buff,0,64);
+  memcpy(holding_buff,SF.SimCelNum,strlen(SF.SimCelNum)+1);
+  memcpy(holding_buff+strlen(SF.SimCelNum)+1,SF.WriteAPIKey,20);//strlen(SF.WriteAPIKey)+2);
+  memset(holding_buff+34,0,2);
+  memcpy(holding_buff+37,SF.ReadAPIKey,strlen(SF.ReadAPIKey)+4);
+  memcpy(temp,holding_buff,56);
+
   pos = FLASH_Settings_PAddr_Sim800;
-  NVMErasePage(pos);
-
-    for(i=0;i<128;i++){
-         temp[i] = (unsigned long)i;//(temp[i]<<j) | 55;
-/*NVMWriteWord(pos,temp[i]);
-         pos += 4;*/
+  j = 0;//NVMErasePage(pos);
+  if(j==0){
+    pos += 16 ;
+    for(i=0;i<14;i++){
+         j = NVMWriteWord(pos,temp[i]);
+         pos += 4;
+         Delay_ms(5);
     }
-      NVMWriteRow (pos,temp);
+   }
+   // j = NVMWriteRow(pos,&temp);
+     sprintf(c,"%d",j);
+#ifdef SimConfDebug
+      PrintOut(PrintHandler, "\r\n"
+                             " * err: %s\r\n"
+                             ,c);
+#endif
 }
+
 char* GetValuesFromFlash(){
-unsigned long i;
+unsigned long i,j,l1,l2,l3,len_total;
 unsigned char *ptr;
 unsigned char buff[512];
 char c[9];
- /*  ptr = (unsigned char*)(FLASH_Settings_VAddr_Sim800);
-   for(i=0;i<20;i++){
+   l1 = strlen(SF.SimCelNum)+1;
+   l2 = 18;
+   l3 = 19;
+   len_total = l1+l2+l3;
+   
+   ptr = (unsigned char*)(FLASH_Settings_VAddr_Sim800);
+   ptr += 16;
+   
+   for(i=0;i<len_total+3;i++){
        buff[i] = ptr[i];
        UART1_Write(buff[i]);
        UART1_Write(0x3A);
-    }*/
-   //  SF.SimCelNum[i] = 0;
-   // strncpy(SF.SimCelNum,buff,16);//SF.SimFlashCellByteCount);
-   /* strncpy(SF.WriteAPIKey,SF.SimFlashBuff+SF.SimFlashAPIWriteIndx,SF.SimFlashAPIWriteCount);
-    strncpy(SF.ReadAPIKey,SF.SimFlashBuff+SF.SimFlashAPIReadIndx,SF.SimFlashAPIReadCount); */
-   i = ReadFlashWord();
-   sprintf(SF.SimCelNum,"%u",i);
+   }
+   strncpy(SF.SimCelNum,buff,l1);
+   strcpy(SF.WriteAPIKey,buff+l1);
+   strncpy(SF.ReadAPIKey,buff+l1+l2+3,l3+2);
+   //sprintf(SF.SimCelNum,"%u",i);
 #ifdef SimConfDebug
       PrintOut(PrintHandler, "\r\n"
                              " * SF.SimCelNum: %s\r\n"

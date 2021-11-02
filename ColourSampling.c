@@ -67,7 +67,7 @@ char cel_num[17];
  WriteToFlashTemp();
  *cel_num = GetValuesFromFlash();
  str_num = memcmp(cel_num,sub_txt,4);
- if(str_num > 0){
+ /*if(str_num > 0){
    SimVars.init_inc = SetupIOT();           //ret 1
    SimVars.init_inc = WaitForSetupSMS(0);   //ret 2
    SimVars.init_inc = GetAPI_Key_SMS();     //ret 3
@@ -75,7 +75,7 @@ char cel_num[17];
           SimVars.init_inc = SendSMS(SimVars.init_inc);
    else
           SimVars.init_inc = SendSMS(SimVars.init_inc);
- }
+ }  */
  
 /*************************************************
 *main => loop forever and call all functions*
@@ -107,5 +107,3 @@ char cel_num[17];
       SendSMS(0);
  }
 }
-
-

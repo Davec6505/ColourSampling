@@ -247,8 +247,8 @@ struct Sim800Flash{
 unsigned char SimCelNum[20];
 unsigned char SimDate[9];
 unsigned char SimTime[9];
-unsigned char WriteAPIKey[17];
-unsigned char ReadAPIKey[17];
+unsigned char WriteAPIKey[24];
+unsigned char ReadAPIKey[24];
 unsigned char SimFlashBuff[512];
 unsigned int SimFlashPtr;
 unsigned int SimReadIndx;
