@@ -5,9 +5,14 @@
 *V =  Read Virtual address
 *P =  Write Physical address
 ******************************************************/
-unsigned long  FLASH_Settings_VAddr_Sim800 = 0x9D07A000;
-unsigned long  FLASH_Settings_PAddr_Sim800 = 0x1D07A000;
 unsigned long temp[128];
+#ifdef SimConfDebug
+ char a[6]; char b[6]; char c[6]; char d[6]; char e[6];
+#endif
+
+struct sim_lengths SL ={
+  0,0,0,0,0,0
+};
 /*****************************************************
 *
 *****************************************************/
@@ -23,6 +28,7 @@ char SimTestTxt[150];
 char rcvPcTxt[150];
 
 Sim800Vars SimVars = {
+   "",
    0,
    9,
    0,
@@ -43,39 +49,33 @@ void InitGSM3(){
    RB.tail = 0;
    RB.rcv_txt_fin = -1;
    SF.SimFlashPtr = 0;
-   SF.SimFlashCellByteCount = 16;
-   SF.SimFlashAPIWriteIndx  = 18;
-   SF.SimFlashAPIWriteCount = 18;
-   SF.SimFlashAPIReadIndx   = 36;
-   SF.SimFlashAPIReadCount  = 18;
-   strcpy(SF.SimCelNum,"\"+447946455348\"");
-   strcpy(SF.WriteAPIKey,"\"W2N015EASX7P7CDK\"");
-   strcpy(SF.ReadAPIKey,"\"TEST15EASX7P7CDK\"");
+   strcpy(SF.SimCelNum,"\"***************\"");
+   strcpy(SF.WriteAPIKey,"\"****************\"");
+   strcpy(SF.ReadAPIKey,"\"****************\"");
 }
 
 /*************************************************
 *get the Sim800 values from flash memory
 *************************************************/
-
 void WriteToFlashTemp(){
 char holding_buff[64];
 unsigned long pos;
-static unsigned long i;
- char c[6];
- int j,mod;
+static int i,j;
 
-  memset(holding_buff,0,64);
-  memcpy(holding_buff,SF.SimCelNum,strlen(SF.SimCelNum)+1);
-  memcpy(holding_buff+strlen(SF.SimCelNum)+1,SF.WriteAPIKey,20);//strlen(SF.WriteAPIKey)+2);
-  memset(holding_buff+34,0,2);
-  memcpy(holding_buff+37,SF.ReadAPIKey,strlen(SF.ReadAPIKey)+4);
-  memcpy(temp,holding_buff,56);
+  if(SL.l1 <= 0)
+     GetStrLengths();
+  
+  memset(holding_buff,0,SL.l5+5);
+  memcpy(holding_buff,SF.SimCelNum,SL.l1);
+  memcpy(holding_buff+SL.l1+1,SF.WriteAPIKey,SL.l2);
+  memcpy(holding_buff+SL.l3+1,SF.ReadAPIKey,SL.l4);
+  memcpy(temp,holding_buff,SL.l5+3);
 
-  pos = FLASH_Settings_PAddr_Sim800;
-  j = 0;//NVMErasePage(pos);
+  pos = FLASH_Settings_PAddr;
+  j = NVMErasePage(pos);
   if(j==0){
     pos += 16 ;
-    for(i=0;i<14;i++){
+    for(i=0;i<SL.l4;i++){
          j = NVMWriteWord(pos,temp[i]);
          pos += 4;
          Delay_ms(5);
@@ -85,41 +85,67 @@ static unsigned long i;
      sprintf(c,"%d",j);
 #ifdef SimConfDebug
       PrintOut(PrintHandler, "\r\n"
-                             " * err: %s\r\n"
+                             " * flash write *\r\n"
+                             " * flash err: %s\r\n"
                              ,c);
 #endif
 }
 
 char* GetValuesFromFlash(){
-unsigned long i,j,l1,l2,l3,len_total;
+unsigned long i,j;
 unsigned char *ptr;
 unsigned char buff[512];
-char c[9];
-   l1 = strlen(SF.SimCelNum)+1;
-   l2 = 18;
-   l3 = 19;
-   len_total = l1+l2+l3;
-   
-   ptr = (unsigned char*)(FLASH_Settings_VAddr_Sim800);
+char *str;
+   if(SL.l1 <= 0)
+      GetStrLengths();
+      
+   ptr = (unsigned char*)FLASH_Settings_VAddr;
    ptr += 16;
    
-   for(i=0;i<len_total+3;i++){
+   for(i=0;i<SL.l5;i++){
        buff[i] = ptr[i];
+#ifdef SimConfDebug
        UART1_Write(buff[i]);
        UART1_Write(0x3A);
+#endif
    }
-   strncpy(SF.SimCelNum,buff,l1);
-   strcpy(SF.WriteAPIKey,buff+l1);
-   strncpy(SF.ReadAPIKey,buff+l1+l2+3,l3+2);
-   //sprintf(SF.SimCelNum,"%u",i);
+   strncpy(SF.SimCelNum,buff,SL.l1);
+   strncpy(SF.WriteAPIKey,buff+SL.l1+1,SL.l2);
+   strncpy(SF.ReadAPIKey,buff+SL.l3+1,SL.l4);
+
 #ifdef SimConfDebug
-      PrintOut(PrintHandler, "\r\n"
-                             " * SF.SimCelNum: %s\r\n"
+      PrintOut(PrintHandler, " * Flash Read        \r\n"
+                             " * SF.SimCelNum:   %s\r\n"
                              " * SF.WriteAPIKey: %s\r\n"
-                             " * SF.ReadAPIKey: %s\r\n"
+                             " * SF.ReadAPIKey:  %s\r\n"
                              ,SF.SimCelNum,SF.WriteAPIKey,SF.ReadAPIKey);
 #endif
-  return SF.SimCelNum;
+   strcpy(str,SF.SimCelNum);
+  return str;
+}
+
+void GetStrLengths(){
+  SL.l1 = strlen(SF.SimCelNum)+1;   //len of cell num
+  SL.l2 = strlen(SF.WriteAPIKey)+1; //len of API Write key
+  SL.l3 = SL.l1 + SL.l2;                  //len Cell + API Wr k
+  SL.l4 = strlen(SF.ReadAPIKey)+1;  //len of API Read Key
+  SL.l5 = SL.l1 + SL.l2 + SL.l4;             //total length
+  SL.mod = SL.l5 % 4;
+  SL.l5 += SL.mod;
+ #ifdef SimConfDebug
+  sprintf(a,"%d",SL.l1);
+  sprintf(b,"%d",SL.l2);
+  sprintf(c,"%d",SL.l3);
+  sprintf(d,"%d",SL.l4);
+  sprintf(e,"%d",SL.l5);
+  PrintOut(PrintHandler, "\r\n"
+                         " * l1: %s\r\n"
+                         " * l2: %s\r\n"
+                         " * l3: %s\r\n"
+                         " * l4: %s\r\n"
+                         " * l5: %s\r\n"
+                         ,a,b,c,d,e);
+#endif
 }
 /*************************************************
 *function pointe called from ISR Uart2
@@ -254,15 +280,15 @@ wait:
      num_strs = strsplit(str_rcv,',');
 
 #ifdef SimConfDebug
-      sprintf(txtA,"%d",num_strs);
-      PrintOut(PrintHandler, "\r\n"
-                           " *num_strs:= %s\r\n"
-                           " *string[0]  %s\r\n"
-                           " *string[1]  %s\r\n"
-                           " *string[2]  %s\r\n"
-                           " *string[3]  %s\r\n"
-                           " *string[4]  %s\r\n"
-                           ,txtA,string[0],string[1],string[2],string[3],string[4]);
+     sprintf(txtA,"%d",num_strs);
+     PrintOut(PrintHandler, "\r\n"
+                            " *num_strs:= %s\r\n"
+                            " *string[0]  %s\r\n"
+                            " *string[1]  %s\r\n"
+                            " *string[2]  %s\r\n"
+                            " *string[3]  %s\r\n"
+                            " *string[4]  %s\r\n"
+                            ,txtA,string[0],string[1],string[2],string[3],string[4]);
 #endif
      str_rcv = findnumber(string[1]);
      res = atoi(str_rcv);  //get the sms rec number
@@ -391,6 +417,7 @@ char sms[4];
       memcpy(SF.SimFlashBuff+SF.SimFlashPtr,string[5],strlen(string[5])+1);
       strncpy(SF.WriteAPIKey,string[5],strlen(string[5])+1);
       SF.SimFlashPtr += strlen(string[5])+1;
+      
     //read API keys to Flash buff first
       SF.SimFlashAPIReadIndx = SF.SimFlashPtr;
       memcpy(SF.SimFlashBuff+SF.SimFlashPtr,string[6],strlen(string[6]));
@@ -426,26 +453,28 @@ char sms[4];
       Delay_ms(500);
       RingToTempBuf();
       res--;
+      
       sprintf(sms,"%d",res);
     }while(res > 0);
     
     str_rcv = setstr(SimTestTxt);
-    res = strcmp(str_rcv,"OK,");
+    res     = strcmp(str_rcv,"OK,");
     sprintf(txtA,"%d",res);
 #ifdef SimConfDebug
     PrintOut(PrintHandler, "\r\n"
                            " * SimTestTxt: %s\r\n"
                            " * str_rcv: %s\r\n"
-                           " * res: %s\r\n"
+                           " * OK-0: %s\r\n"
                            ,SimTestTxt,str_rcv,txtA);
 #endif
-
-   if(res == 0){
-      NVMWriteRow (FLASH_Settings_VAddr_Sim800, SF.SimFlashBuff);
+   if((res == 0)&&(Indx == 1)){
+      WriteToFlashTemp();
       return 3;
    }
+   else if ((res == 0)&&(Indx == 0))
+       return 2;
    else
-       return 0;
+       return res;
 }
 
 /**********************************************************************
@@ -475,8 +504,8 @@ char response;
   UART2_Write(0x0D);
   UART2_Write(0x0A);
   UART2_Write(0x1A);
-  
-  response = WaitForSetupSMS(0);
+  //index 1 is to save to cell no and api to flash
+  response = WaitForSetupSMS(1);
   
   return response;
 }
@@ -495,7 +524,8 @@ char txt[6];
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     Delay_ms(1000);
-    UART2_Write_Text("AT+CMGS=\"+447946455348\"");
+    UART2_Write_Text("AT+CMGS=");
+    UART2_Write_Text(SF.SimCelNum);
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     Delay_ms(2000);
@@ -513,7 +543,7 @@ char txt[6];
              UART2_Write_Text("Setup Complete!");
              break;
       default:
-             UART2_Write_Text("ERROR in setup Power down and start again!");
+             UART2_Write_Text("his is a test!");
              break;
     }
     UART2_Write(0x1A);

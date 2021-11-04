@@ -299,6 +299,7 @@ _unsigned8inttofloat
 _unsigned8inttolongdouble
 _unsignedlonglongtofloat
 _unsignedlonglongtolongdouble
+a
 a10m
 a10m
 a10m
@@ -1868,6 +1869,7 @@ attachif
 attachif
 attachif
 attachif_bit
+b
 b_thresh
 b_thresh
 b0
@@ -2839,6 +2841,7 @@ byto0
 byto0_bit
 byto1
 byto1_bit
+c
 c
 c_thresh
 c_thresh
@@ -8601,6 +8604,7 @@ cvrss
 cvrss
 cvrss
 cvrss_bit
+d
 d_a
 d_a
 d_a
@@ -10313,6 +10317,7 @@ dppulup
 dppulup
 dppulup
 dppulup_bit
+e
 endpoint_number
 endpoint_number
 endpt
@@ -10909,9 +10914,7 @@ filler1
 findnumber
 flash_erase_page
 flash_settings_paddr
-flash_settings_paddr_sim800
 flash_settings_vaddr
-flash_settings_vaddr_sim800
 flash_val
 flash_write_row
 flash_write_word
@@ -11121,6 +11124,7 @@ get_time
 get_timer_values
 getapi_key_sms
 getscaledvalues
+getstrlengths
 getvaluesfromflash
 gp
 gr
@@ -13002,6 +13006,11 @@ jtagen
 jtagen
 jtagen_bit
 kk
+l1
+l2
+l3
+l4
+l5
 labs
 last_head
 last_tail
@@ -13855,6 +13864,7 @@ mm_largestfreememblock
 mm_nrfreeblocksused
 mm_possiblyfragmented
 mm_totalfreememsize
+mod
 mode
 mode
 mode
@@ -19150,6 +19160,7 @@ sirqen_bit
 sirqen_dch1econ_bit
 sirqen_dch2econ_bit
 sirqen_dch3econ_bit
+sl
 sleep
 sleep
 sleep

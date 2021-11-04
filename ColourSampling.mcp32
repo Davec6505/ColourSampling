@@ -6,7 +6,7 @@ Value=0
 [BUILD_TYPE]
 Value=0
 [ACTIVE_TAB]
-Value=String.c
+Value=ColourSampling.c
 [USE_EEPROM]
 Value=0
 [USE_HEAP]
@@ -40,7 +40,9 @@ File3=String.h
 File4=ColourSampling.c
 File5=Flash_R_W.c
 File6=Flash_R_W.h
-Count=7
+File7=_Timers.c
+File8=TCS3472.c
+Count=9
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]

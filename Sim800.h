@@ -65,7 +65,14 @@ unsigned int SimFlashAPIWriteIndx;
 unsigned int SimFlashAPIReadIndx;
 };
 
-
+struct sim_lengths{
+  int l1;
+  int l2;
+  int l3;
+  int l4;
+  int l5;
+  int mod;
+};
 
 
 
@@ -74,6 +81,7 @@ unsigned int SimFlashAPIReadIndx;
 void InitGSM3();
 void WriteToFlashTemp();
 char* GetValuesFromFlash();
+void GetStrLengths();
 void RingToTempBuf();
 void WaitForResponse(short dly);
 void Load_Head_Tail_Pointers();

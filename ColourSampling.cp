@@ -301,7 +301,14 @@ unsigned int SimFlashAPIWriteIndx;
 unsigned int SimFlashAPIReadIndx;
 };
 
-
+struct sim_lengths{
+ int l1;
+ int l2;
+ int l3;
+ int l4;
+ int l5;
+ int mod;
+};
 
 
 
@@ -310,6 +317,7 @@ unsigned int SimFlashAPIReadIndx;
 void InitGSM3();
 void WriteToFlashTemp();
 char* GetValuesFromFlash();
+void GetStrLengths();
 void RingToTempBuf();
 void WaitForResponse(short dly);
 void Load_Head_Tail_Pointers();
@@ -399,12 +407,13 @@ char sub_txt[] = "\"+44";
 
 
 void main() {
+unsigned char cel_num[20];
 char num,res;
 unsigned short i;
 unsigned int R,str_num;
 unsigned int deg;
 char txtR[6];
-char cel_num[17];
+
 
  Update_Test = Test_Update_ThingSpeak;
 
@@ -431,13 +440,27 @@ char cel_num[17];
  T0_SP.sec = 0;
  T0_SP.min = 0;
  T0_SP.hr = 0;
-#line 65 "C:/Users/Git/ColourSampling/ColourSampling.c"
- SimVars.init_inc = 0;
+#line 67 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ strcpy(cel_num,GetValuesFromFlash());
+ str_num = strncmp(cel_num,sub_txt,4);
 
- WriteToFlashTemp();
- *cel_num = GetValuesFromFlash();
- str_num = memcmp(cel_num,sub_txt,4);
-#line 84 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ sprintf(txtR,"%u",str_num);
+ PrintOut(PrintHandler, "\r\n"
+ " *Cell number:   %s\r\n"
+ " *Result of cmp: %s\r\n"
+ ,cel_num,txtR);
+
+ if(str_num > 0){
+ SimVars.init_inc = SetupIOT();
+ SimVars.init_inc = WaitForSetupSMS(0);
+ SimVars.init_inc = GetAPI_Key_SMS();
+ if(SimVars.init_inc != 0)
+ SimVars.init_inc = SendSMS(SimVars.init_inc);
+ else
+ SimVars.init_inc = SendSMS(SimVars.init_inc);
+ }
+#line 90 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ SimVars.init_inc = 0;
  while(1){
  int res;
 
@@ -461,6 +484,8 @@ char cel_num[17];
  }
 
  if(!RG9_bit)
- SendSMS(0);
+ SendSMS(100);
+ if(!RE4_bit)
+ GetValuesFromFlash();
  }
 }

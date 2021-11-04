@@ -14,9 +14,9 @@ main
 			SetI2C2Ptrs
 			I2C2_Wait_For_Idle
 				I2C2_Is_Idle
-				I2C2_TimeoutCallback
 				PrintHandler
 					UART1_Write
+				I2C2_TimeoutCallback
 		I2C_Set_Active
 		I2C2_SetTimeoutCallback
 		InitUart1
@@ -37,20 +37,20 @@ main
 		TCS3472_Read8
 			I2C2_Start
 				I2C2_Wait_For_Idle
-				I2C2_TimeoutCallback
 				PrintHandler
+				I2C2_TimeoutCallback
 			I2C2_Write
 				I2C2_Wait_For_Idle
-				I2C2_TimeoutCallback
 				PrintHandler
+				I2C2_TimeoutCallback
 			I2C2_Stop
 				I2C2_Wait_For_Idle
-				I2C2_TimeoutCallback
 				PrintHandler
+				I2C2_TimeoutCallback
 			I2C2_Read
 				I2C2_Wait_For_Idle
-				I2C2_TimeoutCallback
 				PrintHandler
+				I2C2_TimeoutCallback
 		TCS3472_SetIntergration_Time
 			TCS3472_Write8
 				I2C2_Start
@@ -134,10 +134,10 @@ main
 								I2C1_Stop
 									I2C1_Wait_For_Idle
 										I2C1_Is_Idle
-										I2C2_TimeoutCallback
 										PrintHandler
-									I2C2_TimeoutCallback
+										I2C2_TimeoutCallback
 									PrintHandler
+									I2C2_TimeoutCallback
 						USB_CtrlTrf_In_Handler
 							USB_CtrlTrf_Tx_Service
 							I2C2_Stop
@@ -146,37 +146,92 @@ main
 							I2C1_Stop
 	UART1_Write_Text
 	UART1_Write
-	WriteToFlashTemp
-		memset
-		memcpy
-		strlen
-		NVMWriteWord
-			NVMUnlock
-		sprintf
-		PrintOut
-			_doprntout
-				isdigit
-				_Compare_FP
-				scale
-					_Mul_FP
-				_Mul_FP
-				_Div_FP
-				_FloatToUnsignedIntegral
-				_Unsigned32IntToFloat
-				_Sub_FP
-				_Add_FP
-				fround
-					_Mul_FP
-				_FloatToSignedIntegral
-				I2C2_TimeoutCallback
-				PrintHandler
+	strcpy
 	GetValuesFromFlash
-		strlen
+		GetStrLengths
+			strlen
+			sprintf
+			PrintOut
+				_doprntout
+					isdigit
+					_Compare_FP
+					scale
+						_Mul_FP
+					_Mul_FP
+					_Div_FP
+					_FloatToUnsignedIntegral
+					_Unsigned32IntToFloat
+					_Sub_FP
+					_Add_FP
+					fround
+						_Mul_FP
+					_FloatToSignedIntegral
+					PrintHandler
+					I2C2_TimeoutCallback
 		UART1_Write
 		strncpy
-		strcpy
 		PrintOut
-	memcmp
+		strcpy
+	strncmp
+	PrintOut
+	SetupIOT
+		PrintOut
+		WaitForResponse
+			UART2_Write_Text
+				UART2_Write
+			UART2_Write
+		RingToTempBuf
+		UART2_Write_Text
+		UART2_Write
+		setstr
+		strsplit
+		sprintf
+		findnumber
+			strlen
+			Malloc
+				MM_GetMemAlign
+				MM_Defragment
+					MM_CheckBlocks
+			Free
+				MM_CheckBlocks
+				MM_Defragment
+		atoi
+			isdigit
+	WaitForSetupSMS
+		UART2_Write_Text
+		UART2_Write
+		WaitForResponse
+		RingToTempBuf
+		strsplit
+		sprintf
+		PrintOut
+		atoi
+		setstr
+		strlen
+		memcpy
+		strncpy
+		UART1_Write
+		strcmp
+		WriteToFlashTemp
+			GetStrLengths
+			memset
+			memcpy
+			NVMErasePage
+				NVMUnlock
+			NVMWriteWord
+				NVMUnlock
+			sprintf
+			PrintOut
+	GetAPI_Key_SMS
+		UART2_Write_Text
+		UART2_Write
+		WaitForResponse
+		RingToTempBuf
+		PrintOut
+		WaitForSetupSMS
+	SendSMS
+		UART2_Write_Text
+		UART2_Write
 	HID_Read
 		Gen_Read
 			USB_Handle_Busy
@@ -193,13 +248,11 @@ main
 		memset
 		strcmp
 		atoi
-			isdigit
 		TCS3472_SetIntergration_Time
 		TCS3472_SetGain
 		SendData
 			sprintf
 			UART2_Write_Text
-				UART2_Write
 			UART2_Write
 		Read_Send_AllColour
 			TCS3472_getRawData
@@ -208,8 +261,8 @@ main
 					I2C2_Write
 					I2C2_Restart
 						I2C2_Wait_For_Idle
-						I2C2_TimeoutCallback
 						PrintHandler
+						I2C2_TimeoutCallback
 					I2C2_Read
 					I2C2_Stop
 			GetScaledValues
@@ -273,7 +326,6 @@ main
 			strcat
 		Write_Thresholds
 			NVMErasePage
-				NVMUnlock
 			TCS3472_getRawData
 			atol
 				isdigit
@@ -284,9 +336,6 @@ main
 		strlen
 		strncat
 		HID_Write
-	SendSMS
-		UART2_Write_Text
-		UART2_Write
 	__CC2DW
 	__FillZeros
 	Test_Update_ThingSpeak
