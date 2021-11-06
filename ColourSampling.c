@@ -73,46 +73,51 @@ char txtR[6];
                            " *Result of cmp: %s\r\n"
                            ,cel_num,txtR);
  #endif
- if(str_num > 0){
-   SimVars.init_inc = SetupIOT();           //ret 1
-   SimVars.init_inc = WaitForSetupSMS(0);   //ret 2
-   SimVars.init_inc = GetAPI_Key_SMS();     //ret 3
-   if(SimVars.init_inc != 0)
-       SimVars.init_inc = SendSMS(SimVars.init_inc);
-   else
-       SimVars.init_inc = SendSMS(SimVars.init_inc);
- }
- 
+   if(str_num > 0){
+     SimVars.init_inc = SetupIOT();           //ret 1
+     SimVars.init_inc = WaitForSetupSMS(0);   //ret 2
+     SimVars.init_inc = GetAPI_Key_SMS();     //ret 3
+     if(SimVars.init_inc != 0)
+         SimVars.init_inc = SendSMS(SimVars.init_inc);
+     else
+         SimVars.init_inc = SendSMS(SimVars.init_inc);
+   }else{
+     SimVars.init_inc = 5;
+   }
 /*************************************************
 *main => loop forever and call all functions*
 *keep main free from code
 *************************************************/
- SimVars.init_inc = 0;
- while(1){
- int res;
-   ///////////////////////////////////////////////
-   //Get input from USB to set up thresholds
-   num = HID_Read();
-   if(num != 0){
-      DoStrings(num);
-   }
-   //////////////////////////////////////////////
-   //Get sms input
-   if(SimVars.init_inc >= 5){
-     if(T0_SP.one_per_sec){
-         T0_SP.one_per_sec = 0;
-         res =  Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
-         if(res >= 1){
-               T0_SP.sec = 0;
-               T0_SP.min = 0;
-               T0_SP.hr = 0;
-         }
+   PrintOut(PrintHandler, "\r\n"
+                           " *Run");
+   while(1){
+   int res;
+     ///////////////////////////////////////////////
+     //Get input from USB to set up thresholds
+     num = HID_Read();
+     if(num != 0){
+        DoStrings(num);
+     }
+     //////////////////////////////////////////////
+     //Get sms input
+     if(SimVars.init_inc >= 5){
+       if(T0_SP.one_per_sec){
+           T0_SP.one_per_sec = 0;
+           res =  Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
+           if(res >= 1){
+                 T0_SP.sec = 0;
+                 T0_SP.min = 0;
+                 T0_SP.hr = 0;
+           }
+       }
+     }
+
+     if(!RG9_bit)
+        NVMErasePage(FLASH_Settings_PAddr);//SendSMS(100);
+     if(!RE4_bit){
+        GetValuesFromFlash();
+        TCS3472_getRawData(RawData);
+        SendData(RawData);
      }
    }
-   
-   if(!RG9_bit)
-      SendSMS(100);
-   if(!RE4_bit)
-      GetValuesFromFlash();
- }
 }

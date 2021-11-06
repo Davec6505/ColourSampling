@@ -10910,6 +10910,10 @@ ferr
 ferr
 ferr_bit
 ferr_u2sta_bit
+field1
+field2
+field3
+field4
 filler1
 findnumber
 flash_erase_page
@@ -19680,6 +19684,7 @@ stov8_bit
 stov9
 stov9_bit
 str
+str_api
 str_t
 str_vars
 strcat
@@ -20448,6 +20453,7 @@ tcs3472_write8
 temp
 test_update_thingspeak
 testflash
+testforok
 teststr
 teststrings
 tgate

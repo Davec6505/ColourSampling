@@ -5,14 +5,21 @@
 *V =  Read Virtual address
 *P =  Write Physical address
 ******************************************************/
-unsigned long temp[128];
+
+const char str_api[] = "GET https://api.thingspeak.com/update?api_key=";
+const char field1[]   = "&field1=";
+const char field2[]   = "&field2=";
+const char field3[]   = "&field3=";
+const char field4[]   = "&field4=";
+
 #ifdef SimConfDebug
  char a[6]; char b[6]; char c[6]; char d[6]; char e[6];
 #endif
-
+unsigned long temp[128];
 struct sim_lengths SL ={
   0,0,0,0,0,0
 };
+
 /*****************************************************
 *
 *****************************************************/
@@ -95,7 +102,7 @@ char* GetValuesFromFlash(){
 unsigned long i,j;
 unsigned char *ptr;
 unsigned char buff[512];
-char *str;
+
    if(SL.l1 <= 0)
       GetStrLengths();
       
@@ -120,8 +127,7 @@ char *str;
                              " * SF.ReadAPIKey:  %s\r\n"
                              ,SF.SimCelNum,SF.WriteAPIKey,SF.ReadAPIKey);
 #endif
-   strcpy(str,SF.SimCelNum);
-  return str;
+  return SF.SimCelNum;
 }
 
 void GetStrLengths(){
@@ -550,9 +556,10 @@ char txt[6];
     Delay_ms(5000);
     UART2_Write(0x1A);
     Delay_ms(500);
-    UART2_Write_Text("AT+CIPSHUT");
+    //UART2_Write_Text("AT+CIPSHUT");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
+    
 }
 
 /***********************************************************************
@@ -598,7 +605,6 @@ static unsigned short hLast;
        SendData(RawData);
        return 2;
     }
-    
     return -1;
 }
 
@@ -606,44 +612,72 @@ static unsigned short hLast;
 *Send the data to thingspeak
 ****************************************************/
 void SendData(unsigned int* rgbc){
+char *str;
 char txtC[15];
 char txtR[15];
 char txtG[15];
 char txtB[15];
+char txtLen[6];
+int len;
 
+    //get the colour valuse prior to sending to ThingSpek
     sprintf(txtC,"%u",rgbc[0]);
     sprintf(txtR,"%u",rgbc[1]);
     sprintf(txtG,"%u",rgbc[2]);
     sprintf(txtB,"%u",rgbc[3]);
     
+    //allocate memory for string
+    str = (char*)Malloc(200*sizeof(char));
+    //ensure 1st byte is a null terminating value
+    *str  = 0;
+    //build string
+    strcat(str,str_api);
+    strcat(str,SF.WriteAPIKey);
+    strcat(str,field1);
+    strcat(str,txtC);
+    strcat(str,field2);
+    strcat(str,txtR);
+    strcat(str,field3);
+    strcat(str,txtG);
+    strcat(str,field4);
+    strcat(str,txtB);
+    
+    //start the send sequence
     UART2_Write_Text("AT+CPIN?");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
-    Delay_ms(1000);
+    TestForOK(0);
+    Delay_ms(50);
     UART2_Write_Text("AT+CREG?");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
-    Delay_ms(1000);
+    TestForOK(0);
+    Delay_ms(50);
     UART2_Write_Text("AT+CGATT?");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
-    Delay_ms(1000);
+    TestForOK(0);
+    Delay_ms(50);
     UART2_Write_Text("AT+CIPSHUT");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
-    Delay_ms(3000);
+    TestForOK(0);
+    Delay_ms(50);
     UART2_Write_Text("AT+CIPSTATUS");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
-    Delay_ms(3000);
+    TestForOK(0);
+    Delay_ms(50);
     UART2_Write_Text("AT+CIPMUX=0");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
-    Delay_ms(1000);
+    TestForOK(0);
+    Delay_ms(50);
     UART2_Write_Text("AT+CSTT=\"data.uk\",\"user\",\"one2one\"");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
-    Delay_ms(3000);
+    TestForOK(0);
+    Delay_ms(50);
     UART2_Write_Text("AT+CIICR");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
@@ -655,23 +689,46 @@ char txtB[15];
     UART2_Write_Text("AT+CIPSPRT=1");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
-    Delay_ms(1000);
+    TestForOK(0);
+    Delay_ms(50);
     UART2_Write_Text("AT+CIPSTART=\"TCP\",\"api.thingspeak.com\",80");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
-    Delay_ms(4000);
+    TestForOK(0);
+    Delay_ms(1000);
     UART2_Write_Text("AT+CIPSEND");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     Delay_ms(1000);
-    UART2_Write_Text("GET https://api.thingspeak.com/update?api_key=W2NO15EASX7P7CDK&field1=");
-    UART2_Write_Text(txtC);
-    UART2_Write_Text("&field2=");
-    UART2_Write_Text(txtR);
-    UART2_Write_Text("&field3=");
-    UART2_Write_Text(txtG);
-    UART2_Write_Text("&field4=");
-    UART2_Write_Text(txtB);
+    UART2_Write_Text(str);
     UART2_Write(0x0D);
     UART2_Write(0x0A);
+    UART2_Write(0x0D);
+    UART2_Write(0x0A);
+    UART2_Write(0x1A);
+    TestForOK(1);
+    Delay_ms(50);
+    UART2_Write_Text("AT+CIPSHUT");
+    UART2_Write(0x0D);
+    UART2_Write(0x0A);
+    TestForOK(0);
+    Delay_ms(50);
+    
+    Free(str,150*sizeof(char*));
+}
+
+void TestForOK(char c){
+
+    WaitForResponse(1);
+    Delay_ms(100);
+    RingToTempBuf();
+#ifdef SimConfDebug
+    PrintOut(PrintHandler, "\r\n"
+                           " * %s\r\n"
+                           ,SimTestTxt);
+#endif
+    if(c == 0)
+        while(!strstr(SimTestTxt, "OK"));
+    else if(c == 1)
+        while(!strstr(SimTestTxt, "CONNECT"));
 }

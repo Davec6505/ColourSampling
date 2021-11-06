@@ -42,7 +42,8 @@ File5=Flash_R_W.c
 File6=Flash_R_W.h
 File7=_Timers.c
 File8=TCS3472.c
-Count=9
+File9=Config.c
+Count=10
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]

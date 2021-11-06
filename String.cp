@@ -287,6 +287,7 @@ char GetAPI_Key_SMS();
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
+void TestForOK(char c);
 #line 19 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 
@@ -745,7 +746,6 @@ char str[64];
  pos = FLASH_Settings_PAddr;
  for(i=1;i<128;i++)
  val[i] = 0x00000000;
- err = NVMErasePage(pos);
 
 
  if(!data_src)
@@ -793,7 +793,7 @@ char str[64];
  strcat(str," ||\r\n ");
  return str;
 }
-#line 483 "C:/Users/Git/ColourSampling/String.c"
+#line 482 "C:/Users/Git/ColourSampling/String.c"
 void testStrings(char* writebuff){
  if(strlen(string[0])!=0){
  strncat(writebuff,string[0],strlen(string[0]));

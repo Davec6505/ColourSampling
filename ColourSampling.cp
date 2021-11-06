@@ -329,6 +329,7 @@ char GetAPI_Key_SMS();
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
+void TestForOK(char c);
 #line 20 "c:/users/git/coloursampling/_timers.h"
 typedef struct{
 unsigned long millis;
@@ -458,9 +459,12 @@ char txtR[6];
  SimVars.init_inc = SendSMS(SimVars.init_inc);
  else
  SimVars.init_inc = SendSMS(SimVars.init_inc);
+ }else{
+ SimVars.init_inc = 5;
  }
-#line 90 "C:/Users/Git/ColourSampling/ColourSampling.c"
- SimVars.init_inc = 0;
+#line 91 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ PrintOut(PrintHandler, "\r\n"
+ " *Run");
  while(1){
  int res;
 
@@ -484,8 +488,11 @@ char txtR[6];
  }
 
  if(!RG9_bit)
- SendSMS(100);
- if(!RE4_bit)
+ NVMErasePage(FLASH_Settings_PAddr);
+ if(!RE4_bit){
  GetValuesFromFlash();
+ TCS3472_getRawData(RawData);
+ SendData(RawData);
+ }
  }
 }

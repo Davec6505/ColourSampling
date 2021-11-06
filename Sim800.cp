@@ -355,16 +355,22 @@ char GetAPI_Key_SMS();
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
-#line 8 "C:/Users/Git/ColourSampling/Sim800.c"
-unsigned long temp[128];
+void TestForOK(char c);
+#line 9 "C:/Users/Git/ColourSampling/Sim800.c"
+const char str_api[] = "GET https://api.thingspeak.com/update?api_key=";
+const char field1[] = "&field1=";
+const char field2[] = "&field2=";
+const char field3[] = "&field3=";
+const char field4[] = "&field4=";
+
 
  char a[6]; char b[6]; char c[6]; char d[6]; char e[6];
 
-
+unsigned long temp[128];
 struct sim_lengths SL ={
  0,0,0,0,0,0
 };
-#line 19 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 26 "C:/Users/Git/ColourSampling/Sim800.c"
 sbit RTS at LATB1_bit;
 sbit CTS at RE9_bit;
 sbit RST at LATB2_bit;
@@ -386,7 +392,7 @@ Sim800Vars SimVars = {
 
 struct RingBuffer RB;
 struct Sim800Flash SF;
-#line 44 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 51 "C:/Users/Git/ColourSampling/Sim800.c"
 void InitGSM3(){
  SimVars.initial_str = 0;
  SimVars.init_inc = 0;
@@ -399,7 +405,7 @@ void InitGSM3(){
  strcpy(SF.WriteAPIKey,"\"****************\"");
  strcpy(SF.ReadAPIKey,"\"****************\"");
 }
-#line 60 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 67 "C:/Users/Git/ColourSampling/Sim800.c"
 void WriteToFlashTemp(){
 char holding_buff[64];
 unsigned long pos;
@@ -438,7 +444,7 @@ char* GetValuesFromFlash(){
 unsigned long i,j;
 unsigned char *ptr;
 unsigned char buff[512];
-char *str;
+
  if(SL.l1 <= 0)
  GetStrLengths();
 
@@ -463,8 +469,7 @@ char *str;
  " * SF.ReadAPIKey:  %s\r\n"
  ,SF.SimCelNum,SF.WriteAPIKey,SF.ReadAPIKey);
 
- strcpy(str,SF.SimCelNum);
- return str;
+ return SF.SimCelNum;
 }
 
 void GetStrLengths(){
@@ -490,7 +495,7 @@ void GetStrLengths(){
  ,a,b,c,d,e);
 
 }
-#line 153 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 159 "C:/Users/Git/ColourSampling/Sim800.c"
 void RcvSimTxt(){
 unsigned char txt;
  while(UART2_Data_Ready()) {
@@ -509,7 +514,7 @@ unsigned char txt;
  }
  RB.rcv_txt_fin = 1;
 }
-#line 175 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 181 "C:/Users/Git/ColourSampling/Sim800.c"
 void PwrUpGSM3(){
  RST = 0;
  PWR = 0;
@@ -522,7 +527,7 @@ void PwrUpGSM3(){
  }
  Delay_ms(5000);
 }
-#line 191 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 197 "C:/Users/Git/ColourSampling/Sim800.c"
 void RingToTempBuf(){
 int i;
  i=0;
@@ -530,7 +535,7 @@ int i;
  if(RB.head > RB.last_head){
  while(RB.tail < RB.head){
  SimTestTxt[i] = RB.buff[RB.tail];
-#line 202 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 208 "C:/Users/Git/ColourSampling/Sim800.c"
  i++;
  RB.tail++;
  RB.tail = (RB.tail > 999)? 0: RB.tail;
@@ -539,7 +544,7 @@ int i;
  }
  RB.last_tail = RB.tail;
 }
-#line 214 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 220 "C:/Users/Git/ColourSampling/Sim800.c"
 void WaitForResponse(short dly){
  RB.rcv_txt_fin = 0;
  RB.last_head = RB.head;
@@ -559,12 +564,12 @@ void WaitForResponse(short dly){
  Delay_ms(1000);
  }while(!RB.rcv_txt_fin);
 }
-#line 238 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 244 "C:/Users/Git/ColourSampling/Sim800.c"
 char SetupIOT(){
 int num_strs,res,i;
 char txtA[6];
 char* str_rcv;
-#line 246 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 252 "C:/Users/Git/ColourSampling/Sim800.c"
  res = -1;
 
  PrintOut(PrintHandler, "\r\n"
@@ -637,7 +642,7 @@ wait:
 
  return 1;
 }
-#line 324 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 330 "C:/Users/Git/ColourSampling/Sim800.c"
 char WaitForSetupSMS(unsigned int Indx){
 int i,num_strs,res;
 char* str_rcv;
@@ -793,7 +798,7 @@ char sms[4];
  else
  return res;
 }
-#line 483 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 489 "C:/Users/Git/ColourSampling/Sim800.c"
 char GetAPI_Key_SMS(){
 int i,str_rcv,num_strs;
 char txtA[6];
@@ -823,7 +828,7 @@ char response;
 
  return response;
 }
-#line 516 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 522 "C:/Users/Git/ColourSampling/Sim800.c"
 char SendSMS(char sms_type){
 int res;
 char txt[6];
@@ -861,11 +866,12 @@ char txt[6];
  Delay_ms(5000);
  UART2_Write(0x1A);
  Delay_ms(500);
- UART2_Write_Text("AT+CIPSHUT");
+
  UART2_Write(0x0D);
  UART2_Write(0x0A);
+
 }
-#line 562 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 569 "C:/Users/Git/ColourSampling/Sim800.c"
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h){
 char txtS[6];
 char txtM[6];
@@ -876,15 +882,15 @@ static unsigned short hLast;
 
  if(s != sLast){
  sLast = s;
-#line 577 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 584 "C:/Users/Git/ColourSampling/Sim800.c"
  }
  if(m != mLast){
  mLast = m;
-#line 585 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 592 "C:/Users/Git/ColourSampling/Sim800.c"
  }
  if(h != hLast){
  hLast = h;
-#line 593 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 600 "C:/Users/Git/ColourSampling/Sim800.c"
  }
 
  if(s == 1 &&
@@ -893,49 +899,76 @@ static unsigned short hLast;
  SendData(RawData);
  return 2;
  }
-
  return -1;
 }
-#line 608 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 614 "C:/Users/Git/ColourSampling/Sim800.c"
 void SendData(unsigned int* rgbc){
+char *str;
 char txtC[15];
 char txtR[15];
 char txtG[15];
 char txtB[15];
+char txtLen[6];
+int len;
+
 
  sprintf(txtC,"%u",rgbc[0]);
  sprintf(txtR,"%u",rgbc[1]);
  sprintf(txtG,"%u",rgbc[2]);
  sprintf(txtB,"%u",rgbc[3]);
 
+
+ str = (char*)Malloc(200*sizeof(char));
+
+ *str = 0;
+
+ strcat(str,str_api);
+ strcat(str,SF.WriteAPIKey);
+ strcat(str,field1);
+ strcat(str,txtC);
+ strcat(str,field2);
+ strcat(str,txtR);
+ strcat(str,field3);
+ strcat(str,txtG);
+ strcat(str,field4);
+ strcat(str,txtB);
+
+
  UART2_Write_Text("AT+CPIN?");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
- Delay_ms(1000);
+ TestForOK(0);
+ Delay_ms(50);
  UART2_Write_Text("AT+CREG?");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
- Delay_ms(1000);
+ TestForOK(0);
+ Delay_ms(50);
  UART2_Write_Text("AT+CGATT?");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
- Delay_ms(1000);
+ TestForOK(0);
+ Delay_ms(50);
  UART2_Write_Text("AT+CIPSHUT");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
- Delay_ms(3000);
+ TestForOK(0);
+ Delay_ms(50);
  UART2_Write_Text("AT+CIPSTATUS");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
- Delay_ms(3000);
+ TestForOK(0);
+ Delay_ms(50);
  UART2_Write_Text("AT+CIPMUX=0");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
- Delay_ms(1000);
+ TestForOK(0);
+ Delay_ms(50);
  UART2_Write_Text("AT+CSTT=\"data.uk\",\"user\",\"one2one\"");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
- Delay_ms(3000);
+ TestForOK(0);
+ Delay_ms(50);
  UART2_Write_Text("AT+CIICR");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
@@ -947,23 +980,46 @@ char txtB[15];
  UART2_Write_Text("AT+CIPSPRT=1");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
- Delay_ms(1000);
+ TestForOK(0);
+ Delay_ms(50);
  UART2_Write_Text("AT+CIPSTART=\"TCP\",\"api.thingspeak.com\",80");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
- Delay_ms(4000);
+ TestForOK(0);
+ Delay_ms(1000);
  UART2_Write_Text("AT+CIPSEND");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
  Delay_ms(1000);
- UART2_Write_Text("GET https://api.thingspeak.com/update?api_key=W2NO15EASX7P7CDK&field1=");
- UART2_Write_Text(txtC);
- UART2_Write_Text("&field2=");
- UART2_Write_Text(txtR);
- UART2_Write_Text("&field3=");
- UART2_Write_Text(txtG);
- UART2_Write_Text("&field4=");
- UART2_Write_Text(txtB);
+ UART2_Write_Text(str);
  UART2_Write(0x0D);
  UART2_Write(0x0A);
+ UART2_Write(0x0D);
+ UART2_Write(0x0A);
+ UART2_Write(0x1A);
+ TestForOK(1);
+ Delay_ms(50);
+ UART2_Write_Text("AT+CIPSHUT");
+ UART2_Write(0x0D);
+ UART2_Write(0x0A);
+ TestForOK(0);
+ Delay_ms(50);
+
+ Free(str,150*sizeof(char*));
+}
+
+void TestForOK(char c){
+
+ WaitForResponse(1);
+ Delay_ms(100);
+ RingToTempBuf();
+
+ PrintOut(PrintHandler, "\r\n"
+ " * %s\r\n"
+ ,SimTestTxt);
+
+ if(c == 0)
+ while(!strstr(SimTestTxt, "OK"));
+ else if(c == 1)
+ while(!strstr(SimTestTxt, "CONNECT"));
 }

@@ -31,6 +31,7 @@ main
 		InitTimer1
 		InitISR
 		InitGSM3
+			__CC2DW
 			strcpy
 		PwrUpGSM3
 	TCS3472_Init
@@ -171,7 +172,6 @@ main
 		UART1_Write
 		strncpy
 		PrintOut
-		strcpy
 	strncmp
 	PrintOut
 	SetupIOT
@@ -197,6 +197,7 @@ main
 				MM_Defragment
 		atoi
 			isdigit
+		__CC2DW
 	WaitForSetupSMS
 		UART2_Write_Text
 		UART2_Write
@@ -222,6 +223,7 @@ main
 				NVMUnlock
 			sprintf
 			PrintOut
+		__CC2DW
 	GetAPI_Key_SMS
 		UART2_Write_Text
 		UART2_Write
@@ -229,7 +231,9 @@ main
 		RingToTempBuf
 		PrintOut
 		WaitForSetupSMS
+		__CC2DW
 	SendSMS
+		__CC2DW
 		UART2_Write_Text
 		UART2_Write
 	HID_Read
@@ -252,8 +256,21 @@ main
 		TCS3472_SetGain
 		SendData
 			sprintf
+			Malloc
+			strcat
 			UART2_Write_Text
 			UART2_Write
+			TestForOK
+				WaitForResponse
+				RingToTempBuf
+				PrintOut
+				strstr
+					strlen
+					strncmp
+					strchr
+				__CC2DW
+			Free
+			__CC2DW
 		Read_Send_AllColour
 			TCS3472_getRawData
 				TCS3472_Read16
@@ -273,6 +290,7 @@ main
 			sprintf
 			strcat
 			TCS3472_C2RGB_Error
+			__CC2DW
 		Read_Send_OneColour
 			TCS3472_Read16
 			strcpy
@@ -319,13 +337,14 @@ main
 						_Div_FP
 				_FloatToUnsignedIntegral
 			TCS3472_CalcColTemp_dn40
+			__CC2DW
 		Read_Thresholds
 			NVMRead
 			strcpy
 			sprintf
 			strcat
+			__CC2DW
 		Write_Thresholds
-			NVMErasePage
 			TCS3472_getRawData
 			atol
 				isdigit
@@ -336,6 +355,9 @@ main
 		strlen
 		strncat
 		HID_Write
+	NVMErasePage
+	TCS3472_getRawData
+	SendData
 	__CC2DW
 	__FillZeros
 	Test_Update_ThingSpeak

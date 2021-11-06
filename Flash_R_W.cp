@@ -275,6 +275,7 @@ char GetAPI_Key_SMS();
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
+void TestForOK(char c);
 #line 19 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 
