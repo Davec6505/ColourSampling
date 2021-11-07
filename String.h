@@ -82,5 +82,6 @@ char* Write_Thresholds(short data_src);
 int Get_It();
 int Get_Gain();
 char* TestFlash();
+char* RemoveChars(char* str,char a,char b);
 void PrintHandler(char c);
 #endif

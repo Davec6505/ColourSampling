@@ -11128,6 +11128,7 @@ get_time
 get_timer_values
 getapi_key_sms
 getscaledvalues
+getsmstext
 getstrlengths
 getvaluesfromflash
 gp
@@ -18446,7 +18447,10 @@ read_thresholds
 readapikey
 readbuff
 readflashword
+readmsg
 remove_whitespaces
+removechars
+removesmstext
 report
 reset
 restoreinterrupts
@@ -19215,6 +19219,7 @@ smpi3
 smpi3
 smpi3
 smpi3_bit
+sms_test
 sofen
 sofen
 sofen
@@ -20454,6 +20459,7 @@ temp
 test_update_thingspeak
 testflash
 testforok
+testringpointers
 teststr
 teststrings
 tgate

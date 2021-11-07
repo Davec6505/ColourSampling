@@ -212,6 +212,13 @@ main
 		memcpy
 		strncpy
 		UART1_Write
+		RemoveSMSText
+			sprintf
+			UART2_Write_Text
+			UART2_Write
+			WaitForResponse
+			RingToTempBuf
+			__CC2DW
 		strcmp
 		WriteToFlashTemp
 			GetStrLengths
@@ -355,6 +362,32 @@ main
 		strlen
 		strncat
 		HID_Write
+	TestRingPointers
+	GetSMSText
+		RingToTempBuf
+		setstr
+		strsplit
+		strncmp
+		sprintf
+		PrintOut
+		atoi
+		ReadMSG
+			sprintf
+			UART2_Write_Text
+			UART2_Write
+			WaitForResponse
+			RingToTempBuf
+			setstr
+			strsplit
+			strchr
+			strcpy
+			RemoveChars
+				strchr
+				strcpy
+				strlen
+			PrintOut
+			__CC2DW
+		RemoveSMSText
 	NVMErasePage
 	TCS3472_getRawData
 	SendData

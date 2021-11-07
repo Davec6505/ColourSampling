@@ -541,6 +541,27 @@ unsigned int res,i;
         return &str;
 }
 
+/******************************************************************
+* Remove unwanted chars from string
+******************************************************************/
+char* RemoveChars(char* str,char a,char b){
+char *temp;
+int i;
+        //remove " from the string str
+        temp = strchr(str,a);
+        strcpy(str,temp+1);
+        for(i=0;i<strlen(str)+1;i++){
+            if(str[i]==b)
+               break;
+            *(temp+i) = *(str+i);
+        }
+        *(temp+i) = 0;
+        return temp;
+}
+
+/*****************************************************************
+* printf() equivilant
+*****************************************************************/
 void PrintHandler(char c){
 
   UART1_Write(c);

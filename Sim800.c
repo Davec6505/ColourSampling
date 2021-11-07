@@ -11,7 +11,7 @@ const char field1[]   = "&field1=";
 const char field2[]   = "&field2=";
 const char field3[]   = "&field3=";
 const char field4[]   = "&field4=";
-
+const char sms_test[] = "+CMTI";
 #ifdef SimConfDebug
  char a[6]; char b[6]; char c[6]; char d[6]; char e[6];
 #endif
@@ -61,8 +61,24 @@ void InitGSM3(){
    strcpy(SF.ReadAPIKey,"\"****************\"");
 }
 
+/*******************************************************
+*keep trying until power up
+*******************************************************/
+void PwrUpGSM3(){
+ RST = 0;
+ PWR = 0;
+ Delay_ms(1000);
+ PWR = 1;
+
+ while(STAT){
+    LATE3_bit = !LATE3_bit;
+     Delay_ms(100);
+ }
+ Delay_ms(5000);
+}
+
 /*************************************************
-*get the Sim800 values from flash memory
+*get the Sim800 values to and from flash memory
 *************************************************/
 void WriteToFlashTemp(){
 char holding_buff[64];
@@ -133,7 +149,7 @@ unsigned char buff[512];
 void GetStrLengths(){
   SL.l1 = strlen(SF.SimCelNum)+1;   //len of cell num
   SL.l2 = strlen(SF.WriteAPIKey)+1; //len of API Write key
-  SL.l3 = SL.l1 + SL.l2;                  //len Cell + API Wr k
+  SL.l3 = SL.l1 + SL.l2;            //len Cell + API Wr k
   SL.l4 = strlen(SF.ReadAPIKey)+1;  //len of API Read Key
   SL.l5 = SL.l1 + SL.l2 + SL.l4;             //total length
   SL.mod = SL.l5 % 4;
@@ -153,8 +169,9 @@ void GetStrLengths(){
                          ,a,b,c,d,e);
 #endif
 }
+
 /*************************************************
-*function pointe called from ISR Uart2
+*function pointer called from ISR Uart2
 *************************************************/
 void RcvSimTxt(){
 unsigned char txt;
@@ -175,20 +192,43 @@ unsigned char txt;
     RB.rcv_txt_fin = 1;
 }
 
+/******************************************************
+* Check ring buffer pointers for recieved data
+******************************************************/
+int TestRingPointers(){
+int diff;
+     diff = RB.head - RB.tail;
+     
+     return diff;
+}
 /*******************************************************
-*keep trying until power up
+*wait for a response from Sim800
 *******************************************************/
-void PwrUpGSM3(){
- RST = 0;
- PWR = 0;
- Delay_ms(1000);
- PWR = 1;
- 
- while(STAT){
-    LATE3_bit = !LATE3_bit;
-     Delay_ms(100);
- }
- Delay_ms(5000);
+void WaitForResponse(short dly){
+unsigned long lastMillis,newMillis;
+   lastMillis = TMR0.millis;
+   RB.rcv_txt_fin   = 0;
+   RB.last_head     = RB.head;
+   do{
+     LATE3_bit = !LATE3_bit;
+     if(dly == 0)
+      Delay_ms(100);
+     else if(dly == 1)
+      Delay_ms(500);
+     else if(dly == 3){
+      UART2_Write_Text("ATE0");
+      UART2_Write(0x0D);
+      UART2_Write(0x0A);
+      Delay_ms(1000);
+     }
+     else
+      Delay_ms(1000);
+
+      //break if no reply
+      newMillis = TMR0.millis - lastMillis;
+      if(newMillis > 25000)
+           break;
+   }while(!RB.rcv_txt_fin);
 }
 
 /******************************************************
@@ -212,29 +252,6 @@ int i;
       SimTestTxt[i++] = 0;
     }
     RB.last_tail = RB.tail;
-}
-
-/*******************************************************
-*wait for a response from Sim800
-*******************************************************/
-void WaitForResponse(short dly){
-   RB.rcv_txt_fin   = 0;
-   RB.last_head     = RB.head;
-   do{
-     LATE3_bit = !LATE3_bit;
-     if(dly == 0)
-      Delay_ms(100);
-     else if(dly == 1)
-      Delay_ms(500);
-     else if(dly == 3){
-      UART2_Write_Text("ATE0");
-      UART2_Write(0x0D);
-      UART2_Write(0x0A);
-      Delay_ms(1000);
-     }
-     else
-      Delay_ms(1000);
-   }while(!RB.rcv_txt_fin);
 }
 
 /*******************************************************
@@ -364,7 +381,7 @@ char sms[4];
                            string[2],string[3],
                            string[4],string[5]);
 #endif
-   //get the phone number from a response;
+   //get the  number of sms;
     res = atoi(string[1]);
     sprintf(sms,"%d",res);
  #ifdef SimConfDebug
@@ -448,21 +465,7 @@ char sms[4];
 
 //delete sms from sm
     Delay_ms(500);
-    do{
-      UART2_Write_Text("AT+CMGD=");
-      UART2_Write_Text(sms);
-      UART2_Write(0x0D);
-      UART2_Write(0x0A);
-
-   //let OK inc pointers
-      WaitForResponse(1);
-      Delay_ms(500);
-      RingToTempBuf();
-      res--;
-      
-      sprintf(sms,"%d",res);
-    }while(res > 0);
-    
+    RemoveSMSText(res);
     str_rcv = setstr(SimTestTxt);
     res     = strcmp(str_rcv,"OK,");
     sprintf(txtA,"%d",res);
@@ -560,6 +563,120 @@ char txt[6];
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     
+}
+
+/***********************************************************************
+*Get SMS if recieved during run
+***********************************************************************/
+char* GetSMSText(){
+char sms[4];
+char txtA[6],txtB[6];
+char* str_rcv;
+int num_strs,res,err;
+  //ask sim800 for the sms text
+
+    RingToTempBuf();
+    str_rcv = setstr(SimTestTxt);
+    num_strs = strsplit(str_rcv,',');
+    //test if an sms was recieved
+    err = strncmp(sms_test,string[0],4);
+ #ifdef SimConfDebug
+    sprintf(txtA,"%d",num_strs);
+    sprintf(txtB,"%d",err);
+    PrintOut(PrintHandler, "\r\n"
+                           " *num_strs:= %s\r\n"
+                           " *err     := %s\r\n"
+                           " *string[0]  %s\r\n"
+                           " *string[1]  %s\r\n"
+                           " *string[2]  %s\r\n"
+                           " *string[3]  %s\r\n"
+                           " *string[4]  %s\r\n"
+                           " *string[5]  %s\r\n"
+                           " *string[6]  %s\r\n"
+                           ,txtA,txtB,string[0],
+                           string[1],string[2],
+                           string[3],string[4],
+                           string[5],string[6]);
+#endif
+
+   if(!err){
+     res = atoi(string[1]);
+     ReadMSG(res);
+     RemoveSMSText(res);
+   }
+}
+
+/**********************************************************************
+*read the msg that was recieved from the sim memory 
+*[sim can only store 20 messages ]
+**********************************************************************/
+char* ReadMSG(int msg_num){
+char *text;
+char sms[6];
+char *str_rcv;
+int num_strs;
+
+  sprintf(sms,"%d",msg_num);
+  UART2_Write_Text("AT+CMGF=1");
+  UART2_Write(0x0D);
+  UART2_Write(0x0A);
+
+ //let OK inc pointers
+  WaitForResponse(0);
+  RingToTempBuf();
+
+  Delay_ms(1000);
+    UART2_Write_Text("AT+CMGR=");
+    UART2_Write_Text(sms);
+    UART2_Write(0x0D);
+    UART2_Write(0x0A);
+
+    WaitForResponse(1);
+    Delay_ms(1000);
+    RingToTempBuf();
+    str_rcv = setstr(SimTestTxt);
+    num_strs = strsplit(str_rcv,',');
+    text = strchr(string[4], '"');
+    strcpy(string[5], RemoveChars(text,'"','O'));
+ #ifdef SimConfDebug
+    sprintf(sms,"%d",num_strs);
+    PrintOut(PrintHandler, "\r\n"
+                           " *num_strs:= %s\r\n"
+                           " *string[0]  %s\r\n"
+                           " *string[1]  %s\r\n"
+                           " *string[2]  %s\r\n"
+                           " *string[3]  %s\r\n"
+                           " *string[4]  %s\r\n"
+                           " *string[5]  %s\r\n"
+                           " *text       %s\r\n"
+                           ,sms,string[0],string[1],
+                           string[2],string[3],
+                           string[4],string[5],
+                           text);
+#endif
+}
+
+/**********************************************************************
+* remove sms from sim800
+**********************************************************************/
+int RemoveSMSText(int sms_cnt){
+char sms[4];
+
+    do{
+      sprintf(sms,"%d",sms_cnt);
+      UART2_Write_Text("AT+CMGD=");
+      UART2_Write_Text(sms);
+      UART2_Write(0x0D);
+      UART2_Write(0x0A);
+
+   //let OK inc pointers
+      WaitForResponse(1);
+      Delay_ms(500);
+      RingToTempBuf();
+      sms_cnt--;
+    }while(sms_cnt > 0);
+    
+    return sms_cnt;
 }
 
 /***********************************************************************
@@ -681,7 +798,7 @@ int len;
     UART2_Write_Text("AT+CIICR");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
-    Delay_ms(4000);
+    TestForOK(0);
     UART2_Write_Text("AT+CIFSR");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
@@ -717,8 +834,12 @@ int len;
     Free(str,150*sizeof(char*));
 }
 
+/**************************************************************
+*General functions to test Sim800 responses
+*this function test for "OK"
+**************************************************************/
 void TestForOK(char c){
-
+unsigned long lastMillis,newMillis;
     WaitForResponse(1);
     Delay_ms(100);
     RingToTempBuf();
@@ -727,8 +848,17 @@ void TestForOK(char c){
                            " * %s\r\n"
                            ,SimTestTxt);
 #endif
+    lastMillis = TMR0.millis;
     if(c == 0)
-        while(!strstr(SimTestTxt, "OK"));
+        while(!strstr(SimTestTxt, "OK")){
+          newMillis = TMR0.millis - lastMillis;
+          if(newMillis > 5000)
+              break;
+        }
     else if(c == 1)
-        while(!strstr(SimTestTxt, "CONNECT"));
+        while(!strstr(SimTestTxt, "CONNECT")){
+           newMillis = TMR0.millis - lastMillis;
+           if(newMillis > 5000)
+              break;
+        }
 }

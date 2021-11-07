@@ -112,6 +112,19 @@ char txtR[6];
        }
      }
 
+     //test for incoming SMS from
+     res = TestRingPointers();
+     if(res > 1){
+#ifdef MainDebug
+       sprintf(txtR,"d",res);
+       PrintOut(PrintHandler, "\r\n"
+                              " *Diff in pointers"
+                              ,txtR);
+       GetSMSText();
+#endif
+     }
+
+
      if(!RG9_bit)
         NVMErasePage(FLASH_Settings_PAddr);//SendSMS(100);
      if(!RE4_bit){

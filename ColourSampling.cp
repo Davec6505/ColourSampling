@@ -242,6 +242,7 @@ char* Write_Thresholds(short data_src);
 int Get_It();
 int Get_Gain();
 char* TestFlash();
+char* RemoveChars(char* str,char a,char b);
 void PrintHandler(char c);
 #line 1 "c:/users/git/coloursampling/_timers.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
@@ -318,14 +319,18 @@ void InitGSM3();
 void WriteToFlashTemp();
 char* GetValuesFromFlash();
 void GetStrLengths();
-void RingToTempBuf();
+int TestRingPointers();
 void WaitForResponse(short dly);
+void RingToTempBuf();
 void Load_Head_Tail_Pointers();
 void RcvSimTxt();
 void PwrUpGSM3();
 char SetupIOT();
 char WaitForSetupSMS(unsigned int Indx);
 char GetAPI_Key_SMS();
+char* GetSMSText();
+char* ReadMSG(int msg_num);
+int RemoveSMSText(int sms_cnt);
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type);
@@ -486,6 +491,19 @@ char txtR[6];
  }
  }
  }
+
+
+ res = TestRingPointers();
+ if(res > 1){
+
+ sprintf(txtR,"d",res);
+ PrintOut(PrintHandler, "\r\n"
+ " *Diff in pointers"
+ ,txtR);
+ GetSMSText();
+
+ }
+
 
  if(!RG9_bit)
  NVMErasePage(FLASH_Settings_PAddr);
