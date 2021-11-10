@@ -214,6 +214,7 @@ main
 		UART1_Write
 		RemoveSMSText
 			sprintf
+			PrintOut
 			UART2_Write_Text
 			UART2_Write
 			WaitForResponse
@@ -241,8 +242,15 @@ main
 		__CC2DW
 	SendSMS
 		__CC2DW
+		AT_Initial
+			__CC2DW
+			UART2_Write_Text
+			UART2_Write
+			WaitForResponse
+			RingToTempBuf
 		UART2_Write_Text
 		UART2_Write
+	WaitForResponse
 	HID_Read
 		Gen_Read
 			USB_Handle_Busy
@@ -365,14 +373,20 @@ main
 	TestRingPointers
 	GetSMSText
 		RingToTempBuf
+		Malloc
+		memset
 		setstr
 		strsplit
 		strncmp
 		sprintf
 		PrintOut
+		isdigit
 		atoi
 		ReadMSG
+			Malloc
+			memset
 			sprintf
+			PrintOut
 			UART2_Write_Text
 			UART2_Write
 			WaitForResponse
@@ -382,12 +396,17 @@ main
 			strchr
 			strcpy
 			RemoveChars
+				Malloc
+				memset
 				strchr
 				strcpy
 				strlen
-			PrintOut
+				Free
+			Free
 			__CC2DW
+		SendSMS
 		RemoveSMSText
+		Free
 	NVMErasePage
 	TCS3472_getRawData
 	SendData

@@ -3,7 +3,7 @@
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 17 "c:/users/git/coloursampling/flash_r_w.h"
+#line 20 "c:/users/git/coloursampling/flash_r_w.h"
 extern unsigned long FLASH_Settings_VAddr;
 extern unsigned long FLASH_Settings_PAddr;
 
@@ -181,6 +181,8 @@ unsigned int ms;
 unsigned int sec;
 unsigned int min;
 unsigned int hr;
+unsigned int day;
+unsigned int month;
 }Timers;
 
 extern Timers TMR0;
@@ -190,17 +192,20 @@ unsigned int ms;
 unsigned int sec;
 unsigned int min;
 unsigned int hr;
+unsigned int secSP;
+unsigned int minSP;
+unsigned int hrSP;
 unsigned short one_per_sec;
 }Timer_Setpoint;
 
-
-
-
-
 extern Timer_Setpoint T0_SP;
+
+
+
+
 void InitTimer1();
 void Get_Time();
-
+void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 13 "c:/users/git/coloursampling/sim800.h"
@@ -209,6 +214,7 @@ extern sfr sbit CRS;
 extern sfr sbit RST;
 extern sfr sbit PWR;
 extern sfr sbit STAT;
+
 
 
 
@@ -230,6 +236,7 @@ typedef struct{
  uint16_t time_to_log;
  uint16_t num_of_sms_bytes;
  char init_inc;
+ int8_t init_sms;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 
@@ -240,6 +247,7 @@ unsigned int head;
 unsigned int tail;
 unsigned int last_head;
 unsigned int last_tail;
+short head_overflow;
 };
 extern struct RingBuffer RB;
 
@@ -272,11 +280,14 @@ struct sim_lengths{
 
 
 
+
+
 void InitGSM3();
 void WriteToFlashTemp();
 char* GetValuesFromFlash();
 void GetStrLengths();
 int TestRingPointers();
+void AT_Initial();
 void WaitForResponse(short dly);
 void RingToTempBuf();
 void Load_Head_Tail_Pointers();
@@ -864,18 +875,26 @@ unsigned int res,i;
 char* RemoveChars(char* str,char a,char b){
 char *temp;
 int i;
+ temp = (char*)Malloc(100*sizeof(char*));
+ memset(temp,0,100);
 
+ if(a != 0x02){
  temp = strchr(str,a);
  strcpy(str,temp+1);
+ }else{
+ temp = strcpy(temp,str);
+ }
  for(i=0;i<strlen(str)+1;i++){
  if(str[i]==b)
  break;
  *(temp+i) = *(str+i);
  }
  *(temp+i) = 0;
+
+ Free(temp,100);
  return temp;
 }
-#line 565 "C:/Users/Git/ColourSampling/String.c"
+#line 573 "C:/Users/Git/ColourSampling/String.c"
 void PrintHandler(char c){
 
  UART1_Write(c);

@@ -547,15 +547,23 @@ unsigned int res,i;
 char* RemoveChars(char* str,char a,char b){
 char *temp;
 int i;
-        //remove " from the string str
-        temp = strchr(str,a);
-        strcpy(str,temp+1);
+         temp = (char*)Malloc(100*sizeof(char*));
+         memset(temp,0,100);
+        //got " position in the string str
+        if(a != 0x02){
+           temp = strchr(str,a);
+           strcpy(str,temp+1);
+        }else{
+           temp = strcpy(temp,str);
+        }
         for(i=0;i<strlen(str)+1;i++){
             if(str[i]==b)
                break;
             *(temp+i) = *(str+i);
         }
         *(temp+i) = 0;
+        
+         Free(temp,100);
         return temp;
 }
 

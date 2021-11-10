@@ -23,6 +23,8 @@ unsigned int ms;
 unsigned int sec;
 unsigned int min;
 unsigned int hr;
+unsigned int day;
+unsigned int month;
 }Timers;
 
 extern Timers TMR0;
@@ -32,16 +34,19 @@ unsigned int ms;
 unsigned int sec;
 unsigned int min;
 unsigned int hr;
+unsigned int secSP;
+unsigned int minSP;
+unsigned int hrSP;
 unsigned short one_per_sec;
 }Timer_Setpoint;
 
-
+extern  Timer_Setpoint T0_SP;
 
 //////////////////////////////////////////////////////
 //function prototypes
-extern  Timer_Setpoint T0_SP;
+
 void InitTimer1();
 void Get_Time();
-
+void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);
 #endif

@@ -161,7 +161,7 @@ typedef unsigned long time_t;
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 17 "c:/users/git/coloursampling/flash_r_w.h"
+#line 20 "c:/users/git/coloursampling/flash_r_w.h"
 extern unsigned long FLASH_Settings_VAddr;
 extern unsigned long FLASH_Settings_PAddr;
 
@@ -260,6 +260,7 @@ extern sfr sbit STAT;
 
 
 
+
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -273,6 +274,7 @@ typedef struct{
  uint16_t time_to_log;
  uint16_t num_of_sms_bytes;
  char init_inc;
+ int8_t init_sms;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 
@@ -283,6 +285,7 @@ unsigned int head;
 unsigned int tail;
 unsigned int last_head;
 unsigned int last_tail;
+short head_overflow;
 };
 extern struct RingBuffer RB;
 
@@ -315,11 +318,14 @@ struct sim_lengths{
 
 
 
+
+
 void InitGSM3();
 void WriteToFlashTemp();
 char* GetValuesFromFlash();
 void GetStrLengths();
 int TestRingPointers();
+void AT_Initial();
 void WaitForResponse(short dly);
 void RingToTempBuf();
 void Load_Head_Tail_Pointers();
@@ -342,6 +348,8 @@ unsigned int ms;
 unsigned int sec;
 unsigned int min;
 unsigned int hr;
+unsigned int day;
+unsigned int month;
 }Timers;
 
 extern Timers TMR0;
@@ -351,17 +359,20 @@ unsigned int ms;
 unsigned int sec;
 unsigned int min;
 unsigned int hr;
+unsigned int secSP;
+unsigned int minSP;
+unsigned int hrSP;
 unsigned short one_per_sec;
 }Timer_Setpoint;
 
-
-
-
-
 extern Timer_Setpoint T0_SP;
+
+
+
+
 void InitTimer1();
 void Get_Time();
-
+void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"

@@ -20,6 +20,7 @@ extern sfr sbit STAT;
 //defines
 //#define SimDebug
 #define SimConfDebug
+#define SMSDebug
 //#define RingBuffDeBug
 //////////////////////////////////////////////////////
 //constants and vars
@@ -36,6 +37,7 @@ typedef struct{
  uint16_t time_to_log;
  uint16_t num_of_sms_bytes;
  char  init_inc;
+ int8_t init_sms;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 
@@ -46,6 +48,7 @@ unsigned int head;
 unsigned int tail;
 unsigned int last_head;
 unsigned int last_tail;
+short head_overflow;
 };
 extern struct RingBuffer RB;
 
@@ -76,6 +79,8 @@ struct sim_lengths{
 
 
 
+
+
 //////////////////////////////////////////////////////
 //function prototypes
 void InitGSM3();
@@ -83,6 +88,7 @@ void WriteToFlashTemp();
 char* GetValuesFromFlash();
 void GetStrLengths();
 int TestRingPointers();
+void AT_Initial();
 void WaitForResponse(short dly);
 void RingToTempBuf();
 void Load_Head_Tail_Pointers();

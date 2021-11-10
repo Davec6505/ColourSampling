@@ -161,7 +161,7 @@ typedef unsigned long time_t;
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 17 "c:/users/git/coloursampling/flash_r_w.h"
+#line 20 "c:/users/git/coloursampling/flash_r_w.h"
 extern unsigned long FLASH_Settings_VAddr;
 extern unsigned long FLASH_Settings_PAddr;
 
@@ -260,6 +260,7 @@ extern sfr sbit STAT;
 
 
 
+
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -273,6 +274,7 @@ typedef struct{
  uint16_t time_to_log;
  uint16_t num_of_sms_bytes;
  char init_inc;
+ int8_t init_sms;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 
@@ -283,6 +285,7 @@ unsigned int head;
 unsigned int tail;
 unsigned int last_head;
 unsigned int last_tail;
+short head_overflow;
 };
 extern struct RingBuffer RB;
 
@@ -315,11 +318,14 @@ struct sim_lengths{
 
 
 
+
+
 void InitGSM3();
 void WriteToFlashTemp();
 char* GetValuesFromFlash();
 void GetStrLengths();
 int TestRingPointers();
+void AT_Initial();
 void WaitForResponse(short dly);
 void RingToTempBuf();
 void Load_Head_Tail_Pointers();
@@ -342,6 +348,8 @@ unsigned int ms;
 unsigned int sec;
 unsigned int min;
 unsigned int hr;
+unsigned int day;
+unsigned int month;
 }Timers;
 
 extern Timers TMR0;
@@ -351,17 +359,20 @@ unsigned int ms;
 unsigned int sec;
 unsigned int min;
 unsigned int hr;
+unsigned int secSP;
+unsigned int minSP;
+unsigned int hrSP;
 unsigned short one_per_sec;
 }Timer_Setpoint;
 
-
-
-
-
 extern Timer_Setpoint T0_SP;
+
+
+
+
 void InitTimer1();
 void Get_Time();
-
+void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
@@ -397,6 +408,8 @@ Timer_Setpoint T0_SP={
  0,
  0,
  0,
+ 0,
+ 0,
  0
 };
 char* (*testStr)(int i);
@@ -414,18 +427,17 @@ char sub_txt[] = "\"+44";
 
 void main() {
 unsigned char cel_num[20];
-char num,res;
+char num;
 unsigned short i;
-unsigned int R,str_num;
-unsigned int deg;
-char txtR[6];
-
+unsigned int cell_ok,str_num,deg;
+char txtR[6],txtH[6],txtT[6];
+int res;
 
  Update_Test = Test_Update_ThingSpeak;
 
  ConfigPic();
 
- Delay_ms(2000);
+ Delay_ms(500);
 
  it = TCS3472_INTEGRATIONTIME_24MS;
  G = TCS3472_GAIN_1X;
@@ -446,7 +458,7 @@ char txtR[6];
  T0_SP.sec = 0;
  T0_SP.min = 0;
  T0_SP.hr = 0;
-#line 67 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 68 "C:/Users/Git/ColourSampling/ColourSampling.c"
  strcpy(cel_num,GetValuesFromFlash());
  str_num = strncmp(cel_num,sub_txt,4);
 
@@ -456,7 +468,7 @@ char txtR[6];
  " *Result of cmp: %s\r\n"
  ,cel_num,txtR);
 
- if(str_num > 0){
+ if(str_num != 0){
  SimVars.init_inc = SetupIOT();
  SimVars.init_inc = WaitForSetupSMS(0);
  SimVars.init_inc = GetAPI_Key_SMS();
@@ -464,14 +476,25 @@ char txtR[6];
  SimVars.init_inc = SendSMS(SimVars.init_inc);
  else
  SimVars.init_inc = SendSMS(SimVars.init_inc);
+ cell_ok = 0;
  }else{
+ WaitForResponse(3);
  SimVars.init_inc = 5;
+ cell_ok = 1;
  }
-#line 91 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 95 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ if(cell_ok == 1){
+ Delay_ms(3000);
+ SendSMS(4);
+ }
+
  PrintOut(PrintHandler, "\r\n"
  " *Run");
+
+
+ res = 0;
  while(1){
- int res;
+
 
 
  num = HID_Read();
@@ -496,12 +519,17 @@ char txtR[6];
  res = TestRingPointers();
  if(res > 1){
 
- sprintf(txtR,"d",res);
+ sprintf(txtR,"%d",res);
+ sprintf(txtT,"%d",RB.tail);
+ sprintf(txtH,"%d",RB.head);
  PrintOut(PrintHandler, "\r\n"
- " *Diff in pointers"
- ,txtR);
- GetSMSText();
+ " *Tail:= %s\r\n"
+ " *Head:= %s\r\n"
+ " *Diff in pointers:= %s\r\n"
+ ,txtT,txtH,txtR);
 
+
+ GetSMSText();
  }
 
 

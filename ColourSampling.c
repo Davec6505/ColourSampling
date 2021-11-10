@@ -9,6 +9,8 @@ Timer_Setpoint T0_SP={
  0,
  0,
  0,
+ 0,
+ 0,
  0
 };
 char* (*testStr)(int i);
@@ -26,22 +28,21 @@ char sub_txt[] = "\"+44";
 //program
 void main() {
 unsigned char cel_num[20];
-char num,res;
+char num;
 unsigned short i;
-unsigned int R,str_num;
-unsigned int deg;
-char txtR[6];
-
+unsigned int cell_ok,str_num,deg;
+char txtR[6],txtH[6],txtT[6];
+int res;
 
    Update_Test = Test_Update_ThingSpeak;
-   //testStr = StrChecker;
+
    ConfigPic();
 
-   Delay_ms(2000);
+   Delay_ms(500);
 
    it = TCS3472_INTEGRATIONTIME_24MS;//TCS3472_INTEGRATIONTIME_2_4MS;
    G  = TCS3472_GAIN_1X;
-   device_Id = TCS3472_1_5;  //TCS347_11_15;
+   device_Id = TCS3472_1_5;          //TCS347_11_15;
    i = 0;
    i = TCS3472_Init(it,G,device_Id);
    sprintf(txtR,"%2x",i);
@@ -73,7 +74,7 @@ char txtR[6];
                            " *Result of cmp: %s\r\n"
                            ,cel_num,txtR);
  #endif
-   if(str_num > 0){
+   if(str_num != 0){
      SimVars.init_inc = SetupIOT();           //ret 1
      SimVars.init_inc = WaitForSetupSMS(0);   //ret 2
      SimVars.init_inc = GetAPI_Key_SMS();     //ret 3
@@ -81,17 +82,28 @@ char txtR[6];
          SimVars.init_inc = SendSMS(SimVars.init_inc);
      else
          SimVars.init_inc = SendSMS(SimVars.init_inc);
+     cell_ok = 0;
    }else{
+     WaitForResponse(3);
      SimVars.init_inc = 5;
+     cell_ok = 1;
    }
-/*************************************************
+/**************************************************************
 *main => loop forever and call all functions*
 *keep main free from code
-*************************************************/
+**************************************************************/
+   if(cell_ok == 1){ //only if primary cell num has been saved
+       Delay_ms(3000);
+       SendSMS(4);
+   }
+   
    PrintOut(PrintHandler, "\r\n"
                            " *Run");
+
+   
+   res = 0;
    while(1){
-   int res;
+
      ///////////////////////////////////////////////
      //Get input from USB to set up thresholds
      num = HID_Read();
@@ -103,7 +115,7 @@ char txtR[6];
      if(SimVars.init_inc >= 5){
        if(T0_SP.one_per_sec){
            T0_SP.one_per_sec = 0;
-           res =  Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
+           res = Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
            if(res >= 1){
                  T0_SP.sec = 0;
                  T0_SP.min = 0;
@@ -116,12 +128,17 @@ char txtR[6];
      res = TestRingPointers();
      if(res > 1){
 #ifdef MainDebug
-       sprintf(txtR,"d",res);
+       sprintf(txtR,"%d",res);
+       sprintf(txtT,"%d",RB.tail);
+       sprintf(txtH,"%d",RB.head);
        PrintOut(PrintHandler, "\r\n"
-                              " *Diff in pointers"
-                              ,txtR);
-       GetSMSText();
+                              " *Tail:= %s\r\n"
+                              " *Head:= %s\r\n"
+                              " *Diff in pointers:= %s\r\n"
+                              ,txtT,txtH,txtR);
 #endif
+
+        GetSMSText();
      }
 
 

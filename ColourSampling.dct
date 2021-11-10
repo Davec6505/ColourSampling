@@ -1854,6 +1854,7 @@ asam
 asam
 asam_bit
 asin
+at_initial
 atan
 atan2
 atof
@@ -8748,6 +8749,8 @@ dataout8
 dataout8_bit
 dataout9
 dataout9_bit
+day
+day_month
 day01
 day01
 day01
@@ -11140,6 +11143,7 @@ halfsec
 halfsec
 halfsec_bit
 head
+head_overflow
 hid_disable
 hid_enable
 hid_input_report_bytes
@@ -11195,6 +11199,7 @@ hr102_bit
 hr103
 hr103_alrmtime_bit
 hr103_bit
+hrsp
 i2c_is_idle
 i2c_is_idle_ptr
 i2c_read
@@ -12541,6 +12546,7 @@ incm1
 incm1
 incm1_bit
 init_inc
+init_sms
 initgsm3
 initial_str
 initisr
@@ -13862,6 +13868,7 @@ min102_bit
 min103
 min103_alrmtime_bit
 min103_bit
+minsp
 mm_error_
 mm_freememtable
 mm_init
@@ -13902,6 +13909,7 @@ mode32
 mode32_bit
 mode32_spi2con_bit
 modf
+month
 month01
 month01
 month01
@@ -18879,6 +18887,7 @@ sec102_bit
 sec103
 sec103_alrmtime_bit
 sec103_bit
+secsp
 sen
 sen
 sen

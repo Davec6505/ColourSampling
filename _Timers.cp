@@ -82,7 +82,7 @@ typedef unsigned long time_t;
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 17 "c:/users/git/coloursampling/flash_r_w.h"
+#line 20 "c:/users/git/coloursampling/flash_r_w.h"
 extern unsigned long FLASH_Settings_VAddr;
 extern unsigned long FLASH_Settings_PAddr;
 
@@ -258,6 +258,7 @@ extern sfr sbit STAT;
 
 
 
+
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -271,6 +272,7 @@ typedef struct{
  uint16_t time_to_log;
  uint16_t num_of_sms_bytes;
  char init_inc;
+ int8_t init_sms;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 
@@ -281,6 +283,7 @@ unsigned int head;
 unsigned int tail;
 unsigned int last_head;
 unsigned int last_tail;
+short head_overflow;
 };
 extern struct RingBuffer RB;
 
@@ -313,11 +316,14 @@ struct sim_lengths{
 
 
 
+
+
 void InitGSM3();
 void WriteToFlashTemp();
 char* GetValuesFromFlash();
 void GetStrLengths();
 int TestRingPointers();
+void AT_Initial();
 void WaitForResponse(short dly);
 void RingToTempBuf();
 void Load_Head_Tail_Pointers();
@@ -340,6 +346,8 @@ unsigned int ms;
 unsigned int sec;
 unsigned int min;
 unsigned int hr;
+unsigned int day;
+unsigned int month;
 }Timers;
 
 extern Timers TMR0;
@@ -349,17 +357,20 @@ unsigned int ms;
 unsigned int sec;
 unsigned int min;
 unsigned int hr;
+unsigned int secSP;
+unsigned int minSP;
+unsigned int hrSP;
 unsigned short one_per_sec;
 }Timer_Setpoint;
 
-
-
-
-
 extern Timer_Setpoint T0_SP;
+
+
+
+
 void InitTimer1();
 void Get_Time();
-
+void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);
 #line 4 "C:/Users/Git/ColourSampling/_Timers.c"
 Timers TMR0 ={
@@ -369,6 +380,8 @@ Timers TMR0 ={
  0,
  0
 };
+
+
 
 void InitTimer1(){
  char txt[6];
@@ -380,7 +393,9 @@ void InitTimer1(){
  T1IE_bit = 1;
  PR1 = 10000;
  TMR1 = 0;
-#line 27 "C:/Users/Git/ColourSampling/_Timers.c"
+ T0_SP.secSP = 0;
+ T0_SP.minSP = 9;
+ T0_SP.hrSP = 0;
 }
 
 
@@ -389,17 +404,14 @@ char txt[6];
 int res;
  TMR0.millis++;
  TMR0.ms++;
+ T0_SP.ms++;
 
 
- if(TMR0.ms > 999){
- TMR0.ms = 0;
- TMR0.sec++;
+ if(T0_SP.ms > 999){
+ T0_SP.ms = 0;
  T0_SP.sec++;
-
- if(TMR0.sec > 59){
+ if(T0_SP.sec > 59){
  T0_SP.sec = 0;
- TMR0.sec = 0;
- TMR0.min++;
  T0_SP.min++;
 
  sprintf(txt,"%u",T0_SP.min);
@@ -407,30 +419,50 @@ int res;
  UART1_Write(0x0d);
  UART1_Write(0x0a);
 
-
- if(TMR0.min > 59){
+ if(T0_SP.min > 59){
  T0_SP.min = 0;
- TMR0.min = 0;
- TMR0.hr++;
  T0_SP.hr++;
-
- if(TMR0.hr > 23){
- TMR0.hr = 0;
+ if(T0_SP.hr > 23){
  T0_SP.hr = 0;
  }
  }
+ }
+ }
+ if(T0_SP.sec > T0_SP.secSP && T0_SP.min > T0_SP.minSP && T0_SP.hr > T0_SP.hrSP){
+ T0_SP.one_per_sec = 1;
+ T0_SP.sec = T0_SP.min = T0_SP.hr = 0;
+ }
+
+ if(TMR0.ms > 999){
+ TMR0.ms = 0;
+ TMR0.sec++;
+ if(TMR0.sec > 59){
+ TMR0.sec = 0;
+ TMR0.min++;
+
+ if(TMR0.min > 59){
+ TMR0.min = 0;
+ TMR0.hr++;
+
+ if(TMR0.hr > 23){
+ TMR0.hr = 0;
+ }
+ }
 
  }
- T0_SP.one_per_sec = 1;
  LATA10_bit = !LATA10_bit;
  }
 
 
 }
+#line 90 "C:/Users/Git/ColourSampling/_Timers.c"
+void Day_Month(int hr,int day,int mnth){
+int i;
+ for(i=0;i<6;i++){
 
-
-
-
+ }
+}
+#line 101 "C:/Users/Git/ColourSampling/_Timers.c"
 void I2C2_TimeoutCallback(char errorCode) {
 int i;
  if (errorCode == _I2C_TIMEOUT_RD) {
