@@ -372,9 +372,8 @@ main
 		HID_Write
 	TestRingPointers
 	GetSMSText
+		UART1_Write_Text
 		RingToTempBuf
-		Malloc
-		memset
 		setstr
 		strsplit
 		strncmp
@@ -383,8 +382,6 @@ main
 		isdigit
 		atoi
 		ReadMSG
-			Malloc
-			memset
 			sprintf
 			PrintOut
 			UART2_Write_Text
@@ -402,11 +399,10 @@ main
 				strcpy
 				strlen
 				Free
-			Free
 			__CC2DW
 		SendSMS
 		RemoveSMSText
-		Free
+		__CC2DW
 	NVMErasePage
 	TCS3472_getRawData
 	SendData

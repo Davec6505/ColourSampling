@@ -530,6 +530,15 @@ void GetStrLengths(){
 void RcvSimTxt(){
 unsigned char txt;
  while(UART2_Data_Ready()) {
+ if (U2STAbits.FERR || U2STAbits.OERR){
+ if (U2STAbits.FERR ){
+ U2STAbits.FERR = 0;
+ goto m0;
+ }
+ if(U2STAbits.OERR)
+ U2STAbits.OERR = 0;
+ }
+ m0:
  txt = U2RXREG;
  U1TXREG = txt;
  if(txt >= 0x20){
@@ -541,25 +550,22 @@ unsigned char txt;
  }
  if(RB.head > 999){
  RB.head = 0;
- RB.head_overflow = 1;
  }
-
  }
  RB.rcv_txt_fin = 1;
 }
-#line 202 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 209 "C:/Users/Git/ColourSampling/Sim800.c"
 int TestRingPointers(){
 int diff;
- if(RB.head_overflow != 1)
- diff = RB.head - RB.tail;
- else{
- RB.head_overflow = 0;
+ if(RB.tail > RB.head){
  diff = 1000 - RB.tail;
  diff += RB.head;
+ }else{
+ diff = RB.head - RB.tail;
  }
  return diff;
 }
-#line 217 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 223 "C:/Users/Git/ColourSampling/Sim800.c"
 void WaitForResponse(short dly){
 unsigned long lastMillis,newMillis;
  lastMillis = TMR0.millis;
@@ -586,29 +592,30 @@ unsigned long lastMillis,newMillis;
  break;
  }while(!RB.rcv_txt_fin);
 }
-#line 247 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 253 "C:/Users/Git/ColourSampling/Sim800.c"
 void RingToTempBuf(){
 int i;
  i=0;
  RB.tail = RB.last_tail;
- if(RB.head > RB.last_head){
- while(RB.tail < RB.head){
+
+ while(RB.tail != RB.head){
  SimTestTxt[i] = RB.buff[RB.tail];
-#line 258 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 264 "C:/Users/Git/ColourSampling/Sim800.c"
  i++;
  RB.tail++;
- RB.tail = (RB.tail > 999)? 0: RB.tail;
+ if(RB.tail > 999)
+ RB.tail = 0;
  };
  SimTestTxt[i++] = 0;
- }
+
  RB.last_tail = RB.tail;
 }
-#line 271 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 278 "C:/Users/Git/ColourSampling/Sim800.c"
 char SetupIOT(){
 int num_strs,res,i;
 char txtA[6];
 char* str_rcv;
-#line 279 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 286 "C:/Users/Git/ColourSampling/Sim800.c"
  res = -1;
 
  PrintOut(PrintHandler, "\r\n"
@@ -683,7 +690,7 @@ wait:
 
  return 1;
 }
-#line 359 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 366 "C:/Users/Git/ColourSampling/Sim800.c"
 char WaitForSetupSMS(unsigned int Indx){
 int i,num_strs,res;
 char* str_rcv;
@@ -826,7 +833,7 @@ char sms[4];
  else
  return res;
 }
-#line 506 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 513 "C:/Users/Git/ColourSampling/Sim800.c"
 void AT_Initial(){
 
 
@@ -839,7 +846,7 @@ void AT_Initial(){
  Delay_ms(1000);
  RingToTempBuf();
 }
-#line 522 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 529 "C:/Users/Git/ColourSampling/Sim800.c"
 char GetAPI_Key_SMS(){
 int i,str_rcv,num_strs;
 char txtA[6];
@@ -869,7 +876,7 @@ char response;
 
  return response;
 }
-#line 555 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 562 "C:/Users/Git/ColourSampling/Sim800.c"
 char SendSMS(char sms_type){
 static short onecA;
 int res;
@@ -916,16 +923,15 @@ char txt[6];
  Delay_ms(5000);
 
 }
-#line 605 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 612 "C:/Users/Git/ColourSampling/Sim800.c"
 char* GetSMSText(){
 char sms[4];
 char txtA[6],txtB[6];
 char* str_rcv;
 int num_strs,res,err;
-
+ UART1_Write_Text("=================\r\n");
  RingToTempBuf();
- str_rcv = (char*)Malloc(200*sizeof(char*));
- memset(str_rcv,0,200);
+
 
  str_rcv = setstr(SimTestTxt);
  num_strs = strsplit(str_rcv,',');
@@ -969,19 +975,14 @@ int num_strs,res,err;
  RemoveSMSText(res);
  }
 
- Free(str_rcv,200);
+
 }
-#line 664 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 670 "C:/Users/Git/ColourSampling/Sim800.c"
 char* ReadMSG(int msg_num){
 char *text;
 char sms[6];
 char *str_rcv;
 int num_strs,i;
-
- str_rcv = (char*)Malloc(64*sizeof(char*));
- memset(str_rcv,0,200);
- text = (char*)Malloc(64*sizeof(char*));
- memset(text,0,64);
 
  sprintf(sms,"%d",msg_num);
  Delay_ms(1000);
@@ -1017,6 +1018,7 @@ int num_strs,i;
  strcpy(string[5], RemoveChars(text,'"','O'));
 
 
+
  sprintf(sms,"%d",num_strs);
  PrintOut(PrintHandler, "\r\n"
  " *num_strs:= %s\r\n"
@@ -1030,8 +1032,6 @@ int num_strs,i;
  string[2],string[3],
  string[4],string[5]);
 
- Free(str_rcv,200);
- Free(text,64);
 }
 #line 729 "C:/Users/Git/ColourSampling/Sim800.c"
 int RemoveSMSText(int sms_cnt){

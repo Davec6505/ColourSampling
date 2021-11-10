@@ -178,6 +178,15 @@ void GetStrLengths(){
 void RcvSimTxt(){
 unsigned char txt;
     while(UART2_Data_Ready()) {     // If data is received
+      if (U2STAbits.FERR || U2STAbits.OERR){
+          if (U2STAbits.FERR ){
+              U2STAbits.FERR = 0;
+              goto m0;
+          }
+          if(U2STAbits.OERR)
+              U2STAbits.OERR = 0;
+      }
+ m0:
        txt = U2RXREG;
        U1TXREG = txt;
        if(txt >= 0x20){
@@ -189,9 +198,7 @@ unsigned char txt;
        }
        if(RB.head > 999){
            RB.head = 0;             //rest head when buffer is full
-           RB.head_overflow = 1;
        }
-       
     }
     RB.rcv_txt_fin = 1;
 }
@@ -201,12 +208,11 @@ unsigned char txt;
 ******************************************************/
 int TestRingPointers(){
 int diff;
-     if(RB.head_overflow != 1)
-       diff = RB.head - RB.tail;
-     else{
-          RB.head_overflow = 0;
-          diff = 1000 - RB.tail;
-          diff += RB.head;
+     if(RB.tail > RB.head){
+        diff = 1000 - RB.tail;
+        diff += RB.head;
+     }else{
+        diff = RB.head - RB.tail;
      }
      return diff;
 }
@@ -248,8 +254,8 @@ void RingToTempBuf(){
 int i;
     i=0;
     RB.tail = RB.last_tail;
-    if(RB.head > RB.last_head){
-      while(RB.tail < RB.head){
+   // if(RB.head > RB.last_head){
+      while(RB.tail != RB.head){
          SimTestTxt[i] = RB.buff[RB.tail];
 #ifdef RingBuffDeBug
          UART1_Write(SimTestTxt[i]);
@@ -257,10 +263,11 @@ int i;
 #endif
          i++;
          RB.tail++;
-         RB.tail = (RB.tail > 999)? 0: RB.tail;
+         if(RB.tail > 999)
+            RB.tail = 0;
       };
       SimTestTxt[i++] = 0;
-    }
+   // }
     RB.last_tail = RB.tail;
 }
 
@@ -607,10 +614,9 @@ char sms[4];
 char txtA[6],txtB[6];
 char* str_rcv;
 int num_strs,res,err;
-
+    UART1_Write_Text("=================\r\n");
     RingToTempBuf();
-    str_rcv = (char*)Malloc(200*sizeof(char*));
-    memset(str_rcv,0,200);
+
   //ask sim800 for the sms text
     str_rcv = setstr(SimTestTxt);
     num_strs = strsplit(str_rcv,',');
@@ -654,7 +660,7 @@ int num_strs,res,err;
        RemoveSMSText(res);
    }
    
-   Free(str_rcv,200);
+
 }
 
 /**********************************************************************
@@ -666,11 +672,6 @@ char *text;
 char sms[6];
 char *str_rcv;
 int num_strs,i;
-
-    str_rcv = (char*)Malloc(64*sizeof(char*));
-    memset(str_rcv,0,200);
-    text    = (char*)Malloc(64*sizeof(char*));
-    memset(text,0,64);
 
     sprintf(sms,"%d",msg_num);
     Delay_ms(1000);
@@ -704,7 +705,8 @@ int num_strs,i;
     strcpy(string[3], RemoveChars(string[3],'"',0x0A));
     strcpy(string[4], RemoveChars(string[4],0x02,'+'));
     strcpy(string[5], RemoveChars(text,'"','O'));
-
+    
+    
  #ifdef SMSDebug
     sprintf(sms,"%d",num_strs);
     PrintOut(PrintHandler, "\r\n"
@@ -719,8 +721,6 @@ int num_strs,i;
                            string[2],string[3],
                            string[4],string[5]);
 #endif
-   Free(str_rcv,200);
-   Free(text,64);
 }
 
 /**********************************************************************
