@@ -184,6 +184,7 @@ main
 		UART2_Write_Text
 		UART2_Write
 		setstr
+			strlen
 		strsplit
 		sprintf
 		findnumber
@@ -393,12 +394,12 @@ main
 			strchr
 			strcpy
 			RemoveChars
-				Malloc
-				memset
 				strchr
 				strcpy
 				strlen
-				Free
+			strcmp
+			Write_Thresholds
+			SendSMS
 			__CC2DW
 		SendSMS
 		RemoveSMSText

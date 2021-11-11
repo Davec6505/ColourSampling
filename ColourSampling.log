@@ -59,6 +59,7 @@ hint: 517	1163	Variable 'val' has been declared, but not used	String.c
 hint: 519	1163	Variable 'i' has been declared, but not used	String.c
 diagnostics: 577	123	Compiled Successfully	String.c
 warning: 537	1512	variable 'res' might not have been initialized	String.c
+warning: 557	1512	variable 'temp' might not have been initialized	String.c
 hint: 45	1164	Variable 'result' has been eliminated by optimizer	String.c
 hint: 47	1164	Variable 'res0' has been eliminated by optimizer	String.c
 hint: 282	1164	Variable 'err' has been eliminated by optimizer	String.c
@@ -72,48 +73,37 @@ hint: 50	1164	Variable 'res' has been eliminated by optimizer	Flash_R_W.c
 hint: 66	1164	Variable 'res' has been eliminated by optimizer	Flash_R_W.c
 hint: 80	1164	Variable 'res' has been eliminated by optimizer	Flash_R_W.c
 diagnostics: 0	122	Compilation Started	flash_r_w.h
-warning: 56	1506	Implicit conversion of pointer to int	Sim800.c
-warning: 100	1508	Implicit conversion of int to ptr	Sim800.c
-warning: 104	1508	Implicit conversion of int to ptr	Sim800.c
-hint: 120	1163	Variable 'j' has been declared, but not used	Sim800.c
-hint: 279	1163	Variable 'i' has been declared, but not used	Sim800.c
-hint: 530	1163	Variable 'i' has been declared, but not used	Sim800.c
-hint: 530	1163	Variable 'str_rcv' has been declared, but not used	Sim800.c
-hint: 530	1163	Variable 'num_strs' has been declared, but not used	Sim800.c
-hint: 531	1163	Variable 'txtA' has been declared, but not used	Sim800.c
-hint: 564	1163	Variable 'res' has been declared, but not used	Sim800.c
-hint: 565	1163	Variable 'txt' has been declared, but not used	Sim800.c
-warning: 607	1503	Result is not defined in function: 'SendSMS'	Sim800.c
-warning: 624	1505	Suspicious pointer conversion	Sim800.c
-warning: 664	1503	Result is not defined in function: 'GetSMSText'	Sim800.c
-hint: 674	1163	Variable 'i' has been declared, but not used	Sim800.c
-warning: 724	1503	Result is not defined in function: 'ReadMSG'	Sim800.c
-hint: 760	1163	Variable 'txtS' has been declared, but not used	Sim800.c
-hint: 761	1163	Variable 'txtM' has been declared, but not used	Sim800.c
-hint: 762	1163	Variable 'txtH' has been declared, but not used	Sim800.c
-warning: 824	1505	Suspicious pointer conversion	Sim800.c
-warning: 826	1505	Suspicious pointer conversion	Sim800.c
-warning: 828	1505	Suspicious pointer conversion	Sim800.c
-warning: 830	1505	Suspicious pointer conversion	Sim800.c
-warning: 832	1505	Suspicious pointer conversion	Sim800.c
-hint: 810	1163	Variable 'txtLen' has been declared, but not used	Sim800.c
-hint: 811	1163	Variable 'len' has been declared, but not used	Sim800.c
-diagnostics: 937	123	Compiled Successfully	Sim800.c
-hint: 224	1164	Variable 'newMillis' has been eliminated by optimizer	Sim800.c
-hint: 279	1164	Variable 'num_strs' has been eliminated by optimizer	Sim800.c
-hint: 281	1164	Variable 'str_rcv' has been eliminated by optimizer	Sim800.c
-hint: 532	1164	Variable 'response' has been eliminated by optimizer	Sim800.c
-hint: 645	1164	Variable 'is_digit' has been eliminated by optimizer	Sim800.c
-hint: 615	1164	Variable 'str_rcv' has been eliminated by optimizer	Sim800.c
-hint: 673	1164	Variable 'str_rcv' has been eliminated by optimizer	Sim800.c
-hint: 915	1164	Variable 'newMillis' has been eliminated by optimizer	Sim800.c
-diagnostics: 0	127	All files Compiled in 1046 ms	 
+warning: 76	1506	Implicit conversion of pointer to int	Sim800.c
+warning: 119	1508	Implicit conversion of int to ptr	Sim800.c
+warning: 123	1508	Implicit conversion of int to ptr	Sim800.c
+hint: 139	1163	Variable 'j' has been declared, but not used	Sim800.c
+hint: 298	1163	Variable 'i' has been declared, but not used	Sim800.c
+hint: 546	1163	Variable 'i' has been declared, but not used	Sim800.c
+hint: 580	1163	Variable 'res' has been declared, but not used	Sim800.c
+warning: 623	1503	Result is not defined in function: 'SendSMS'	Sim800.c
+warning: 638	1505	Suspicious pointer conversion	Sim800.c
+warning: 678	1503	Result is not defined in function: 'GetSMSText'	Sim800.c
+hint: 685	1163	Variable 'i' has been declared, but not used	Sim800.c
+warning: 743	1503	Result is not defined in function: 'ReadMSG'	Sim800.c
+warning: 833	1505	Suspicious pointer conversion	Sim800.c
+warning: 835	1505	Suspicious pointer conversion	Sim800.c
+warning: 837	1505	Suspicious pointer conversion	Sim800.c
+warning: 839	1505	Suspicious pointer conversion	Sim800.c
+warning: 841	1505	Suspicious pointer conversion	Sim800.c
+hint: 820	1163	Variable 'len' has been declared, but not used	Sim800.c
+diagnostics: 946	123	Compiled Successfully	Sim800.c
+hint: 243	1164	Variable 'newMillis' has been eliminated by optimizer	Sim800.c
+hint: 298	1164	Variable 'num_strs' has been eliminated by optimizer	Sim800.c
+hint: 548	1164	Variable 'response' has been eliminated by optimizer	Sim800.c
+hint: 659	1164	Variable 'is_digit' has been eliminated by optimizer	Sim800.c
+hint: 924	1164	Variable 'newMillis' has been eliminated by optimizer	Sim800.c
+diagnostics: 0	127	All files Compiled in 1422 ms	 
 hint: 0	1144	Used RX: 32 (100%)   Free RX: 0 (0%)	Used RX: 32 (100%)   Free RX: 0 (0%)
-hint: 0	1144	Static RAM (bytes): 5032   Dynamic RAM (bytes): 21733	Static RAM (bytes): 5032   Dynamic RAM (bytes): 21733
+hint: 0	1144	Static RAM (bytes): 5384   Dynamic RAM (bytes): 21377	Static RAM (bytes): 5384   Dynamic RAM (bytes): 21377
 hint: 0	1144	HEAP RAM (bytes): 6000	HEAP RAM (bytes): 6000
-hint: 0	1144	Used ROM (bytes): 66940 (13%)  Free ROM (bytes): 457348 (87%)	Used ROM (bytes): 66940 (13%)  Free ROM (bytes): 457348 (87%)
+hint: 0	1144	Used ROM (bytes): 67258 (13%)  Free ROM (bytes): 457030 (87%)	Used ROM (bytes): 67258 (13%)  Free ROM (bytes): 457030 (87%)
 hint: 0	1144	Used BOOTROM (bytes): 1912 (16%)  Free BOOTROM (bytes): 10361 (84%)	Used BOOTROM (bytes): 1912 (16%)  Free BOOTROM (bytes): 10361 (84%)
 diagnostics: 0	125	Project Linked Successfully	ColourSampling.mcp32
-diagnostics: 0	128	Linked in 297 ms	 
-diagnostics: 0	129	Project 'ColourSampling.mcp32' completed: 1922 ms	 
-diagnostics: 0	103	Finished successfully: 10 Nov 2021, 23:04:47	ColourSampling.mcp32
+diagnostics: 0	128	Linked in 375 ms	 
+diagnostics: 0	129	Project 'ColourSampling.mcp32' completed: 2531 ms	 
+diagnostics: 0	103	Finished successfully: 11 Nov 2021, 22:42:32	ColourSampling.mcp32

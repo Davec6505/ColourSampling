@@ -169,7 +169,7 @@ int i,j;
 **********************************************************************/
 char* setstr(char conf[250]){
  int i;
-      for(i=0;i < 100;i++){
+      for(i=0;i < strlen(conf);i++){
          if((conf[i] == 0x0D)|| (conf[i] == 0x0A))
              break;
       }
@@ -472,7 +472,7 @@ char str[64];
        
        sprintf(txtR,"%x",err);
        strcpy(str,txtR);
-       strcat(str," ||\r\n ");
+       strcat(str," \r\n ");
        return str;
 }
 
@@ -546,9 +546,9 @@ unsigned int res,i;
 ******************************************************************/
 char* RemoveChars(char* str,char a,char b){
 char *temp;
-int i;
-         temp = (char*)Malloc(100*sizeof(char*));
-         memset(temp,0,100);
+int i=0;
+        // temp = (char*)Malloc(100*sizeof(char*));
+        // memset(temp,0,100);
         //got " position in the string str
         if(a != 0x02){
            temp = strchr(str,a);
@@ -556,14 +556,14 @@ int i;
         }else{
            temp = strcpy(temp,str);
         }
-        for(i=0;i<strlen(str)+1;i++){
-            if(str[i]==b)
+        for(i=0;i<strlen(temp)+1;i++){
+            if(temp[i]==b)
                break;
             *(temp+i) = *(str+i);
         }
         *(temp+i) = 0;
-        
-         Free(temp,100);
+
+       //  Free(temp,100);
         return temp;
 }
 

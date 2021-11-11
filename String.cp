@@ -531,7 +531,7 @@ int i,j;
 #line 170 "C:/Users/Git/ColourSampling/String.c"
 char* setstr(char conf[250]){
  int i;
- for(i=0;i < 100;i++){
+ for(i=0;i < strlen(conf);i++){
  if((conf[i] == 0x0D)|| (conf[i] == 0x0A))
  break;
  }
@@ -806,7 +806,7 @@ char str[64];
 
  sprintf(txtR,"%x",err);
  strcpy(str,txtR);
- strcat(str," ||\r\n ");
+ strcat(str," \r\n ");
  return str;
 }
 #line 482 "C:/Users/Git/ColourSampling/String.c"
@@ -874,9 +874,9 @@ unsigned int res,i;
 #line 547 "C:/Users/Git/ColourSampling/String.c"
 char* RemoveChars(char* str,char a,char b){
 char *temp;
-int i;
- temp = (char*)Malloc(100*sizeof(char*));
- memset(temp,0,100);
+int i=0;
+
+
 
  if(a != 0x02){
  temp = strchr(str,a);
@@ -884,14 +884,14 @@ int i;
  }else{
  temp = strcpy(temp,str);
  }
- for(i=0;i<strlen(str)+1;i++){
- if(str[i]==b)
+ for(i=0;i<strlen(temp)+1;i++){
+ if(temp[i]==b)
  break;
  *(temp+i) = *(str+i);
  }
  *(temp+i) = 0;
 
- Free(temp,100);
+
  return temp;
 }
 #line 573 "C:/Users/Git/ColourSampling/String.c"

@@ -34,6 +34,26 @@ char rcvSimTxt[150];
 char SimTestTxt[150];
 char rcvPcTxt[150];
 
+char holding_buff[64];
+char buff[200];
+char *text;
+char *str_rcv;
+char *ptr;
+char *str;
+char sms[6];
+
+char txtA[6];
+char txtS[6];
+char txtM[6];
+char txtH[20];
+
+
+char txtC[15];
+char txtR[15];
+char txtG[15];
+char txtB[15];
+char txtLen[6];
+
 Sim800Vars SimVars = {
    "",
    0,
@@ -83,7 +103,6 @@ void PwrUpGSM3(){
 *get the Sim800 values to and from flash memory
 *************************************************/
 void WriteToFlashTemp(){
-char holding_buff[64];
 unsigned long pos;
 static int i,j;
 
@@ -118,8 +137,8 @@ static int i,j;
 
 char* GetValuesFromFlash(){
 unsigned long i,j;
-unsigned char *ptr;
-unsigned char buff[512];
+
+
 
    if(SL.l1 <= 0)
       GetStrLengths();
@@ -176,7 +195,7 @@ void GetStrLengths(){
 *function pointer called from ISR Uart2
 *************************************************/
 void RcvSimTxt(){
-unsigned char txt;
+char txt;
     while(UART2_Data_Ready()) {     // If data is received
       if (U2STAbits.FERR || U2STAbits.OERR){
           if (U2STAbits.FERR ){
@@ -276,9 +295,8 @@ int i;
 *and waiting for responses from
 *******************************************************/
 char SetupIOT(){
-int num_strs,res,i;
-char txtA[6];
-char* str_rcv;
+int res,i,num_strs;
+
 /*******************************************************
 *check to see if network is registered AT+CREG? = 0,[1/5]
 *1= home / 5 = Roaming network wait in a loop until reg
@@ -364,10 +382,8 @@ wait:
 *phone that the device need to talk to
 *******************************************************/
 char WaitForSetupSMS(unsigned int Indx){
-int i,num_strs,res;
-char* str_rcv;
-char txtA[6];
-char sms[4];
+int i,res,num_strs;
+
 
   //Set sms to text mode = 1
   UART2_Write_Text("AT+CMGF=1");
@@ -527,8 +543,8 @@ void AT_Initial(){
 *Ask for the API key and wait for it
 **********************************************************************/
 char GetAPI_Key_SMS(){
-int i,str_rcv,num_strs;
-char txtA[6];
+int i;
+
 char response;
   //set up a send sms
   UART2_Write_Text("AT+CMGS=");
@@ -562,7 +578,7 @@ char response;
 char SendSMS(char sms_type){
 static short onecA;
 int res;
-char txt[6];
+
     if(!onecA){
       onecA = 1;
       AT_Initial();
@@ -610,9 +626,7 @@ char txt[6];
 *Get SMS if recieved during run
 ***********************************************************************/
 char* GetSMSText(){
-char sms[4];
-char txtA[6],txtB[6];
-char* str_rcv;
+
 int num_strs,res,err;
     UART1_Write_Text("=================\r\n");
     RingToTempBuf();
@@ -668,10 +682,7 @@ int num_strs,res,err;
 *[sim can only store 20 messages ]
 **********************************************************************/
 char* ReadMSG(int msg_num){
-char *text;
-char sms[6];
-char *str_rcv;
-int num_strs,i;
+int i,num_strs;
 
     sprintf(sms,"%d",msg_num);
     Delay_ms(1000);
@@ -697,15 +708,18 @@ int num_strs,i;
     WaitForResponse(1);
     RingToTempBuf();
     Delay_ms(1000);
-
     
+#ifdef SMSDebug
+     PrintOut(PrintHandler, "\r\n"
+                           "************** \r\n");
+#endif
+
     str_rcv = setstr(SimTestTxt);
     num_strs = strsplit(str_rcv,',');
     text = strchr(string[4], '"');
     strcpy(string[3], RemoveChars(string[3],'"',0x0A));
     strcpy(string[4], RemoveChars(string[4],0x02,'+'));
     strcpy(string[5], RemoveChars(text,'"','O'));
-    
     
  #ifdef SMSDebug
     sprintf(sms,"%d",num_strs);
@@ -721,13 +735,17 @@ int num_strs,i;
                            string[2],string[3],
                            string[4],string[5]);
 #endif
+    if(string[5] != NULL){
+        if(!strcmp(string[5],"WRITE_THV"));
+            Write_Thresholds(0);
+            SendSMS(3);
+    }
 }
 
 /**********************************************************************
 * remove sms from sim800
 **********************************************************************/
 int RemoveSMSText(int sms_cnt){
-char sms[4];
 
 #ifdef SMSDebug
      sprintf(sms,"%d",sms_cnt);
@@ -757,9 +775,6 @@ char sms[4];
 *test to update thingspeak at req interval
 ***********************************************************************/
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h){
-char txtS[6];
-char txtM[6];
-char txtH[6];
 static unsigned short sLast;
 static unsigned short mLast;
 static unsigned short hLast;
@@ -802,12 +817,6 @@ static unsigned short hLast;
 *Send the data to thingspeak
 ****************************************************/
 void SendData(unsigned int* rgbc){
-char *str;
-char txtC[15];
-char txtR[15];
-char txtG[15];
-char txtB[15];
-char txtLen[6];
 int len;
 
     //get the colour valuse prior to sending to ThingSpek

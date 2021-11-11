@@ -2804,6 +2804,7 @@ btsef
 btsef
 btsef_bit
 buff
+buff
 bufm
 bufm
 bufm
@@ -11151,6 +11152,7 @@ hid_output_report_bytes
 hid_read
 hid_rpt_desc
 hid_write
+holding_buff
 hosten
 hosten
 hosten
@@ -17964,6 +17966,7 @@ pten9
 pten9
 pten9
 pten9_bit
+ptr
 ptrden
 ptrden
 ptrden
@@ -19228,6 +19231,7 @@ smpi3
 smpi3
 smpi3
 smpi3_bit
+sms
 sms_test
 sofen
 sofen
@@ -19698,7 +19702,9 @@ stov8_bit
 stov9
 stov9_bit
 str
+str
 str_api
+str_rcv
 str_t
 str_vars
 strcat
@@ -20471,6 +20477,7 @@ testforok
 testringpointers
 teststr
 teststrings
+text
 tgate
 tgate
 tgate
@@ -21725,6 +21732,15 @@ twip
 twip
 twip_bit
 txt
+txta
+txtb
+txtc
+txtg
+txth
+txtlen
+txtm
+txtr
+txts
 u1addr
 u1addrbits
 u1addrclr
