@@ -19233,6 +19233,9 @@ smpi3
 smpi3_bit
 sms
 sms_test
+sms_test1
+sms_test2
+sms_test3
 sofen
 sofen
 sofen
@@ -20474,6 +20477,7 @@ temp
 test_update_thingspeak
 testflash
 testforok
+testrecievedsms
 testringpointers
 teststr
 teststrings

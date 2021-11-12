@@ -251,6 +251,34 @@ main
 			RingToTempBuf
 		UART2_Write_Text
 		UART2_Write
+		Read_Thresholds
+			NVMRead
+			strcpy
+			sprintf
+			strcat
+			__CC2DW
+		strlen
+		strncpy
+		Read_Send_AllColour
+			TCS3472_getRawData
+				TCS3472_Read16
+					I2C2_Start
+					I2C2_Write
+					I2C2_Restart
+						I2C2_Wait_For_Idle
+						PrintHandler
+						I2C2_TimeoutCallback
+					I2C2_Read
+					I2C2_Stop
+			GetScaledValues
+				_SignedIntegralToFloat
+				_Div_FP
+				_Mul_FP
+			strcpy
+			sprintf
+			strcat
+			TCS3472_C2RGB_Error
+			__CC2DW
 	WaitForResponse
 	HID_Read
 		Gen_Read
@@ -288,25 +316,6 @@ main
 			Free
 			__CC2DW
 		Read_Send_AllColour
-			TCS3472_getRawData
-				TCS3472_Read16
-					I2C2_Start
-					I2C2_Write
-					I2C2_Restart
-						I2C2_Wait_For_Idle
-						PrintHandler
-						I2C2_TimeoutCallback
-					I2C2_Read
-					I2C2_Stop
-			GetScaledValues
-				_SignedIntegralToFloat
-				_Div_FP
-				_Mul_FP
-			strcpy
-			sprintf
-			strcat
-			TCS3472_C2RGB_Error
-			__CC2DW
 		Read_Send_OneColour
 			TCS3472_Read16
 			strcpy
@@ -355,11 +364,6 @@ main
 			TCS3472_CalcColTemp_dn40
 			__CC2DW
 		Read_Thresholds
-			NVMRead
-			strcpy
-			sprintf
-			strcat
-			__CC2DW
 		Write_Thresholds
 			TCS3472_getRawData
 			atol
@@ -397,9 +401,17 @@ main
 				strchr
 				strcpy
 				strlen
-			strcmp
-			Write_Thresholds
-			SendSMS
+			StrChecker
+			TestRecievedSMS
+				sprintf
+				PrintOut
+				SendSMS
+				GetValuesFromFlash
+				NVMErasePage
+				WriteToFlashTemp
+				Write_Thresholds
+				strncat
+				strlen
 			__CC2DW
 		SendSMS
 		RemoveSMSText

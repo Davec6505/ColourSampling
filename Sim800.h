@@ -99,6 +99,7 @@ char WaitForSetupSMS(unsigned int Indx);
 char GetAPI_Key_SMS();
 char* GetSMSText();
 char* ReadMSG(int msg_num);
+void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);

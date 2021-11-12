@@ -1,7 +1,7 @@
 #include "Sim800.h"
 
 /******************************************************
-*Flash memory region for Sim800 module  
+*Flash memory region for Sim800 module
 *V =  Read Virtual address
 *P =  Write Physical address
 ******************************************************/
@@ -12,6 +12,9 @@ const char field2[]   = "&field2=";
 const char field3[]   = "&field3=";
 const char field4[]   = "&field4=";
 const char sms_test[] = "+CMTI";
+const char sms_test1[] = "WRITE_RAW";
+const char sms_test2[] = "READA";
+const char sms_test3[] = "READA_SCL";
 #ifdef SimConfDebug
  char a[6]; char b[6]; char c[6]; char d[6]; char e[6];
 #endif
@@ -108,7 +111,7 @@ static int i,j;
 
   if(SL.l1 <= 0)
      GetStrLengths();
-  
+
   memset(holding_buff,0,SL.l5+5);
   memcpy(holding_buff,SF.SimCelNum,SL.l1);
   memcpy(holding_buff+SL.l1+1,SF.WriteAPIKey,SL.l2);
@@ -142,10 +145,10 @@ unsigned long i,j;
 
    if(SL.l1 <= 0)
       GetStrLengths();
-      
+
    ptr = (unsigned char*)FLASH_Settings_VAddr;
    ptr += 16;
-   
+
    for(i=0;i<SL.l5;i++){
        buff[i] = ptr[i];
 #ifdef SimConfDebug
@@ -461,7 +464,7 @@ int i,res,num_strs;
         strncpy(SF.SimCelNum,string[1],strlen(string[1])+1);
         strncpy(SF.SimDate,string[3],strlen(string[3]));
         strncpy(SF.SimTime,string[4],8);
-        
+
 #ifdef SimConfDebug
       PrintOut(PrintHandler, "\r\n"
                              " * SF.SimCelNum: %s\r\n"
@@ -476,7 +479,7 @@ int i,res,num_strs;
       memcpy(SF.SimFlashBuff+SF.SimFlashPtr,string[5],strlen(string[5])+1);
       strncpy(SF.WriteAPIKey,string[5],strlen(string[5])+1);
       SF.SimFlashPtr += strlen(string[5])+1;
-      
+
     //read API keys to Flash buff first
       SF.SimFlashAPIReadIndx = SF.SimFlashPtr;
       memcpy(SF.SimFlashBuff+SF.SimFlashPtr,string[6],strlen(string[6]));
@@ -568,7 +571,7 @@ char response;
   UART2_Write(0x1A);
   //index 1 is to save to cell no and api to flash
   response = WaitForSetupSMS(1);
-  
+
   return response;
 }
 
@@ -578,6 +581,7 @@ char response;
 char SendSMS(char sms_type){
 static short onecA;
 int res;
+char b[64];
 
     if(!onecA){
       onecA = 1;
@@ -610,6 +614,21 @@ int res;
              break;
       case 5:
              UART2_Write_Text("SMS Not recieved!");
+             break;
+      case 6:
+             str = Read_Thresholds();
+             strncpy(b,str,strlen(str));
+             UART2_Write_Text(b);
+             break;
+      case 7:
+             str = Read_Send_AllColour(0);
+             strncpy(b,str,strlen(str));
+             UART2_Write_Text(b);
+             break;
+      case 8:
+             str = Read_Send_AllColour(1);
+             strncpy(b,str,strlen(str));
+             UART2_Write_Text(b);
              break;
       default:
              UART2_Write_Text("Error Power cycle the device!");
@@ -673,16 +692,16 @@ int num_strs,res,err;
        }
        RemoveSMSText(res);
    }
-   
+
 
 }
 
 /**********************************************************************
-*read the msg that was recieved from the sim memory 
+*read the msg that was recieved from the sim memory
 *[sim can only store 20 messages ]
 **********************************************************************/
 char* ReadMSG(int msg_num){
-int i,num_strs;
+int i,num_strs,res;
 
     sprintf(sms,"%d",msg_num);
     Delay_ms(1000);
@@ -698,17 +717,17 @@ int i,num_strs;
     WaitForResponse(1);
     RingToTempBuf();
     Delay_ms(1000);
-    
-    
+
+
     UART2_Write_Text("AT+CMGR=");
     UART2_Write_Text(sms);
     UART2_Write(0x0D);
     UART2_Write(0x0A);
-    
+
     WaitForResponse(1);
     RingToTempBuf();
     Delay_ms(1000);
-    
+
 #ifdef SMSDebug
      PrintOut(PrintHandler, "\r\n"
                            "************** \r\n");
@@ -720,7 +739,7 @@ int i,num_strs;
     strcpy(string[3], RemoveChars(string[3],'"',0x0A));
     strcpy(string[4], RemoveChars(string[4],0x02,'+'));
     strcpy(string[5], RemoveChars(text,'"','O'));
-    
+
  #ifdef SMSDebug
     sprintf(sms,"%d",num_strs);
     PrintOut(PrintHandler, "\r\n"
@@ -735,12 +754,58 @@ int i,num_strs;
                            string[2],string[3],
                            string[4],string[5]);
 #endif
-    if(string[5] != NULL){
-        if(!strcmp(string[5],"WRITE_THV"));
-            Write_Thresholds(0);
-            SendSMS(3);
-    }
+        if(string[5] != NULL){
+          res = StrChecker(string[5]);
+            TestRecievedSMS(res);
+        }
+
 }
+
+/**********************************************************************
+* test the recieved sms for reaction
+**********************************************************************/
+void TestRecievedSMS(int res){
+char *t,B[64];
+
+#ifdef SMSDebug
+            // strncat(b,t,strlen(t));
+     sprintf(B,"%d",res);
+     PrintOut(PrintHandler, "\r\n"
+                            " *CRGB:= %s\r\n"
+                               ,B);
+#endif
+
+    switch(res){
+      case 6:
+             SendSMS(7);
+             break;
+      case 13:
+             SendSMS(8);
+             break;
+      case 14:
+             SendSMS(6);
+             break;
+      case 16:
+            GetValuesFromFlash();
+            NVMErasePage(FLASH_Settings_PAddr);
+
+               //t =  Read_Send_AllColour(0);
+               WriteToFlashTemp();
+               t =  Write_Thresholds(0);
+#ifdef SMSDebug
+               strncat(b,t,strlen(t));
+               PrintOut(PrintHandler, "\r\n"
+                               " *CRGB:= %s\r\n"
+                               ,t);
+#endif
+                SendSMS(6);
+            break;
+      default:
+            break;
+    }
+
+}
+
 
 /**********************************************************************
 * remove sms from sim800
