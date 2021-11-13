@@ -34,9 +34,7 @@ unsigned int ms;
 unsigned int sec;
 unsigned int min;
 unsigned int hr;
-unsigned int secSP;
-unsigned int minSP;
-unsigned int hrSP;
+unsigned int lastMin;
 unsigned short one_per_sec;
 }Timer_Setpoint;
 

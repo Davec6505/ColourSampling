@@ -194,7 +194,8 @@ READA_SCL,
 READA_THV,
 WRITE_MAN,
 WRITE_RAW,
-START
+START,
+CANCEL
 };
 
 struct Constants{
@@ -215,8 +216,9 @@ struct Thresh{
  uint16_t R_thresh;
  uint16_t G_thresh;
  uint16_t B_thresh;
+ uint16_t time_to_log;
 };
-
+extern struct Thresh Threshold;
 
 
 
@@ -268,9 +270,9 @@ extern char rcvPcTxt[150];
 
 
 typedef struct{
- unsigned int time_to_log;
  char initial_str;
  char init_inc;
+ char start: 1;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 
@@ -356,9 +358,7 @@ unsigned int ms;
 unsigned int sec;
 unsigned int min;
 unsigned int hr;
-unsigned int secSP;
-unsigned int minSP;
-unsigned int hrSP;
+unsigned int lastMin;
 unsigned short one_per_sec;
 }Timer_Setpoint;
 
@@ -392,15 +392,12 @@ void InitTimer1(){
  T1IE_bit = 1;
  PR1 = 10000;
  TMR1 = 0;
- T0_SP.secSP = 0;
- T0_SP.minSP = 9;
- T0_SP.hrSP = 0;
 }
 
 
 void Get_Time(){
 char txt[6];
-int res;
+int res,minsPassed;
  TMR0.millis++;
  TMR0.ms++;
  T0_SP.ms++;
@@ -427,10 +424,12 @@ int res;
  }
  }
  }
- if(T0_SP.sec > T0_SP.secSP && T0_SP.min > T0_SP.minSP && T0_SP.hr > T0_SP.hrSP){
+
+ if(T0_SP.min > Threshold.time_to_log ){
  T0_SP.one_per_sec = 1;
  T0_SP.sec = T0_SP.min = T0_SP.hr = 0;
  }
+
 
  if(TMR0.ms > 999){
  TMR0.ms = 0;
@@ -451,17 +450,15 @@ int res;
  }
  LATA10_bit = !LATA10_bit;
  }
-
-
 }
-#line 90 "C:/Users/Git/ColourSampling/_Timers.c"
+#line 87 "C:/Users/Git/ColourSampling/_Timers.c"
 void Day_Month(int hr,int day,int mnth){
 int i;
  for(i=0;i<6;i++){
 
  }
 }
-#line 101 "C:/Users/Git/ColourSampling/_Timers.c"
+#line 98 "C:/Users/Git/ColourSampling/_Timers.c"
 void I2C2_TimeoutCallback(char errorCode) {
 int i;
  if (errorCode == _I2C_TIMEOUT_RD) {

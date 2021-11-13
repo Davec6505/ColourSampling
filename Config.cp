@@ -196,7 +196,8 @@ READA_SCL,
 READA_THV,
 WRITE_MAN,
 WRITE_RAW,
-START
+START,
+CANCEL
 };
 
 struct Constants{
@@ -217,8 +218,9 @@ struct Thresh{
  uint16_t R_thresh;
  uint16_t G_thresh;
  uint16_t B_thresh;
+ uint16_t time_to_log;
 };
-
+extern struct Thresh Threshold;
 
 
 
@@ -270,9 +272,9 @@ extern char rcvPcTxt[150];
 
 
 typedef struct{
- unsigned int time_to_log;
  char initial_str;
  char init_inc;
+ char start: 1;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 
@@ -358,9 +360,7 @@ unsigned int ms;
 unsigned int sec;
 unsigned int min;
 unsigned int hr;
-unsigned int secSP;
-unsigned int minSP;
-unsigned int hrSP;
+unsigned int lastMin;
 unsigned short one_per_sec;
 }Timer_Setpoint;
 

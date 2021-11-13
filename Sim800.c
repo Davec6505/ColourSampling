@@ -59,8 +59,8 @@ char txtLen[6];
 
 Sim800Vars SimVars = {
    0,
-   9,
-   0
+   0, //setup sequence
+   0  //Start / Stop
 };
 
 struct RingBuffer RB;
@@ -117,7 +117,7 @@ static int i,j;
   pos = FLASH_Settings_PAddr;
   j = NVMErasePage(pos);
   if(j==0){
-    pos += 16 ;
+    pos += 20 ;
     for(i=0;i<SL.l4;i++){
          j = NVMWriteWord(pos,temp[i]);
          pos += 4;
@@ -143,7 +143,7 @@ unsigned long i,j;
       GetStrLengths();
 
    ptr = (unsigned char*)FLASH_Settings_VAddr;
-   ptr += 16;
+   ptr += 20;
 
    for(i=0;i<SL.l5;i++){
        buff[i] = ptr[i];
@@ -611,20 +611,26 @@ char b[64];
       case 5:
              UART2_Write_Text("SMS Not recieved!");
              break;
-      case 6:
+      case 6: //read the set points
              str = Read_Thresholds();
              strncpy(b,str,strlen(str));
              UART2_Write_Text(b);
              break;
-      case 7:
+      case 7: //read raw values
              str = Read_Send_AllColour(0);
              strncpy(b,str,strlen(str));
              UART2_Write_Text(b);
              break;
-      case 8:
+      case 8: //read scaled values
              str = Read_Send_AllColour(1);
              strncpy(b,str,strlen(str));
              UART2_Write_Text(b);
+             break;
+      case 9:
+             UART2_Write_Text("Test Started!");
+             break;
+      case 10:
+             UART2_Write_Text("Test Stopped!");
              break;
       default:
              UART2_Write_Text("Error Power cycle the device!");
@@ -764,7 +770,7 @@ int i,num_strs,res;
 * test the recieved sms for reaction
 **********************************************************************/
 void TestRecievedSMS(int res){
-char *t,B[64];
+char *t,B[64],txtDig[9];
 
 #ifdef SMSDebug
             // strncat(b,t,strlen(t));
@@ -787,10 +793,12 @@ char *t,B[64];
       case 16:
             GetValuesFromFlash();
             NVMErasePage(FLASH_Settings_PAddr);
-
-               //t =  Read_Send_AllColour(0);
-               WriteToFlashTemp();
-               t =  Write_Thresholds(0);
+            if(string[5] != NULL){
+               strcpy(B,string[5]);
+               Threshold.time_to_log = atoi(B);
+            }
+            WriteToFlashTemp();
+            t =  Write_Thresholds(0);
 #ifdef SMSDebug
                strncat(b,t,strlen(t));
                PrintOut(PrintHandler, "\r\n"
@@ -800,7 +808,12 @@ char *t,B[64];
                 SendSMS(6);
            break;
       case 17:
-
+           SimVars.init_inc = 5;  //Test started
+           SendSMS(9);
+           break;
+      case 18:
+           SimVars.init_inc = 3;  //Test Stopped
+           SendSMS(10);
            break;
       default:
             break;
@@ -872,7 +885,7 @@ static unsigned short hLast;
     }
     
     if(s == 1 &&
-       m > SimVars.time_to_log){
+       m > Threshold.time_to_log){
        TCS3472_getRawData(RawData);
        SendData(RawData);
        return 2;

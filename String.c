@@ -10,13 +10,13 @@ const code char *comc[13]={
    "T",
    "G"
 };
-const code char *com[18]={
+const code char *com[20]={
    "CONFIG",      //0
-   "SENDC",        //1
-   "SENDR",        //2
-   "SENDG",        //3
-   "SENDB",        //4
-   "SENDA",        //5
+   "SENDC",       //1
+   "SENDR",       //2
+   "SENDG",       //3
+   "SENDB",       //4
+   "SENDA",       //5
    "READA",       //6
    "READR",       //7
    "READG",       //8
@@ -28,7 +28,8 @@ const code char *com[18]={
    "READA_THV",   //14
    "WRITE_MAN",   //15
    "WRITE_RAW",   //16
-   "START"
+   "START",       //17
+   "CANCEL"         //18
 };
 
 
@@ -137,6 +138,12 @@ char *str,err,i;
         case WRITE_RAW :
             str = Write_Thresholds(0);
             break;
+        case START :
+            SimVars.init_inc = 5;
+            break;
+        case CANCEL :
+            SimVars.init_inc = 3;
+            break;
         default:
             str = "No data requested!\r\n";
            break;
@@ -203,29 +210,6 @@ int i,ii,kk;
 }
 
 /*********************************************************************
-* Split the string according to the char
-*********************************************************************/
-void strsplit2(char**mdarr,char str[250], char c){
-int i,ii,kk;
-    ii=kk=0;
-    for (i = 0; i < 250;i++){
-        if(str[i] == c){
-          mdarr[kk][ii] = 0;
-          kk++;
-          ii=0;
-          continue;//goto endb;
-        }else{
-          mdarr[kk][ii] = str[i];
-          ii++;
-       }
-//endb:
-       if(str[i]==0)
-          break;
-    }
-
-}
-
-/*********************************************************************
 * seperate numeric fro string   0x30 - 0x39
 *********************************************************************/
 char* findnumber(char* str){
@@ -256,7 +240,7 @@ int i;
        once = 1;
        enum_val = enum_num;
     }
-    for(i = 0;i < enum_val;i++){
+    for(i = 0;i < enum_val+1;i++){
          if(strncmp(str,com[i],strlen(str)-1)==0)
             break;
     }
@@ -393,7 +377,7 @@ int Get_Gain(){
 *Read flash memory for Threshold values
 **********************************************************************/
 char* Read_Thresholds(){
-char txtR[15];
+char txtR[25];
 char str[64];
 unsigned long Val;
 
@@ -413,6 +397,10 @@ unsigned long Val;
        strcat(str," | ");
 
        sprintf(txtR,"%u",Threshold.B_thresh);
+       strcat(str,txtR);
+       strcat(str," | ");
+       
+       sprintf(txtR,"%u",Threshold.time_to_log);
        strcat(str,txtR);
        strcat(str," ||\r\n ");
 
@@ -467,8 +455,15 @@ char str[64];
                 val[3] = atol(string[5]);
         }
          else
-              val[3] = RawData[3];
+             val[3] = RawData[3];
          err = NVMWriteWord(pos,val[3]);
+         
+        pos += 4;
+        if(!data_src){
+            if(string[5] != NULL)
+                val[4] = atol(string[5]);
+             err = NVMWriteWord(pos,val[4]);
+        }
 
 
        //  err = NVMWriteRow(FLASH_Settings_PAddr,val);

@@ -21,15 +21,12 @@ void InitTimer1(){
   T1IE_bit      = 1;
   PR1           = 10000;
   TMR1          = 0;
-  T0_SP.secSP   = 0;
-  T0_SP.minSP   = 9;
-  T0_SP.hrSP    = 0;
 }
 
 //run time
 void Get_Time(){
 char txt[6];
-int res;
+int res,minsPassed;
       TMR0.millis++;
       TMR0.ms++;
       T0_SP.ms++;
@@ -56,12 +53,14 @@ int res;
            }
          }
        }
-       if(T0_SP.sec > T0_SP.secSP && T0_SP.min > T0_SP.minSP && T0_SP.hr > T0_SP.hrSP){
+       
+       if(T0_SP.min > Threshold.time_to_log ){
              T0_SP.one_per_sec = 1;
              T0_SP.sec = T0_SP.min = T0_SP.hr = 0; //start timming again
        }
+       
        //every second
-      if(TMR0.ms > 999){
+       if(TMR0.ms > 999){
           TMR0.ms = 0;
           TMR0.sec++;
           if(TMR0.sec > 59){
@@ -79,9 +78,7 @@ int res;
 
           }
           LATA10_bit = !LATA10_bit;
-      }
-      
-
+       }
 }
 
 /***************************************************************

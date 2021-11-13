@@ -145,29 +145,56 @@ OR	R3, R3, R2
 ;Flash_R_W.c,43 :: 		vals->B_thresh = Val;
 ADDIU	R2, R26, 6
 SH	R3, 0(R2)
-;Flash_R_W.c,47 :: 		}
+;Flash_R_W.c,45 :: 		Val = buff[19];
+ADDIU	R2, R4, 19
+LBU	R2, 0(R2)
+; Val start address is: 8 (R2)
+ANDI	R2, R2, 255
+;Flash_R_W.c,46 :: 		Val =(Val<<8)| buff[18];
+SLL	R3, R2, 8
+; Val end address is: 8 (R2)
+ADDIU	R2, R4, 18
+LBU	R2, 0(R2)
+ANDI	R2, R2, 255
+OR	R2, R3, R2
+;Flash_R_W.c,47 :: 		Val =(Val<<8)| buff[17];
+SLL	R3, R2, 8
+ADDIU	R2, R4, 17
+LBU	R2, 0(R2)
+ANDI	R2, R2, 255
+OR	R2, R3, R2
+;Flash_R_W.c,48 :: 		Val =(Val<<8)| buff[16];
+SLL	R3, R2, 8
+ADDIU	R2, R4, 16
+LBU	R2, 0(R2)
+ANDI	R2, R2, 255
+OR	R3, R3, R2
+;Flash_R_W.c,49 :: 		vals->time_to_log = Val;
+ADDIU	R2, R26, 8
+SH	R3, 0(R2)
+;Flash_R_W.c,52 :: 		}
 L_end_NVMRead:
 ADDIU	SP, SP, 512
 JR	RA
 NOP	
 ; end of _NVMRead
 _NVMWriteWord:
-;Flash_R_W.c,49 :: 		unsigned int NVMWriteWord (void* address, unsigned long _data){
+;Flash_R_W.c,54 :: 		unsigned int NVMWriteWord (void* address, unsigned long _data){
 ADDIU	SP, SP, -8
 SW	RA, 0(SP)
-;Flash_R_W.c,53 :: 		NVMADDR = (unsigned long) address;
+;Flash_R_W.c,58 :: 		NVMADDR = (unsigned long) address;
 SW	R25, 4(SP)
 SW	R25, Offset(NVMADDR+0)(GP)
-;Flash_R_W.c,56 :: 		NVMDATA = _data;
+;Flash_R_W.c,61 :: 		NVMDATA = _data;
 SW	R26, Offset(NVMDATA+0)(GP)
-;Flash_R_W.c,59 :: 		res = NVMUnlock (0x4001);
+;Flash_R_W.c,64 :: 		res = NVMUnlock (0x4001);
 ORI	R25, R0, 16385
 JAL	_NVMUnlock+0
 NOP	
-;Flash_R_W.c,61 :: 		return res;
-;Flash_R_W.c,62 :: 		}
-;Flash_R_W.c,61 :: 		return res;
-;Flash_R_W.c,62 :: 		}
+;Flash_R_W.c,66 :: 		return res;
+;Flash_R_W.c,67 :: 		}
+;Flash_R_W.c,66 :: 		return res;
+;Flash_R_W.c,67 :: 		}
 L_end_NVMWriteWord:
 LW	R25, 4(SP)
 LW	RA, 0(SP)
@@ -176,22 +203,22 @@ JR	RA
 NOP	
 ; end of _NVMWriteWord
 _NVMWriteRow:
-;Flash_R_W.c,65 :: 		unsigned int NVMWriteRow (void* address, void* _data){
+;Flash_R_W.c,70 :: 		unsigned int NVMWriteRow (void* address, void* _data){
 ADDIU	SP, SP, -8
 SW	RA, 0(SP)
-;Flash_R_W.c,68 :: 		NVMADDR = (unsigned long) address;
+;Flash_R_W.c,73 :: 		NVMADDR = (unsigned long) address;
 SW	R25, 4(SP)
 SW	R25, Offset(NVMADDR+0)(GP)
-;Flash_R_W.c,71 :: 		NVMSRCADDR = (unsigned long) _data;
+;Flash_R_W.c,76 :: 		NVMSRCADDR = (unsigned long) _data;
 SW	R26, Offset(NVMSRCADDR+0)(GP)
-;Flash_R_W.c,74 :: 		res = NVMUnlock(0x4003);
+;Flash_R_W.c,79 :: 		res = NVMUnlock(0x4003);
 ORI	R25, R0, 16387
 JAL	_NVMUnlock+0
 NOP	
-;Flash_R_W.c,76 :: 		return res;
-;Flash_R_W.c,77 :: 		}
-;Flash_R_W.c,76 :: 		return res;
-;Flash_R_W.c,77 :: 		}
+;Flash_R_W.c,81 :: 		return res;
+;Flash_R_W.c,82 :: 		}
+;Flash_R_W.c,81 :: 		return res;
+;Flash_R_W.c,82 :: 		}
 L_end_NVMWriteRow:
 LW	R25, 4(SP)
 LW	RA, 0(SP)
@@ -200,20 +227,20 @@ JR	RA
 NOP	
 ; end of _NVMWriteRow
 _NVMErasePage:
-;Flash_R_W.c,79 :: 		unsigned int NVMErasePage(void* address){
+;Flash_R_W.c,84 :: 		unsigned int NVMErasePage(void* address){
 ADDIU	SP, SP, -8
 SW	RA, 0(SP)
-;Flash_R_W.c,82 :: 		NVMADDR = (unsigned long) address;
+;Flash_R_W.c,87 :: 		NVMADDR = (unsigned long) address;
 SW	R25, 4(SP)
 SW	R25, Offset(NVMADDR+0)(GP)
-;Flash_R_W.c,84 :: 		res = NVMUnlock(0x4004);
+;Flash_R_W.c,89 :: 		res = NVMUnlock(0x4004);
 ORI	R25, R0, 16388
 JAL	_NVMUnlock+0
 NOP	
-;Flash_R_W.c,86 :: 		return res;
-;Flash_R_W.c,87 :: 		}
-;Flash_R_W.c,86 :: 		return res;
-;Flash_R_W.c,87 :: 		}
+;Flash_R_W.c,91 :: 		return res;
+;Flash_R_W.c,92 :: 		}
+;Flash_R_W.c,91 :: 		return res;
+;Flash_R_W.c,92 :: 		}
 L_end_NVMErasePage:
 LW	R25, 4(SP)
 LW	RA, 0(SP)
@@ -222,28 +249,28 @@ JR	RA
 NOP	
 ; end of _NVMErasePage
 _NVMUnlock:
-;Flash_R_W.c,89 :: 		unsigned int NVMUnlock (unsigned int nvmop){
-;Flash_R_W.c,92 :: 		status = (unsigned int)DI();
+;Flash_R_W.c,94 :: 		unsigned int NVMUnlock (unsigned int nvmop){
+;Flash_R_W.c,97 :: 		status = (unsigned int)DI();
 DI	R30
 ; status start address is: 12 (R3)
 ANDI	R3, R30, 65535
-;Flash_R_W.c,95 :: 		NVMCON = nvmop & 0x00004007;
+;Flash_R_W.c,100 :: 		NVMCON = nvmop & 0x00004007;
 ANDI	R2, R25, 16391
 ANDI	R2, R2, 65535
 SW	R2, Offset(NVMCON+0)(GP)
-;Flash_R_W.c,98 :: 		NVMKEY = 0xAA996655;
+;Flash_R_W.c,103 :: 		NVMKEY = 0xAA996655;
 LUI	R2, 43673
 ORI	R2, R2, 26197
 SW	R2, Offset(NVMKEY+0)(GP)
-;Flash_R_W.c,99 :: 		NVMKEY = 0x556699AA;
+;Flash_R_W.c,104 :: 		NVMKEY = 0x556699AA;
 LUI	R2, 21862
 ORI	R2, R2, 39338
 SW	R2, Offset(NVMKEY+0)(GP)
-;Flash_R_W.c,102 :: 		NVMCONSET = 0x8000;
+;Flash_R_W.c,107 :: 		NVMCONSET = 0x8000;
 ORI	R2, R0, 32768
 SW	R2, Offset(NVMCONSET+0)(GP)
 ; status end address is: 12 (R3)
-;Flash_R_W.c,105 :: 		while (NVMCON & 0x8000);
+;Flash_R_W.c,110 :: 		while (NVMCON & 0x8000);
 L_NVMUnlock3:
 ; status start address is: 12 (R3)
 LW	R2, Offset(NVMCON+0)(GP)
@@ -256,7 +283,7 @@ L__NVMUnlock17:
 J	L_NVMUnlock3
 NOP	
 L_NVMUnlock4:
-;Flash_R_W.c,108 :: 		if (status & 0x0001)
+;Flash_R_W.c,113 :: 		if (status & 0x0001)
 ANDI	R2, R3, 1
 ; status end address is: 12 (R3)
 BNE	R2, R0, L__NVMUnlock19
@@ -264,33 +291,33 @@ NOP
 J	L_NVMUnlock5
 NOP	
 L__NVMUnlock19:
-;Flash_R_W.c,109 :: 		EI();
+;Flash_R_W.c,114 :: 		EI();
 EI	R30
 J	L_NVMUnlock6
 NOP	
 L_NVMUnlock5:
-;Flash_R_W.c,111 :: 		DI();
+;Flash_R_W.c,116 :: 		DI();
 DI	R30
 L_NVMUnlock6:
-;Flash_R_W.c,114 :: 		NVMCONCLR = 0x0004000;
+;Flash_R_W.c,119 :: 		NVMCONCLR = 0x0004000;
 ORI	R2, R0, 16384
 SW	R2, Offset(NVMCONCLR+0)(GP)
-;Flash_R_W.c,117 :: 		return (NVMCON & 0x3000);
+;Flash_R_W.c,122 :: 		return (NVMCON & 0x3000);
 LW	R2, Offset(NVMCON+0)(GP)
 ANDI	R2, R2, 12288
-;Flash_R_W.c,118 :: 		}
+;Flash_R_W.c,123 :: 		}
 L_end_NVMUnlock:
 JR	RA
 NOP	
 ; end of _NVMUnlock
 _ReadFlashWord:
-;Flash_R_W.c,120 :: 		unsigned long ReadFlashWord(){
+;Flash_R_W.c,125 :: 		unsigned long ReadFlashWord(){
 ADDIU	SP, SP, -512
-;Flash_R_W.c,129 :: 		ptr = (unsigned char*)(FLASH_Settings_VAddr);
+;Flash_R_W.c,134 :: 		ptr = (unsigned char*)(FLASH_Settings_VAddr);
 ; ptr start address is: 20 (R5)
 LWR	R5, Offset(_FLASH_Settings_VAddr+0)(GP)
 LWL	R5, Offset(_FLASH_Settings_VAddr+3)(GP)
-;Flash_R_W.c,130 :: 		for(i=0;i<512;i++){
+;Flash_R_W.c,135 :: 		for(i=0;i<512;i++){
 ; i start address is: 16 (R4)
 MOVZ	R4, R0, R0
 ; ptr end address is: 20 (R5)
@@ -304,49 +331,49 @@ NOP
 J	L_ReadFlashWord8
 NOP	
 L__ReadFlashWord21:
-;Flash_R_W.c,131 :: 		buff[i] = *ptr;
+;Flash_R_W.c,136 :: 		buff[i] = *ptr;
 ADDIU	R2, SP, 0
 ADDU	R3, R2, R4
 LBU	R2, 0(R5)
 SB	R2, 0(R3)
-;Flash_R_W.c,132 :: 		ptr++;
+;Flash_R_W.c,137 :: 		ptr++;
 ADDIU	R2, R5, 1
 MOVZ	R5, R2, R0
-;Flash_R_W.c,130 :: 		for(i=0;i<512;i++){
+;Flash_R_W.c,135 :: 		for(i=0;i<512;i++){
 ADDIU	R2, R4, 1
 MOVZ	R4, R2, R0
-;Flash_R_W.c,133 :: 		}
+;Flash_R_W.c,138 :: 		}
 ; ptr end address is: 20 (R5)
 ; i end address is: 16 (R4)
 J	L_ReadFlashWord7
 NOP	
 L_ReadFlashWord8:
-;Flash_R_W.c,135 :: 		Val = buff[3];
+;Flash_R_W.c,140 :: 		Val = buff[3];
 ADDIU	R4, SP, 0
 ADDIU	R2, R4, 3
 LBU	R2, 0(R2)
 ; Val start address is: 8 (R2)
 ANDI	R2, R2, 255
-;Flash_R_W.c,136 :: 		Val =(Val<<8)| buff[2];
+;Flash_R_W.c,141 :: 		Val =(Val<<8)| buff[2];
 SLL	R3, R2, 8
 ; Val end address is: 8 (R2)
 ADDIU	R2, R4, 2
 LBU	R2, 0(R2)
 ANDI	R2, R2, 255
 OR	R2, R3, R2
-;Flash_R_W.c,137 :: 		Val =(Val<<8)| buff[1];
+;Flash_R_W.c,142 :: 		Val =(Val<<8)| buff[1];
 SLL	R3, R2, 8
 ADDIU	R2, R4, 1
 LBU	R2, 0(R2)
 ANDI	R2, R2, 255
 OR	R2, R3, R2
-;Flash_R_W.c,138 :: 		Val =(Val<<8)| buff[0];
+;Flash_R_W.c,143 :: 		Val =(Val<<8)| buff[0];
 SLL	R3, R2, 8
 LBU	R2, 0(R4)
 ANDI	R2, R2, 255
 OR	R2, R3, R2
-;Flash_R_W.c,140 :: 		return Val;//0xafffafff;
-;Flash_R_W.c,141 :: 		}
+;Flash_R_W.c,145 :: 		return Val;//0xafffafff;
+;Flash_R_W.c,146 :: 		}
 L_end_ReadFlashWord:
 ADDIU	SP, SP, 512
 JR	RA

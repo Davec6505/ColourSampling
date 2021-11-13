@@ -163,7 +163,8 @@ READA_SCL,
 READA_THV,
 WRITE_MAN,
 WRITE_RAW,
-START
+START,
+CANCEL
 };
 
 struct Constants{
@@ -184,8 +185,9 @@ struct Thresh{
  uint16_t R_thresh;
  uint16_t G_thresh;
  uint16_t B_thresh;
+ uint16_t time_to_log;
 };
-
+extern struct Thresh Threshold;
 
 
 
@@ -262,9 +264,7 @@ unsigned int ms;
 unsigned int sec;
 unsigned int min;
 unsigned int hr;
-unsigned int secSP;
-unsigned int minSP;
-unsigned int hrSP;
+unsigned int lastMin;
 unsigned short one_per_sec;
 }Timer_Setpoint;
 
@@ -301,9 +301,9 @@ extern char rcvPcTxt[150];
 
 
 typedef struct{
- unsigned int time_to_log;
  char initial_str;
  char init_inc;
+ char start: 1;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 
@@ -422,7 +422,7 @@ char txtLen[6];
 
 Sim800Vars SimVars = {
  0,
- 9,
+ 0,
  0
 };
 
@@ -471,7 +471,7 @@ static int i,j;
  pos = FLASH_Settings_PAddr;
  j = NVMErasePage(pos);
  if(j==0){
- pos += 16 ;
+ pos += 20 ;
  for(i=0;i<SL.l4;i++){
  j = NVMWriteWord(pos,temp[i]);
  pos += 4;
@@ -497,7 +497,7 @@ unsigned long i,j;
  GetStrLengths();
 
  ptr = (unsigned char*)FLASH_Settings_VAddr;
- ptr += 16;
+ ptr += 20;
 
  for(i=0;i<SL.l5;i++){
  buff[i] = ptr[i];
@@ -942,6 +942,12 @@ char b[64];
  strncpy(b,str,strlen(str));
  UART2_Write_Text(b);
  break;
+ case 9:
+ UART2_Write_Text("Test Started!");
+ break;
+ case 10:
+ UART2_Write_Text("Test Stopped!");
+ break;
  default:
  UART2_Write_Text("Error Power cycle the device!");
  break;
@@ -952,7 +958,7 @@ char b[64];
  Delay_ms(5000);
 
 }
-#line 643 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 649 "C:/Users/Git/ColourSampling/Sim800.c"
 char* GetSMSText(){
 
 int num_strs,res,err;
@@ -1004,7 +1010,7 @@ int num_strs,res,err;
 
 
 }
-#line 699 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 705 "C:/Users/Git/ColourSampling/Sim800.c"
 char* ReadMSG(int msg_num){
 int i,num_strs,res;
 
@@ -1068,9 +1074,9 @@ int i,num_strs,res;
  }
 
 }
-#line 766 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 772 "C:/Users/Git/ColourSampling/Sim800.c"
 void TestRecievedSMS(int res){
-char *t,B[64];
+char *t,B[64],txtDig[9];
 
 
 
@@ -1093,8 +1099,10 @@ char *t,B[64];
  case 16:
  GetValuesFromFlash();
  NVMErasePage(FLASH_Settings_PAddr);
-
-
+ if(string[5] !=  ((void *)0) ){
+ strcpy(B,string[5]);
+ Threshold.time_to_log = atoi(B);
+ }
  WriteToFlashTemp();
  t = Write_Thresholds(0);
 
@@ -1106,14 +1114,19 @@ char *t,B[64];
  SendSMS(6);
  break;
  case 17:
-
+ SimVars.init_inc = 5;
+ SendSMS(9);
+ break;
+ case 18:
+ SimVars.init_inc = 3;
+ SendSMS(10);
  break;
  default:
  break;
  }
 
 }
-#line 815 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 828 "C:/Users/Git/ColourSampling/Sim800.c"
 int RemoveSMSText(int sms_cnt){
 
 
@@ -1138,7 +1151,7 @@ int RemoveSMSText(int sms_cnt){
 
  return sms_cnt;
 }
-#line 844 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 857 "C:/Users/Git/ColourSampling/Sim800.c"
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h){
 static unsigned short sLast;
 static unsigned short mLast;
@@ -1146,26 +1159,26 @@ static unsigned short hLast;
 
  if(s != sLast){
  sLast = s;
-#line 856 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 869 "C:/Users/Git/ColourSampling/Sim800.c"
  }
  if(m != mLast){
  mLast = m;
-#line 864 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 877 "C:/Users/Git/ColourSampling/Sim800.c"
  }
  if(h != hLast){
  hLast = h;
-#line 872 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 885 "C:/Users/Git/ColourSampling/Sim800.c"
  }
 
  if(s == 1 &&
- m > SimVars.time_to_log){
+ m > Threshold.time_to_log){
  TCS3472_getRawData(RawData);
  SendData(RawData);
  return 2;
  }
  return -1;
 }
-#line 886 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 899 "C:/Users/Git/ColourSampling/Sim800.c"
 void SendData(unsigned int* rgbc){
 int len;
 
@@ -1265,7 +1278,7 @@ int len;
 
  Free(str,150*sizeof(char*));
 }
-#line 990 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 1003 "C:/Users/Git/ColourSampling/Sim800.c"
 void TestForOK(char c){
 unsigned long lastMillis,newMillis;
  WaitForResponse(1);

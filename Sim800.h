@@ -32,9 +32,9 @@ extern char rcvPcTxt[150];
 //////////////////////////////////////////////////////
 //structs and enuum
 typedef struct{
- unsigned int time_to_log;
  char  initial_str;
  char  init_inc;
+ char  start: 1;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 

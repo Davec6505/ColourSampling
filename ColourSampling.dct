@@ -11200,7 +11200,6 @@ hr102_bit
 hr103
 hr103_alrmtime_bit
 hr103_bit
-hrsp
 i2c_is_idle
 i2c_is_idle_ptr
 i2c_read
@@ -13025,6 +13024,7 @@ l5
 labs
 last_head
 last_tail
+lastmin
 lata
 lata0
 lata0
@@ -13868,7 +13868,6 @@ min102_bit
 min103
 min103_alrmtime_bit
 min103_bit
-minsp
 mm_error_
 mm_freememtable
 mm_init
@@ -18886,7 +18885,6 @@ sec102_bit
 sec103
 sec103_alrmtime_bit
 sec103_bit
-secsp
 sen
 sen
 sen
@@ -19654,6 +19652,7 @@ stallif
 stallif
 stallif
 stallif_bit
+start
 stat
 stov
 stov
@@ -19746,7 +19745,6 @@ strncpy
 strpbrk
 strrchr
 strsplit
-strsplit2
 strsplitfp
 strspn
 strstr

@@ -28,64 +28,57 @@ ORI	R2, R0, 10000
 SW	R2, Offset(PR1+0)(GP)
 ;_Timers.c,23 :: 		TMR1          = 0;
 SW	R0, Offset(TMR1+0)(GP)
-;_Timers.c,24 :: 		T0_SP.secSP   = 0;
-SH	R0, Offset(_T0_SP+8)(GP)
-;_Timers.c,25 :: 		T0_SP.minSP   = 9;
-ORI	R2, R0, 9
-SH	R2, Offset(_T0_SP+10)(GP)
-;_Timers.c,26 :: 		T0_SP.hrSP    = 0;
-SH	R0, Offset(_T0_SP+12)(GP)
-;_Timers.c,27 :: 		}
+;_Timers.c,24 :: 		}
 L_end_InitTimer1:
 JR	RA
 NOP	
 ; end of _InitTimer1
 _Get_Time:
-;_Timers.c,30 :: 		void Get_Time(){
+;_Timers.c,27 :: 		void Get_Time(){
 ADDIU	SP, SP, -16
 SW	RA, 0(SP)
-;_Timers.c,33 :: 		TMR0.millis++;
+;_Timers.c,30 :: 		TMR0.millis++;
 SW	R25, 4(SP)
 LW	R2, Offset(_TMR0+0)(GP)
 ADDIU	R2, R2, 1
 SW	R2, Offset(_TMR0+0)(GP)
-;_Timers.c,34 :: 		TMR0.ms++;
+;_Timers.c,31 :: 		TMR0.ms++;
 LHU	R2, Offset(_TMR0+4)(GP)
 ADDIU	R2, R2, 1
 SH	R2, Offset(_TMR0+4)(GP)
-;_Timers.c,35 :: 		T0_SP.ms++;
+;_Timers.c,32 :: 		T0_SP.ms++;
 LHU	R2, Offset(_T0_SP+0)(GP)
 ADDIU	R2, R2, 1
 SH	R2, Offset(_T0_SP+0)(GP)
-;_Timers.c,38 :: 		if(T0_SP.ms > 999){
+;_Timers.c,35 :: 		if(T0_SP.ms > 999){
 ANDI	R2, R2, 65535
 SLTIU	R2, R2, 1000
-BEQ	R2, R0, L__Get_Time37
+BEQ	R2, R0, L__Get_Time31
 NOP	
 J	L_Get_Time0
 NOP	
-L__Get_Time37:
-;_Timers.c,39 :: 		T0_SP.ms = 0;
+L__Get_Time31:
+;_Timers.c,36 :: 		T0_SP.ms = 0;
 SH	R0, Offset(_T0_SP+0)(GP)
-;_Timers.c,40 :: 		T0_SP.sec++;
+;_Timers.c,37 :: 		T0_SP.sec++;
 LHU	R2, Offset(_T0_SP+2)(GP)
 ADDIU	R2, R2, 1
 SH	R2, Offset(_T0_SP+2)(GP)
-;_Timers.c,41 :: 		if(T0_SP.sec > 59){
+;_Timers.c,38 :: 		if(T0_SP.sec > 59){
 ANDI	R2, R2, 65535
 SLTIU	R2, R2, 60
-BEQ	R2, R0, L__Get_Time38
+BEQ	R2, R0, L__Get_Time32
 NOP	
 J	L_Get_Time1
 NOP	
-L__Get_Time38:
-;_Timers.c,42 :: 		T0_SP.sec = 0;
+L__Get_Time32:
+;_Timers.c,39 :: 		T0_SP.sec = 0;
 SH	R0, Offset(_T0_SP+2)(GP)
-;_Timers.c,43 :: 		T0_SP.min++;
+;_Timers.c,40 :: 		T0_SP.min++;
 LHU	R2, Offset(_T0_SP+4)(GP)
 ADDIU	R2, R2, 1
 SH	R2, Offset(_T0_SP+4)(GP)
-;_Timers.c,45 :: 		sprintf(txt,"%u",T0_SP.min);
+;_Timers.c,42 :: 		sprintf(txt,"%u",T0_SP.min);
 ADDIU	R3, SP, 8
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
@@ -96,156 +89,137 @@ SW	R3, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;_Timers.c,46 :: 		UART1_Write_Text(txt);
+;_Timers.c,43 :: 		UART1_Write_Text(txt);
 ADDIU	R2, SP, 8
 MOVZ	R25, R2, R0
 JAL	_UART1_Write_Text+0
 NOP	
-;_Timers.c,47 :: 		UART1_Write(0x0d);
+;_Timers.c,44 :: 		UART1_Write(0x0d);
 ORI	R25, R0, 13
 JAL	_UART1_Write+0
 NOP	
-;_Timers.c,48 :: 		UART1_Write(0x0a);
+;_Timers.c,45 :: 		UART1_Write(0x0a);
 ORI	R25, R0, 10
 JAL	_UART1_Write+0
 NOP	
-;_Timers.c,50 :: 		if(T0_SP.min > 59){
+;_Timers.c,47 :: 		if(T0_SP.min > 59){
 LHU	R2, Offset(_T0_SP+4)(GP)
 SLTIU	R2, R2, 60
-BEQ	R2, R0, L__Get_Time39
+BEQ	R2, R0, L__Get_Time33
 NOP	
 J	L_Get_Time2
 NOP	
-L__Get_Time39:
-;_Timers.c,51 :: 		T0_SP.min = 0;
+L__Get_Time33:
+;_Timers.c,48 :: 		T0_SP.min = 0;
 SH	R0, Offset(_T0_SP+4)(GP)
-;_Timers.c,52 :: 		T0_SP.hr++;
+;_Timers.c,49 :: 		T0_SP.hr++;
 LHU	R2, Offset(_T0_SP+6)(GP)
 ADDIU	R2, R2, 1
 SH	R2, Offset(_T0_SP+6)(GP)
-;_Timers.c,53 :: 		if(T0_SP.hr > 23){
+;_Timers.c,50 :: 		if(T0_SP.hr > 23){
 ANDI	R2, R2, 65535
 SLTIU	R2, R2, 24
-BEQ	R2, R0, L__Get_Time40
+BEQ	R2, R0, L__Get_Time34
 NOP	
 J	L_Get_Time3
 NOP	
-L__Get_Time40:
-;_Timers.c,54 :: 		T0_SP.hr = 0;
+L__Get_Time34:
+;_Timers.c,51 :: 		T0_SP.hr = 0;
 SH	R0, Offset(_T0_SP+6)(GP)
-;_Timers.c,55 :: 		}
+;_Timers.c,52 :: 		}
 L_Get_Time3:
-;_Timers.c,56 :: 		}
+;_Timers.c,53 :: 		}
 L_Get_Time2:
-;_Timers.c,57 :: 		}
+;_Timers.c,54 :: 		}
 L_Get_Time1:
-;_Timers.c,58 :: 		}
+;_Timers.c,55 :: 		}
 L_Get_Time0:
-;_Timers.c,59 :: 		if(T0_SP.sec > T0_SP.secSP && T0_SP.min > T0_SP.minSP && T0_SP.hr > T0_SP.hrSP){
-LHU	R3, Offset(_T0_SP+8)(GP)
-LHU	R2, Offset(_T0_SP+2)(GP)
-SLTU	R2, R3, R2
-BNE	R2, R0, L__Get_Time41
-NOP	
-J	L__Get_Time34
-NOP	
-L__Get_Time41:
-LHU	R3, Offset(_T0_SP+10)(GP)
+;_Timers.c,57 :: 		if(T0_SP.min > Threshold.time_to_log ){
+LHU	R3, Offset(_Threshold+8)(GP)
 LHU	R2, Offset(_T0_SP+4)(GP)
 SLTU	R2, R3, R2
-BNE	R2, R0, L__Get_Time42
+BNE	R2, R0, L__Get_Time35
 NOP	
-J	L__Get_Time33
+J	L_Get_Time4
 NOP	
-L__Get_Time42:
-LHU	R3, Offset(_T0_SP+12)(GP)
-LHU	R2, Offset(_T0_SP+6)(GP)
-SLTU	R2, R3, R2
-BNE	R2, R0, L__Get_Time43
-NOP	
-J	L__Get_Time32
-NOP	
-L__Get_Time43:
-L__Get_Time31:
-;_Timers.c,60 :: 		T0_SP.one_per_sec = 1;
+L__Get_Time35:
+;_Timers.c,58 :: 		T0_SP.one_per_sec = 1;
 ORI	R2, R0, 1
-SB	R2, Offset(_T0_SP+14)(GP)
-;_Timers.c,61 :: 		T0_SP.sec = T0_SP.min = T0_SP.hr = 0; //start timming again
+SB	R2, Offset(_T0_SP+10)(GP)
+;_Timers.c,59 :: 		T0_SP.sec = T0_SP.min = T0_SP.hr = 0; //start timming again
 SH	R0, Offset(_T0_SP+6)(GP)
 SH	R0, Offset(_T0_SP+4)(GP)
 SH	R0, Offset(_T0_SP+2)(GP)
-;_Timers.c,59 :: 		if(T0_SP.sec > T0_SP.secSP && T0_SP.min > T0_SP.minSP && T0_SP.hr > T0_SP.hrSP){
-L__Get_Time34:
-L__Get_Time33:
-L__Get_Time32:
-;_Timers.c,64 :: 		if(TMR0.ms > 999){
+;_Timers.c,60 :: 		}
+L_Get_Time4:
+;_Timers.c,63 :: 		if(TMR0.ms > 999){
 LHU	R2, Offset(_TMR0+4)(GP)
 SLTIU	R2, R2, 1000
-BEQ	R2, R0, L__Get_Time44
+BEQ	R2, R0, L__Get_Time36
 NOP	
-J	L_Get_Time7
+J	L_Get_Time5
 NOP	
-L__Get_Time44:
-;_Timers.c,65 :: 		TMR0.ms = 0;
+L__Get_Time36:
+;_Timers.c,64 :: 		TMR0.ms = 0;
 SH	R0, Offset(_TMR0+4)(GP)
-;_Timers.c,66 :: 		TMR0.sec++;
+;_Timers.c,65 :: 		TMR0.sec++;
 LHU	R2, Offset(_TMR0+6)(GP)
 ADDIU	R2, R2, 1
 SH	R2, Offset(_TMR0+6)(GP)
-;_Timers.c,67 :: 		if(TMR0.sec > 59){
+;_Timers.c,66 :: 		if(TMR0.sec > 59){
 ANDI	R2, R2, 65535
 SLTIU	R2, R2, 60
-BEQ	R2, R0, L__Get_Time45
+BEQ	R2, R0, L__Get_Time37
 NOP	
-J	L_Get_Time8
+J	L_Get_Time6
 NOP	
-L__Get_Time45:
-;_Timers.c,68 :: 		TMR0.sec = 0;
+L__Get_Time37:
+;_Timers.c,67 :: 		TMR0.sec = 0;
 SH	R0, Offset(_TMR0+6)(GP)
-;_Timers.c,69 :: 		TMR0.min++;
+;_Timers.c,68 :: 		TMR0.min++;
 LHU	R2, Offset(_TMR0+8)(GP)
 ADDIU	R2, R2, 1
 SH	R2, Offset(_TMR0+8)(GP)
-;_Timers.c,71 :: 		if(TMR0.min > 59){
+;_Timers.c,70 :: 		if(TMR0.min > 59){
 ANDI	R2, R2, 65535
 SLTIU	R2, R2, 60
-BEQ	R2, R0, L__Get_Time46
+BEQ	R2, R0, L__Get_Time38
 NOP	
-J	L_Get_Time9
+J	L_Get_Time7
 NOP	
-L__Get_Time46:
-;_Timers.c,72 :: 		TMR0.min = 0;
+L__Get_Time38:
+;_Timers.c,71 :: 		TMR0.min = 0;
 SH	R0, Offset(_TMR0+8)(GP)
-;_Timers.c,73 :: 		TMR0.hr++;
+;_Timers.c,72 :: 		TMR0.hr++;
 LHU	R2, Offset(_TMR0+10)(GP)
 ADDIU	R2, R2, 1
 SH	R2, Offset(_TMR0+10)(GP)
-;_Timers.c,75 :: 		if(TMR0.hr > 23){
+;_Timers.c,74 :: 		if(TMR0.hr > 23){
 ANDI	R2, R2, 65535
 SLTIU	R2, R2, 24
-BEQ	R2, R0, L__Get_Time47
+BEQ	R2, R0, L__Get_Time39
 NOP	
-J	L_Get_Time10
+J	L_Get_Time8
 NOP	
-L__Get_Time47:
-;_Timers.c,76 :: 		TMR0.hr = 0;
+L__Get_Time39:
+;_Timers.c,75 :: 		TMR0.hr = 0;
 SH	R0, Offset(_TMR0+10)(GP)
-;_Timers.c,77 :: 		}
-L_Get_Time10:
-;_Timers.c,78 :: 		}
-L_Get_Time9:
-;_Timers.c,80 :: 		}
+;_Timers.c,76 :: 		}
 L_Get_Time8:
-;_Timers.c,81 :: 		LATA10_bit = !LATA10_bit;
+;_Timers.c,77 :: 		}
+L_Get_Time7:
+;_Timers.c,79 :: 		}
+L_Get_Time6:
+;_Timers.c,80 :: 		LATA10_bit = !LATA10_bit;
 _LX	
 EXT	R2, R2, BitPos(LATA10_bit+0), 1
 XORI	R3, R2, 1
 _LX	
 INS	R2, R3, BitPos(LATA10_bit+0), 1
 _SX	
+;_Timers.c,81 :: 		}
+L_Get_Time5:
 ;_Timers.c,82 :: 		}
-L_Get_Time7:
-;_Timers.c,85 :: 		}
 L_end_Get_Time:
 LW	R25, 4(SP)
 LW	RA, 0(SP)
@@ -254,177 +228,177 @@ JR	RA
 NOP	
 ; end of _Get_Time
 _Day_Month:
-;_Timers.c,90 :: 		void Day_Month(int hr,int day,int mnth){
-;_Timers.c,92 :: 		for(i=0;i<6;i++){
+;_Timers.c,87 :: 		void Day_Month(int hr,int day,int mnth){
+;_Timers.c,89 :: 		for(i=0;i<6;i++){
 ; i start address is: 12 (R3)
 MOVZ	R3, R0, R0
 ; i end address is: 12 (R3)
-L_Day_Month11:
+L_Day_Month9:
 ; i start address is: 12 (R3)
 SEH	R2, R3
 SLTI	R2, R2, 6
-BNE	R2, R0, L__Day_Month49
+BNE	R2, R0, L__Day_Month41
 NOP	
-J	L_Day_Month12
+J	L_Day_Month10
 NOP	
-L__Day_Month49:
+L__Day_Month41:
 ADDIU	R2, R3, 1
 SEH	R3, R2
-;_Timers.c,94 :: 		}
+;_Timers.c,91 :: 		}
 ; i end address is: 12 (R3)
-J	L_Day_Month11
+J	L_Day_Month9
 NOP	
-L_Day_Month12:
-;_Timers.c,95 :: 		}
+L_Day_Month10:
+;_Timers.c,92 :: 		}
 L_end_Day_Month:
 JR	RA
 NOP	
 ; end of _Day_Month
 _I2C2_TimeoutCallback:
-;_Timers.c,101 :: 		void I2C2_TimeoutCallback(char errorCode) {
-;_Timers.c,103 :: 		if (errorCode == _I2C_TIMEOUT_RD) {
+;_Timers.c,98 :: 		void I2C2_TimeoutCallback(char errorCode) {
+;_Timers.c,100 :: 		if (errorCode == _I2C_TIMEOUT_RD) {
 ANDI	R3, R25, 255
 ORI	R2, R0, 3
-BEQ	R3, R2, L__I2C2_TimeoutCallback51
+BEQ	R3, R2, L__I2C2_TimeoutCallback43
+NOP	
+J	L_I2C2_TimeoutCallback12
+NOP	
+L__I2C2_TimeoutCallback43:
+;_Timers.c,102 :: 		for(i = 0;i < 20;i++){
+; i start address is: 16 (R4)
+MOVZ	R4, R0, R0
+; i end address is: 16 (R4)
+L_I2C2_TimeoutCallback13:
+; i start address is: 16 (R4)
+SEH	R2, R4
+SLTI	R2, R2, 20
+BNE	R2, R0, L__I2C2_TimeoutCallback44
 NOP	
 J	L_I2C2_TimeoutCallback14
 NOP	
-L__I2C2_TimeoutCallback51:
-;_Timers.c,105 :: 		for(i = 0;i < 20;i++){
-; i start address is: 16 (R4)
-MOVZ	R4, R0, R0
-; i end address is: 16 (R4)
-L_I2C2_TimeoutCallback15:
-; i start address is: 16 (R4)
-SEH	R2, R4
-SLTI	R2, R2, 20
-BNE	R2, R0, L__I2C2_TimeoutCallback52
-NOP	
-J	L_I2C2_TimeoutCallback16
-NOP	
-L__I2C2_TimeoutCallback52:
-;_Timers.c,106 :: 		LATE3_bit = !LATE3_bit;
+L__I2C2_TimeoutCallback44:
+;_Timers.c,103 :: 		LATE3_bit = !LATE3_bit;
 _LX	
 EXT	R2, R2, BitPos(LATE3_bit+0), 1
 XORI	R3, R2, 1
 _LX	
 INS	R2, R3, BitPos(LATE3_bit+0), 1
 _SX	
-;_Timers.c,107 :: 		Delay_ms(100);
+;_Timers.c,104 :: 		Delay_ms(100);
 LUI	R24, 40
 ORI	R24, R24, 45226
-L_I2C2_TimeoutCallback18:
+L_I2C2_TimeoutCallback16:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_I2C2_TimeoutCallback18
+BNE	R24, R0, L_I2C2_TimeoutCallback16
 NOP	
-;_Timers.c,105 :: 		for(i = 0;i < 20;i++){
+;_Timers.c,102 :: 		for(i = 0;i < 20;i++){
 ADDIU	R2, R4, 1
 SEH	R4, R2
-;_Timers.c,108 :: 		}
+;_Timers.c,105 :: 		}
 ; i end address is: 16 (R4)
-J	L_I2C2_TimeoutCallback15
+J	L_I2C2_TimeoutCallback13
 NOP	
-L_I2C2_TimeoutCallback16:
-;_Timers.c,109 :: 		}
 L_I2C2_TimeoutCallback14:
-;_Timers.c,111 :: 		if (errorCode == _I2C_TIMEOUT_WR) {
+;_Timers.c,106 :: 		}
+L_I2C2_TimeoutCallback12:
+;_Timers.c,108 :: 		if (errorCode == _I2C_TIMEOUT_WR) {
 ANDI	R3, R25, 255
 ORI	R2, R0, 4
-BEQ	R3, R2, L__I2C2_TimeoutCallback53
+BEQ	R3, R2, L__I2C2_TimeoutCallback45
+NOP	
+J	L_I2C2_TimeoutCallback18
+NOP	
+L__I2C2_TimeoutCallback45:
+;_Timers.c,110 :: 		for(i = 0;i < 20;i++){
+; i start address is: 16 (R4)
+MOVZ	R4, R0, R0
+; i end address is: 16 (R4)
+L_I2C2_TimeoutCallback19:
+; i start address is: 16 (R4)
+SEH	R2, R4
+SLTI	R2, R2, 20
+BNE	R2, R0, L__I2C2_TimeoutCallback46
 NOP	
 J	L_I2C2_TimeoutCallback20
 NOP	
-L__I2C2_TimeoutCallback53:
-;_Timers.c,113 :: 		for(i = 0;i < 20;i++){
-; i start address is: 16 (R4)
-MOVZ	R4, R0, R0
-; i end address is: 16 (R4)
-L_I2C2_TimeoutCallback21:
-; i start address is: 16 (R4)
-SEH	R2, R4
-SLTI	R2, R2, 20
-BNE	R2, R0, L__I2C2_TimeoutCallback54
-NOP	
-J	L_I2C2_TimeoutCallback22
-NOP	
-L__I2C2_TimeoutCallback54:
-;_Timers.c,114 :: 		LATE3_bit = !LATE3_bit;
+L__I2C2_TimeoutCallback46:
+;_Timers.c,111 :: 		LATE3_bit = !LATE3_bit;
 _LX	
 EXT	R2, R2, BitPos(LATE3_bit+0), 1
 XORI	R3, R2, 1
 _LX	
 INS	R2, R3, BitPos(LATE3_bit+0), 1
 _SX	
-;_Timers.c,115 :: 		Delay_ms(500);
+;_Timers.c,112 :: 		Delay_ms(500);
 LUI	R24, 203
 ORI	R24, R24, 29524
-L_I2C2_TimeoutCallback24:
+L_I2C2_TimeoutCallback22:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_I2C2_TimeoutCallback24
+BNE	R24, R0, L_I2C2_TimeoutCallback22
 NOP	
 NOP	
 NOP	
-;_Timers.c,113 :: 		for(i = 0;i < 20;i++){
+;_Timers.c,110 :: 		for(i = 0;i < 20;i++){
 ADDIU	R2, R4, 1
 SEH	R4, R2
-;_Timers.c,116 :: 		}
+;_Timers.c,113 :: 		}
 ; i end address is: 16 (R4)
-J	L_I2C2_TimeoutCallback21
+J	L_I2C2_TimeoutCallback19
 NOP	
-L_I2C2_TimeoutCallback22:
-;_Timers.c,117 :: 		}
 L_I2C2_TimeoutCallback20:
-;_Timers.c,119 :: 		if (errorCode == _I2C_TIMEOUT_STOP) {
+;_Timers.c,114 :: 		}
+L_I2C2_TimeoutCallback18:
+;_Timers.c,116 :: 		if (errorCode == _I2C_TIMEOUT_STOP) {
 ANDI	R3, R25, 255
 ORI	R2, R0, 7
-BEQ	R3, R2, L__I2C2_TimeoutCallback55
+BEQ	R3, R2, L__I2C2_TimeoutCallback47
+NOP	
+J	L_I2C2_TimeoutCallback24
+NOP	
+L__I2C2_TimeoutCallback47:
+;_Timers.c,118 :: 		}
+L_I2C2_TimeoutCallback24:
+;_Timers.c,120 :: 		if (errorCode == _I2C_TIMEOUT_START) {
+ANDI	R3, R25, 255
+ORI	R2, R0, 5
+BEQ	R3, R2, L__I2C2_TimeoutCallback48
+NOP	
+J	L_I2C2_TimeoutCallback25
+NOP	
+L__I2C2_TimeoutCallback48:
+;_Timers.c,122 :: 		}
+L_I2C2_TimeoutCallback25:
+;_Timers.c,124 :: 		if (errorCode == _I2C_TIMEOUT_REPEATED_START) {
+ANDI	R3, R25, 255
+ORI	R2, R0, 6
+BEQ	R3, R2, L__I2C2_TimeoutCallback49
 NOP	
 J	L_I2C2_TimeoutCallback26
 NOP	
-L__I2C2_TimeoutCallback55:
-;_Timers.c,121 :: 		}
+L__I2C2_TimeoutCallback49:
+;_Timers.c,126 :: 		}
 L_I2C2_TimeoutCallback26:
-;_Timers.c,123 :: 		if (errorCode == _I2C_TIMEOUT_START) {
+;_Timers.c,128 :: 		if (errorCode == _I2C_TIMEOUT_INIT) {
 ANDI	R3, R25, 255
-ORI	R2, R0, 5
-BEQ	R3, R2, L__I2C2_TimeoutCallback56
+ORI	R2, R0, 8
+BEQ	R3, R2, L__I2C2_TimeoutCallback50
 NOP	
 J	L_I2C2_TimeoutCallback27
 NOP	
-L__I2C2_TimeoutCallback56:
-;_Timers.c,125 :: 		}
+L__I2C2_TimeoutCallback50:
+;_Timers.c,130 :: 		}
 L_I2C2_TimeoutCallback27:
-;_Timers.c,127 :: 		if (errorCode == _I2C_TIMEOUT_REPEATED_START) {
+;_Timers.c,132 :: 		if (errorCode == _I2C_TIMEOUT_INIT_ADVANCED) {
 ANDI	R3, R25, 255
-ORI	R2, R0, 6
-BEQ	R3, R2, L__I2C2_TimeoutCallback57
+ORI	R2, R0, 9
+BEQ	R3, R2, L__I2C2_TimeoutCallback51
 NOP	
 J	L_I2C2_TimeoutCallback28
 NOP	
-L__I2C2_TimeoutCallback57:
-;_Timers.c,129 :: 		}
+L__I2C2_TimeoutCallback51:
+;_Timers.c,134 :: 		}
 L_I2C2_TimeoutCallback28:
-;_Timers.c,131 :: 		if (errorCode == _I2C_TIMEOUT_INIT) {
-ANDI	R3, R25, 255
-ORI	R2, R0, 8
-BEQ	R3, R2, L__I2C2_TimeoutCallback58
-NOP	
-J	L_I2C2_TimeoutCallback29
-NOP	
-L__I2C2_TimeoutCallback58:
-;_Timers.c,133 :: 		}
-L_I2C2_TimeoutCallback29:
-;_Timers.c,135 :: 		if (errorCode == _I2C_TIMEOUT_INIT_ADVANCED) {
-ANDI	R3, R25, 255
-ORI	R2, R0, 9
-BEQ	R3, R2, L__I2C2_TimeoutCallback59
-NOP	
-J	L_I2C2_TimeoutCallback30
-NOP	
-L__I2C2_TimeoutCallback59:
-;_Timers.c,137 :: 		}
-L_I2C2_TimeoutCallback30:
-;_Timers.c,139 :: 		}
+;_Timers.c,136 :: 		}
 L_end_I2C2_TimeoutCallback:
 JR	RA
 NOP	

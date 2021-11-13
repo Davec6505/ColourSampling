@@ -406,6 +406,8 @@ main
 				SendSMS
 				GetValuesFromFlash
 				NVMErasePage
+				strcpy
+				atoi
 				WriteToFlashTemp
 				Write_Thresholds
 				strncat

@@ -36,7 +36,8 @@ READA_SCL,          //13
 READA_THV,          //14
 WRITE_MAN,          //15
 WRITE_RAW,          //16
-START               //17
+START,              //17
+CANCEL              //18
 };
 
 struct Constants{
@@ -57,8 +58,9 @@ struct Thresh{
  uint16_t R_thresh;
  uint16_t G_thresh;
  uint16_t B_thresh;
+ uint16_t time_to_log;
 };
-
+extern struct Thresh Threshold;
 
 /////////////////////////////////////////////////
 //Variables

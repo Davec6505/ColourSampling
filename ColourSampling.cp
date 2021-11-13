@@ -196,7 +196,8 @@ READA_SCL,
 READA_THV,
 WRITE_MAN,
 WRITE_RAW,
-START
+START,
+CANCEL
 };
 
 struct Constants{
@@ -217,8 +218,9 @@ struct Thresh{
  uint16_t R_thresh;
  uint16_t G_thresh;
  uint16_t B_thresh;
+ uint16_t time_to_log;
 };
-
+extern struct Thresh Threshold;
 
 
 
@@ -270,9 +272,9 @@ extern char rcvPcTxt[150];
 
 
 typedef struct{
- unsigned int time_to_log;
  char initial_str;
  char init_inc;
+ char start: 1;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 
@@ -358,9 +360,7 @@ unsigned int ms;
 unsigned int sec;
 unsigned int min;
 unsigned int hr;
-unsigned int secSP;
-unsigned int minSP;
-unsigned int hrSP;
+unsigned int lastMin;
 unsigned short one_per_sec;
 }Timer_Setpoint;
 
@@ -403,7 +403,6 @@ int (*Update_Test)(uint16_t s,uint16_t m, uint16_t h);
 
 PString str_t;
 Timer_Setpoint T0_SP={
- 0,
  0,
  0,
  0,
@@ -457,7 +456,7 @@ int res;
  T0_SP.sec = 0;
  T0_SP.min = 0;
  T0_SP.hr = 0;
-#line 68 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 67 "C:/Users/Git/ColourSampling/ColourSampling.c"
  strcpy(cel_num,GetValuesFromFlash());
  str_num = strncmp(cel_num,sub_txt,4);
 
@@ -481,7 +480,7 @@ int res;
  SimVars.init_inc = 5;
  cell_ok = 1;
  }
-#line 95 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 94 "C:/Users/Git/ColourSampling/ColourSampling.c"
  if(cell_ok == 1){
  Delay_ms(3000);
  SendSMS(4);

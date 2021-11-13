@@ -10,7 +10,6 @@ Timer_Setpoint T0_SP={
  0,
  0,
  0,
- 0,
  0
 };
 char* (*testStr)(int i);

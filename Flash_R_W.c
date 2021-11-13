@@ -41,7 +41,12 @@ unsigned long Val;
        Val =(Val<<8)| buff[13];
        Val =(Val<<8)| buff[12];
        vals->B_thresh = Val;
-          
+        
+       Val = buff[19];
+       Val =(Val<<8)| buff[18];
+       Val =(Val<<8)| buff[17];
+       Val =(Val<<8)| buff[16];
+       vals->time_to_log = Val;
    // i += 4;
   //}
 }
