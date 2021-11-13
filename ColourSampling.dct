@@ -10923,7 +10923,6 @@ findnumber
 flash_erase_page
 flash_settings_paddr
 flash_settings_vaddr
-flash_val
 flash_write_row
 flash_write_word
 floattostr
@@ -12548,7 +12547,6 @@ incm1
 incm1
 incm1_bit
 init_inc
-init_sms
 initgsm3
 initial_str
 initisr
@@ -13988,7 +13986,6 @@ nosc2
 nosc2
 nosc2_bit
 nr_free_blocks
-num_of_sms_bytes
 num_string
 nvmaddr
 nvmaddr0
@@ -18459,7 +18456,6 @@ readapikey
 readbuff
 readflashword
 readmsg
-remove_whitespaces
 removechars
 removesmstext
 report
@@ -19233,9 +19229,6 @@ smpi3
 smpi3_bit
 sms
 sms_test
-sms_test1
-sms_test2
-sms_test3
 sofen
 sofen
 sofen
@@ -19753,6 +19746,7 @@ strncpy
 strpbrk
 strrchr
 strsplit
+strsplit2
 strsplitfp
 strspn
 strstr
@@ -20482,6 +20476,7 @@ testringpointers
 teststr
 teststrings
 text
+text1
 tgate
 tgate
 tgate

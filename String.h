@@ -16,7 +16,7 @@
 #define size 20
 #define str_size 64
 //structs and enums
-extern char string[size][str_size];//={"HELLO WORLD","HELLO WORLD","HELLO WORLD","HELLO WORLD","HELLO WORLD"};
+extern char string[size][str_size];
 
 enum ControlColorIO{
 CONFIG,             //0
@@ -35,7 +35,8 @@ READT_DN40,         //12
 READA_SCL,          //13
 READA_THV,          //14
 WRITE_MAN,          //15
-WRITE_RAW          //16
+WRITE_RAW,          //16
+START               //17
 };
 
 struct Constants{
@@ -69,9 +70,9 @@ extern char writebuff[64];
 int DoStrings(int num);
 PString InitString(char cmp);
 int StrChecker(char **arr);
-void remove_whitespaces(char* str);
 char* findnumber(char* str);
 int strsplit(char* str,char c);
+void strsplit2(char**mdarr,char str[250], char c);
 void testStrings(char* writebuff);
 char* setstr(char conf[250]);
 void clr_str_arrays(char *str[10]);

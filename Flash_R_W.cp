@@ -219,12 +219,9 @@ extern char rcvPcTxt[150];
 
 
 typedef struct{
- uint8_t flash_val[512];
- uint8_t initial_str;
- uint16_t time_to_log;
- uint16_t num_of_sms_bytes;
+ unsigned int time_to_log;
+ char initial_str;
  char init_inc;
- int8_t init_sms;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 
@@ -312,7 +309,8 @@ READT_DN40,
 READA_SCL,
 READA_THV,
 WRITE_MAN,
-WRITE_RAW
+WRITE_RAW,
+START
 };
 
 struct Constants{
@@ -346,9 +344,9 @@ extern char writebuff[64];
 int DoStrings(int num);
 PString InitString(char cmp);
 int StrChecker(char **arr);
-void remove_whitespaces(char* str);
 char* findnumber(char* str);
 int strsplit(char* str,char c);
+void strsplit2(char**mdarr,char str[250], char c);
 void testStrings(char* writebuff);
 char* setstr(char conf[250]);
 void clr_str_arrays(char *str[10]);

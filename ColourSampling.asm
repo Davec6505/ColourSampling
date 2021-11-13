@@ -155,16 +155,16 @@ L__main23:
 ;ColourSampling.c,78 :: 		SimVars.init_inc = SetupIOT();           //ret 1
 JAL	_SetupIOT+0
 NOP	
-SB	R2, Offset(_SimVars+518)(GP)
+SB	R2, Offset(_SimVars+3)(GP)
 ;ColourSampling.c,79 :: 		SimVars.init_inc = WaitForSetupSMS(0);   //ret 2
 MOVZ	R25, R0, R0
 JAL	_WaitForSetupSMS+0
 NOP	
-SB	R2, Offset(_SimVars+518)(GP)
+SB	R2, Offset(_SimVars+3)(GP)
 ;ColourSampling.c,80 :: 		SimVars.init_inc = GetAPI_Key_SMS();     //ret 3
 JAL	_GetAPI_Key_SMS+0
 NOP	
-SB	R2, Offset(_SimVars+518)(GP)
+SB	R2, Offset(_SimVars+3)(GP)
 ;ColourSampling.c,81 :: 		if(SimVars.init_inc != 0)
 ANDI	R2, R2, 255
 BNE	R2, R0, L__main25
@@ -173,18 +173,18 @@ J	L_main5
 NOP	
 L__main25:
 ;ColourSampling.c,82 :: 		SimVars.init_inc = SendSMS(SimVars.init_inc);
-LBU	R25, Offset(_SimVars+518)(GP)
+LBU	R25, Offset(_SimVars+3)(GP)
 JAL	_SendSMS+0
 NOP	
-SB	R2, Offset(_SimVars+518)(GP)
+SB	R2, Offset(_SimVars+3)(GP)
 J	L_main6
 NOP	
 L_main5:
 ;ColourSampling.c,84 :: 		SimVars.init_inc = SendSMS(SimVars.init_inc);
-LBU	R25, Offset(_SimVars+518)(GP)
+LBU	R25, Offset(_SimVars+3)(GP)
 JAL	_SendSMS+0
 NOP	
-SB	R2, Offset(_SimVars+518)(GP)
+SB	R2, Offset(_SimVars+3)(GP)
 L_main6:
 ;ColourSampling.c,85 :: 		cell_ok = 0;
 ; cell_ok start address is: 8 (R2)
@@ -200,7 +200,7 @@ JAL	_WaitForResponse+0
 NOP	
 ;ColourSampling.c,88 :: 		SimVars.init_inc = 5;
 ORI	R2, R0, 5
-SB	R2, Offset(_SimVars+518)(GP)
+SB	R2, Offset(_SimVars+3)(GP)
 ;ColourSampling.c,89 :: 		cell_ok = 1;
 ; cell_ok start address is: 8 (R2)
 ORI	R2, R0, 1
@@ -266,7 +266,7 @@ NOP
 ;ColourSampling.c,112 :: 		}
 L_main13:
 ;ColourSampling.c,115 :: 		if(SimVars.init_inc >= 5){
-LBU	R2, Offset(_SimVars+518)(GP)
+LBU	R2, Offset(_SimVars+3)(GP)
 SLTIU	R2, R2, 5
 BEQ	R2, R0, L__main29
 NOP	

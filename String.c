@@ -10,7 +10,7 @@ const code char *comc[13]={
    "T",
    "G"
 };
-const code char *com[17]={
+const code char *com[18]={
    "CONFIG",      //0
    "SENDC",        //1
    "SENDR",        //2
@@ -25,9 +25,10 @@ const code char *com[17]={
    "READT",       //11
    "READT_DN40",  //12
    "READA_SCL",   //13
-   "READA_THV",    //14
+   "READA_THV",   //14
    "WRITE_MAN",   //15
-   "WRITE_RAW"   //16
+   "WRITE_RAW",   //16
+   "START"
 };
 
 
@@ -170,33 +171,12 @@ int i,j;
 char* setstr(char conf[250]){
  int i;
       for(i=0;i < strlen(conf);i++){
-         if((conf[i] == 0x0D)|| (conf[i] == 0x0A))
+         if(conf[i] == NULL)
              break;
       }
       conf[i+1] = 0;
 
       return conf;
-}
-
-/********************************************************************
-*remove all white spaces from the string
-********************************************************************/
-void remove_whitespaces(char* src){
-char* dst = src;
-int i,j;
-
-      for(i=0,j=0;i<strlen(dst);i++){
-          if(dst[j] == 0x32){
-             j++;
-             continue;
-          }
-          src[i] = dst[j];
-      };
-      src[i] = 0;
-      UART1_Write_Text("White Space:= ");
-      UART1_Write_Text(src);
-      UART1_Write(0x0D);
-      UART1_Write(0x0A);
 }
 
 /*********************************************************************
@@ -220,6 +200,29 @@ int i,ii,kk;
           break;
     }
     return kk;
+}
+
+/*********************************************************************
+* Split the string according to the char
+*********************************************************************/
+void strsplit2(char**mdarr,char str[250], char c){
+int i,ii,kk;
+    ii=kk=0;
+    for (i = 0; i < 250;i++){
+        if(str[i] == c){
+          mdarr[kk][ii] = 0;
+          kk++;
+          ii=0;
+          continue;//goto endb;
+        }else{
+          mdarr[kk][ii] = str[i];
+          ii++;
+       }
+//endb:
+       if(str[i]==0)
+          break;
+    }
+
 }
 
 /*********************************************************************
@@ -547,14 +550,14 @@ unsigned int res,i;
 char* RemoveChars(char* str,char a,char b){
 char *temp;
 int i=0;
-        // temp = (char*)Malloc(100*sizeof(char*));
+        temp = (char*)Malloc(100*sizeof(char*));
         // memset(temp,0,100);
         //got " position in the string str
         if(a != 0x02){
            temp = strchr(str,a);
            strcpy(str,temp+1);
         }else{
-           temp = strcpy(temp,str);
+           strcpy(temp,str);
         }
         for(i=0;i<strlen(temp)+1;i++){
             if(temp[i]==b)
@@ -563,7 +566,7 @@ int i=0;
         }
         *(temp+i) = 0;
 
-       //  Free(temp,100);
+         Free(temp,100);
         return temp;
 }
 

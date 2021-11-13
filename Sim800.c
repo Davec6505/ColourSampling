@@ -12,12 +12,11 @@ const char field2[]   = "&field2=";
 const char field3[]   = "&field3=";
 const char field4[]   = "&field4=";
 const char sms_test[] = "+CMTI";
-const char sms_test1[] = "WRITE_RAW";
-const char sms_test2[] = "READA";
-const char sms_test3[] = "READA_SCL";
+
 #ifdef SimConfDebug
  char a[6]; char b[6]; char c[6]; char d[6]; char e[6];
 #endif
+
 unsigned long temp[128];
 struct sim_lengths SL ={
   0,0,0,0,0,0
@@ -40,6 +39,7 @@ char rcvPcTxt[150];
 char holding_buff[64];
 char buff[200];
 char *text;
+char *text1;
 char *str_rcv;
 char *ptr;
 char *str;
@@ -58,11 +58,8 @@ char txtB[15];
 char txtLen[6];
 
 Sim800Vars SimVars = {
-   "",
    0,
    9,
-   0,
-   0,
    0
 };
 
@@ -75,7 +72,6 @@ struct Sim800Flash SF;
 void InitGSM3(){
    SimVars.initial_str = 0;
    SimVars.init_inc    = 0;
-   SimVars.init_sms    = 0;
    *SimTestTxt = "Hello World this is a test";
    RB.head = 0;
    RB.tail = 0;
@@ -337,8 +333,8 @@ wait:
  // Delay_ms(5000);
 
   if(RB.head > RB.last_head){
-     str_rcv = setstr(SimTestTxt);
-     num_strs = strsplit(str_rcv,',');
+  
+     num_strs = strsplit(SimTestTxt,',');
 
 #ifdef SimConfDebug
      sprintf(txtA,"%d",num_strs);
@@ -438,8 +434,8 @@ int i,res,num_strs;
     WaitForResponse(1);
     Delay_ms(1000);
     RingToTempBuf();
-    str_rcv = setstr(SimTestTxt);
-    num_strs = strsplit(str_rcv,',');
+    //str_rcv = setstr(SimTestTxt);
+    num_strs = strsplit(SimTestTxt,',');
  #ifdef SimConfDebug
     sprintf(txtA,"%d",num_strs);
     PrintOut(PrintHandler, "\r\n"
@@ -505,8 +501,8 @@ int i,res,num_strs;
 //delete sms from sm
     Delay_ms(500);
     RemoveSMSText(res);
-    str_rcv = setstr(SimTestTxt);
-    res     = strcmp(str_rcv,"OK,");
+   // str_rcv = setstr(SimTestTxt);
+    res     = strcmp(SimTestTxt,"OK,");
     sprintf(txtA,"%d",res);
 #ifdef SimConfDebug
     PrintOut(PrintHandler, "\r\n"
@@ -651,8 +647,8 @@ int num_strs,res,err;
     RingToTempBuf();
 
   //ask sim800 for the sms text
-    str_rcv = setstr(SimTestTxt);
-    num_strs = strsplit(str_rcv,',');
+    //str_rcv = setstr(SimTestTxt);
+    num_strs = strsplit(SimTestTxt,',');
     //test if an sms was recieved
     err = strncmp(sms_test,string[0],4);
  #ifdef SMSDebug
@@ -733,12 +729,13 @@ int i,num_strs,res;
                            "************** \r\n");
 #endif
 
-    str_rcv = setstr(SimTestTxt);
-    num_strs = strsplit(str_rcv,',');
+    //str_rcv = setstr(SimTestTxt);
+    num_strs = strsplit(SimTestTxt,',');
     text = strchr(string[4], '"');
+    strcpy(string[6], RemoveChars(text,'"','O'));
     strcpy(string[3], RemoveChars(string[3],'"',0x0A));
     strcpy(string[4], RemoveChars(string[4],0x02,'+'));
-    strcpy(string[5], RemoveChars(text,'"','O'));
+
 
  #ifdef SMSDebug
     sprintf(sms,"%d",num_strs);
@@ -750,12 +747,14 @@ int i,num_strs,res;
                            " *string[3]  %s\r\n"
                            " *string[4]  %s\r\n"
                            " *string[5]  %s\r\n"
-                           ,sms,string[0],string[1],
-                           string[2],string[3],
-                           string[4],string[5]);
+                           " *string[6]  %s\r\n"
+                           ,sms,string[0],string[1]
+                           ,string[2],string[3]
+                           ,string[4],string[5]
+                           ,string[6]);
 #endif
-        if(string[5] != NULL){
-          res = StrChecker(string[5]);
+        if(string[6] != NULL){
+          res = StrChecker(string[6]);
             TestRecievedSMS(res);
         }
 
@@ -777,14 +776,14 @@ char *t,B[64];
 
     switch(res){
       case 6:
-             SendSMS(7);
-             break;
+           SendSMS(7);
+           break;
       case 13:
-             SendSMS(8);
-             break;
+           SendSMS(8);
+           break;
       case 14:
-             SendSMS(6);
-             break;
+           SendSMS(6);
+           break;
       case 16:
             GetValuesFromFlash();
             NVMErasePage(FLASH_Settings_PAddr);
@@ -799,7 +798,10 @@ char *t,B[64];
                                ,t);
 #endif
                 SendSMS(6);
-            break;
+           break;
+      case 17:
+
+           break;
       default:
             break;
     }

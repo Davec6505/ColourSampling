@@ -231,12 +231,9 @@ extern char rcvPcTxt[150];
 
 
 typedef struct{
- uint8_t flash_val[512];
- uint8_t initial_str;
- uint16_t time_to_log;
- uint16_t num_of_sms_bytes;
+ unsigned int time_to_log;
+ char initial_str;
  char init_inc;
- int8_t init_sms;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 
@@ -324,7 +321,8 @@ READT_DN40,
 READA_SCL,
 READA_THV,
 WRITE_MAN,
-WRITE_RAW
+WRITE_RAW,
+START
 };
 
 struct Constants{
@@ -358,9 +356,9 @@ extern char writebuff[64];
 int DoStrings(int num);
 PString InitString(char cmp);
 int StrChecker(char **arr);
-void remove_whitespaces(char* str);
 char* findnumber(char* str);
 int strsplit(char* str,char c);
+void strsplit2(char**mdarr,char str[250], char c);
 void testStrings(char* writebuff);
 char* setstr(char conf[250]);
 void clr_str_arrays(char *str[10]);
@@ -382,7 +380,7 @@ const code char *comc[13]={
  "T",
  "G"
 };
-const code char *com[17]={
+const code char *com[18]={
  "CONFIG",
  "SENDC",
  "SENDR",
@@ -399,7 +397,8 @@ const code char *com[17]={
  "READA_SCL",
  "READA_THV",
  "WRITE_MAN",
- "WRITE_RAW"
+ "WRITE_RAW",
+ "START"
 };
 
 
@@ -408,7 +407,7 @@ PString InitString(char cmp){
  str_t.c = cmp;
  str_t.StrSplitFp = strsplit;
 }
-#line 43 "C:/Users/Git/ColourSampling/String.c"
+#line 44 "C:/Users/Git/ColourSampling/String.c"
 int DoStrings(int num){
 char *str,err,i;
  char *result,conf[64] = "";
@@ -519,7 +518,7 @@ char *str,err,i;
 ret:
  return 0;
 }
-#line 157 "C:/Users/Git/ColourSampling/String.c"
+#line 158 "C:/Users/Git/ColourSampling/String.c"
 void clr_str_arrays(char str[20][64]){
 int i,j;
  for(i = 0;i < 20;i++){
@@ -529,36 +528,18 @@ int i,j;
 
  }
 }
-#line 170 "C:/Users/Git/ColourSampling/String.c"
+#line 171 "C:/Users/Git/ColourSampling/String.c"
 char* setstr(char conf[250]){
  int i;
  for(i=0;i < strlen(conf);i++){
- if((conf[i] == 0x0D)|| (conf[i] == 0x0A))
+ if(conf[i] ==  ((void *)0) )
  break;
  }
  conf[i+1] = 0;
 
  return conf;
 }
-#line 184 "C:/Users/Git/ColourSampling/String.c"
-void remove_whitespaces(char* src){
-char* dst = src;
-int i,j;
-
- for(i=0,j=0;i<strlen(dst);i++){
- if(dst[j] == 0x32){
- j++;
- continue;
- }
- src[i] = dst[j];
- };
- src[i] = 0;
- UART1_Write_Text("White Space:= ");
- UART1_Write_Text(src);
- UART1_Write(0x0D);
- UART1_Write(0x0A);
-}
-#line 205 "C:/Users/Git/ColourSampling/String.c"
+#line 185 "C:/Users/Git/ColourSampling/String.c"
 int strsplit(char str[250], char c){
 int i,ii,kk;
  ii=kk=0;
@@ -578,7 +559,27 @@ int i,ii,kk;
  }
  return kk;
 }
-#line 228 "C:/Users/Git/ColourSampling/String.c"
+#line 208 "C:/Users/Git/ColourSampling/String.c"
+void strsplit2(char**mdarr,char str[250], char c){
+int i,ii,kk;
+ ii=kk=0;
+ for (i = 0; i < 250;i++){
+ if(str[i] == c){
+ mdarr[kk][ii] = 0;
+ kk++;
+ ii=0;
+ continue;
+ }else{
+ mdarr[kk][ii] = str[i];
+ ii++;
+ }
+
+ if(str[i]==0)
+ break;
+ }
+
+}
+#line 231 "C:/Users/Git/ColourSampling/String.c"
 char* findnumber(char* str){
 char* temp;
 int i,j;
@@ -594,7 +595,7 @@ int i,j;
  Free(temp,sizeof(temp));
  return temp;
 }
-#line 248 "C:/Users/Git/ColourSampling/String.c"
+#line 251 "C:/Users/Git/ColourSampling/String.c"
 int StrChecker(char *str){
 static int enum_val;
 static bit once;
@@ -609,7 +610,7 @@ int i;
  }
  return i;
 }
-#line 266 "C:/Users/Git/ColourSampling/String.c"
+#line 269 "C:/Users/Git/ColourSampling/String.c"
 void WriteData(char *_data){
 
 
@@ -617,7 +618,7 @@ void WriteData(char *_data){
  strncpy(writebuff,_data,strlen(_data));
  HID_Write(&writebuff,64);
 }
-#line 277 "C:/Users/Git/ColourSampling/String.c"
+#line 280 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_AllColour(short data_src){
 float FltData[3];
 char txtR[15];
@@ -665,7 +666,7 @@ int err;
 
  return &str;
 }
-#line 328 "C:/Users/Git/ColourSampling/String.c"
+#line 331 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_OneColour(int colr){
 unsigned int col;
 char txtR[10];
@@ -726,7 +727,7 @@ int Get_It(){
 int Get_Gain(){
  return 0;
 }
-#line 392 "C:/Users/Git/ColourSampling/String.c"
+#line 395 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Thresholds(){
 char txtR[15];
 char str[64];
@@ -753,7 +754,7 @@ unsigned long Val;
 
  return &str;
 }
-#line 422 "C:/Users/Git/ColourSampling/String.c"
+#line 425 "C:/Users/Git/ColourSampling/String.c"
 char* Write_Thresholds(short data_src){
 unsigned long val[128];
 unsigned long pos;
@@ -810,7 +811,7 @@ char str[64];
  strcat(str," \r\n ");
  return str;
 }
-#line 482 "C:/Users/Git/ColourSampling/String.c"
+#line 485 "C:/Users/Git/ColourSampling/String.c"
 void testStrings(char* writebuff){
  if(strlen(string[0])!=0){
  strncat(writebuff,string[0],strlen(string[0]));
@@ -872,18 +873,18 @@ unsigned int res,i;
 
  return &str;
 }
-#line 547 "C:/Users/Git/ColourSampling/String.c"
+#line 550 "C:/Users/Git/ColourSampling/String.c"
 char* RemoveChars(char* str,char a,char b){
 char *temp;
 int i=0;
-
+ temp = (char*)Malloc(100*sizeof(char*));
 
 
  if(a != 0x02){
  temp = strchr(str,a);
  strcpy(str,temp+1);
  }else{
- temp = strcpy(temp,str);
+ strcpy(temp,str);
  }
  for(i=0;i<strlen(temp)+1;i++){
  if(temp[i]==b)
@@ -892,10 +893,10 @@ int i=0;
  }
  *(temp+i) = 0;
 
-
+ Free(temp,100);
  return temp;
 }
-#line 573 "C:/Users/Git/ColourSampling/String.c"
+#line 576 "C:/Users/Git/ColourSampling/String.c"
 void PrintHandler(char c){
 
  UART1_Write(c);

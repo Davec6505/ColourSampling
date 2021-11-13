@@ -183,8 +183,6 @@ main
 		RingToTempBuf
 		UART2_Write_Text
 		UART2_Write
-		setstr
-			strlen
 		strsplit
 		sprintf
 		findnumber
@@ -208,7 +206,6 @@ main
 		sprintf
 		PrintOut
 		atoi
-		setstr
 		strlen
 		memcpy
 		strncpy
@@ -289,6 +286,7 @@ main
 		clr_str_arrays
 		memcpy
 		setstr
+			strlen
 		strsplit
 		StrChecker
 			strlen
@@ -379,7 +377,6 @@ main
 	GetSMSText
 		UART1_Write_Text
 		RingToTempBuf
-		setstr
 		strsplit
 		strncmp
 		sprintf
@@ -393,14 +390,15 @@ main
 			UART2_Write
 			WaitForResponse
 			RingToTempBuf
-			setstr
 			strsplit
 			strchr
 			strcpy
 			RemoveChars
+				Malloc
 				strchr
 				strcpy
 				strlen
+				Free
 			StrChecker
 			TestRecievedSMS
 				sprintf
