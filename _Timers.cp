@@ -288,19 +288,27 @@ short head_overflow;
 extern struct RingBuffer RB;
 
 struct Sim800Flash{
-unsigned char SimCelNum[20];
-unsigned char SimDate[9];
-unsigned char SimTime[9];
-unsigned char WriteAPIKey[24];
-unsigned char ReadAPIKey[24];
-unsigned char SimFlashBuff[512];
+char SimDate[9];
+char SimTime[9];
+char SimCelNum[20];
+char WriteAPIKey[20];
+char ReadAPIKey[20];
+char APN[20];
+char PWD[20];
+char SimFlashBuff[512];
 unsigned int SimFlashPtr;
 unsigned int SimReadIndx;
+
 unsigned int SimFlashCellByteCount;
 unsigned int SimFlashAPIWriteCount;
 unsigned int SimFlashAPIReadCount;
+unsigned int SimFlashAPNByteCount;
+unsigned int SimFlashPWDByteCount;
+
 unsigned int SimFlashAPIWriteIndx;
 unsigned int SimFlashAPIReadIndx;
+unsigned int SimFlashAPNIndx;
+unsigned int SimFlashPWDIndx;
 };
 
 struct sim_lengths{
@@ -309,6 +317,10 @@ struct sim_lengths{
  int l3;
  int l4;
  int l5;
+ int l6;
+ int l7;
+ int lTotA;
+ int lTotB;
  int mod;
 };
 
@@ -427,7 +439,6 @@ int res,minsPassed;
 
  if(T0_SP.min > Threshold.time_to_log ){
  T0_SP.one_per_sec = 1;
- T0_SP.sec = T0_SP.min = T0_SP.hr = 0;
  }
 
 
@@ -451,14 +462,14 @@ int res,minsPassed;
  LATA10_bit = !LATA10_bit;
  }
 }
-#line 87 "C:/Users/Git/ColourSampling/_Timers.c"
+#line 86 "C:/Users/Git/ColourSampling/_Timers.c"
 void Day_Month(int hr,int day,int mnth){
 int i;
  for(i=0;i<6;i++){
 
  }
 }
-#line 98 "C:/Users/Git/ColourSampling/_Timers.c"
+#line 97 "C:/Users/Git/ColourSampling/_Timers.c"
 void I2C2_TimeoutCallback(char errorCode) {
 int i;
  if (errorCode == _I2C_TIMEOUT_RD) {

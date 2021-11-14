@@ -78,13 +78,13 @@ int res;
      SimVars.init_inc = WaitForSetupSMS(0);   //ret 2
      SimVars.init_inc = GetAPI_Key_SMS();     //ret 3
      if(SimVars.init_inc != 0)
-         SimVars.init_inc = SendSMS(SimVars.init_inc);
+       SendSMS(SimVars.init_inc);
      else
-         SimVars.init_inc = SendSMS(SimVars.init_inc);
+       SendSMS(SimVars.init_inc);
      cell_ok = 0;
    }else{
      WaitForResponse(3);
-     SimVars.init_inc = 5;
+     SimVars.init_inc = 3;
      cell_ok = 1;
    }
 /**************************************************************
@@ -98,11 +98,11 @@ int res;
    
    PrintOut(PrintHandler, "\r\n"
                            " *Run");
-
-   
    res = 0;
+/***************************************************
+* main loop forever!!
+***************************************************/
    while(1){
-
      ///////////////////////////////////////////////
      //Get input from USB to set up thresholds
      num = HID_Read();
@@ -113,13 +113,11 @@ int res;
      //Get sms input
      if(SimVars.init_inc >= 5){
        if(T0_SP.one_per_sec){
+         res = Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
+         if(res >= 1){
+           T0_SP.sec = T0_SP.min = T0_SP.hr = 0; //start timming again
            T0_SP.one_per_sec = 0;
-           res = Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
-           if(res >= 1){
-                 T0_SP.sec = 0;
-                 T0_SP.min = 0;
-                 T0_SP.hr = 0;
-           }
+         }
        }
      }
 

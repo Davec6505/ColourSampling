@@ -1803,6 +1803,7 @@ apiov
 apiov
 apiov
 apiov_bit
+apn
 apoful
 apoful
 apoful
@@ -10829,6 +10830,7 @@ extr
 extr
 extr
 extr_bit
+f
 fabs
 fceie
 fceie
@@ -13021,6 +13023,8 @@ l2
 l3
 l4
 l5
+l6
+l7
 labs
 last_head
 last_tail
@@ -13753,6 +13757,8 @@ ltagboot
 ltagboot
 ltagboot
 ltagboot_bit
+ltota
+ltotb
 ltrim
 ltype
 ltype
@@ -17975,6 +17981,7 @@ ptwren
 ptwren
 ptwren
 ptwren_bit
+pwd
 pwr
 pwrupgsm3
 r_thresh
@@ -19144,9 +19151,13 @@ simflashapireadcount
 simflashapireadindx
 simflashapiwritecount
 simflashapiwriteindx
+simflashapnbytecount
+simflashapnindx
 simflashbuff
 simflashcellbytecount
 simflashptr
+simflashpwdbytecount
+simflashpwdindx
 simreadindx
 simtesttxt
 simtime

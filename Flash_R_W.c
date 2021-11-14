@@ -3,8 +3,6 @@
 
 unsigned long  FLASH_Settings_VAddr = 0x9D07A000;
 unsigned long  FLASH_Settings_PAddr = 0x1D07A000;
-//unsigned long  FLASH_Settings_VAddr = 0xBD079ff6;
-//unsigned long  FLASH_Settings_PAddr = 0x1D079ff6;
 
 void NVMRead(void* addr,struct Thresh *vals){
 unsigned char buff[512];

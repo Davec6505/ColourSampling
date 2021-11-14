@@ -56,7 +56,6 @@ int res,minsPassed;
        
        if(T0_SP.min > Threshold.time_to_log ){
              T0_SP.one_per_sec = 1;
-             T0_SP.sec = T0_SP.min = T0_SP.hr = 0; //start timming again
        }
        
        //every second

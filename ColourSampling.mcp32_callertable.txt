@@ -149,29 +149,25 @@ main
 	UART1_Write
 	strcpy
 	GetValuesFromFlash
-		GetStrLengths
-			strlen
-			sprintf
-			PrintOut
-				_doprntout
-					isdigit
-					_Compare_FP
-					scale
-						_Mul_FP
-					_Mul_FP
-					_Div_FP
-					_FloatToUnsignedIntegral
-					_Unsigned32IntToFloat
-					_Sub_FP
-					_Add_FP
-					fround
-						_Mul_FP
-					_FloatToSignedIntegral
-					PrintHandler
-					I2C2_TimeoutCallback
 		UART1_Write
 		strncpy
 		PrintOut
+			_doprntout
+				isdigit
+				_Compare_FP
+				scale
+					_Mul_FP
+				_Mul_FP
+				_Div_FP
+				_FloatToUnsignedIntegral
+				_Unsigned32IntToFloat
+				_Sub_FP
+				_Add_FP
+				fround
+					_Mul_FP
+				_FloatToSignedIntegral
+				PrintHandler
+				I2C2_TimeoutCallback
 	strncmp
 	PrintOut
 	SetupIOT
@@ -209,7 +205,6 @@ main
 		strlen
 		memcpy
 		strncpy
-		UART1_Write
 		RemoveSMSText
 			sprintf
 			PrintOut
@@ -220,7 +215,6 @@ main
 			__CC2DW
 		strcmp
 		WriteToFlashTemp
-			GetStrLengths
 			memset
 			memcpy
 			NVMErasePage
