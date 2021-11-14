@@ -508,16 +508,16 @@ int i,res,num_strs;
 #endif
     }else if(Indx == 1){
     //write API keys to Flash buff first
-      strncpy(SF.WriteAPIKey,string[5],strlen(string[5])+1);
+      strncpy(SF.WriteAPIKey,string[5],strlen(string[5]));
 
     //read API keys to Flash buff first
-      strncpy(SF.ReadAPIKey,string[6],strlen(string[6])+1);
+      strncpy(SF.ReadAPIKey,string[6],strlen(string[6]));
       
     //network APN to Flash buff first
-      strncpy(SF.APN,string[7],strlen(string[7])+1);
+      strncpy(SF.APN,string[7],strlen(string[7]));
 
     //network Password to Flash buff first
-      strncpy(SF.PWD,string[8],strlen(string[8])+1);
+      strncpy(SF.PWD,string[8],strlen(string[8]));
       
 #ifdef SimConfDebug
       PrintOut(PrintHandler, "\r\n"
@@ -775,7 +775,8 @@ int i,num_strs,res;
     text = strchr(string[4], '"');
     strcpy(string[6], RemoveChars(text,'"','O'));
     strcpy(string[3], RemoveChars(string[3],'"',0x0A));
-    strcpy(string[4], RemoveChars(string[4],0x02,'+'));
+    memset(string[4]+8,0,1);
+    strncpy(string[4],string[4],8);//RemoveChars(string[4],0x02,'+'));
 
 
  #ifdef SMSDebug
@@ -919,8 +920,7 @@ static unsigned short hLast;
 #endif
     }
     
-    if(s == 1 &&
-       m > Threshold.time_to_log){
+    if(m > Threshold.time_to_log){
        TCS3472_getRawData(RawData);
        SendData(RawData);
        return 2;

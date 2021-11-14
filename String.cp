@@ -548,13 +548,15 @@ char* setstr(char conf[250]){
 }
 #line 192 "C:/Users/Git/ColourSampling/String.c"
 int strsplit(char str[250], char c){
-int i,ii,kk;
- ii=kk=0;
+int i,ii,kk,err,lasti;
+ ii=kk=err=lasti=0;
  for (i = 0; i < 250;i++){
- if(str[i] == c){
+ err = i - lasti;
+ if(str[i] == c || err > 62){
  string[kk][ii] = 0;
  kk++;
- ii=0;
+ ii=err=0;
+ lasti = i;
  continue;
  }else{
  string[kk][ii] = str[i];
@@ -566,7 +568,7 @@ int i,ii,kk;
  }
  return kk;
 }
-#line 215 "C:/Users/Git/ColourSampling/String.c"
+#line 217 "C:/Users/Git/ColourSampling/String.c"
 char* findnumber(char* str){
 char* temp;
 int i,j;
@@ -582,7 +584,7 @@ int i,j;
  Free(temp,sizeof(temp));
  return temp;
 }
-#line 235 "C:/Users/Git/ColourSampling/String.c"
+#line 237 "C:/Users/Git/ColourSampling/String.c"
 int StrChecker(char *str){
 static int enum_val;
 static bit once;
@@ -597,7 +599,7 @@ int i;
  }
  return i;
 }
-#line 253 "C:/Users/Git/ColourSampling/String.c"
+#line 255 "C:/Users/Git/ColourSampling/String.c"
 void WriteData(char *_data){
 
 
@@ -605,7 +607,7 @@ void WriteData(char *_data){
  strncpy(writebuff,_data,strlen(_data));
  HID_Write(&writebuff,64);
 }
-#line 264 "C:/Users/Git/ColourSampling/String.c"
+#line 266 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_AllColour(short data_src){
 float FltData[3];
 char txtR[15];
@@ -653,7 +655,7 @@ int err;
 
  return &str;
 }
-#line 315 "C:/Users/Git/ColourSampling/String.c"
+#line 317 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_OneColour(int colr){
 unsigned int col;
 char txtR[10];
@@ -714,7 +716,7 @@ int Get_It(){
 int Get_Gain(){
  return 0;
 }
-#line 379 "C:/Users/Git/ColourSampling/String.c"
+#line 381 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Thresholds(){
 char txtR[25];
 char str[64];
@@ -745,7 +747,7 @@ unsigned long Val;
 
  return &str;
 }
-#line 413 "C:/Users/Git/ColourSampling/String.c"
+#line 415 "C:/Users/Git/ColourSampling/String.c"
 char* Write_Thresholds(short data_src){
 unsigned long val[128];
 unsigned long pos;
@@ -809,7 +811,7 @@ char str[64];
  strcat(str," \r\n ");
  return str;
 }
-#line 480 "C:/Users/Git/ColourSampling/String.c"
+#line 482 "C:/Users/Git/ColourSampling/String.c"
 void testStrings(char* writebuff){
  if(strlen(string[0])!=0){
  strncat(writebuff,string[0],strlen(string[0]));
@@ -871,7 +873,7 @@ unsigned int res,i;
 
  return &str;
 }
-#line 545 "C:/Users/Git/ColourSampling/String.c"
+#line 547 "C:/Users/Git/ColourSampling/String.c"
 char* RemoveChars(char* str,char a,char b){
 char *temp;
 int i=0;
@@ -894,7 +896,7 @@ int i=0;
  Free(temp,100);
  return temp;
 }
-#line 571 "C:/Users/Git/ColourSampling/String.c"
+#line 573 "C:/Users/Git/ColourSampling/String.c"
 void PrintHandler(char c){
 
  UART1_Write(c);

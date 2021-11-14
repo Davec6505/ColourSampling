@@ -813,16 +813,16 @@ int i,res,num_strs;
 
  }else if(Indx == 1){
 
- strncpy(SF.WriteAPIKey,string[5],strlen(string[5])+1);
+ strncpy(SF.WriteAPIKey,string[5],strlen(string[5]));
 
 
- strncpy(SF.ReadAPIKey,string[6],strlen(string[6])+1);
+ strncpy(SF.ReadAPIKey,string[6],strlen(string[6]));
 
 
- strncpy(SF.APN,string[7],strlen(string[7])+1);
+ strncpy(SF.APN,string[7],strlen(string[7]));
 
 
- strncpy(SF.PWD,string[8],strlen(string[8])+1);
+ strncpy(SF.PWD,string[8],strlen(string[8]));
 
 
  PrintOut(PrintHandler, "\r\n"
@@ -1063,7 +1063,8 @@ int i,num_strs,res;
  text = strchr(string[4], '"');
  strcpy(string[6], RemoveChars(text,'"','O'));
  strcpy(string[3], RemoveChars(string[3],'"',0x0A));
- strcpy(string[4], RemoveChars(string[4],0x02,'+'));
+ memset(string[4]+8,0,1);
+ strncpy(string[4],string[4],8);
 
 
 
@@ -1088,7 +1089,7 @@ int i,num_strs,res;
  }
 
 }
-#line 807 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 808 "C:/Users/Git/ColourSampling/Sim800.c"
 void TestRecievedSMS(int res){
 char *t,B[64],txtDig[9];
 
@@ -1140,7 +1141,7 @@ char *t,B[64],txtDig[9];
  }
 
 }
-#line 863 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 864 "C:/Users/Git/ColourSampling/Sim800.c"
 int RemoveSMSText(int sms_cnt){
 
 
@@ -1165,7 +1166,7 @@ int RemoveSMSText(int sms_cnt){
 
  return sms_cnt;
 }
-#line 892 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 893 "C:/Users/Git/ColourSampling/Sim800.c"
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h){
 static unsigned short sLast;
 static unsigned short mLast;
@@ -1173,19 +1174,18 @@ static unsigned short hLast;
 
  if(s != sLast){
  sLast = s;
-#line 904 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 905 "C:/Users/Git/ColourSampling/Sim800.c"
  }
  if(m != mLast){
  mLast = m;
-#line 912 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 913 "C:/Users/Git/ColourSampling/Sim800.c"
  }
  if(h != hLast){
  hLast = h;
-#line 920 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 921 "C:/Users/Git/ColourSampling/Sim800.c"
  }
 
- if(s == 1 &&
- m > Threshold.time_to_log){
+ if(m > Threshold.time_to_log){
  TCS3472_getRawData(RawData);
  SendData(RawData);
  return 2;

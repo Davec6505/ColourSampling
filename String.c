@@ -190,13 +190,15 @@ char* setstr(char conf[250]){
 * Split the string according to the char
 *********************************************************************/
 int strsplit(char str[250], char c){
-int i,ii,kk;
-    ii=kk=0;
+int i,ii,kk,err,lasti;
+    ii=kk=err=lasti=0;
     for (i = 0; i < 250;i++){
-        if(str[i] == c){
+        err = i - lasti;
+        if(str[i] == c || err > 62){
           string[kk][ii] = 0;
           kk++;
-          ii=0;
+          ii=err=0;
+          lasti = i;
           continue;//goto endb;
         }else{
           string[kk][ii] = str[i];

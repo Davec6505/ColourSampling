@@ -396,6 +396,8 @@ main
 				strcpy
 				strlen
 				Free
+			memset
+			strncpy
 			StrChecker
 			TestRecievedSMS
 				sprintf
