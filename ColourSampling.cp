@@ -297,20 +297,6 @@ char WriteAPIKey[20];
 char ReadAPIKey[20];
 char APN[20];
 char PWD[20];
-char SimFlashBuff[512];
-unsigned int SimFlashPtr;
-unsigned int SimReadIndx;
-
-unsigned int SimFlashCellByteCount;
-unsigned int SimFlashAPIWriteCount;
-unsigned int SimFlashAPIReadCount;
-unsigned int SimFlashAPNByteCount;
-unsigned int SimFlashPWDByteCount;
-
-unsigned int SimFlashAPIWriteIndx;
-unsigned int SimFlashAPIReadIndx;
-unsigned int SimFlashAPNIndx;
-unsigned int SimFlashPWDIndx;
 };
 
 struct sim_lengths{
@@ -322,8 +308,10 @@ struct sim_lengths{
  int l6;
  int l7;
  int lTotA;
- int lTotB;
  int mod;
+ int l1l2;
+ int l1l2l3;
+ int l1l2l3l4;
 };
 
 

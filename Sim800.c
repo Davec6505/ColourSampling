@@ -88,7 +88,6 @@ void InitGSM3(){
    RB.head = 0;
    RB.tail = 0;
    RB.rcv_txt_fin = -1;
-   SF.SimFlashPtr = 0;
    strcpy(SF.SimCelNum,"\"****************\"");
    strcpy(SF.WriteAPIKey,"\"****************\"");
    strcpy(SF.ReadAPIKey,"\"****************\"");
@@ -119,16 +118,16 @@ void WriteToFlashTemp(){
 unsigned long pos;
 static int i,j;
 
-  //GetStrLengths();
+  GetStrLengths();
 
-  memset(buff,0,100);//SL.lTotA);                  //make every byte NULL
-  memcpy(buff,SF.SimCelNum,19);//SL.l1+1);          //Save Cell num
-  memcpy(buff+20,SF.WriteAPIKey,19);//Save API Wr Key
-  memcpy(buff+40,SF.ReadAPIKey,19); //Save API Rd Key
-  memcpy(buff+60,SF.APN,19);        //Save APN
-  memcpy(buff+80,SF.PWD,19);        //Save PWD
+  memset(buff,0,SL.lTotA);                  //make every byte NULL
+  memcpy(buff,SF.SimCelNum,SL.l1);          //Save Cell num
+  memcpy(buff+SL.l1,SF.WriteAPIKey,SL.l2);//Save API Wr Key
+  memcpy(buff+SL.l1l2,SF.ReadAPIKey,SL.l3); //Save API Rd Key
+  memcpy(buff+SL.l1l2l3,SF.APN,SL.l4);        //Save APN
+  memcpy(buff+SL.l1l2l3l4,SF.PWD,SL.l5);        //Save PWD
   
-  memcpy(temp,buff,100);
+  memcpy(temp,buff,SL.lTotA+4);
 
   pos = FLASH_Settings_PAddr;
   j = NVMErasePage(pos);
@@ -158,22 +157,22 @@ static int i,j;
 char* GetValuesFromFlash(){
 unsigned long i,j;
 
- //  GetStrLengths();
+   GetStrLengths();
    ptr = (unsigned char*)FLASH_Settings_VAddr;
    ptr += 20;
 
-   for(i=0;i<100;i++){
+   for(i=0;i<SL.lTotA;i++){
        buff[i] = ptr[i];
 #ifdef SimConfDebug
        UART1_Write(buff[i]);
        UART1_Write(0x3A);
 #endif
    }
-   strncpy(SF.SimCelNum,buff,19);
-   strncpy(SF.WriteAPIKey,buff+20,19);
-   strncpy(SF.ReadAPIKey,buff+40,19);
-   strncpy(SF.APN,buff+60,19);
-   strncpy(SF.PWD,buff+80,19);
+   strncpy(SF.SimCelNum,buff,SL.l1);
+   strncpy(SF.WriteAPIKey,buff+SL.l1,SL.l2);
+   strncpy(SF.ReadAPIKey,buff+SL.l1l2,SL.l3);
+   strncpy(SF.APN,buff+SL.l1l2l3,SL.l4);
+   strncpy(SF.PWD,buff+SL.l1l2l3l4,SL.l5);
 #ifdef SimConfDebug
       PrintOut(PrintHandler, " * Flash Read        \r\n"
                              " * SF.SimCelNum:   %s\r\n"
@@ -192,15 +191,18 @@ unsigned long i,j;
 *************************************************/
 void GetStrLengths(){
 
-  SL.l1 = strlen(SF.SimCelNum)+1;   //len of cell num
-  SL.l2 = strlen(SF.WriteAPIKey)+1; //len of API Write key
-  SL.l3 = strlen(SF.ReadAPIKey)+1;  //len of API Read Key
-  SL.l4 = strlen(SF.APN)+1;         //len of APN
-  SL.l5 = strlen(SF.PWD)+1;         //len of PWD
+  SL.l1 = sizeof(SF.SimCelNum)-1;   //len of cell num
+  SL.l2 = sizeof(SF.WriteAPIKey)-1; //len of API Write key
+  SL.l3 = sizeof(SF.ReadAPIKey)-1;  //len of API Read Key
+  SL.l4 = sizeof(SF.APN)-1;         //len of APN
+  SL.l5 = sizeof(SF.PWD)-1;         //len of PWD
   
   //len Cell + API Wr + API rd + APN + PWD
-  SL.lTotA = SL.l1 + SL.l2 + SL.l3 + SL.l4 + SL.l5;
-
+  SL.lTotA     = SL.l1 + SL.l2 + SL.l3 + SL.l4 + SL.l5;
+  SL.l1l2      = SL.l1 + SL.l2;
+  SL.l1l2l3    = SL.l1l2 + SL.l3;
+  SL.l1l2l3l4  = SL.l1l2l3 + SL.l4;
+  
   SL.mod = SL.lTotA % 4;  //total divisable by 4 = flash Wrd size
   SL.mod = 4 - SL.mod;
   SL.lTotA += SL.mod;
@@ -492,11 +494,9 @@ int i,res,num_strs;
 #endif
 //save cell number to flash buffer
     if(Indx == 0){
-        SF.SimFlashPtr = strlen(string[1])+1;
-        SF.SimFlashCellByteCount = SF.SimFlashPtr;
-        memcpy(SF.SimFlashBuff,string[1],SF.SimFlashPtr);
-        strncpy(SF.SimCelNum,string[1],strlen(string[1])+1);
-        strncpy(SF.SimDate,string[3],strlen(string[3]));
+
+        strncpy(SF.SimCelNum,string[1],strlen(string[1])+11);
+        strncpy(SF.SimDate,string[3],strlen(string[3])+1);
         strncpy(SF.SimTime,string[4],8);
 
 #ifdef SimConfDebug
@@ -508,33 +508,17 @@ int i,res,num_strs;
 #endif
     }else if(Indx == 1){
     //write API keys to Flash buff first
-     // SF.SimFlashAPIWriteIndx  = SF.SimFlashPtr;
-     // SF.SimFlashAPIWriteCount = strlen(string[5])+1;
-    //  memcpy(SF.SimFlashBuff+SF.SimFlashPtr,string[5],strlen(string[5])+1);
       strncpy(SF.WriteAPIKey,string[5],strlen(string[5])+1);
-    //  SF.SimFlashPtr += strlen(string[5])+1;
 
     //read API keys to Flash buff first
-    //  SF.SimFlashAPIReadIndx = SF.SimFlashPtr;
-    //  memcpy(SF.SimFlashBuff+SF.SimFlashPtr,string[6],strlen(string[6]));
       strncpy(SF.ReadAPIKey,string[6],strlen(string[6])+1);
-    //  SF.SimFlashPtr += strlen(string[6])+1;
-    //  SF.SimFlashAPIReadCount = strlen(string[6])+1;
-    //  SF.SimFlashPtr += strlen(string[6])+1;
       
     //network APN to Flash buff first
-    //  SF.SimFlashAPNIndx = SF.SimFlashPtr;
-    //  memcpy(SF.SimFlashBuff+SF.SimFlashPtr,string[7],strlen(string[7]));
       strncpy(SF.APN,string[7],strlen(string[7])+1);
-    //  SF.SimFlashPtr += strlen(string[7])+1;
-    //  SF.SimFlashAPNByteCount = strlen(string[7])+1;
-      
+
     //network Password to Flash buff first
-    // SF.SimFlashPWDIndx = SF.SimFlashPtr;
-    // memcpy(SF.SimFlashBuff+SF.SimFlashPtr,string[8],strlen(string[8]));
       strncpy(SF.PWD,string[8],strlen(string[8])+1);
-    //  SF.SimFlashPtr += strlen(string[8])+1;
-    //  SF.SimFlashPWDByteCount = strlen(string[8])+1;
+      
 #ifdef SimConfDebug
       PrintOut(PrintHandler, "\r\n"
                              " * SF.WriteAPIKey: %s\r\n"
@@ -544,20 +528,12 @@ int i,res,num_strs;
                              ,SF.WriteAPIKey,SF.ReadAPIKey
                              ,SF.APN,SF.PWD);
 
-      //print out the flash buffer to check locations
-     /* for(i=0;i<SF.SimFlashPtr;i++){
-         UART1_Write(SF.SimFlashBuff[i]);
-         UART1_Write(0x3A);
-      }
-      UART1_Write(0x0D);
-      UART1_Write(0x0A); */
 #endif
     }
 
 //delete sms from sm
     Delay_ms(500);
     RemoveSMSText(res);
-   // str_rcv = setstr(SimTestTxt);
     res     = strcmp(SimTestTxt,"OK,");
     sprintf(txtA,"%d",res);
 #ifdef SimConfDebug
