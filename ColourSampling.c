@@ -78,9 +78,9 @@ int res;
      SimVars.init_inc = WaitForSetupSMS(0);   //ret 2
      SimVars.init_inc = GetAPI_Key_SMS();     //ret 3
      if(SimVars.init_inc != 0)
-       SendSMS(SimVars.init_inc);
+       SendSMS(SimVars.init_inc,1);
      else
-       SendSMS(SimVars.init_inc);
+       SendSMS(SimVars.init_inc,1);
      cell_ok = 0;
    }else{
      WaitForResponse(3);
@@ -92,8 +92,9 @@ int res;
 *keep main free from code
 **************************************************************/
    if(cell_ok == 1){ //only if primary cell num has been saved
+       Read_Thresholds();
        Delay_ms(3000);
-       SendSMS(4);
+       SendSMS(4,1);
    }
    
    PrintOut(PrintHandler, "\r\n"

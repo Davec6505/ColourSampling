@@ -31,8 +31,7 @@ main
 		InitTimer1
 		InitISR
 		InitGSM3
-			__CC2DW
-			strcpy
+			memset
 		PwrUpGSM3
 	TCS3472_Init
 		TCS3472_Read8
@@ -237,6 +236,7 @@ main
 		__CC2DW
 	SendSMS
 		__CC2DW
+		strcpy
 		AT_Initial
 			__CC2DW
 			UART2_Write_Text
@@ -274,6 +274,7 @@ main
 			TCS3472_C2RGB_Error
 			__CC2DW
 	WaitForResponse
+	Read_Thresholds
 	HID_Read
 		Gen_Read
 			USB_Handle_Busy
@@ -387,6 +388,8 @@ main
 			UART2_Write
 			WaitForResponse
 			RingToTempBuf
+			strlen
+			toupper
 			strsplit
 			strchr
 			strcpy
@@ -398,7 +401,12 @@ main
 				Free
 			memset
 			strncpy
+			RemoveWhiteSpace
+				strlen
 			StrChecker
+			strcmp
+			UART1_Write_Text
+			SendSMS
 			TestRecievedSMS
 				sprintf
 				PrintOut
@@ -409,8 +417,6 @@ main
 				atoi
 				WriteToFlashTemp
 				Write_Thresholds
-				strncat
-				strlen
 			__CC2DW
 		SendSMS
 		RemoveSMSText

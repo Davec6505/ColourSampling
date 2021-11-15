@@ -35,7 +35,7 @@ sbit STAT at RB4_bit;      //Status input
 /*****************************************************
 *  buffers for flash write char to dbl-word
 *****************************************************/
-char holding_buff[150];
+
 char buff[512];
 unsigned long temp[128];
 
@@ -88,11 +88,11 @@ void InitGSM3(){
    RB.head = 0;
    RB.tail = 0;
    RB.rcv_txt_fin = -1;
-   strcpy(SF.SimCelNum,"\"****************\"");
-   strcpy(SF.WriteAPIKey,"\"****************\"");
-   strcpy(SF.ReadAPIKey,"\"****************\"");
-   strcpy(SF.APN,"\"****************\"");
-   strcpy(SF.PWD,"\"****************\"");
+   memset(SF.SimCelNum,0,sizeof(SF.SimCelNum));
+   memset(SF.WriteAPIKey,0,sizeof(SF.WriteAPIKey));
+   memset(SF.ReadAPIKey,0,sizeof(SF.ReadAPIKey));
+   memset(SF.APN,0,sizeof(SF.APN));
+   memset(SF.PWD,0,sizeof(SF.PWD));
 }
 
 /*******************************************************
@@ -120,7 +120,7 @@ static int i,j;
 
   GetStrLengths();
 
-  memset(buff,0,SL.lTotA);                  //make every byte NULL
+  memset(buff,0,512);                  //make every byte NULL
   memcpy(buff,SF.SimCelNum,SL.l1);          //Save Cell num
   memcpy(buff+SL.l1,SF.WriteAPIKey,SL.l2);//Save API Wr Key
   memcpy(buff+SL.l1l2,SF.ReadAPIKey,SL.l3); //Save API Rd Key
@@ -507,26 +507,26 @@ int i,res,num_strs;
                              ,SF.SimCelNum,SF.SimDate,SF.SimTime);
 #endif
     }else if(Indx == 1){
-    //write API keys to Flash buff first
-      strncpy(SF.WriteAPIKey,string[5],strlen(string[5]));
+      //write API keys to Flash buff first
+        strncpy(SF.WriteAPIKey,string[5],strlen(string[5])+1);
 
-    //read API keys to Flash buff first
-      strncpy(SF.ReadAPIKey,string[6],strlen(string[6]));
-      
-    //network APN to Flash buff first
-      strncpy(SF.APN,string[7],strlen(string[7]));
+      //read API keys to Flash buff first
+        strncpy(SF.ReadAPIKey,string[6],strlen(string[6])+1);
 
-    //network Password to Flash buff first
-      strncpy(SF.PWD,string[8],strlen(string[8]));
-      
+      //network APN to Flash buff first
+        strncpy(SF.APN,string[7],strlen(string[7])+1);
+
+      //network Password to Flash buff first
+        strncpy(SF.PWD,string[8],strlen(string[8])+1);
+
 #ifdef SimConfDebug
-      PrintOut(PrintHandler, "\r\n"
-                             " * SF.WriteAPIKey: %s\r\n"
-                             " * SF.ReadAPIKey:  %s\r\n"
-                             " * SF.APN:         %s\r\n"
-                             " * SF.PWD:         %s\r\n"
-                             ,SF.WriteAPIKey,SF.ReadAPIKey
-                             ,SF.APN,SF.PWD);
+        PrintOut(PrintHandler, "\r\n"
+                               " * SF.WriteAPIKey: %s\r\n"
+                               " * SF.ReadAPIKey:  %s\r\n"
+                               " * SF.APN:         %s\r\n"
+                               " * SF.PWD:         %s\r\n"
+                               ,SF.WriteAPIKey,SF.ReadAPIKey
+                               ,SF.APN,SF.PWD);
 
 #endif
     }
@@ -534,7 +534,7 @@ int i,res,num_strs;
 //delete sms from sm
     Delay_ms(500);
     RemoveSMSText(res);
-    res     = strcmp(SimTestTxt,"OK,");
+    res = strcmp(SimTestTxt,"OK,");
     sprintf(txtA,"%d",res);
 #ifdef SimConfDebug
     PrintOut(PrintHandler, "\r\n"
@@ -543,6 +543,7 @@ int i,res,num_strs;
                            " * OK-0: %s\r\n"
                            ,SimTestTxt,str_rcv,txtA);
 #endif
+
    if((res == 0)&&(Indx == 1)){
       WriteToFlashTemp();
       return 3;
@@ -606,21 +607,27 @@ char response;
 /**********************************************************************
 * Send SMS
 ***********************************************************************/
-char SendSMS(char sms_type){
+char SendSMS(char sms_type,char cellNum){
 static short onecA;
 int res;
 char b[64];
-
+char tempCellNum[20];
+     if(!cellNum)
+        strcpy(tempCellNum,string[1]);
+     else
+        strcpy(tempCellNum,SF.SimCelNum);
+        
     if(!onecA){
       onecA = 1;
       AT_Initial();
     }
+    
     UART2_Write_Text("AT+CMGF=1");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     Delay_ms(1000);
     UART2_Write_Text("AT+CMGS=");
-    UART2_Write_Text(SF.SimCelNum);
+    UART2_Write_Text(tempCellNum);//SF.SimCelNum);
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     Delay_ms(2000);
@@ -645,7 +652,7 @@ char b[64];
              break;
       case 6: //read the set points
              str = Read_Thresholds();
-             strncpy(b,str,strlen(str));
+             strncpy(b,str,strlen(str)-4);
              UART2_Write_Text(b);
              break;
       case 7: //read raw values
@@ -663,6 +670,9 @@ char b[64];
              break;
       case 10:
              UART2_Write_Text("Test Stopped!");
+             break;
+      case 11:
+             UART2_Write_Text("You are not permitted To set the Threshold contact the supplier!");
              break;
       default:
              UART2_Write_Text("Error Power cycle the device!");
@@ -724,7 +734,7 @@ int num_strs,res,err;
 #endif
          ReadMSG(res);
        }else{
-         SendSMS(5);
+         SendSMS(5,0);
          res = 1;
        }
        RemoveSMSText(res);
@@ -769,7 +779,10 @@ int i,num_strs,res;
      PrintOut(PrintHandler, "\r\n"
                            "************** \r\n");
 #endif
-
+     
+     for(i = 0;i<strlen(SimTestTxt);i++){
+          SimTestTxt[i] =  toupper(SimTestTxt[i]);
+      }
     //str_rcv = setstr(SimTestTxt);
     num_strs = strsplit(SimTestTxt,',');
     text = strchr(string[4], '"');
@@ -796,10 +809,20 @@ int i,num_strs,res;
                            ,string[6]);
 #endif
         if(string[6] != NULL){
+          strcpy(string[6],RemoveWhiteSpace(string[6]));
           res = StrChecker(string[6]);
-            TestRecievedSMS(res);
+          //if configuration msg and not primary cell no return
+          if((res == 16) && (strcmp(string[1],SF.SimCelNum))){
+#ifdef SMSDebug
+             UART1_Write_Text("not Primary number\r\n");
+#endif
+             SendSMS(11,1);
+             return 255;
+          }
+                  
+          TestRecievedSMS(res);
         }
-
+     return 0;
 }
 
 /**********************************************************************
@@ -818,13 +841,13 @@ char *t,B[64],txtDig[9];
 
     switch(res){
       case 6:
-           SendSMS(7);
+           SendSMS(7,1);
            break;
       case 13:
-           SendSMS(8);
+           SendSMS(8,1);
            break;
       case 14:
-           SendSMS(6);
+           SendSMS(6,1);
            break;
       case 16:
             GetValuesFromFlash();
@@ -836,20 +859,20 @@ char *t,B[64],txtDig[9];
             WriteToFlashTemp();
             t =  Write_Thresholds(0);
 #ifdef SMSDebug
-               strncat(b,t,strlen(t));
+              // strncpy(b,t,strlen(t));
                PrintOut(PrintHandler, "\r\n"
                                " *CRGB:= %s\r\n"
                                ,t);
 #endif
-                SendSMS(6);
+                SendSMS(6,0);
            break;
       case 17:
            SimVars.init_inc = 5;  //Test started
-           SendSMS(9);
+           SendSMS(9,1);
            break;
       case 18:
            SimVars.init_inc = 3;  //Test Stopped
-           SendSMS(10);
+           SendSMS(10,1);
            break;
       default:
             break;

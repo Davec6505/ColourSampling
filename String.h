@@ -10,7 +10,7 @@
 
 //////////////////////////////////////////////////
 //defines
-#define enum_num ((WRITE_RAW - CONFIG)+1)
+#define enum_num ((CANCEL - CONFIG)+1)
 //#define StrDebug
 
 #define size 20
@@ -78,6 +78,7 @@ void strsplit2(char**mdarr,char str[250], char c);
 void testStrings(char* writebuff);
 char* setstr(char conf[250]);
 void clr_str_arrays(char *str[10]);
+char* RemoveWhiteSpace(char* str);
 char* Read_Send_AllColour(short data_src);
 char* Read_Send_OneColour(int colr);
 char* Read_Thresholds();

@@ -297,7 +297,7 @@ void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
-char SendSMS(char sms_type);
+char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
 #line 19 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
@@ -362,6 +362,7 @@ void strsplit2(char**mdarr,char str[250], char c);
 void testStrings(char* writebuff);
 char* setstr(char conf[250]);
 void clr_str_arrays(char *str[10]);
+char* RemoveWhiteSpace(char* str);
 char* Read_Send_AllColour(short data_src);
 char* Read_Send_OneColour(int colr);
 char* Read_Thresholds();
@@ -425,7 +426,7 @@ char *str,err,i;
  if(res0 > 0)
  res1 = StrChecker(string[1]);
  else
- res1 =  ((WRITE_RAW - CONFIG)+1)  + 1;
+ res1 =  ((CANCEL - CONFIG)+1)  + 1;
  memset(writebuff,0,64);
 
 
@@ -591,7 +592,7 @@ static bit once;
 int i;
  if(!once){
  once = 1;
- enum_val =  ((WRITE_RAW - CONFIG)+1) ;
+ enum_val =  ((CANCEL - CONFIG)+1) ;
  }
  for(i = 0;i < enum_val+1;i++){
  if(strncmp(str,com[i],strlen(str)-1)==0)
@@ -600,6 +601,42 @@ int i;
  return i;
 }
 #line 255 "C:/Users/Git/ColourSampling/String.c"
+char* RemoveWhiteSpace(char* str){
+char* temp;
+int i,j;
+j=0;
+ for(i=0;i<strlen(str);i++){
+ if(str[i] == ' ')
+ continue;
+ temp[j] = str[i];
+ j++;
+ }
+ return temp;
+}
+#line 271 "C:/Users/Git/ColourSampling/String.c"
+char* RemoveChars(char* str,char a,char b){
+char *temp;
+int i=0;
+ temp = (char*)Malloc(100*sizeof(char*));
+
+
+ if(a != 0x02){
+ temp = strchr(str,a);
+ strcpy(str,temp+1);
+ }else{
+ strcpy(temp,str);
+ }
+ for(i=0;i<strlen(temp)+1;i++){
+ if(temp[i]==b)
+ break;
+ *(temp+i) = *(str+i);
+ }
+ *(temp+i) = 0;
+
+ Free(temp,100);
+ return temp;
+}
+#line 297 "C:/Users/Git/ColourSampling/String.c"
 void WriteData(char *_data){
 
 
@@ -607,7 +644,7 @@ void WriteData(char *_data){
  strncpy(writebuff,_data,strlen(_data));
  HID_Write(&writebuff,64);
 }
-#line 266 "C:/Users/Git/ColourSampling/String.c"
+#line 308 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_AllColour(short data_src){
 float FltData[3];
 char txtR[15];
@@ -655,7 +692,7 @@ int err;
 
  return &str;
 }
-#line 317 "C:/Users/Git/ColourSampling/String.c"
+#line 359 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_OneColour(int colr){
 unsigned int col;
 char txtR[10];
@@ -716,7 +753,7 @@ int Get_It(){
 int Get_Gain(){
  return 0;
 }
-#line 381 "C:/Users/Git/ColourSampling/String.c"
+#line 423 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Thresholds(){
 char txtR[25];
 char str[64];
@@ -747,7 +784,7 @@ unsigned long Val;
 
  return &str;
 }
-#line 415 "C:/Users/Git/ColourSampling/String.c"
+#line 457 "C:/Users/Git/ColourSampling/String.c"
 char* Write_Thresholds(short data_src){
 unsigned long val[128];
 unsigned long pos;
@@ -811,7 +848,7 @@ char str[64];
  strcat(str," \r\n ");
  return str;
 }
-#line 482 "C:/Users/Git/ColourSampling/String.c"
+#line 524 "C:/Users/Git/ColourSampling/String.c"
 void testStrings(char* writebuff){
  if(strlen(string[0])!=0){
  strncat(writebuff,string[0],strlen(string[0]));
@@ -873,30 +910,7 @@ unsigned int res,i;
 
  return &str;
 }
-#line 547 "C:/Users/Git/ColourSampling/String.c"
-char* RemoveChars(char* str,char a,char b){
-char *temp;
-int i=0;
- temp = (char*)Malloc(100*sizeof(char*));
-
-
- if(a != 0x02){
- temp = strchr(str,a);
- strcpy(str,temp+1);
- }else{
- strcpy(temp,str);
- }
- for(i=0;i<strlen(temp)+1;i++){
- if(temp[i]==b)
- break;
- *(temp+i) = *(str+i);
- }
- *(temp+i) = 0;
-
- Free(temp,100);
- return temp;
-}
-#line 573 "C:/Users/Git/ColourSampling/String.c"
+#line 591 "C:/Users/Git/ColourSampling/String.c"
 void PrintHandler(char c){
 
  UART1_Write(c);

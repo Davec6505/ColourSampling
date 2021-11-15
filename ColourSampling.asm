@@ -172,14 +172,16 @@ NOP
 J	L_main5
 NOP	
 L__main25:
-;ColourSampling.c,81 :: 		SendSMS(SimVars.init_inc);
+;ColourSampling.c,81 :: 		SendSMS(SimVars.init_inc,1);
+ORI	R26, R0, 1
 LBU	R25, Offset(_SimVars+1)(GP)
 JAL	_SendSMS+0
 NOP	
 J	L_main6
 NOP	
 L_main5:
-;ColourSampling.c,83 :: 		SendSMS(SimVars.init_inc);
+;ColourSampling.c,83 :: 		SendSMS(SimVars.init_inc,1);
+ORI	R26, R0, 1
 LBU	R25, Offset(_SimVars+1)(GP)
 JAL	_SendSMS+0
 NOP	
@@ -215,7 +217,10 @@ NOP
 J	L_main8
 NOP	
 L__main26:
-;ColourSampling.c,95 :: 		Delay_ms(3000);
+;ColourSampling.c,95 :: 		Read_Thresholds();
+JAL	_Read_Thresholds+0
+NOP	
+;ColourSampling.c,96 :: 		Delay_ms(3000);
 LUI	R24, 1220
 ORI	R24, R24, 46079
 L_main9:
@@ -223,47 +228,48 @@ ADDIU	R24, R24, -1
 BNE	R24, R0, L_main9
 NOP	
 NOP	
-;ColourSampling.c,96 :: 		SendSMS(4);
+;ColourSampling.c,97 :: 		SendSMS(4,1);
+ORI	R26, R0, 1
 ORI	R25, R0, 4
 JAL	_SendSMS+0
 NOP	
-;ColourSampling.c,97 :: 		}
+;ColourSampling.c,98 :: 		}
 L_main8:
-;ColourSampling.c,100 :: 		" *Run");
+;ColourSampling.c,101 :: 		" *Run");
 LUI	R2, hi_addr(?lstr_5_ColourSampling+0)
 ORI	R2, R2, lo_addr(?lstr_5_ColourSampling+0)
 ADDIU	SP, SP, -8
 SW	R2, 4(SP)
-;ColourSampling.c,99 :: 		PrintOut(PrintHandler, "\r\n"
+;ColourSampling.c,100 :: 		PrintOut(PrintHandler, "\r\n"
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
 SW	R2, 0(SP)
-;ColourSampling.c,100 :: 		" *Run");
+;ColourSampling.c,101 :: 		" *Run");
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 8
-;ColourSampling.c,105 :: 		while(1){
+;ColourSampling.c,106 :: 		while(1){
 L_main11:
-;ColourSampling.c,108 :: 		num = HID_Read();
+;ColourSampling.c,109 :: 		num = HID_Read();
 JAL	_HID_Read+0
 NOP	
 ; num start address is: 12 (R3)
 ANDI	R3, R2, 255
-;ColourSampling.c,109 :: 		if(num != 0){
+;ColourSampling.c,110 :: 		if(num != 0){
 ANDI	R2, R2, 255
 BNE	R2, R0, L__main28
 NOP	
 J	L_main13
 NOP	
 L__main28:
-;ColourSampling.c,110 :: 		DoStrings(num);
+;ColourSampling.c,111 :: 		DoStrings(num);
 ANDI	R25, R3, 255
 ; num end address is: 12 (R3)
 JAL	_DoStrings+0
 NOP	
-;ColourSampling.c,111 :: 		}
+;ColourSampling.c,112 :: 		}
 L_main13:
-;ColourSampling.c,114 :: 		if(SimVars.init_inc >= 5){
+;ColourSampling.c,115 :: 		if(SimVars.init_inc >= 5){
 LBU	R2, Offset(_SimVars+1)(GP)
 SLTIU	R2, R2, 5
 BEQ	R2, R0, L__main29
@@ -271,21 +277,21 @@ NOP
 J	L_main14
 NOP	
 L__main29:
-;ColourSampling.c,115 :: 		if(T0_SP.one_per_sec){
+;ColourSampling.c,116 :: 		if(T0_SP.one_per_sec){
 LBU	R2, Offset(_T0_SP+10)(GP)
 BNE	R2, R0, L__main31
 NOP	
 J	L_main15
 NOP	
 L__main31:
-;ColourSampling.c,116 :: 		res = Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
+;ColourSampling.c,117 :: 		res = Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
 LHU	R27, Offset(_T0_SP+6)(GP)
 LHU	R26, Offset(_T0_SP+4)(GP)
 LHU	R25, Offset(_T0_SP+2)(GP)
 LW	R30, Offset(_Update_Test+0)(GP)
 JALR	RA, R30
 NOP	
-;ColourSampling.c,117 :: 		if(res >= 1){
+;ColourSampling.c,118 :: 		if(res >= 1){
 SEH	R2, R2
 SLTI	R2, R2, 1
 BEQ	R2, R0, L__main32
@@ -293,24 +299,24 @@ NOP
 J	L_main16
 NOP	
 L__main32:
-;ColourSampling.c,118 :: 		T0_SP.sec = T0_SP.min = T0_SP.hr = 0; //start timming again
+;ColourSampling.c,119 :: 		T0_SP.sec = T0_SP.min = T0_SP.hr = 0; //start timming again
 SH	R0, Offset(_T0_SP+6)(GP)
 SH	R0, Offset(_T0_SP+4)(GP)
 SH	R0, Offset(_T0_SP+2)(GP)
-;ColourSampling.c,119 :: 		T0_SP.one_per_sec = 0;
+;ColourSampling.c,120 :: 		T0_SP.one_per_sec = 0;
 SB	R0, Offset(_T0_SP+10)(GP)
-;ColourSampling.c,120 :: 		}
-L_main16:
 ;ColourSampling.c,121 :: 		}
-L_main15:
+L_main16:
 ;ColourSampling.c,122 :: 		}
+L_main15:
+;ColourSampling.c,123 :: 		}
 L_main14:
-;ColourSampling.c,125 :: 		res = TestRingPointers();
+;ColourSampling.c,126 :: 		res = TestRingPointers();
 JAL	_TestRingPointers+0
 NOP	
 ; res start address is: 16 (R4)
 SEH	R4, R2
-;ColourSampling.c,126 :: 		if(res > 1){
+;ColourSampling.c,127 :: 		if(res > 1){
 SEH	R2, R2
 SLTI	R2, R2, 2
 BEQ	R2, R0, L__main33
@@ -318,7 +324,7 @@ NOP
 J	L_main17
 NOP	
 L__main33:
-;ColourSampling.c,128 :: 		sprintf(txtR,"%d",res);
+;ColourSampling.c,129 :: 		sprintf(txtR,"%d",res);
 ADDIU	R3, SP, 22
 ADDIU	SP, SP, -12
 SH	R4, 8(SP)
@@ -330,7 +336,7 @@ SW	R3, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;ColourSampling.c,129 :: 		sprintf(txtT,"%d",RB.tail);
+;ColourSampling.c,130 :: 		sprintf(txtT,"%d",RB.tail);
 ADDIU	R3, SP, 34
 LHU	R2, Offset(_RB+1004)(GP)
 ADDIU	SP, SP, -12
@@ -342,7 +348,7 @@ SW	R3, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;ColourSampling.c,130 :: 		sprintf(txtH,"%d",RB.head);
+;ColourSampling.c,131 :: 		sprintf(txtH,"%d",RB.head);
 ADDIU	R3, SP, 28
 LHU	R2, Offset(_RB+1002)(GP)
 ADDIU	SP, SP, -12
@@ -354,7 +360,7 @@ SW	R3, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;ColourSampling.c,135 :: 		,txtT,txtH,txtR);
+;ColourSampling.c,136 :: 		,txtT,txtH,txtR);
 ADDIU	R4, SP, 22
 ADDIU	R3, SP, 28
 ADDIU	R2, SP, 34
@@ -362,24 +368,24 @@ ADDIU	SP, SP, -20
 SW	R4, 16(SP)
 SW	R3, 12(SP)
 SW	R2, 8(SP)
-;ColourSampling.c,134 :: 		" *Diff in pointers:= %s\r\n"
+;ColourSampling.c,135 :: 		" *Diff in pointers:= %s\r\n"
 LUI	R2, hi_addr(?lstr_9_ColourSampling+0)
 ORI	R2, R2, lo_addr(?lstr_9_ColourSampling+0)
 SW	R2, 4(SP)
-;ColourSampling.c,131 :: 		PrintOut(PrintHandler, "\r\n"
+;ColourSampling.c,132 :: 		PrintOut(PrintHandler, "\r\n"
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
 SW	R2, 0(SP)
-;ColourSampling.c,135 :: 		,txtT,txtH,txtR);
+;ColourSampling.c,136 :: 		,txtT,txtH,txtR);
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 20
-;ColourSampling.c,138 :: 		GetSMSText();
+;ColourSampling.c,139 :: 		GetSMSText();
 JAL	_GetSMSText+0
 NOP	
-;ColourSampling.c,139 :: 		}
+;ColourSampling.c,140 :: 		}
 L_main17:
-;ColourSampling.c,142 :: 		if(!RG9_bit)
+;ColourSampling.c,143 :: 		if(!RG9_bit)
 _LX	
 EXT	R2, R2, BitPos(RG9_bit+0), 1
 BEQ	R2, R0, L__main34
@@ -387,12 +393,12 @@ NOP
 J	L_main18
 NOP	
 L__main34:
-;ColourSampling.c,143 :: 		NVMErasePage(FLASH_Settings_PAddr);//SendSMS(100);
+;ColourSampling.c,144 :: 		NVMErasePage(FLASH_Settings_PAddr);//SendSMS(100);
 LW	R25, Offset(_FLASH_Settings_PAddr+0)(GP)
 JAL	_NVMErasePage+0
 NOP	
 L_main18:
-;ColourSampling.c,144 :: 		if(!RE4_bit){
+;ColourSampling.c,145 :: 		if(!RE4_bit){
 _LX	
 EXT	R2, R2, BitPos(RE4_bit+0), 1
 BEQ	R2, R0, L__main35
@@ -400,25 +406,25 @@ NOP
 J	L_main19
 NOP	
 L__main35:
-;ColourSampling.c,145 :: 		GetValuesFromFlash();
+;ColourSampling.c,146 :: 		GetValuesFromFlash();
 JAL	_GetValuesFromFlash+0
 NOP	
-;ColourSampling.c,146 :: 		TCS3472_getRawData(RawData);
+;ColourSampling.c,147 :: 		TCS3472_getRawData(RawData);
 LUI	R25, hi_addr(_RawData+0)
 ORI	R25, R25, lo_addr(_RawData+0)
 JAL	_TCS3472_getRawData+0
 NOP	
-;ColourSampling.c,147 :: 		SendData(RawData);
+;ColourSampling.c,148 :: 		SendData(RawData);
 LUI	R25, hi_addr(_RawData+0)
 ORI	R25, R25, lo_addr(_RawData+0)
 JAL	_SendData+0
 NOP	
-;ColourSampling.c,148 :: 		}
-L_main19:
 ;ColourSampling.c,149 :: 		}
+L_main19:
+;ColourSampling.c,150 :: 		}
 J	L_main11
 NOP	
-;ColourSampling.c,150 :: 		}
+;ColourSampling.c,151 :: 		}
 L_end_main:
 L__main_end_loop:
 J	L__main_end_loop

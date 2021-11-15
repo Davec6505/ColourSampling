@@ -100,6 +100,6 @@ void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
-char SendSMS(char sms_type);
+char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
 #endif

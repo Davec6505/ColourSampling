@@ -238,6 +238,7 @@ void strsplit2(char**mdarr,char str[250], char c);
 void testStrings(char* writebuff);
 char* setstr(char conf[250]);
 void clr_str_arrays(char *str[10]);
+char* RemoveWhiteSpace(char* str);
 char* Read_Send_AllColour(short data_src);
 char* Read_Send_OneColour(int colr);
 char* Read_Thresholds();
@@ -340,7 +341,7 @@ void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
 int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
 void SendData(unsigned int* rgbc);
-char SendSMS(char sms_type);
+char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
 #line 20 "c:/users/git/coloursampling/_timers.h"
 typedef struct{
@@ -471,9 +472,9 @@ int res;
  SimVars.init_inc = WaitForSetupSMS(0);
  SimVars.init_inc = GetAPI_Key_SMS();
  if(SimVars.init_inc != 0)
- SendSMS(SimVars.init_inc);
+ SendSMS(SimVars.init_inc,1);
  else
- SendSMS(SimVars.init_inc);
+ SendSMS(SimVars.init_inc,1);
  cell_ok = 0;
  }else{
  WaitForResponse(3);
@@ -482,14 +483,15 @@ int res;
  }
 #line 94 "C:/Users/Git/ColourSampling/ColourSampling.c"
  if(cell_ok == 1){
+ Read_Thresholds();
  Delay_ms(3000);
- SendSMS(4);
+ SendSMS(4,1);
  }
 
  PrintOut(PrintHandler, "\r\n"
  " *Run");
  res = 0;
-#line 105 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 106 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
 
 

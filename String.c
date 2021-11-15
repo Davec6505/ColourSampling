@@ -249,6 +249,48 @@ int i;
    return i;
 }
 
+/******************************************************************
+* Remove unwanted white space from string
+******************************************************************/
+char* RemoveWhiteSpace(char* str){
+char* temp;
+int i,j;
+j=0;
+  for(i=0;i<strlen(str);i++){
+      if(str[i] == ' ')
+        continue;
+      temp[j] = str[i];
+      j++;
+  }
+  return temp;
+}
+
+/******************************************************************
+* Remove unwanted chars from string
+******************************************************************/
+char* RemoveChars(char* str,char a,char b){
+char *temp;
+int i=0;
+        temp = (char*)Malloc(100*sizeof(char*));
+        // memset(temp,0,100);
+        //got " position in the string str
+        if(a != 0x02){
+           temp = strchr(str,a);
+           strcpy(str,temp+1);
+        }else{
+           strcpy(temp,str);
+        }
+        for(i=0;i<strlen(temp)+1;i++){
+            if(temp[i]==b)
+               break;
+            *(temp+i) = *(str+i);
+        }
+        *(temp+i) = 0;
+
+         Free(temp,100);
+        return temp;
+}
+
 /*********************************************************************
 * Write output to USB !! under construction
 *********************************************************************/
@@ -541,31 +583,7 @@ unsigned int res,i;
         return &str;
 }
 
-/******************************************************************
-* Remove unwanted chars from string
-******************************************************************/
-char* RemoveChars(char* str,char a,char b){
-char *temp;
-int i=0;
-        temp = (char*)Malloc(100*sizeof(char*));
-        // memset(temp,0,100);
-        //got " position in the string str
-        if(a != 0x02){
-           temp = strchr(str,a);
-           strcpy(str,temp+1);
-        }else{
-           strcpy(temp,str);
-        }
-        for(i=0;i<strlen(temp)+1;i++){
-            if(temp[i]==b)
-               break;
-            *(temp+i) = *(str+i);
-        }
-        *(temp+i) = 0;
 
-         Free(temp,100);
-        return temp;
-}
 
 /*****************************************************************
 * printf() equivilant

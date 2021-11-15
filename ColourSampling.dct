@@ -11153,7 +11153,6 @@ hid_output_report_bytes
 hid_read
 hid_rpt_desc
 hid_write
-holding_buff
 hosten
 hosten
 hosten
@@ -18466,6 +18465,7 @@ readflashword
 readmsg
 removechars
 removesmstext
+removewhitespace
 report
 reset
 restoreinterrupts
