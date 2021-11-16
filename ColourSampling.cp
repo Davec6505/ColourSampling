@@ -197,7 +197,8 @@ READA_THV,
 WRITE_MAN,
 WRITE_RAW,
 START,
-CANCEL
+CANCEL,
+ERROR
 };
 
 struct Constants{
@@ -339,7 +340,7 @@ char* GetSMSText();
 char* ReadMSG(int msg_num);
 void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
-int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
+int Test_Update_ThingSpeak();
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
@@ -400,7 +401,7 @@ void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
 #line 4 "C:/Users/Git/ColourSampling/ColourSampling.c"
-int (*Update_Test)(uint16_t s,uint16_t m, uint16_t h);
+int (*Update_Test)();
 
 PString str_t;
 Timer_Setpoint T0_SP={
@@ -429,8 +430,8 @@ unsigned char cel_num[20];
 char num;
 unsigned short i;
 unsigned int cell_ok,str_num,deg;
-char txtR[6],txtH[6],txtT[6];
-int res;
+char txtR[6],txtH[6],txtT[6],txtI[6];
+int resA=0, resB=0, diff = 0;;
 
  Update_Test = Test_Update_ThingSpeak;
 
@@ -490,7 +491,7 @@ int res;
 
  PrintOut(PrintHandler, "\r\n"
  " *Run");
- res = 0;
+ resA = resB = 0;
 #line 106 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
 
@@ -503,29 +504,33 @@ int res;
 
  if(SimVars.init_inc >= 5){
  if(T0_SP.one_per_sec){
- res = Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
- if(res >= 1){
+ Update_Test();
  T0_SP.sec = T0_SP.min = T0_SP.hr = 0;
  T0_SP.one_per_sec = 0;
  }
  }
- }
 
 
- res = TestRingPointers();
- if(res > 1){
+ if(!T0_SP.one_per_sec){
+ diff = TestRingPointers();
+ if(diff > 1){
+ SimVars.init_inc = 3;
+ resB = GetSMSText();
 
- sprintf(txtR,"%d",res);
+ sprintf(txtI,"%d",resB);
+ sprintf(txtR,"%d",diff);
  sprintf(txtT,"%d",RB.tail);
  sprintf(txtH,"%d",RB.head);
  PrintOut(PrintHandler, "\r\n"
  " *Tail:= %s\r\n"
  " *Head:= %s\r\n"
  " *Diff in pointers:= %s\r\n"
- ,txtT,txtH,txtR);
+ " *Reply from GetSmsTxt():= %s\r\n"
+ ,txtT,txtH,txtR,txtI);
 
-
- GetSMSText();
+ Delay_ms(500);
+ }
+ SimVars.init_inc = 5;
  }
 
 

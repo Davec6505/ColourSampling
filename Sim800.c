@@ -295,7 +295,7 @@ unsigned long lastMillis,newMillis;
 
       //break if no reply
       newMillis = TMR0.millis - lastMillis;
-      if(newMillis > 25000)
+      if(newMillis > 59000)
            break;
    }while(!RB.rcv_txt_fin);
 }
@@ -672,7 +672,10 @@ char tempCellNum[20];
              UART2_Write_Text("Test Stopped!");
              break;
       case 11:
-             UART2_Write_Text("You are not permitted To set the Threshold contact the supplier!");
+             UART2_Write_Text("You are not permitted to set the threshold contact the supplier!");
+             break;
+      case 12:
+             UART2_Write_Text("Not a recognised command!");
              break;
       default:
              UART2_Write_Text("Error Power cycle the device!");
@@ -724,23 +727,24 @@ int num_strs,res,err;
    if(!err){
    unsigned int is_digit;
        is_digit = isdigit(*string[1]);
+       
        if(is_digit == 1){
          res = atoi(string[1]);
 #ifdef SMSDebug
-     sprintf(sms,"%d",res);
-     PrintOut(PrintHandler, "\r\n"
-                           " *no of sms's:= %s\r\n"
-                           ,sms);
+         sprintf(sms,"%d",res);
+         PrintOut(PrintHandler, "\r\n"
+                               " *no of sms's:= %s\r\n"
+                               ,sms);
 #endif
          ReadMSG(res);
        }else{
          SendSMS(5,0);
          res = 1;
        }
-       RemoveSMSText(res);
+      return RemoveSMSText(res);
    }
 
-
+   return -1;
 }
 
 /**********************************************************************
@@ -812,14 +816,10 @@ int i,num_strs,res;
           strcpy(string[6],RemoveWhiteSpace(string[6]));
           res = StrChecker(string[6]);
           //if configuration msg and not primary cell no return
-          if((res == 16) && (strcmp(string[1],SF.SimCelNum))){
-#ifdef SMSDebug
-             UART1_Write_Text("not Primary number\r\n");
-#endif
-             SendSMS(11,1);
+          if((res == 16) && (strncmp(string[1],SF.SimCelNum,8))){
+             SendSMS(11,0);
              return 255;
           }
-                  
           TestRecievedSMS(res);
         }
      return 0;
@@ -835,19 +835,34 @@ char *t,B[64],txtDig[9];
             // strncat(b,t,strlen(t));
      sprintf(B,"%d",res);
      PrintOut(PrintHandler, "\r\n"
-                            " *CRGB:= %s\r\n"
+                            " *Str check result:= %s\r\n"
                                ,B);
 #endif
 
     switch(res){
       case 6:
-           SendSMS(7,1);
+           SendSMS(7,0);
+           break;
+      case 7: //R
+           SendSMS(12,0);
+           break;
+      case 8: //G
+           SendSMS(12,0);
+           break;
+      case 9: //B
+           SendSMS(12,0);
+           break;
+      case 10: //C
+           SendSMS(12,0);
            break;
       case 13:
-           SendSMS(8,1);
+           SendSMS(8,0);
            break;
       case 14:
-           SendSMS(6,1);
+           SendSMS(6,0);
+           break;
+      case 15: //write,
+           SendSMS(12,0);
            break;
       case 16:
             GetValuesFromFlash();
@@ -868,11 +883,14 @@ char *t,B[64],txtDig[9];
            break;
       case 17:
            SimVars.init_inc = 5;  //Test started
-           SendSMS(9,1);
+           SendSMS(9,0);
            break;
       case 18:
            SimVars.init_inc = 3;  //Test Stopped
-           SendSMS(10,1);
+           SendSMS(10,0);
+           break;
+       case 20:
+           SendSMS(12,0);
            break;
       default:
             break;
@@ -913,42 +931,11 @@ int RemoveSMSText(int sms_cnt){
 *TCP connection
 *test to update thingspeak at req interval
 ***********************************************************************/
-int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h){
-static unsigned short sLast;
-static unsigned short mLast;
-static unsigned short hLast;
+int Test_Update_ThingSpeak(){
 
-    if(s != sLast){
-       sLast = s;
-#ifdef SimDebug
-       sprintf(txtS,"%u",s);
-       UART1_Write_Text(txtS);
-       UART1_Write(0x3A);
-#endif
-    }
-    if(m != mLast){
-       mLast = m;
-#ifdef SimDebug
-       sprintf(txtM,"%u",m);
-       UART1_Write_Text(txtM);
-       UART1_Write(0x3A);
-#endif
-    }
-    if(h != hLast){
-      hLast = h;
-#ifdef SimDebug
-      sprintf(txtH,"%u",h);
-      UART1_Write_Text(txtH);
-      UART1_Write(0x3A);
-#endif
-    }
-    
-    if(m > Threshold.time_to_log){
        TCS3472_getRawData(RawData);
        SendData(RawData);
        return 2;
-    }
-    return -1;
 }
 
 /****************************************************
@@ -957,6 +944,7 @@ static unsigned short hLast;
 void SendData(unsigned int* rgbc){
 int len;
 
+    
     //get the colour valuse prior to sending to ThingSpek
     sprintf(txtC,"%u",rgbc[0]);
     sprintf(txtR,"%u",rgbc[1]);
@@ -964,7 +952,6 @@ int len;
     sprintf(txtB,"%u",rgbc[3]);
     
     //allocate memory for string
-    str = (char*)Malloc(200*sizeof(char));
     //ensure 1st byte is a null terminating value
     *str  = 0;
     //build string
@@ -1054,7 +1041,6 @@ int len;
     TestForOK(0);
     Delay_ms(50);
     
-    Free(str,150*sizeof(char*));
 }
 
 /**************************************************************

@@ -164,7 +164,8 @@ READA_THV,
 WRITE_MAN,
 WRITE_RAW,
 START,
-CANCEL
+CANCEL,
+ERROR
 };
 
 struct Constants{
@@ -368,7 +369,7 @@ char* GetSMSText();
 char* ReadMSG(int msg_num);
 void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
-int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h);
+int Test_Update_ThingSpeak();
 void SendData(unsigned int* rgbc);
 char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
@@ -619,7 +620,7 @@ unsigned long lastMillis,newMillis;
 
 
  newMillis = TMR0.millis - lastMillis;
- if(newMillis > 25000)
+ if(newMillis > 59000)
  break;
  }while(!RB.rcv_txt_fin);
 }
@@ -967,7 +968,10 @@ char tempCellNum[20];
  UART2_Write_Text("Test Stopped!");
  break;
  case 11:
- UART2_Write_Text("You are not permitted To set the Threshold contact the supplier!");
+ UART2_Write_Text("You are not permitted to set the threshold contact the supplier!");
+ break;
+ case 12:
+ UART2_Write_Text("Not a recognised command!");
  break;
  default:
  UART2_Write_Text("Error Power cycle the device!");
@@ -979,7 +983,7 @@ char tempCellNum[20];
  Delay_ms(5000);
 
 }
-#line 691 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 694 "C:/Users/Git/ColourSampling/Sim800.c"
 char* GetSMSText(){
 
 int num_strs,res,err;
@@ -1016,6 +1020,7 @@ int num_strs,res,err;
  if(!err){
  unsigned int is_digit;
  is_digit = isdigit(*string[1]);
+
  if(is_digit == 1){
  res = atoi(string[1]);
 
@@ -1029,12 +1034,12 @@ int num_strs,res,err;
  SendSMS(5,0);
  res = 1;
  }
- RemoveSMSText(res);
+ return RemoveSMSText(res);
  }
 
-
+ return -1;
 }
-#line 750 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 754 "C:/Users/Git/ColourSampling/Sim800.c"
 char* ReadMSG(int msg_num){
 int i,num_strs,res;
 
@@ -1100,14 +1105,10 @@ int i,num_strs,res;
  strcpy(string[6],RemoveWhiteSpace(string[6]));
  res = StrChecker(string[6]);
 
- if((res == 16) && (strcmp(string[1],SF.SimCelNum))){
-
- UART1_Write_Text("not Primary number\r\n");
-
- SendSMS(11,1);
+ if((res == 16) && (strncmp(string[1],SF.SimCelNum,8))){
+ SendSMS(11,0);
  return 255;
  }
-
  TestRecievedSMS(res);
  }
  return 0;
@@ -1120,19 +1121,34 @@ char *t,B[64],txtDig[9];
 
  sprintf(B,"%d",res);
  PrintOut(PrintHandler, "\r\n"
- " *CRGB:= %s\r\n"
+ " *Str check result:= %s\r\n"
  ,B);
 
 
  switch(res){
  case 6:
- SendSMS(7,1);
+ SendSMS(7,0);
+ break;
+ case 7:
+ SendSMS(12,0);
+ break;
+ case 8:
+ SendSMS(12,0);
+ break;
+ case 9:
+ SendSMS(12,0);
+ break;
+ case 10:
+ SendSMS(12,0);
  break;
  case 13:
- SendSMS(8,1);
+ SendSMS(8,0);
  break;
  case 14:
- SendSMS(6,1);
+ SendSMS(6,0);
+ break;
+ case 15:
+ SendSMS(12,0);
  break;
  case 16:
  GetValuesFromFlash();
@@ -1153,18 +1169,21 @@ char *t,B[64],txtDig[9];
  break;
  case 17:
  SimVars.init_inc = 5;
- SendSMS(9,1);
+ SendSMS(9,0);
  break;
  case 18:
  SimVars.init_inc = 3;
- SendSMS(10,1);
+ SendSMS(10,0);
+ break;
+ case 20:
+ SendSMS(12,0);
  break;
  default:
  break;
  }
 
 }
-#line 887 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 905 "C:/Users/Git/ColourSampling/Sim800.c"
 int RemoveSMSText(int sms_cnt){
 
 
@@ -1189,35 +1208,17 @@ int RemoveSMSText(int sms_cnt){
 
  return sms_cnt;
 }
-#line 916 "C:/Users/Git/ColourSampling/Sim800.c"
-int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h){
-static unsigned short sLast;
-static unsigned short mLast;
-static unsigned short hLast;
+#line 934 "C:/Users/Git/ColourSampling/Sim800.c"
+int Test_Update_ThingSpeak(){
 
- if(s != sLast){
- sLast = s;
-#line 928 "C:/Users/Git/ColourSampling/Sim800.c"
- }
- if(m != mLast){
- mLast = m;
-#line 936 "C:/Users/Git/ColourSampling/Sim800.c"
- }
- if(h != hLast){
- hLast = h;
-#line 944 "C:/Users/Git/ColourSampling/Sim800.c"
- }
-
- if(m > Threshold.time_to_log){
  TCS3472_getRawData(RawData);
  SendData(RawData);
  return 2;
- }
- return -1;
 }
-#line 957 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 944 "C:/Users/Git/ColourSampling/Sim800.c"
 void SendData(unsigned int* rgbc){
 int len;
+
 
 
  sprintf(txtC,"%u",rgbc[0]);
@@ -1226,7 +1227,6 @@ int len;
  sprintf(txtB,"%u",rgbc[3]);
 
 
- str = (char*)Malloc(200*sizeof(char));
 
  *str = 0;
 
@@ -1316,9 +1316,8 @@ int len;
  TestForOK(0);
  Delay_ms(50);
 
- Free(str,150*sizeof(char*));
 }
-#line 1064 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 1050 "C:/Users/Git/ColourSampling/Sim800.c"
 void TestForOK(char c){
 unsigned long lastMillis,newMillis;
  WaitForResponse(1);

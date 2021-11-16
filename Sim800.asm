@@ -90,11 +90,11 @@ _SX
 L_PwrUpGSM32:
 _LX	
 EXT	R2, R2, BitPos(RB4_bit+0), 1
-BNE	R2, R0, L__PwrUpGSM3195
+BNE	R2, R0, L__PwrUpGSM3198
 NOP	
 J	L_PwrUpGSM33
 NOP	
-L__PwrUpGSM3195:
+L__PwrUpGSM3198:
 ;Sim800.c,108 :: 		LATE3_bit = !LATE3_bit;
 _LX	
 EXT	R2, R2, BitPos(LATE3_bit+0), 1
@@ -218,11 +218,11 @@ LW	R3, 16(SP)
 SH	R2, Offset(WriteToFlashTemp_j_L0+0)(GP)
 ;Sim800.c,134 :: 		if(j==0){
 SEH	R2, R2
-BEQ	R2, R0, L__WriteToFlashTemp197
+BEQ	R2, R0, L__WriteToFlashTemp200
 NOP	
 J	L_WriteToFlashTemp8
 NOP	
-L__WriteToFlashTemp197:
+L__WriteToFlashTemp200:
 ;Sim800.c,135 :: 		pos += 20 ;
 ADDIU	R2, R3, 20
 ; pos end address is: 12 (R3)
@@ -235,11 +235,11 @@ L_WriteToFlashTemp9:
 ; pos start address is: 16 (R4)
 LH	R2, Offset(WriteToFlashTemp_i_L0+0)(GP)
 SLTI	R2, R2, 100
-BNE	R2, R0, L__WriteToFlashTemp198
+BNE	R2, R0, L__WriteToFlashTemp201
 NOP	
 J	L_WriteToFlashTemp10
 NOP	
-L__WriteToFlashTemp198:
+L__WriteToFlashTemp201:
 ;Sim800.c,137 :: 		j = NVMWriteWord(pos,temp[i]);
 LH	R2, Offset(WriteToFlashTemp_i_L0+0)(GP)
 SLL	R3, R2, 2
@@ -358,11 +358,11 @@ L_GetValuesFromFlash14:
 ; i start address is: 16 (R4)
 LH	R2, Offset(_SL+14)(GP)
 SLTU	R2, R4, R2
-BNE	R2, R0, L__GetValuesFromFlash200
+BNE	R2, R0, L__GetValuesFromFlash203
 NOP	
 J	L_GetValuesFromFlash15
 NOP	
-L__GetValuesFromFlash200:
+L__GetValuesFromFlash203:
 ;Sim800.c,165 :: 		buff[i] = ptr[i];
 LUI	R2, hi_addr(_buff+0)
 ORI	R2, R2, lo_addr(_buff+0)
@@ -652,38 +652,38 @@ SW	RA, 0(SP)
 L_RcvSimTxt17:
 JAL	_UART2_Data_Ready+0
 NOP	
-BNE	R2, R0, L__RcvSimTxt204
+BNE	R2, R0, L__RcvSimTxt207
 NOP	
 J	L_RcvSimTxt18
 NOP	
-L__RcvSimTxt204:
+L__RcvSimTxt207:
 ;Sim800.c,234 :: 		if (U2STAbits.FERR || U2STAbits.OERR){
 LBU	R2, Offset(U2STAbits+0)(GP)
 EXT	R2, R2, 2, 1
-BEQ	R2, R0, L__RcvSimTxt205
+BEQ	R2, R0, L__RcvSimTxt208
 NOP	
-J	L__RcvSimTxt181
+J	L__RcvSimTxt184
 NOP	
-L__RcvSimTxt205:
+L__RcvSimTxt208:
 LBU	R2, Offset(U2STAbits+0)(GP)
 EXT	R2, R2, 1, 1
-BEQ	R2, R0, L__RcvSimTxt206
+BEQ	R2, R0, L__RcvSimTxt209
 NOP	
-J	L__RcvSimTxt180
+J	L__RcvSimTxt183
 NOP	
-L__RcvSimTxt206:
+L__RcvSimTxt209:
 J	L_RcvSimTxt21
 NOP	
-L__RcvSimTxt181:
-L__RcvSimTxt180:
+L__RcvSimTxt184:
+L__RcvSimTxt183:
 ;Sim800.c,235 :: 		if (U2STAbits.FERR ){
 LBU	R2, Offset(U2STAbits+0)(GP)
 EXT	R2, R2, 2, 1
-BNE	R2, R0, L__RcvSimTxt208
+BNE	R2, R0, L__RcvSimTxt211
 NOP	
 J	L_RcvSimTxt22
 NOP	
-L__RcvSimTxt208:
+L__RcvSimTxt211:
 ;Sim800.c,236 :: 		U2STAbits.FERR = 0;
 ORI	R2, R0, 4
 SW	R2, Offset(U2STAbits+4)(GP)
@@ -695,11 +695,11 @@ L_RcvSimTxt22:
 ;Sim800.c,239 :: 		if(U2STAbits.OERR)
 LBU	R2, Offset(U2STAbits+0)(GP)
 EXT	R2, R2, 1, 1
-BNE	R2, R0, L__RcvSimTxt210
+BNE	R2, R0, L__RcvSimTxt213
 NOP	
 J	L_RcvSimTxt23
 NOP	
-L__RcvSimTxt210:
+L__RcvSimTxt213:
 ;Sim800.c,240 :: 		U2STAbits.OERR = 0;
 ORI	R2, R0, 2
 SW	R2, Offset(U2STAbits+4)(GP)
@@ -717,11 +717,11 @@ SW	R2, Offset(U1TXREG+0)(GP)
 ;Sim800.c,245 :: 		if(txt >= 0x20){
 ANDI	R2, R4, 255
 SLTIU	R2, R2, 32
-BEQ	R2, R0, L__RcvSimTxt211
+BEQ	R2, R0, L__RcvSimTxt214
 NOP	
 J	L_RcvSimTxt24
 NOP	
-L__RcvSimTxt211:
+L__RcvSimTxt214:
 ;Sim800.c,246 :: 		RB.buff[RB.head] = txt;
 LHU	R3, Offset(_RB+1002)(GP)
 LUI	R2, hi_addr(_RB+1)
@@ -739,11 +739,11 @@ NOP
 L_RcvSimTxt24:
 LW	R3, Offset(U2RXREG+0)(GP)
 ORI	R2, R0, 10
-BEQ	R3, R2, L__RcvSimTxt212
+BEQ	R3, R2, L__RcvSimTxt215
 NOP	
 J	L_RcvSimTxt26
 NOP	
-L__RcvSimTxt212:
+L__RcvSimTxt215:
 ;Sim800.c,249 :: 		RB.buff[RB.head] = ',';
 LHU	R3, Offset(_RB+1002)(GP)
 LUI	R2, hi_addr(_RB+1)
@@ -761,11 +761,11 @@ L_RcvSimTxt25:
 ;Sim800.c,252 :: 		if(RB.head > 999){
 LHU	R2, Offset(_RB+1002)(GP)
 SLTIU	R2, R2, 1000
-BEQ	R2, R0, L__RcvSimTxt213
+BEQ	R2, R0, L__RcvSimTxt216
 NOP	
 J	L_RcvSimTxt27
 NOP	
-L__RcvSimTxt213:
+L__RcvSimTxt216:
 ;Sim800.c,253 :: 		RB.head = 0;             //rest head when buffer is full
 SH	R0, Offset(_RB+1002)(GP)
 ;Sim800.c,254 :: 		}
@@ -790,11 +790,11 @@ _TestRingPointers:
 LHU	R3, Offset(_RB+1002)(GP)
 LHU	R2, Offset(_RB+1004)(GP)
 SLTU	R2, R3, R2
-BNE	R2, R0, L__TestRingPointers215
+BNE	R2, R0, L__TestRingPointers218
 NOP	
 J	L_TestRingPointers28
 NOP	
-L__TestRingPointers215:
+L__TestRingPointers218:
 ;Sim800.c,265 :: 		diff = 1000 - RB.tail;
 LHU	R3, Offset(_RB+1004)(GP)
 ORI	R2, R0, 1000
@@ -841,7 +841,7 @@ SH	R2, Offset(_RB+1006)(GP)
 ;Sim800.c,281 :: 		do{
 J	L_WaitForResponse30
 NOP	
-L__WaitForResponse182:
+L__WaitForResponse185:
 ;Sim800.c,300 :: 		}while(!RB.rcv_txt_fin);
 ;Sim800.c,281 :: 		do{
 L_WaitForResponse30:
@@ -856,11 +856,11 @@ INS	R2, R3, BitPos(LATE3_bit+0), 1
 _SX	
 ;Sim800.c,283 :: 		if(dly == 0)
 SEB	R2, R25
-BEQ	R2, R0, L__WaitForResponse217
+BEQ	R2, R0, L__WaitForResponse220
 NOP	
 J	L_WaitForResponse33
 NOP	
-L__WaitForResponse217:
+L__WaitForResponse220:
 ; lastMillis end address is: 20 (R5)
 ;Sim800.c,284 :: 		Delay_ms(100);
 ; lastMillis start address is: 20 (R5)
@@ -876,11 +876,11 @@ L_WaitForResponse33:
 ;Sim800.c,285 :: 		else if(dly == 1)
 SEB	R3, R25
 ORI	R2, R0, 1
-BEQ	R3, R2, L__WaitForResponse218
+BEQ	R3, R2, L__WaitForResponse221
 NOP	
 J	L_WaitForResponse37
 NOP	
-L__WaitForResponse218:
+L__WaitForResponse221:
 ;Sim800.c,286 :: 		Delay_ms(500);
 LUI	R24, 203
 ORI	R24, R24, 29524
@@ -896,11 +896,11 @@ L_WaitForResponse37:
 ;Sim800.c,287 :: 		else if(dly == 3){
 SEB	R3, R25
 ORI	R2, R0, 3
-BEQ	R3, R2, L__WaitForResponse219
+BEQ	R3, R2, L__WaitForResponse222
 NOP	
 J	L_WaitForResponse41
 NOP	
-L__WaitForResponse219:
+L__WaitForResponse222:
 ;Sim800.c,288 :: 		UART2_Write_Text("ATE0");
 ORI	R30, R0, 65
 SB	R30, 5(SP)
@@ -951,14 +951,15 @@ L_WaitForResponse40:
 L_WaitForResponse36:
 ;Sim800.c,297 :: 		newMillis = TMR0.millis - lastMillis;
 LW	R2, Offset(_TMR0+0)(GP)
-SUBU	R2, R2, R5
-;Sim800.c,298 :: 		if(newMillis > 25000)
-SLTIU	R2, R2, 25001
-BEQ	R2, R0, L__WaitForResponse220
+SUBU	R3, R2, R5
+;Sim800.c,298 :: 		if(newMillis > 59000)
+ORI	R2, R0, 59000
+SLTU	R2, R2, R3
+BNE	R2, R0, L__WaitForResponse223
 NOP	
 J	L_WaitForResponse47
 NOP	
-L__WaitForResponse220:
+L__WaitForResponse223:
 ; lastMillis end address is: 20 (R5)
 ;Sim800.c,299 :: 		break;
 J	L_WaitForResponse31
@@ -967,11 +968,11 @@ L_WaitForResponse47:
 ;Sim800.c,300 :: 		}while(!RB.rcv_txt_fin);
 ; lastMillis start address is: 20 (R5)
 LBU	R2, Offset(_RB+0)(GP)
-BNE	R2, R0, L__WaitForResponse222
+BNE	R2, R0, L__WaitForResponse225
 NOP	
-J	L__WaitForResponse182
+J	L__WaitForResponse185
 NOP	
-L__WaitForResponse222:
+L__WaitForResponse225:
 ; lastMillis end address is: 20 (R5)
 L_WaitForResponse31:
 ;Sim800.c,301 :: 		}
@@ -995,11 +996,11 @@ L_RingToTempBuf48:
 ; i start address is: 20 (R5)
 LHU	R3, Offset(_RB+1002)(GP)
 LHU	R2, Offset(_RB+1004)(GP)
-BNE	R2, R3, L__RingToTempBuf225
+BNE	R2, R3, L__RingToTempBuf228
 NOP	
 J	L_RingToTempBuf49
 NOP	
-L__RingToTempBuf225:
+L__RingToTempBuf228:
 ;Sim800.c,312 :: 		SimTestTxt[i] = RB.buff[RB.tail];
 SEH	R3, R5
 LUI	R2, hi_addr(_SimTestTxt+0)
@@ -1021,11 +1022,11 @@ SH	R2, Offset(_RB+1004)(GP)
 ;Sim800.c,319 :: 		if(RB.tail > 999)
 ANDI	R2, R2, 65535
 SLTIU	R2, R2, 1000
-BEQ	R2, R0, L__RingToTempBuf226
+BEQ	R2, R0, L__RingToTempBuf229
 NOP	
 J	L_RingToTempBuf50
 NOP	
-L__RingToTempBuf226:
+L__RingToTempBuf229:
 ;Sim800.c,320 :: 		RB.tail = 0;
 SH	R0, Offset(_RB+1004)(GP)
 L_RingToTempBuf50:
@@ -1156,11 +1157,11 @@ ADDIU	SP, SP, 12
 LHU	R3, Offset(_RB+1006)(GP)
 LHU	R2, Offset(_RB+1002)(GP)
 SLTU	R2, R3, R2
-BNE	R2, R0, L__SetupIOT228
+BNE	R2, R0, L__SetupIOT231
 NOP	
 J	L_SetupIOT55
 NOP	
-L__SetupIOT228:
+L__SetupIOT231:
 ;Sim800.c,372 :: 		num_strs = strsplit(SimTestTxt,',');
 ORI	R26, R0, 44
 LUI	R25, hi_addr(_SimTestTxt+0)
@@ -1228,11 +1229,11 @@ SEH	R4, R2
 ;Sim800.c,389 :: 		if(res == 1){
 SEH	R3, R2
 ORI	R2, R0, 1
-BEQ	R3, R2, L__SetupIOT229
+BEQ	R3, R2, L__SetupIOT232
 NOP	
 J	L_SetupIOT56
 NOP	
-L__SetupIOT229:
+L__SetupIOT232:
 ;Sim800.c,391 :: 		sprintf(txtA,"%d",res);
 ADDIU	SP, SP, -12
 SH	R4, 8(SP)
@@ -1594,11 +1595,11 @@ ADDIU	SP, SP, 48
 LHU	R25, 12(SP)
 ;Sim800.c,496 :: 		if(Indx == 0){
 ANDI	R2, R25, 65535
-BEQ	R2, R0, L__WaitForSetupSMS231
+BEQ	R2, R0, L__WaitForSetupSMS234
 NOP	
 J	L_WaitForSetupSMS66
 NOP	
-L__WaitForSetupSMS231:
+L__WaitForSetupSMS234:
 ;Sim800.c,498 :: 		strncpy(SF.SimCelNum,string[1],strlen(string[1])+11);
 SH	R25, 12(SP)
 LUI	R25, hi_addr(_string+64)
@@ -1664,11 +1665,11 @@ NOP
 L_WaitForSetupSMS66:
 ANDI	R3, R25, 65535
 ORI	R2, R0, 1
-BEQ	R3, R2, L__WaitForSetupSMS232
+BEQ	R3, R2, L__WaitForSetupSMS235
 NOP	
 J	L_WaitForSetupSMS68
 NOP	
-L__WaitForSetupSMS232:
+L__WaitForSetupSMS235:
 ;Sim800.c,511 :: 		strncpy(SF.WriteAPIKey,string[5],strlen(string[5])+1);
 SH	R25, 12(SP)
 LUI	R25, hi_addr(_string+320)
@@ -1820,19 +1821,19 @@ ADDIU	SP, SP, 20
 LHU	R25, 12(SP)
 ;Sim800.c,547 :: 		if((res == 0)&&(Indx == 1)){
 LH	R2, 14(SP)
-BEQ	R2, R0, L__WaitForSetupSMS233
+BEQ	R2, R0, L__WaitForSetupSMS236
 NOP	
-J	L__WaitForSetupSMS186
+J	L__WaitForSetupSMS189
 NOP	
-L__WaitForSetupSMS233:
+L__WaitForSetupSMS236:
 ANDI	R3, R25, 65535
 ORI	R2, R0, 1
-BEQ	R3, R2, L__WaitForSetupSMS234
+BEQ	R3, R2, L__WaitForSetupSMS237
 NOP	
-J	L__WaitForSetupSMS185
+J	L__WaitForSetupSMS188
 NOP	
-L__WaitForSetupSMS234:
-L__WaitForSetupSMS184:
+L__WaitForSetupSMS237:
+L__WaitForSetupSMS187:
 ;Sim800.c,548 :: 		WriteToFlashTemp();
 JAL	_WriteToFlashTemp+0
 NOP	
@@ -1841,29 +1842,29 @@ ORI	R2, R0, 3
 J	L_end_WaitForSetupSMS
 NOP	
 ;Sim800.c,547 :: 		if((res == 0)&&(Indx == 1)){
-L__WaitForSetupSMS186:
-L__WaitForSetupSMS185:
+L__WaitForSetupSMS189:
+L__WaitForSetupSMS188:
 ;Sim800.c,551 :: 		else if ((res == 0)&&(Indx == 0))
 LH	R2, 14(SP)
-BEQ	R2, R0, L__WaitForSetupSMS235
+BEQ	R2, R0, L__WaitForSetupSMS238
 NOP	
-J	L__WaitForSetupSMS188
+J	L__WaitForSetupSMS191
 NOP	
-L__WaitForSetupSMS235:
+L__WaitForSetupSMS238:
 ANDI	R2, R25, 65535
-BEQ	R2, R0, L__WaitForSetupSMS236
+BEQ	R2, R0, L__WaitForSetupSMS239
 NOP	
-J	L__WaitForSetupSMS187
+J	L__WaitForSetupSMS190
 NOP	
-L__WaitForSetupSMS236:
-L__WaitForSetupSMS183:
+L__WaitForSetupSMS239:
+L__WaitForSetupSMS186:
 ;Sim800.c,552 :: 		return 2;
 ORI	R2, R0, 2
 J	L_end_WaitForSetupSMS
 NOP	
 ;Sim800.c,551 :: 		else if ((res == 0)&&(Indx == 0))
-L__WaitForSetupSMS188:
-L__WaitForSetupSMS187:
+L__WaitForSetupSMS191:
+L__WaitForSetupSMS190:
 ;Sim800.c,554 :: 		return res;
 LH	R2, 14(SP)
 ;Sim800.c,555 :: 		}
@@ -2025,17 +2026,17 @@ NOP
 ; end of _GetAPI_Key_SMS
 _SendSMS:
 ;Sim800.c,610 :: 		char SendSMS(char sms_type,char cellNum){
-ADDIU	SP, SP, -368
+ADDIU	SP, SP, -396
 SW	RA, 0(SP)
 ;Sim800.c,615 :: 		if(!cellNum)
 SW	R25, 4(SP)
 SW	R26, 8(SP)
 SW	R27, 12(SP)
-BEQ	R26, R0, L__SendSMS240
+BEQ	R26, R0, L__SendSMS243
 NOP	
 J	L_SendSMS83
 NOP	
-L__SendSMS240:
+L__SendSMS243:
 ;Sim800.c,616 :: 		strcpy(tempCellNum,string[1]);
 ADDIU	R2, SP, 81
 SB	R25, 16(SP)
@@ -2060,11 +2061,11 @@ LBU	R25, 16(SP)
 L_SendSMS84:
 ;Sim800.c,620 :: 		if(!onecA){
 LB	R2, Offset(SendSMS_onecA_L0+0)(GP)
-BEQ	R2, R0, L__SendSMS241
+BEQ	R2, R0, L__SendSMS244
 NOP	
 J	L_SendSMS85
 NOP	
-L__SendSMS241:
+L__SendSMS244:
 ;Sim800.c,621 :: 		onecA = 1;
 ORI	R2, R0, 1
 SB	R2, Offset(SendSMS_onecA_L0+0)(GP)
@@ -2342,7 +2343,7 @@ J	L_SendSMS91
 NOP	
 ;Sim800.c,674 :: 		case 11:
 L_SendSMS103:
-;Sim800.c,675 :: 		UART2_Write_Text("You are not permitted To set the Threshold contact the supplier!");
+;Sim800.c,675 :: 		UART2_Write_Text("You are not permitted to set the threshold contact the supplier!");
 ADDIU	R23, SP, 272
 ADDIU	R22, R23, 65
 LUI	R24, hi_addr(?ICS?lstr52_Sim800+0)
@@ -2356,11 +2357,11 @@ NOP
 ;Sim800.c,676 :: 		break;
 J	L_SendSMS91
 NOP	
-;Sim800.c,677 :: 		default:
+;Sim800.c,677 :: 		case 12:
 L_SendSMS104:
-;Sim800.c,678 :: 		UART2_Write_Text("Error Power cycle the device!");
+;Sim800.c,678 :: 		UART2_Write_Text("Not a recognised command!");
 ADDIU	R23, SP, 337
-ADDIU	R22, R23, 30
+ADDIU	R22, R23, 26
 LUI	R24, hi_addr(?ICS?lstr53_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr53_Sim800+0)
 JAL	___CC2DW+0
@@ -2372,147 +2373,170 @@ NOP
 ;Sim800.c,679 :: 		break;
 J	L_SendSMS91
 NOP	
-;Sim800.c,680 :: 		}
+;Sim800.c,680 :: 		default:
+L_SendSMS105:
+;Sim800.c,681 :: 		UART2_Write_Text("Error Power cycle the device!");
+ADDIU	R23, SP, 363
+ADDIU	R22, R23, 30
+LUI	R24, hi_addr(?ICS?lstr54_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr54_Sim800+0)
+JAL	___CC2DW+0
+NOP	
+ADDIU	R2, SP, 363
+MOVZ	R25, R2, R0
+JAL	_UART2_Write_Text+0
+NOP	
+;Sim800.c,682 :: 		break;
+J	L_SendSMS91
+NOP	
+;Sim800.c,683 :: 		}
 L_SendSMS90:
 ANDI	R2, R25, 255
-BNE	R2, R0, L__SendSMS243
+BNE	R2, R0, L__SendSMS246
 NOP	
 J	L_SendSMS92
 NOP	
-L__SendSMS243:
+L__SendSMS246:
 ANDI	R3, R25, 255
 ORI	R2, R0, 1
-BNE	R3, R2, L__SendSMS245
+BNE	R3, R2, L__SendSMS248
 NOP	
 J	L_SendSMS93
 NOP	
-L__SendSMS245:
+L__SendSMS248:
 ANDI	R3, R25, 255
 ORI	R2, R0, 2
-BNE	R3, R2, L__SendSMS247
+BNE	R3, R2, L__SendSMS250
 NOP	
 J	L_SendSMS94
 NOP	
-L__SendSMS247:
+L__SendSMS250:
 ANDI	R3, R25, 255
 ORI	R2, R0, 3
-BNE	R3, R2, L__SendSMS249
+BNE	R3, R2, L__SendSMS252
 NOP	
 J	L_SendSMS95
 NOP	
-L__SendSMS249:
+L__SendSMS252:
 ANDI	R3, R25, 255
 ORI	R2, R0, 4
-BNE	R3, R2, L__SendSMS251
+BNE	R3, R2, L__SendSMS254
 NOP	
 J	L_SendSMS96
 NOP	
-L__SendSMS251:
+L__SendSMS254:
 ANDI	R3, R25, 255
 ORI	R2, R0, 5
-BNE	R3, R2, L__SendSMS253
+BNE	R3, R2, L__SendSMS256
 NOP	
 J	L_SendSMS97
 NOP	
-L__SendSMS253:
+L__SendSMS256:
 ANDI	R3, R25, 255
 ORI	R2, R0, 6
-BNE	R3, R2, L__SendSMS255
+BNE	R3, R2, L__SendSMS258
 NOP	
 J	L_SendSMS98
 NOP	
-L__SendSMS255:
+L__SendSMS258:
 ANDI	R3, R25, 255
 ORI	R2, R0, 7
-BNE	R3, R2, L__SendSMS257
+BNE	R3, R2, L__SendSMS260
 NOP	
 J	L_SendSMS99
 NOP	
-L__SendSMS257:
+L__SendSMS260:
 ANDI	R3, R25, 255
 ORI	R2, R0, 8
-BNE	R3, R2, L__SendSMS259
+BNE	R3, R2, L__SendSMS262
 NOP	
 J	L_SendSMS100
 NOP	
-L__SendSMS259:
+L__SendSMS262:
 ANDI	R3, R25, 255
 ORI	R2, R0, 9
-BNE	R3, R2, L__SendSMS261
+BNE	R3, R2, L__SendSMS264
 NOP	
 J	L_SendSMS101
 NOP	
-L__SendSMS261:
+L__SendSMS264:
 ANDI	R3, R25, 255
 ORI	R2, R0, 10
-BNE	R3, R2, L__SendSMS263
+BNE	R3, R2, L__SendSMS266
 NOP	
 J	L_SendSMS102
 NOP	
-L__SendSMS263:
+L__SendSMS266:
 ANDI	R3, R25, 255
 ORI	R2, R0, 11
-BNE	R3, R2, L__SendSMS265
+BNE	R3, R2, L__SendSMS268
 NOP	
 J	L_SendSMS103
 NOP	
-L__SendSMS265:
+L__SendSMS268:
+ANDI	R3, R25, 255
+ORI	R2, R0, 12
+BNE	R3, R2, L__SendSMS270
+NOP	
 J	L_SendSMS104
 NOP	
+L__SendSMS270:
+J	L_SendSMS105
+NOP	
 L_SendSMS91:
-;Sim800.c,681 :: 		UART2_Write(0x0D);
+;Sim800.c,684 :: 		UART2_Write(0x0D);
 ORI	R25, R0, 13
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,682 :: 		UART2_Write(0x0A);
+;Sim800.c,685 :: 		UART2_Write(0x0A);
 ORI	R25, R0, 10
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,683 :: 		UART2_Write(0x1A);
+;Sim800.c,686 :: 		UART2_Write(0x1A);
 ORI	R25, R0, 26
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,684 :: 		Delay_ms(5000);
+;Sim800.c,687 :: 		Delay_ms(5000);
 LUI	R24, 2034
 ORI	R24, R24, 33108
-L_SendSMS105:
+L_SendSMS106:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendSMS105
+BNE	R24, R0, L_SendSMS106
 NOP	
 NOP	
 NOP	
-;Sim800.c,686 :: 		}
+;Sim800.c,689 :: 		}
 L_end_SendSMS:
 LW	R27, 12(SP)
 LW	R26, 8(SP)
 LW	R25, 4(SP)
 LW	RA, 0(SP)
-ADDIU	SP, SP, 368
+ADDIU	SP, SP, 396
 JR	RA
 NOP	
 ; end of _SendSMS
 _GetSMSText:
-;Sim800.c,691 :: 		char* GetSMSText(){
+;Sim800.c,694 :: 		char* GetSMSText(){
 ADDIU	SP, SP, -40
 SW	RA, 0(SP)
-;Sim800.c,694 :: 		UART1_Write_Text("=================\r\n");
+;Sim800.c,697 :: 		UART1_Write_Text("=================\r\n");
 SW	R25, 4(SP)
 SW	R26, 8(SP)
 SW	R27, 12(SP)
 ADDIU	R23, SP, 20
 ADDIU	R22, R23, 20
-LUI	R24, hi_addr(?ICS?lstr54_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr54_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr55_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr55_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 20
 MOVZ	R25, R2, R0
 JAL	_UART1_Write_Text+0
 NOP	
-;Sim800.c,695 :: 		RingToTempBuf();
+;Sim800.c,698 :: 		RingToTempBuf();
 JAL	_RingToTempBuf+0
 NOP	
-;Sim800.c,699 :: 		num_strs = strsplit(SimTestTxt,',');
+;Sim800.c,702 :: 		num_strs = strsplit(SimTestTxt,',');
 ORI	R26, R0, 44
 LUI	R25, hi_addr(_SimTestTxt+0)
 ORI	R25, R25, lo_addr(_SimTestTxt+0)
@@ -2520,7 +2544,7 @@ JAL	_strsplit+0
 NOP	
 ; num_strs start address is: 20 (R5)
 SEH	R5, R2
-;Sim800.c,701 :: 		err = strncmp(sms_test,string[0],4);
+;Sim800.c,704 :: 		err = strncmp(sms_test,string[0],4);
 ORI	R27, R0, 4
 LUI	R26, hi_addr(_string+0)
 ORI	R26, R26, lo_addr(_string+0)
@@ -2529,12 +2553,12 @@ ORI	R25, R25, lo_addr(_sms_test+0)
 JAL	_strncmp+0
 NOP	
 SH	R2, 18(SP)
-;Sim800.c,703 :: 		sprintf(txtA,"%d",num_strs);
+;Sim800.c,706 :: 		sprintf(txtA,"%d",num_strs);
 ADDIU	SP, SP, -12
 SH	R5, 8(SP)
 ; num_strs end address is: 20 (R5)
-LUI	R2, hi_addr(?lstr_55_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_55_Sim800+0)
+LUI	R2, hi_addr(?lstr_56_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_56_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtA+0)
 ORI	R2, R2, lo_addr(_txtA+0)
@@ -2542,12 +2566,12 @@ SW	R2, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;Sim800.c,704 :: 		sprintf(txtB,"%d",err);
+;Sim800.c,707 :: 		sprintf(txtB,"%d",err);
 LH	R2, 18(SP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_56_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_56_Sim800+0)
+LUI	R2, hi_addr(?lstr_57_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_57_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtB+0)
 ORI	R2, R2, lo_addr(_txtB+0)
@@ -2555,7 +2579,7 @@ SW	R2, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;Sim800.c,721 :: 		,string[7],string[8]);
+;Sim800.c,724 :: 		,string[7],string[8]);
 LUI	R2, hi_addr(_string+512)
 ORI	R2, R2, lo_addr(_string+512)
 ADDIU	SP, SP, -52
@@ -2563,28 +2587,28 @@ SW	R2, 48(SP)
 LUI	R2, hi_addr(_string+448)
 ORI	R2, R2, lo_addr(_string+448)
 SW	R2, 44(SP)
-;Sim800.c,720 :: 		,string[5],string[6]
+;Sim800.c,723 :: 		,string[5],string[6]
 LUI	R2, hi_addr(_string+384)
 ORI	R2, R2, lo_addr(_string+384)
 SW	R2, 40(SP)
 LUI	R2, hi_addr(_string+320)
 ORI	R2, R2, lo_addr(_string+320)
 SW	R2, 36(SP)
-;Sim800.c,719 :: 		,string[3],string[4]
+;Sim800.c,722 :: 		,string[3],string[4]
 LUI	R2, hi_addr(_string+256)
 ORI	R2, R2, lo_addr(_string+256)
 SW	R2, 32(SP)
 LUI	R2, hi_addr(_string+192)
 ORI	R2, R2, lo_addr(_string+192)
 SW	R2, 28(SP)
-;Sim800.c,718 :: 		,string[1],string[2]
+;Sim800.c,721 :: 		,string[1],string[2]
 LUI	R2, hi_addr(_string+128)
 ORI	R2, R2, lo_addr(_string+128)
 SW	R2, 24(SP)
 LUI	R2, hi_addr(_string+64)
 ORI	R2, R2, lo_addr(_string+64)
 SW	R2, 20(SP)
-;Sim800.c,717 :: 		,txtA,txtB,string[0]
+;Sim800.c,720 :: 		,txtA,txtB,string[0]
 LUI	R2, hi_addr(_string+0)
 ORI	R2, R2, lo_addr(_string+0)
 SW	R2, 16(SP)
@@ -2594,48 +2618,48 @@ SW	R2, 12(SP)
 LUI	R2, hi_addr(_txtA+0)
 ORI	R2, R2, lo_addr(_txtA+0)
 SW	R2, 8(SP)
-;Sim800.c,716 :: 		" *string[8]  %s\r\n"
-LUI	R2, hi_addr(?lstr_57_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_57_Sim800+0)
+;Sim800.c,719 :: 		" *string[8]  %s\r\n"
+LUI	R2, hi_addr(?lstr_58_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_58_Sim800+0)
 SW	R2, 4(SP)
-;Sim800.c,705 :: 		PrintOut(PrintHandler, "\r\n"
+;Sim800.c,708 :: 		PrintOut(PrintHandler, "\r\n"
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
 SW	R2, 0(SP)
-;Sim800.c,721 :: 		,string[7],string[8]);
+;Sim800.c,724 :: 		,string[7],string[8]);
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 52
-;Sim800.c,724 :: 		if(!err){
+;Sim800.c,727 :: 		if(!err){
 LH	R2, 18(SP)
-BEQ	R2, R0, L__GetSMSText267
-NOP	
-J	L_GetSMSText107
-NOP	
-L__GetSMSText267:
-;Sim800.c,726 :: 		is_digit = isdigit(*string[1]);
-LBU	R25, Offset(_string+64)(GP)
-JAL	_isdigit+0
-NOP	
-;Sim800.c,727 :: 		if(is_digit == 1){
-ANDI	R3, R2, 65535
-ORI	R2, R0, 1
-BEQ	R3, R2, L__GetSMSText268
+BEQ	R2, R0, L__GetSMSText272
 NOP	
 J	L_GetSMSText108
 NOP	
-L__GetSMSText268:
-;Sim800.c,728 :: 		res = atoi(string[1]);
+L__GetSMSText272:
+;Sim800.c,729 :: 		is_digit = isdigit(*string[1]);
+LBU	R25, Offset(_string+64)(GP)
+JAL	_isdigit+0
+NOP	
+;Sim800.c,731 :: 		if(is_digit == 1){
+ANDI	R3, R2, 65535
+ORI	R2, R0, 1
+BEQ	R3, R2, L__GetSMSText273
+NOP	
+J	L_GetSMSText109
+NOP	
+L__GetSMSText273:
+;Sim800.c,732 :: 		res = atoi(string[1]);
 LUI	R25, hi_addr(_string+64)
 ORI	R25, R25, lo_addr(_string+64)
 JAL	_atoi+0
 NOP	
 SH	R2, 16(SP)
-;Sim800.c,730 :: 		sprintf(sms,"%d",res);
+;Sim800.c,734 :: 		sprintf(sms,"%d",res);
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_58_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_58_Sim800+0)
+LUI	R2, hi_addr(?lstr_59_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_59_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
@@ -2643,48 +2667,56 @@ SW	R2, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;Sim800.c,733 :: 		,sms);
+;Sim800.c,737 :: 		,sms);
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-;Sim800.c,732 :: 		" *no of sms's:= %s\r\n"
-LUI	R2, hi_addr(?lstr_59_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_59_Sim800+0)
+;Sim800.c,736 :: 		" *no of sms's:= %s\r\n"
+LUI	R2, hi_addr(?lstr_60_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_60_Sim800+0)
 SW	R2, 4(SP)
-;Sim800.c,731 :: 		PrintOut(PrintHandler, "\r\n"
+;Sim800.c,735 :: 		PrintOut(PrintHandler, "\r\n"
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
 SW	R2, 0(SP)
-;Sim800.c,733 :: 		,sms);
+;Sim800.c,737 :: 		,sms);
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 12
-;Sim800.c,735 :: 		ReadMSG(res);
+;Sim800.c,739 :: 		ReadMSG(res);
 LH	R25, 16(SP)
 JAL	_ReadMSG+0
 NOP	
-;Sim800.c,736 :: 		}else{
-J	L_GetSMSText109
+;Sim800.c,740 :: 		}else{
+J	L_GetSMSText110
 NOP	
-L_GetSMSText108:
-;Sim800.c,737 :: 		SendSMS(5,0);
+L_GetSMSText109:
+;Sim800.c,741 :: 		SendSMS(5,0);
 MOVZ	R26, R0, R0
 ORI	R25, R0, 5
 JAL	_SendSMS+0
 NOP	
-;Sim800.c,738 :: 		res = 1;
+;Sim800.c,742 :: 		res = 1;
 ORI	R2, R0, 1
 SH	R2, 16(SP)
-;Sim800.c,739 :: 		}
-L_GetSMSText109:
-;Sim800.c,740 :: 		RemoveSMSText(res);
+;Sim800.c,743 :: 		}
+L_GetSMSText110:
+;Sim800.c,744 :: 		return RemoveSMSText(res);
 LH	R25, 16(SP)
 JAL	_RemoveSMSText+0
 NOP	
-;Sim800.c,741 :: 		}
-L_GetSMSText107:
-;Sim800.c,744 :: 		}
+SEH	R2, R2
+J	L_end_GetSMSText
+NOP	
+;Sim800.c,745 :: 		}
+L_GetSMSText108:
+;Sim800.c,747 :: 		return -1;
+LUI	R2, 65535
+ORI	R2, R2, 65535
+;Sim800.c,748 :: 		}
+;Sim800.c,747 :: 		return -1;
+;Sim800.c,748 :: 		}
 L_end_GetSMSText:
 LW	R27, 12(SP)
 LW	R26, 8(SP)
@@ -2695,17 +2727,17 @@ JR	RA
 NOP	
 ; end of _GetSMSText
 _ReadMSG:
-;Sim800.c,750 :: 		char* ReadMSG(int msg_num){
-ADDIU	SP, SP, -68
+;Sim800.c,754 :: 		char* ReadMSG(int msg_num){
+ADDIU	SP, SP, -48
 SW	RA, 0(SP)
-;Sim800.c,753 :: 		sprintf(sms,"%d",msg_num);
+;Sim800.c,757 :: 		sprintf(sms,"%d",msg_num);
 SW	R25, 4(SP)
 SW	R26, 8(SP)
 SW	R27, 12(SP)
 ADDIU	SP, SP, -12
 SH	R25, 8(SP)
-LUI	R2, hi_addr(?lstr_60_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_60_Sim800+0)
+LUI	R2, hi_addr(?lstr_61_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_61_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
@@ -2713,119 +2745,119 @@ SW	R2, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;Sim800.c,754 :: 		Delay_ms(1000);
+;Sim800.c,758 :: 		Delay_ms(1000);
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_ReadMSG110:
+L_ReadMSG111:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_ReadMSG110
+BNE	R24, R0, L_ReadMSG111
 NOP	
-;Sim800.c,758 :: 		,sms);
+;Sim800.c,762 :: 		,sms);
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-;Sim800.c,757 :: 		" *num_sms's:= %s\r\n"
-LUI	R2, hi_addr(?lstr_61_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_61_Sim800+0)
+;Sim800.c,761 :: 		" *num_sms's:= %s\r\n"
+LUI	R2, hi_addr(?lstr_62_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_62_Sim800+0)
 SW	R2, 4(SP)
-;Sim800.c,756 :: 		PrintOut(PrintHandler, "\r\n"
+;Sim800.c,760 :: 		PrintOut(PrintHandler, "\r\n"
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
 SW	R2, 0(SP)
-;Sim800.c,758 :: 		,sms);
+;Sim800.c,762 :: 		,sms);
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 12
-;Sim800.c,761 :: 		UART2_Write_Text("AT+CMGF=1");
+;Sim800.c,765 :: 		UART2_Write_Text("AT+CMGF=1");
 ADDIU	R23, SP, 20
 ADDIU	R22, R23, 10
-LUI	R24, hi_addr(?ICS?lstr62_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr62_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr63_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr63_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 20
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
-;Sim800.c,762 :: 		UART2_Write(0x0D);
+;Sim800.c,766 :: 		UART2_Write(0x0D);
 ORI	R25, R0, 13
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,763 :: 		UART2_Write(0x0A);
+;Sim800.c,767 :: 		UART2_Write(0x0A);
 ORI	R25, R0, 10
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,764 :: 		WaitForResponse(1);
+;Sim800.c,768 :: 		WaitForResponse(1);
 ORI	R25, R0, 1
 JAL	_WaitForResponse+0
 NOP	
-;Sim800.c,765 :: 		RingToTempBuf();
+;Sim800.c,769 :: 		RingToTempBuf();
 JAL	_RingToTempBuf+0
 NOP	
-;Sim800.c,766 :: 		Delay_ms(1000);
+;Sim800.c,770 :: 		Delay_ms(1000);
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_ReadMSG112:
+L_ReadMSG113:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_ReadMSG112
+BNE	R24, R0, L_ReadMSG113
 NOP	
-;Sim800.c,769 :: 		UART2_Write_Text("AT+CMGR=");
+;Sim800.c,773 :: 		UART2_Write_Text("AT+CMGR=");
 ADDIU	R23, SP, 30
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr63_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr63_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr64_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr64_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 30
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
-;Sim800.c,770 :: 		UART2_Write_Text(sms);
+;Sim800.c,774 :: 		UART2_Write_Text(sms);
 LUI	R25, hi_addr(_sms+0)
 ORI	R25, R25, lo_addr(_sms+0)
 JAL	_UART2_Write_Text+0
 NOP	
-;Sim800.c,771 :: 		UART2_Write(0x0D);
+;Sim800.c,775 :: 		UART2_Write(0x0D);
 ORI	R25, R0, 13
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,772 :: 		UART2_Write(0x0A);
+;Sim800.c,776 :: 		UART2_Write(0x0A);
 ORI	R25, R0, 10
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,774 :: 		WaitForResponse(1);
+;Sim800.c,778 :: 		WaitForResponse(1);
 ORI	R25, R0, 1
 JAL	_WaitForResponse+0
 NOP	
-;Sim800.c,775 :: 		RingToTempBuf();
+;Sim800.c,779 :: 		RingToTempBuf();
 JAL	_RingToTempBuf+0
 NOP	
-;Sim800.c,776 :: 		Delay_ms(1000);
+;Sim800.c,780 :: 		Delay_ms(1000);
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_ReadMSG114:
+L_ReadMSG115:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_ReadMSG114
+BNE	R24, R0, L_ReadMSG115
 NOP	
-;Sim800.c,780 :: 		"************** \r\n");
-LUI	R2, hi_addr(?lstr_64_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_64_Sim800+0)
+;Sim800.c,784 :: 		"************** \r\n");
+LUI	R2, hi_addr(?lstr_65_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_65_Sim800+0)
 ADDIU	SP, SP, -8
 SW	R2, 4(SP)
-;Sim800.c,779 :: 		PrintOut(PrintHandler, "\r\n"
+;Sim800.c,783 :: 		PrintOut(PrintHandler, "\r\n"
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
 SW	R2, 0(SP)
-;Sim800.c,780 :: 		"************** \r\n");
+;Sim800.c,784 :: 		"************** \r\n");
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 8
-;Sim800.c,783 :: 		for(i = 0;i<strlen(SimTestTxt);i++){
+;Sim800.c,787 :: 		for(i = 0;i<strlen(SimTestTxt);i++){
 ; i start address is: 20 (R5)
 MOVZ	R5, R0, R0
 ; i end address is: 20 (R5)
-L_ReadMSG116:
+L_ReadMSG117:
 ; i start address is: 20 (R5)
 SH	R25, 16(SP)
 LUI	R25, hi_addr(_SimTestTxt+0)
@@ -2836,35 +2868,35 @@ LH	R25, 16(SP)
 SEH	R3, R5
 SEH	R2, R2
 SLT	R2, R3, R2
-BNE	R2, R0, L__ReadMSG270
+BNE	R2, R0, L__ReadMSG275
 NOP	
-J	L_ReadMSG117
+J	L_ReadMSG118
 NOP	
-L__ReadMSG270:
-;Sim800.c,784 :: 		SimTestTxt[i] =  toupper(SimTestTxt[i]);
+L__ReadMSG275:
+;Sim800.c,788 :: 		SimTestTxt[i] =  toupper(SimTestTxt[i]);
 SEH	R3, R5
 LUI	R2, hi_addr(_SimTestTxt+0)
 ORI	R2, R2, lo_addr(_SimTestTxt+0)
 ADDU	R2, R2, R3
-SW	R2, 64(SP)
+SW	R2, 44(SP)
 SH	R25, 16(SP)
 LBU	R25, 0(R2)
 JAL	_toupper+0
 NOP	
 LH	R25, 16(SP)
-LW	R3, 64(SP)
+LW	R3, 44(SP)
 SB	R2, 0(R3)
-;Sim800.c,783 :: 		for(i = 0;i<strlen(SimTestTxt);i++){
+;Sim800.c,787 :: 		for(i = 0;i<strlen(SimTestTxt);i++){
 ADDIU	R2, R5, 1
 ; i end address is: 20 (R5)
 ; i start address is: 8 (R2)
-;Sim800.c,785 :: 		}
+;Sim800.c,789 :: 		}
 SEH	R5, R2
 ; i end address is: 8 (R2)
-J	L_ReadMSG116
+J	L_ReadMSG117
 NOP	
-L_ReadMSG117:
-;Sim800.c,787 :: 		num_strs = strsplit(SimTestTxt,',');
+L_ReadMSG118:
+;Sim800.c,791 :: 		num_strs = strsplit(SimTestTxt,',');
 SH	R25, 16(SP)
 ORI	R26, R0, 44
 LUI	R25, hi_addr(_SimTestTxt+0)
@@ -2872,14 +2904,14 @@ ORI	R25, R25, lo_addr(_SimTestTxt+0)
 JAL	_strsplit+0
 NOP	
 SH	R2, 18(SP)
-;Sim800.c,788 :: 		text = strchr(string[4], '"');
+;Sim800.c,792 :: 		text = strchr(string[4], '"');
 ORI	R26, R0, 34
 LUI	R25, hi_addr(_string+256)
 ORI	R25, R25, lo_addr(_string+256)
 JAL	_strchr+0
 NOP	
 SW	R2, Offset(_text+0)(GP)
-;Sim800.c,789 :: 		strcpy(string[6], RemoveChars(text,'"','O'));
+;Sim800.c,793 :: 		strcpy(string[6], RemoveChars(text,'"','O'));
 ORI	R27, R0, 79
 ORI	R26, R0, 34
 MOVZ	R25, R2, R0
@@ -2890,7 +2922,7 @@ LUI	R25, hi_addr(_string+384)
 ORI	R25, R25, lo_addr(_string+384)
 JAL	_strcpy+0
 NOP	
-;Sim800.c,790 :: 		strcpy(string[3], RemoveChars(string[3],'"',0x0A));
+;Sim800.c,794 :: 		strcpy(string[3], RemoveChars(string[3],'"',0x0A));
 ORI	R27, R0, 10
 ORI	R26, R0, 34
 LUI	R25, hi_addr(_string+192)
@@ -2902,14 +2934,14 @@ LUI	R25, hi_addr(_string+192)
 ORI	R25, R25, lo_addr(_string+192)
 JAL	_strcpy+0
 NOP	
-;Sim800.c,791 :: 		memset(string[4]+8,0,1);
+;Sim800.c,795 :: 		memset(string[4]+8,0,1);
 ORI	R27, R0, 1
 MOVZ	R26, R0, R0
 LUI	R25, hi_addr(_string+264)
 ORI	R25, R25, lo_addr(_string+264)
 JAL	_memset+0
 NOP	
-;Sim800.c,792 :: 		strncpy(string[4],string[4],8);//RemoveChars(string[4],0x02,'+'));
+;Sim800.c,796 :: 		strncpy(string[4],string[4],8);//RemoveChars(string[4],0x02,'+'));
 ORI	R27, R0, 8
 LUI	R26, hi_addr(_string+256)
 ORI	R26, R26, lo_addr(_string+256)
@@ -2917,12 +2949,12 @@ LUI	R25, hi_addr(_string+256)
 ORI	R25, R25, lo_addr(_string+256)
 JAL	_strncpy+0
 NOP	
-;Sim800.c,796 :: 		sprintf(sms,"%d",num_strs);
+;Sim800.c,800 :: 		sprintf(sms,"%d",num_strs);
 LH	R2, 18(SP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_65_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_65_Sim800+0)
+LUI	R2, hi_addr(?lstr_66_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_66_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
@@ -2930,26 +2962,26 @@ SW	R2, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;Sim800.c,809 :: 		,string[6]);
+;Sim800.c,813 :: 		,string[6]);
 LUI	R2, hi_addr(_string+384)
 ORI	R2, R2, lo_addr(_string+384)
 ADDIU	SP, SP, -40
 SW	R2, 36(SP)
-;Sim800.c,808 :: 		,string[4],string[5]
+;Sim800.c,812 :: 		,string[4],string[5]
 LUI	R2, hi_addr(_string+320)
 ORI	R2, R2, lo_addr(_string+320)
 SW	R2, 32(SP)
 LUI	R2, hi_addr(_string+256)
 ORI	R2, R2, lo_addr(_string+256)
 SW	R2, 28(SP)
-;Sim800.c,807 :: 		,string[2],string[3]
+;Sim800.c,811 :: 		,string[2],string[3]
 LUI	R2, hi_addr(_string+192)
 ORI	R2, R2, lo_addr(_string+192)
 SW	R2, 24(SP)
 LUI	R2, hi_addr(_string+128)
 ORI	R2, R2, lo_addr(_string+128)
 SW	R2, 20(SP)
-;Sim800.c,806 :: 		,sms,string[0],string[1]
+;Sim800.c,810 :: 		,sms,string[0],string[1]
 LUI	R2, hi_addr(_string+64)
 ORI	R2, R2, lo_addr(_string+64)
 SW	R2, 16(SP)
@@ -2959,29 +2991,29 @@ SW	R2, 12(SP)
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
 SW	R2, 8(SP)
-;Sim800.c,805 :: 		" *string[6]  %s\r\n"
-LUI	R2, hi_addr(?lstr_66_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_66_Sim800+0)
+;Sim800.c,809 :: 		" *string[6]  %s\r\n"
+LUI	R2, hi_addr(?lstr_67_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_67_Sim800+0)
 SW	R2, 4(SP)
-;Sim800.c,797 :: 		PrintOut(PrintHandler, "\r\n"
+;Sim800.c,801 :: 		PrintOut(PrintHandler, "\r\n"
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
 SW	R2, 0(SP)
-;Sim800.c,809 :: 		,string[6]);
+;Sim800.c,813 :: 		,string[6]);
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 40
 LH	R25, 16(SP)
-;Sim800.c,811 :: 		if(string[6] != NULL){
+;Sim800.c,815 :: 		if(string[6] != NULL){
 MOVZ	R3, R0, R0
 LUI	R2, hi_addr(_string+384)
 ORI	R2, R2, lo_addr(_string+384)
-BNE	R3, R2, L__ReadMSG272
+BNE	R3, R2, L__ReadMSG277
 NOP	
-J	L_ReadMSG119
+J	L_ReadMSG120
 NOP	
-L__ReadMSG272:
-;Sim800.c,812 :: 		strcpy(string[6],RemoveWhiteSpace(string[6]));
+L__ReadMSG277:
+;Sim800.c,816 :: 		strcpy(string[6],RemoveWhiteSpace(string[6]));
 SH	R25, 16(SP)
 LUI	R25, hi_addr(_string+384)
 ORI	R25, R25, lo_addr(_string+384)
@@ -2992,7 +3024,7 @@ LUI	R25, hi_addr(_string+384)
 ORI	R25, R25, lo_addr(_string+384)
 JAL	_strcpy+0
 NOP	
-;Sim800.c,813 :: 		res = StrChecker(string[6]);
+;Sim800.c,817 :: 		res = StrChecker(string[6]);
 LUI	R25, hi_addr(_string+384)
 ORI	R25, R25, lo_addr(_string+384)
 JAL	_StrChecker+0
@@ -3000,55 +3032,45 @@ NOP
 LH	R25, 16(SP)
 ; res start address is: 20 (R5)
 SEH	R5, R2
-;Sim800.c,815 :: 		if((res == 16) && (strcmp(string[1],SF.SimCelNum))){
+;Sim800.c,819 :: 		if((res == 16) && (strncmp(string[1],SF.SimCelNum,8))){
 SEH	R3, R2
 ORI	R2, R0, 16
-BEQ	R3, R2, L__ReadMSG273
+BEQ	R3, R2, L__ReadMSG278
 NOP	
-J	L__ReadMSG191
+J	L__ReadMSG194
 NOP	
-L__ReadMSG273:
+L__ReadMSG278:
 SH	R25, 16(SP)
+ORI	R27, R0, 8
 LUI	R26, hi_addr(_SF+18)
 ORI	R26, R26, lo_addr(_SF+18)
 LUI	R25, hi_addr(_string+64)
 ORI	R25, R25, lo_addr(_string+64)
-JAL	_strcmp+0
+JAL	_strncmp+0
 NOP	
 LH	R25, 16(SP)
-BNE	R2, R0, L__ReadMSG275
+BNE	R2, R0, L__ReadMSG280
 NOP	
-J	L__ReadMSG190
+J	L__ReadMSG193
 NOP	
-L__ReadMSG275:
+L__ReadMSG280:
 ; res end address is: 20 (R5)
-L__ReadMSG189:
-;Sim800.c,817 :: 		UART1_Write_Text("not Primary number\r\n");
-ADDIU	R23, SP, 39
-ADDIU	R22, R23, 21
-LUI	R24, hi_addr(?ICS?lstr67_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr67_Sim800+0)
-JAL	___CC2DW+0
-NOP	
-ADDIU	R2, SP, 39
+L__ReadMSG192:
+;Sim800.c,820 :: 		SendSMS(11,0);
 SH	R25, 16(SP)
-MOVZ	R25, R2, R0
-JAL	_UART1_Write_Text+0
-NOP	
-;Sim800.c,819 :: 		SendSMS(11,1);
-ORI	R26, R0, 1
+MOVZ	R26, R0, R0
 ORI	R25, R0, 11
 JAL	_SendSMS+0
 NOP	
 LH	R25, 16(SP)
-;Sim800.c,820 :: 		return 255;
+;Sim800.c,821 :: 		return 255;
 ORI	R2, R0, 255
 J	L_end_ReadMSG
 NOP	
-;Sim800.c,815 :: 		if((res == 16) && (strcmp(string[1],SF.SimCelNum))){
-L__ReadMSG191:
+;Sim800.c,819 :: 		if((res == 16) && (strncmp(string[1],SF.SimCelNum,8))){
+L__ReadMSG194:
 ; res start address is: 20 (R5)
-L__ReadMSG190:
+L__ReadMSG193:
 ;Sim800.c,823 :: 		TestRecievedSMS(res);
 SH	R25, 16(SP)
 ; res end address is: 20 (R5)
@@ -3057,7 +3079,7 @@ JAL	_TestRecievedSMS+0
 NOP	
 LH	R25, 16(SP)
 ;Sim800.c,824 :: 		}
-L_ReadMSG119:
+L_ReadMSG120:
 ;Sim800.c,825 :: 		return 0;
 MOVZ	R2, R0, R0
 ;Sim800.c,826 :: 		}
@@ -3068,7 +3090,7 @@ LW	R27, 12(SP)
 LW	R26, 8(SP)
 LW	R25, 4(SP)
 LW	RA, 0(SP)
-ADDIU	SP, SP, 68
+ADDIU	SP, SP, 48
 JR	RA
 NOP	
 ; end of _ReadMSG
@@ -3094,7 +3116,7 @@ ADDIU	SP, SP, 12
 ADDIU	R2, SP, 14
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-;Sim800.c,838 :: 		" *CRGB:= %s\r\n"
+;Sim800.c,838 :: 		" *Str check result:= %s\r\n"
 LUI	R2, hi_addr(?lstr_69_Sim800+0)
 ORI	R2, R2, lo_addr(?lstr_69_Sim800+0)
 SW	R2, 4(SP)
@@ -3108,180 +3130,282 @@ NOP
 ADDIU	SP, SP, 12
 LH	R25, 12(SP)
 ;Sim800.c,842 :: 		switch(res){
-J	L_TestRecievedSMS123
+J	L_TestRecievedSMS124
 NOP	
 ;Sim800.c,843 :: 		case 6:
-L_TestRecievedSMS125:
-;Sim800.c,844 :: 		SendSMS(7,1);
-ORI	R26, R0, 1
+L_TestRecievedSMS126:
+;Sim800.c,844 :: 		SendSMS(7,0);
+MOVZ	R26, R0, R0
 ORI	R25, R0, 7
 JAL	_SendSMS+0
 NOP	
 ;Sim800.c,845 :: 		break;
-J	L_TestRecievedSMS124
+J	L_TestRecievedSMS125
 NOP	
-;Sim800.c,846 :: 		case 13:
-L_TestRecievedSMS126:
-;Sim800.c,847 :: 		SendSMS(8,1);
-ORI	R26, R0, 1
-ORI	R25, R0, 8
+;Sim800.c,846 :: 		case 7: //R
+L_TestRecievedSMS127:
+;Sim800.c,847 :: 		SendSMS(12,0);
+MOVZ	R26, R0, R0
+ORI	R25, R0, 12
 JAL	_SendSMS+0
 NOP	
 ;Sim800.c,848 :: 		break;
-J	L_TestRecievedSMS124
+J	L_TestRecievedSMS125
 NOP	
-;Sim800.c,849 :: 		case 14:
-L_TestRecievedSMS127:
-;Sim800.c,850 :: 		SendSMS(6,1);
-ORI	R26, R0, 1
-ORI	R25, R0, 6
+;Sim800.c,849 :: 		case 8: //G
+L_TestRecievedSMS128:
+;Sim800.c,850 :: 		SendSMS(12,0);
+MOVZ	R26, R0, R0
+ORI	R25, R0, 12
 JAL	_SendSMS+0
 NOP	
 ;Sim800.c,851 :: 		break;
-J	L_TestRecievedSMS124
+J	L_TestRecievedSMS125
 NOP	
-;Sim800.c,852 :: 		case 16:
-L_TestRecievedSMS128:
-;Sim800.c,853 :: 		GetValuesFromFlash();
+;Sim800.c,852 :: 		case 9: //B
+L_TestRecievedSMS129:
+;Sim800.c,853 :: 		SendSMS(12,0);
+MOVZ	R26, R0, R0
+ORI	R25, R0, 12
+JAL	_SendSMS+0
+NOP	
+;Sim800.c,854 :: 		break;
+J	L_TestRecievedSMS125
+NOP	
+;Sim800.c,855 :: 		case 10: //C
+L_TestRecievedSMS130:
+;Sim800.c,856 :: 		SendSMS(12,0);
+MOVZ	R26, R0, R0
+ORI	R25, R0, 12
+JAL	_SendSMS+0
+NOP	
+;Sim800.c,857 :: 		break;
+J	L_TestRecievedSMS125
+NOP	
+;Sim800.c,858 :: 		case 13:
+L_TestRecievedSMS131:
+;Sim800.c,859 :: 		SendSMS(8,0);
+MOVZ	R26, R0, R0
+ORI	R25, R0, 8
+JAL	_SendSMS+0
+NOP	
+;Sim800.c,860 :: 		break;
+J	L_TestRecievedSMS125
+NOP	
+;Sim800.c,861 :: 		case 14:
+L_TestRecievedSMS132:
+;Sim800.c,862 :: 		SendSMS(6,0);
+MOVZ	R26, R0, R0
+ORI	R25, R0, 6
+JAL	_SendSMS+0
+NOP	
+;Sim800.c,863 :: 		break;
+J	L_TestRecievedSMS125
+NOP	
+;Sim800.c,864 :: 		case 15: //write,
+L_TestRecievedSMS133:
+;Sim800.c,865 :: 		SendSMS(12,0);
+MOVZ	R26, R0, R0
+ORI	R25, R0, 12
+JAL	_SendSMS+0
+NOP	
+;Sim800.c,866 :: 		break;
+J	L_TestRecievedSMS125
+NOP	
+;Sim800.c,867 :: 		case 16:
+L_TestRecievedSMS134:
+;Sim800.c,868 :: 		GetValuesFromFlash();
 JAL	_GetValuesFromFlash+0
 NOP	
-;Sim800.c,854 :: 		NVMErasePage(FLASH_Settings_PAddr);
+;Sim800.c,869 :: 		NVMErasePage(FLASH_Settings_PAddr);
 LW	R25, Offset(_FLASH_Settings_PAddr+0)(GP)
 JAL	_NVMErasePage+0
 NOP	
-;Sim800.c,855 :: 		if(string[5] != NULL){
+;Sim800.c,870 :: 		if(string[5] != NULL){
 MOVZ	R3, R0, R0
 LUI	R2, hi_addr(_string+320)
 ORI	R2, R2, lo_addr(_string+320)
-BNE	R3, R2, L__TestRecievedSMS278
+BNE	R3, R2, L__TestRecievedSMS283
 NOP	
-J	L_TestRecievedSMS129
+J	L_TestRecievedSMS135
 NOP	
-L__TestRecievedSMS278:
-;Sim800.c,856 :: 		strcpy(B,string[5]);
+L__TestRecievedSMS283:
+;Sim800.c,871 :: 		strcpy(B,string[5]);
 ADDIU	R2, SP, 14
 LUI	R26, hi_addr(_string+320)
 ORI	R26, R26, lo_addr(_string+320)
 MOVZ	R25, R2, R0
 JAL	_strcpy+0
 NOP	
-;Sim800.c,857 :: 		Threshold.time_to_log = atoi(B);
+;Sim800.c,872 :: 		Threshold.time_to_log = atoi(B);
 ADDIU	R2, SP, 14
 MOVZ	R25, R2, R0
 JAL	_atoi+0
 NOP	
 SH	R2, Offset(_Threshold+8)(GP)
-;Sim800.c,858 :: 		}
-L_TestRecievedSMS129:
-;Sim800.c,859 :: 		WriteToFlashTemp();
+;Sim800.c,873 :: 		}
+L_TestRecievedSMS135:
+;Sim800.c,874 :: 		WriteToFlashTemp();
 JAL	_WriteToFlashTemp+0
 NOP	
-;Sim800.c,860 :: 		t =  Write_Thresholds(0);
+;Sim800.c,875 :: 		t =  Write_Thresholds(0);
 MOVZ	R25, R0, R0
 JAL	_Write_Thresholds+0
 NOP	
-;Sim800.c,865 :: 		,t);
+;Sim800.c,880 :: 		,t);
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-;Sim800.c,864 :: 		" *CRGB:= %s\r\n"
+;Sim800.c,879 :: 		" *CRGB:= %s\r\n"
 LUI	R2, hi_addr(?lstr_70_Sim800+0)
 ORI	R2, R2, lo_addr(?lstr_70_Sim800+0)
 SW	R2, 4(SP)
-;Sim800.c,863 :: 		PrintOut(PrintHandler, "\r\n"
+;Sim800.c,878 :: 		PrintOut(PrintHandler, "\r\n"
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
 SW	R2, 0(SP)
-;Sim800.c,865 :: 		,t);
+;Sim800.c,880 :: 		,t);
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 12
-;Sim800.c,867 :: 		SendSMS(6,0);
+;Sim800.c,882 :: 		SendSMS(6,0);
 MOVZ	R26, R0, R0
 ORI	R25, R0, 6
 JAL	_SendSMS+0
 NOP	
-;Sim800.c,868 :: 		break;
-J	L_TestRecievedSMS124
+;Sim800.c,883 :: 		break;
+J	L_TestRecievedSMS125
 NOP	
-;Sim800.c,869 :: 		case 17:
-L_TestRecievedSMS130:
-;Sim800.c,870 :: 		SimVars.init_inc = 5;  //Test started
+;Sim800.c,884 :: 		case 17:
+L_TestRecievedSMS136:
+;Sim800.c,885 :: 		SimVars.init_inc = 5;  //Test started
 ORI	R2, R0, 5
 SB	R2, Offset(_SimVars+1)(GP)
-;Sim800.c,871 :: 		SendSMS(9,1);
-ORI	R26, R0, 1
+;Sim800.c,886 :: 		SendSMS(9,0);
+MOVZ	R26, R0, R0
 ORI	R25, R0, 9
 JAL	_SendSMS+0
 NOP	
-;Sim800.c,872 :: 		break;
-J	L_TestRecievedSMS124
+;Sim800.c,887 :: 		break;
+J	L_TestRecievedSMS125
 NOP	
-;Sim800.c,873 :: 		case 18:
-L_TestRecievedSMS131:
-;Sim800.c,874 :: 		SimVars.init_inc = 3;  //Test Stopped
+;Sim800.c,888 :: 		case 18:
+L_TestRecievedSMS137:
+;Sim800.c,889 :: 		SimVars.init_inc = 3;  //Test Stopped
 ORI	R2, R0, 3
 SB	R2, Offset(_SimVars+1)(GP)
-;Sim800.c,875 :: 		SendSMS(10,1);
-ORI	R26, R0, 1
+;Sim800.c,890 :: 		SendSMS(10,0);
+MOVZ	R26, R0, R0
 ORI	R25, R0, 10
 JAL	_SendSMS+0
 NOP	
-;Sim800.c,876 :: 		break;
-J	L_TestRecievedSMS124
-NOP	
-;Sim800.c,877 :: 		default:
-L_TestRecievedSMS132:
-;Sim800.c,878 :: 		break;
-J	L_TestRecievedSMS124
-NOP	
-;Sim800.c,879 :: 		}
-L_TestRecievedSMS123:
-SEH	R3, R25
-ORI	R2, R0, 6
-BNE	R3, R2, L__TestRecievedSMS280
-NOP	
+;Sim800.c,891 :: 		break;
 J	L_TestRecievedSMS125
 NOP	
-L__TestRecievedSMS280:
+;Sim800.c,892 :: 		case 20:
+L_TestRecievedSMS138:
+;Sim800.c,893 :: 		SendSMS(12,0);
+MOVZ	R26, R0, R0
+ORI	R25, R0, 12
+JAL	_SendSMS+0
+NOP	
+;Sim800.c,894 :: 		break;
+J	L_TestRecievedSMS125
+NOP	
+;Sim800.c,895 :: 		default:
+L_TestRecievedSMS139:
+;Sim800.c,896 :: 		break;
+J	L_TestRecievedSMS125
+NOP	
+;Sim800.c,897 :: 		}
+L_TestRecievedSMS124:
 SEH	R3, R25
-ORI	R2, R0, 13
-BNE	R3, R2, L__TestRecievedSMS282
+ORI	R2, R0, 6
+BNE	R3, R2, L__TestRecievedSMS285
 NOP	
 J	L_TestRecievedSMS126
 NOP	
-L__TestRecievedSMS282:
+L__TestRecievedSMS285:
 SEH	R3, R25
-ORI	R2, R0, 14
-BNE	R3, R2, L__TestRecievedSMS284
+ORI	R2, R0, 7
+BNE	R3, R2, L__TestRecievedSMS287
 NOP	
 J	L_TestRecievedSMS127
 NOP	
-L__TestRecievedSMS284:
+L__TestRecievedSMS287:
 SEH	R3, R25
-ORI	R2, R0, 16
-BNE	R3, R2, L__TestRecievedSMS286
+ORI	R2, R0, 8
+BNE	R3, R2, L__TestRecievedSMS289
 NOP	
 J	L_TestRecievedSMS128
 NOP	
-L__TestRecievedSMS286:
+L__TestRecievedSMS289:
 SEH	R3, R25
-ORI	R2, R0, 17
-BNE	R3, R2, L__TestRecievedSMS288
+ORI	R2, R0, 9
+BNE	R3, R2, L__TestRecievedSMS291
+NOP	
+J	L_TestRecievedSMS129
+NOP	
+L__TestRecievedSMS291:
+SEH	R3, R25
+ORI	R2, R0, 10
+BNE	R3, R2, L__TestRecievedSMS293
 NOP	
 J	L_TestRecievedSMS130
 NOP	
-L__TestRecievedSMS288:
+L__TestRecievedSMS293:
 SEH	R3, R25
-ORI	R2, R0, 18
-BNE	R3, R2, L__TestRecievedSMS290
+ORI	R2, R0, 13
+BNE	R3, R2, L__TestRecievedSMS295
 NOP	
 J	L_TestRecievedSMS131
 NOP	
-L__TestRecievedSMS290:
+L__TestRecievedSMS295:
+SEH	R3, R25
+ORI	R2, R0, 14
+BNE	R3, R2, L__TestRecievedSMS297
+NOP	
 J	L_TestRecievedSMS132
 NOP	
-L_TestRecievedSMS124:
-;Sim800.c,881 :: 		}
+L__TestRecievedSMS297:
+SEH	R3, R25
+ORI	R2, R0, 15
+BNE	R3, R2, L__TestRecievedSMS299
+NOP	
+J	L_TestRecievedSMS133
+NOP	
+L__TestRecievedSMS299:
+SEH	R3, R25
+ORI	R2, R0, 16
+BNE	R3, R2, L__TestRecievedSMS301
+NOP	
+J	L_TestRecievedSMS134
+NOP	
+L__TestRecievedSMS301:
+SEH	R3, R25
+ORI	R2, R0, 17
+BNE	R3, R2, L__TestRecievedSMS303
+NOP	
+J	L_TestRecievedSMS136
+NOP	
+L__TestRecievedSMS303:
+SEH	R3, R25
+ORI	R2, R0, 18
+BNE	R3, R2, L__TestRecievedSMS305
+NOP	
+J	L_TestRecievedSMS137
+NOP	
+L__TestRecievedSMS305:
+SEH	R3, R25
+ORI	R2, R0, 20
+BNE	R3, R2, L__TestRecievedSMS307
+NOP	
+J	L_TestRecievedSMS138
+NOP	
+L__TestRecievedSMS307:
+J	L_TestRecievedSMS139
+NOP	
+L_TestRecievedSMS125:
+;Sim800.c,899 :: 		}
 L_end_TestRecievedSMS:
 LW	R26, 8(SP)
 LW	R25, 4(SP)
@@ -3291,10 +3415,10 @@ JR	RA
 NOP	
 ; end of _TestRecievedSMS
 _RemoveSMSText:
-;Sim800.c,887 :: 		int RemoveSMSText(int sms_cnt){
+;Sim800.c,905 :: 		int RemoveSMSText(int sms_cnt){
 ADDIU	SP, SP, -16
 SW	RA, 0(SP)
-;Sim800.c,890 :: 		sprintf(sms,"%d",sms_cnt);
+;Sim800.c,908 :: 		sprintf(sms,"%d",sms_cnt);
 SH	R25, 4(SP)
 ADDIU	SP, SP, -12
 SH	R25, 8(SP)
@@ -3307,27 +3431,27 @@ SW	R2, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;Sim800.c,893 :: 		,sms);
+;Sim800.c,911 :: 		,sms);
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-;Sim800.c,892 :: 		" *num_strs:= %s\r\n"
+;Sim800.c,910 :: 		" *num_strs:= %s\r\n"
 LUI	R2, hi_addr(?lstr_72_Sim800+0)
 ORI	R2, R2, lo_addr(?lstr_72_Sim800+0)
 SW	R2, 4(SP)
-;Sim800.c,891 :: 		PrintOut(PrintHandler, "\r\n"
+;Sim800.c,909 :: 		PrintOut(PrintHandler, "\r\n"
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
 SW	R2, 0(SP)
-;Sim800.c,893 :: 		,sms);
+;Sim800.c,911 :: 		,sms);
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 12
 LH	R25, 4(SP)
-;Sim800.c,895 :: 		do{
-L_RemoveSMSText133:
-;Sim800.c,896 :: 		sprintf(sms,"%d",sms_cnt);
+;Sim800.c,913 :: 		do{
+L_RemoveSMSText140:
+;Sim800.c,914 :: 		sprintf(sms,"%d",sms_cnt);
 SH	R25, 4(SP)
 ADDIU	SP, SP, -12
 SH	R25, 8(SP)
@@ -3340,7 +3464,7 @@ SW	R2, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;Sim800.c,897 :: 		UART2_Write_Text("AT+CMGD=");
+;Sim800.c,915 :: 		UART2_Write_Text("AT+CMGD=");
 ADDIU	R23, SP, 6
 ADDIU	R22, R23, 9
 LUI	R24, hi_addr(?ICS?lstr74_Sim800+0)
@@ -3351,48 +3475,48 @@ ADDIU	R2, SP, 6
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
-;Sim800.c,898 :: 		UART2_Write_Text(sms);
+;Sim800.c,916 :: 		UART2_Write_Text(sms);
 LUI	R25, hi_addr(_sms+0)
 ORI	R25, R25, lo_addr(_sms+0)
 JAL	_UART2_Write_Text+0
 NOP	
-;Sim800.c,899 :: 		UART2_Write(0x0D);
+;Sim800.c,917 :: 		UART2_Write(0x0D);
 ORI	R25, R0, 13
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,900 :: 		UART2_Write(0x0A);
+;Sim800.c,918 :: 		UART2_Write(0x0A);
 ORI	R25, R0, 10
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,903 :: 		WaitForResponse(1);
+;Sim800.c,921 :: 		WaitForResponse(1);
 ORI	R25, R0, 1
 JAL	_WaitForResponse+0
 NOP	
 LH	R25, 4(SP)
-;Sim800.c,904 :: 		Delay_ms(1000);
+;Sim800.c,922 :: 		Delay_ms(1000);
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_RemoveSMSText136:
+L_RemoveSMSText143:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_RemoveSMSText136
+BNE	R24, R0, L_RemoveSMSText143
 NOP	
-;Sim800.c,905 :: 		RingToTempBuf();
+;Sim800.c,923 :: 		RingToTempBuf();
 JAL	_RingToTempBuf+0
 NOP	
-;Sim800.c,906 :: 		sms_cnt--;
+;Sim800.c,924 :: 		sms_cnt--;
 ADDIU	R2, R25, -1
 SEH	R25, R2
-;Sim800.c,907 :: 		}while(sms_cnt > 0);
+;Sim800.c,925 :: 		}while(sms_cnt > 0);
 SEH	R2, R2
 SLTI	R2, R2, 1
-BNE	R2, R0, L__RemoveSMSText292
+BNE	R2, R0, L__RemoveSMSText309
 NOP	
-J	L_RemoveSMSText133
+J	L_RemoveSMSText140
 NOP	
-L__RemoveSMSText292:
-;Sim800.c,909 :: 		return sms_cnt;
+L__RemoveSMSText309:
+;Sim800.c,927 :: 		return sms_cnt;
 SEH	R2, R25
-;Sim800.c,910 :: 		}
+;Sim800.c,928 :: 		}
 L_end_RemoveSMSText:
 LW	RA, 0(SP)
 ADDIU	SP, SP, 16
@@ -3400,76 +3524,25 @@ JR	RA
 NOP	
 ; end of _RemoveSMSText
 _Test_Update_ThingSpeak:
-;Sim800.c,916 :: 		int Test_Update_ThingSpeak(unsigned int s,unsigned int m, unsigned int h){
+;Sim800.c,934 :: 		int Test_Update_ThingSpeak(){
 ADDIU	SP, SP, -8
 SW	RA, 0(SP)
-;Sim800.c,921 :: 		if(s != sLast){
+;Sim800.c,936 :: 		TCS3472_getRawData(RawData);
 SW	R25, 4(SP)
-ANDI	R3, R25, 65535
-LBU	R2, Offset(Test_Update_ThingSpeak_sLast_L0+0)(GP)
-BNE	R3, R2, L__Test_Update_ThingSpeak295
-NOP	
-J	L_Test_Update_ThingSpeak138
-NOP	
-L__Test_Update_ThingSpeak295:
-;Sim800.c,922 :: 		sLast = s;
-SB	R25, Offset(Test_Update_ThingSpeak_sLast_L0+0)(GP)
-;Sim800.c,928 :: 		}
-L_Test_Update_ThingSpeak138:
-;Sim800.c,929 :: 		if(m != mLast){
-ANDI	R3, R26, 65535
-LBU	R2, Offset(Test_Update_ThingSpeak_mLast_L0+0)(GP)
-BNE	R3, R2, L__Test_Update_ThingSpeak297
-NOP	
-J	L_Test_Update_ThingSpeak139
-NOP	
-L__Test_Update_ThingSpeak297:
-;Sim800.c,930 :: 		mLast = m;
-SB	R26, Offset(Test_Update_ThingSpeak_mLast_L0+0)(GP)
-;Sim800.c,936 :: 		}
-L_Test_Update_ThingSpeak139:
-;Sim800.c,937 :: 		if(h != hLast){
-ANDI	R3, R27, 65535
-LBU	R2, Offset(Test_Update_ThingSpeak_hLast_L0+0)(GP)
-BNE	R3, R2, L__Test_Update_ThingSpeak299
-NOP	
-J	L_Test_Update_ThingSpeak140
-NOP	
-L__Test_Update_ThingSpeak299:
-;Sim800.c,938 :: 		hLast = h;
-SB	R27, Offset(Test_Update_ThingSpeak_hLast_L0+0)(GP)
-;Sim800.c,944 :: 		}
-L_Test_Update_ThingSpeak140:
-;Sim800.c,946 :: 		if(m > Threshold.time_to_log){
-ANDI	R3, R26, 65535
-LHU	R2, Offset(_Threshold+8)(GP)
-SLTU	R2, R2, R3
-BNE	R2, R0, L__Test_Update_ThingSpeak300
-NOP	
-J	L_Test_Update_ThingSpeak141
-NOP	
-L__Test_Update_ThingSpeak300:
-;Sim800.c,947 :: 		TCS3472_getRawData(RawData);
 LUI	R25, hi_addr(_RawData+0)
 ORI	R25, R25, lo_addr(_RawData+0)
 JAL	_TCS3472_getRawData+0
 NOP	
-;Sim800.c,948 :: 		SendData(RawData);
+;Sim800.c,937 :: 		SendData(RawData);
 LUI	R25, hi_addr(_RawData+0)
 ORI	R25, R25, lo_addr(_RawData+0)
 JAL	_SendData+0
 NOP	
-;Sim800.c,949 :: 		return 2;
+;Sim800.c,938 :: 		return 2;
 ORI	R2, R0, 2
-J	L_end_Test_Update_ThingSpeak
-NOP	
-;Sim800.c,950 :: 		}
-L_Test_Update_ThingSpeak141:
-;Sim800.c,951 :: 		return -1;
-ORI	R2, R0, 65535
-;Sim800.c,952 :: 		}
-;Sim800.c,951 :: 		return -1;
-;Sim800.c,952 :: 		}
+;Sim800.c,939 :: 		}
+;Sim800.c,938 :: 		return 2;
+;Sim800.c,939 :: 		}
 L_end_Test_Update_ThingSpeak:
 LW	R25, 4(SP)
 LW	RA, 0(SP)
@@ -3478,10 +3551,10 @@ JR	RA
 NOP	
 ; end of _Test_Update_ThingSpeak
 _SendData:
-;Sim800.c,957 :: 		void SendData(unsigned int* rgbc){
+;Sim800.c,944 :: 		void SendData(unsigned int* rgbc){
 ADDIU	SP, SP, -196
 SW	RA, 0(SP)
-;Sim800.c,961 :: 		sprintf(txtC,"%u",rgbc[0]);
+;Sim800.c,949 :: 		sprintf(txtC,"%u",rgbc[0]);
 SW	R25, 4(SP)
 SW	R26, 8(SP)
 LHU	R2, 0(R25)
@@ -3498,7 +3571,7 @@ JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
 LW	R25, 12(SP)
-;Sim800.c,962 :: 		sprintf(txtR,"%u",rgbc[1]);
+;Sim800.c,950 :: 		sprintf(txtR,"%u",rgbc[1]);
 ADDIU	R2, R25, 2
 LHU	R2, 0(R2)
 SW	R25, 12(SP)
@@ -3514,7 +3587,7 @@ JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
 LW	R25, 12(SP)
-;Sim800.c,963 :: 		sprintf(txtG,"%u",rgbc[2]);
+;Sim800.c,951 :: 		sprintf(txtG,"%u",rgbc[2]);
 ADDIU	R2, R25, 4
 LHU	R2, 0(R2)
 SW	R25, 12(SP)
@@ -3530,7 +3603,7 @@ JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
 LW	R25, 12(SP)
-;Sim800.c,964 :: 		sprintf(txtB,"%u",rgbc[3]);
+;Sim800.c,952 :: 		sprintf(txtB,"%u",rgbc[3]);
 ADDIU	R2, R25, 6
 LHU	R2, 0(R2)
 ADDIU	SP, SP, -12
@@ -3544,74 +3617,70 @@ SW	R2, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;Sim800.c,967 :: 		str = (char*)Malloc(200*sizeof(char));
-ORI	R25, R0, 200
-JAL	_Malloc+0
-NOP	
-SW	R2, Offset(_str+0)(GP)
-;Sim800.c,969 :: 		*str  = 0;
+;Sim800.c,956 :: 		*str  = 0;
+LW	R2, Offset(_str+0)(GP)
 SB	R0, 0(R2)
-;Sim800.c,971 :: 		strcat(str,str_api);
+;Sim800.c,958 :: 		strcat(str,str_api);
 LUI	R26, hi_addr(_str_api+0)
 ORI	R26, R26, lo_addr(_str_api+0)
 LW	R25, Offset(_str+0)(GP)
 JAL	_strcat+0
 NOP	
-;Sim800.c,972 :: 		strcat(str,SF.WriteAPIKey);
+;Sim800.c,959 :: 		strcat(str,SF.WriteAPIKey);
 LUI	R26, hi_addr(_SF+38)
 ORI	R26, R26, lo_addr(_SF+38)
 LW	R25, Offset(_str+0)(GP)
 JAL	_strcat+0
 NOP	
-;Sim800.c,973 :: 		strcat(str,field1);
+;Sim800.c,960 :: 		strcat(str,field1);
 LUI	R26, hi_addr(_field1+0)
 ORI	R26, R26, lo_addr(_field1+0)
 LW	R25, Offset(_str+0)(GP)
 JAL	_strcat+0
 NOP	
-;Sim800.c,974 :: 		strcat(str,txtC);
+;Sim800.c,961 :: 		strcat(str,txtC);
 LUI	R26, hi_addr(_txtC+0)
 ORI	R26, R26, lo_addr(_txtC+0)
 LW	R25, Offset(_str+0)(GP)
 JAL	_strcat+0
 NOP	
-;Sim800.c,975 :: 		strcat(str,field2);
+;Sim800.c,962 :: 		strcat(str,field2);
 LUI	R26, hi_addr(_field2+0)
 ORI	R26, R26, lo_addr(_field2+0)
 LW	R25, Offset(_str+0)(GP)
 JAL	_strcat+0
 NOP	
-;Sim800.c,976 :: 		strcat(str,txtR);
+;Sim800.c,963 :: 		strcat(str,txtR);
 LUI	R26, hi_addr(_txtR+0)
 ORI	R26, R26, lo_addr(_txtR+0)
 LW	R25, Offset(_str+0)(GP)
 JAL	_strcat+0
 NOP	
-;Sim800.c,977 :: 		strcat(str,field3);
+;Sim800.c,964 :: 		strcat(str,field3);
 LUI	R26, hi_addr(_field3+0)
 ORI	R26, R26, lo_addr(_field3+0)
 LW	R25, Offset(_str+0)(GP)
 JAL	_strcat+0
 NOP	
-;Sim800.c,978 :: 		strcat(str,txtG);
+;Sim800.c,965 :: 		strcat(str,txtG);
 LUI	R26, hi_addr(_txtG+0)
 ORI	R26, R26, lo_addr(_txtG+0)
 LW	R25, Offset(_str+0)(GP)
 JAL	_strcat+0
 NOP	
-;Sim800.c,979 :: 		strcat(str,field4);
+;Sim800.c,966 :: 		strcat(str,field4);
 LUI	R26, hi_addr(_field4+0)
 ORI	R26, R26, lo_addr(_field4+0)
 LW	R25, Offset(_str+0)(GP)
 JAL	_strcat+0
 NOP	
-;Sim800.c,980 :: 		strcat(str,txtB);
+;Sim800.c,967 :: 		strcat(str,txtB);
 LUI	R26, hi_addr(_txtB+0)
 ORI	R26, R26, lo_addr(_txtB+0)
 LW	R25, Offset(_str+0)(GP)
 JAL	_strcat+0
 NOP	
-;Sim800.c,983 :: 		UART2_Write_Text("AT+CPIN?");
+;Sim800.c,970 :: 		UART2_Write_Text("AT+CPIN?");
 ADDIU	R23, SP, 16
 ADDIU	R22, R23, 9
 LUI	R24, hi_addr(?ICS?lstr79_Sim800+0)
@@ -3622,28 +3691,28 @@ ADDIU	R2, SP, 16
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
-;Sim800.c,984 :: 		UART2_Write(0x0D);
+;Sim800.c,971 :: 		UART2_Write(0x0D);
 ORI	R25, R0, 13
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,985 :: 		UART2_Write(0x0A);
+;Sim800.c,972 :: 		UART2_Write(0x0A);
 ORI	R25, R0, 10
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,986 :: 		TestForOK(0);
+;Sim800.c,973 :: 		TestForOK(0);
 MOVZ	R25, R0, R0
 JAL	_TestForOK+0
 NOP	
-;Sim800.c,987 :: 		Delay_ms(50);
+;Sim800.c,974 :: 		Delay_ms(50);
 LUI	R24, 20
 ORI	R24, R24, 22612
-L_SendData142:
+L_SendData145:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData142
+BNE	R24, R0, L_SendData145
 NOP	
 NOP	
 NOP	
-;Sim800.c,988 :: 		UART2_Write_Text("AT+CREG?");
+;Sim800.c,975 :: 		UART2_Write_Text("AT+CREG?");
 ADDIU	R23, SP, 25
 ADDIU	R22, R23, 9
 LUI	R24, hi_addr(?ICS?lstr80_Sim800+0)
@@ -3654,28 +3723,28 @@ ADDIU	R2, SP, 25
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
-;Sim800.c,989 :: 		UART2_Write(0x0D);
+;Sim800.c,976 :: 		UART2_Write(0x0D);
 ORI	R25, R0, 13
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,990 :: 		UART2_Write(0x0A);
+;Sim800.c,977 :: 		UART2_Write(0x0A);
 ORI	R25, R0, 10
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,991 :: 		TestForOK(0);
+;Sim800.c,978 :: 		TestForOK(0);
 MOVZ	R25, R0, R0
 JAL	_TestForOK+0
 NOP	
-;Sim800.c,992 :: 		Delay_ms(50);
+;Sim800.c,979 :: 		Delay_ms(50);
 LUI	R24, 20
 ORI	R24, R24, 22612
-L_SendData144:
+L_SendData147:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData144
+BNE	R24, R0, L_SendData147
 NOP	
 NOP	
 NOP	
-;Sim800.c,993 :: 		UART2_Write_Text("AT+CGATT?");
+;Sim800.c,980 :: 		UART2_Write_Text("AT+CGATT?");
 ADDIU	R23, SP, 34
 ADDIU	R22, R23, 10
 LUI	R24, hi_addr(?ICS?lstr81_Sim800+0)
@@ -3686,28 +3755,28 @@ ADDIU	R2, SP, 34
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
-;Sim800.c,994 :: 		UART2_Write(0x0D);
+;Sim800.c,981 :: 		UART2_Write(0x0D);
 ORI	R25, R0, 13
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,995 :: 		UART2_Write(0x0A);
+;Sim800.c,982 :: 		UART2_Write(0x0A);
 ORI	R25, R0, 10
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,996 :: 		TestForOK(0);
+;Sim800.c,983 :: 		TestForOK(0);
 MOVZ	R25, R0, R0
 JAL	_TestForOK+0
 NOP	
-;Sim800.c,997 :: 		Delay_ms(50);
+;Sim800.c,984 :: 		Delay_ms(50);
 LUI	R24, 20
 ORI	R24, R24, 22612
-L_SendData146:
+L_SendData149:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData146
+BNE	R24, R0, L_SendData149
 NOP	
 NOP	
 NOP	
-;Sim800.c,998 :: 		UART2_Write_Text("AT+CIPSHUT");
+;Sim800.c,985 :: 		UART2_Write_Text("AT+CIPSHUT");
 ADDIU	R23, SP, 44
 ADDIU	R22, R23, 11
 LUI	R24, hi_addr(?ICS?lstr82_Sim800+0)
@@ -3718,28 +3787,28 @@ ADDIU	R2, SP, 44
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
-;Sim800.c,999 :: 		UART2_Write(0x0D);
+;Sim800.c,986 :: 		UART2_Write(0x0D);
 ORI	R25, R0, 13
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,1000 :: 		UART2_Write(0x0A);
+;Sim800.c,987 :: 		UART2_Write(0x0A);
 ORI	R25, R0, 10
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,1001 :: 		TestForOK(0);
+;Sim800.c,988 :: 		TestForOK(0);
 MOVZ	R25, R0, R0
 JAL	_TestForOK+0
 NOP	
-;Sim800.c,1002 :: 		Delay_ms(50);
+;Sim800.c,989 :: 		Delay_ms(50);
 LUI	R24, 20
 ORI	R24, R24, 22612
-L_SendData148:
+L_SendData151:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData148
+BNE	R24, R0, L_SendData151
 NOP	
 NOP	
 NOP	
-;Sim800.c,1003 :: 		UART2_Write_Text("AT+CIPSTATUS");
+;Sim800.c,990 :: 		UART2_Write_Text("AT+CIPSTATUS");
 ADDIU	R23, SP, 55
 ADDIU	R22, R23, 13
 LUI	R24, hi_addr(?ICS?lstr83_Sim800+0)
@@ -3748,6 +3817,91 @@ JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 55
 MOVZ	R25, R2, R0
+JAL	_UART2_Write_Text+0
+NOP	
+;Sim800.c,991 :: 		UART2_Write(0x0D);
+ORI	R25, R0, 13
+JAL	_UART2_Write+0
+NOP	
+;Sim800.c,992 :: 		UART2_Write(0x0A);
+ORI	R25, R0, 10
+JAL	_UART2_Write+0
+NOP	
+;Sim800.c,993 :: 		TestForOK(0);
+MOVZ	R25, R0, R0
+JAL	_TestForOK+0
+NOP	
+;Sim800.c,994 :: 		Delay_ms(50);
+LUI	R24, 20
+ORI	R24, R24, 22612
+L_SendData153:
+ADDIU	R24, R24, -1
+BNE	R24, R0, L_SendData153
+NOP	
+NOP	
+NOP	
+;Sim800.c,995 :: 		UART2_Write_Text("AT+CIPMUX=0");
+ADDIU	R23, SP, 68
+ADDIU	R22, R23, 12
+LUI	R24, hi_addr(?ICS?lstr84_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr84_Sim800+0)
+JAL	___CC2DW+0
+NOP	
+ADDIU	R2, SP, 68
+MOVZ	R25, R2, R0
+JAL	_UART2_Write_Text+0
+NOP	
+;Sim800.c,996 :: 		UART2_Write(0x0D);
+ORI	R25, R0, 13
+JAL	_UART2_Write+0
+NOP	
+;Sim800.c,997 :: 		UART2_Write(0x0A);
+ORI	R25, R0, 10
+JAL	_UART2_Write+0
+NOP	
+;Sim800.c,998 :: 		TestForOK(0);
+MOVZ	R25, R0, R0
+JAL	_TestForOK+0
+NOP	
+;Sim800.c,999 :: 		Delay_ms(50);
+LUI	R24, 20
+ORI	R24, R24, 22612
+L_SendData155:
+ADDIU	R24, R24, -1
+BNE	R24, R0, L_SendData155
+NOP	
+NOP	
+NOP	
+;Sim800.c,1000 :: 		UART2_Write_Text("AT+CSTT=");//\"data.uk\",\"user\",\"one2one\"");
+ADDIU	R23, SP, 80
+ADDIU	R22, R23, 9
+LUI	R24, hi_addr(?ICS?lstr85_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr85_Sim800+0)
+JAL	___CC2DW+0
+NOP	
+ADDIU	R2, SP, 80
+MOVZ	R25, R2, R0
+JAL	_UART2_Write_Text+0
+NOP	
+;Sim800.c,1001 :: 		UART2_Write_Text(SF.APN);
+LUI	R25, hi_addr(_SF+78)
+ORI	R25, R25, lo_addr(_SF+78)
+JAL	_UART2_Write_Text+0
+NOP	
+;Sim800.c,1002 :: 		UART2_Write_Text(",\"user\",");
+ADDIU	R23, SP, 89
+ADDIU	R22, R23, 9
+LUI	R24, hi_addr(?ICS?lstr86_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr86_Sim800+0)
+JAL	___CC2DW+0
+NOP	
+ADDIU	R2, SP, 89
+MOVZ	R25, R2, R0
+JAL	_UART2_Write_Text+0
+NOP	
+;Sim800.c,1003 :: 		UART2_Write_Text(SF.PWD);
+LUI	R25, hi_addr(_SF+98)
+ORI	R25, R25, lo_addr(_SF+98)
 JAL	_UART2_Write_Text+0
 NOP	
 ;Sim800.c,1004 :: 		UART2_Write(0x0D);
@@ -3765,20 +3919,20 @@ NOP
 ;Sim800.c,1007 :: 		Delay_ms(50);
 LUI	R24, 20
 ORI	R24, R24, 22612
-L_SendData150:
+L_SendData157:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData150
+BNE	R24, R0, L_SendData157
 NOP	
 NOP	
 NOP	
-;Sim800.c,1008 :: 		UART2_Write_Text("AT+CIPMUX=0");
-ADDIU	R23, SP, 68
-ADDIU	R22, R23, 12
-LUI	R24, hi_addr(?ICS?lstr84_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr84_Sim800+0)
+;Sim800.c,1008 :: 		UART2_Write_Text("AT+CIICR");
+ADDIU	R23, SP, 98
+ADDIU	R22, R23, 9
+LUI	R24, hi_addr(?ICS?lstr87_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr87_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 68
+ADDIU	R2, SP, 98
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
@@ -3794,45 +3948,41 @@ NOP
 MOVZ	R25, R0, R0
 JAL	_TestForOK+0
 NOP	
-;Sim800.c,1012 :: 		Delay_ms(50);
-LUI	R24, 20
-ORI	R24, R24, 22612
-L_SendData152:
+;Sim800.c,1012 :: 		UART2_Write_Text("AT+CIFSR");
+ADDIU	R23, SP, 107
+ADDIU	R22, R23, 9
+LUI	R24, hi_addr(?ICS?lstr88_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr88_Sim800+0)
+JAL	___CC2DW+0
+NOP	
+ADDIU	R2, SP, 107
+MOVZ	R25, R2, R0
+JAL	_UART2_Write_Text+0
+NOP	
+;Sim800.c,1013 :: 		UART2_Write(0x0D);
+ORI	R25, R0, 13
+JAL	_UART2_Write+0
+NOP	
+;Sim800.c,1014 :: 		UART2_Write(0x0A);
+ORI	R25, R0, 10
+JAL	_UART2_Write+0
+NOP	
+;Sim800.c,1015 :: 		Delay_ms(1000);
+LUI	R24, 406
+ORI	R24, R24, 59050
+L_SendData159:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData152
+BNE	R24, R0, L_SendData159
 NOP	
-NOP	
-NOP	
-;Sim800.c,1013 :: 		UART2_Write_Text("AT+CSTT=");//\"data.uk\",\"user\",\"one2one\"");
-ADDIU	R23, SP, 80
-ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr85_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr85_Sim800+0)
+;Sim800.c,1016 :: 		UART2_Write_Text("AT+CIPSPRT=1");
+ADDIU	R23, SP, 116
+ADDIU	R22, R23, 13
+LUI	R24, hi_addr(?ICS?lstr89_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr89_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 80
+ADDIU	R2, SP, 116
 MOVZ	R25, R2, R0
-JAL	_UART2_Write_Text+0
-NOP	
-;Sim800.c,1014 :: 		UART2_Write_Text(SF.APN);
-LUI	R25, hi_addr(_SF+78)
-ORI	R25, R25, lo_addr(_SF+78)
-JAL	_UART2_Write_Text+0
-NOP	
-;Sim800.c,1015 :: 		UART2_Write_Text(",\"user\",");
-ADDIU	R23, SP, 89
-ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr86_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr86_Sim800+0)
-JAL	___CC2DW+0
-NOP	
-ADDIU	R2, SP, 89
-MOVZ	R25, R2, R0
-JAL	_UART2_Write_Text+0
-NOP	
-;Sim800.c,1016 :: 		UART2_Write_Text(SF.PWD);
-LUI	R25, hi_addr(_SF+98)
-ORI	R25, R25, lo_addr(_SF+98)
 JAL	_UART2_Write_Text+0
 NOP	
 ;Sim800.c,1017 :: 		UART2_Write(0x0D);
@@ -3850,20 +4000,20 @@ NOP
 ;Sim800.c,1020 :: 		Delay_ms(50);
 LUI	R24, 20
 ORI	R24, R24, 22612
-L_SendData154:
+L_SendData161:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData154
+BNE	R24, R0, L_SendData161
 NOP	
 NOP	
 NOP	
-;Sim800.c,1021 :: 		UART2_Write_Text("AT+CIICR");
-ADDIU	R23, SP, 98
-ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr87_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr87_Sim800+0)
+;Sim800.c,1021 :: 		UART2_Write_Text("AT+CIPSTART=\"TCP\",\"api.thingspeak.com\",80");
+ADDIU	R23, SP, 129
+ADDIU	R22, R23, 42
+LUI	R24, hi_addr(?ICS?lstr90_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr90_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 98
+ADDIU	R2, SP, 129
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
@@ -3879,95 +4029,14 @@ NOP
 MOVZ	R25, R0, R0
 JAL	_TestForOK+0
 NOP	
-;Sim800.c,1025 :: 		UART2_Write_Text("AT+CIFSR");
-ADDIU	R23, SP, 107
-ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr88_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr88_Sim800+0)
-JAL	___CC2DW+0
-NOP	
-ADDIU	R2, SP, 107
-MOVZ	R25, R2, R0
-JAL	_UART2_Write_Text+0
-NOP	
-;Sim800.c,1026 :: 		UART2_Write(0x0D);
-ORI	R25, R0, 13
-JAL	_UART2_Write+0
-NOP	
-;Sim800.c,1027 :: 		UART2_Write(0x0A);
-ORI	R25, R0, 10
-JAL	_UART2_Write+0
-NOP	
-;Sim800.c,1028 :: 		Delay_ms(1000);
+;Sim800.c,1025 :: 		Delay_ms(1000);
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_SendData156:
+L_SendData163:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData156
+BNE	R24, R0, L_SendData163
 NOP	
-;Sim800.c,1029 :: 		UART2_Write_Text("AT+CIPSPRT=1");
-ADDIU	R23, SP, 116
-ADDIU	R22, R23, 13
-LUI	R24, hi_addr(?ICS?lstr89_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr89_Sim800+0)
-JAL	___CC2DW+0
-NOP	
-ADDIU	R2, SP, 116
-MOVZ	R25, R2, R0
-JAL	_UART2_Write_Text+0
-NOP	
-;Sim800.c,1030 :: 		UART2_Write(0x0D);
-ORI	R25, R0, 13
-JAL	_UART2_Write+0
-NOP	
-;Sim800.c,1031 :: 		UART2_Write(0x0A);
-ORI	R25, R0, 10
-JAL	_UART2_Write+0
-NOP	
-;Sim800.c,1032 :: 		TestForOK(0);
-MOVZ	R25, R0, R0
-JAL	_TestForOK+0
-NOP	
-;Sim800.c,1033 :: 		Delay_ms(50);
-LUI	R24, 20
-ORI	R24, R24, 22612
-L_SendData158:
-ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData158
-NOP	
-NOP	
-NOP	
-;Sim800.c,1034 :: 		UART2_Write_Text("AT+CIPSTART=\"TCP\",\"api.thingspeak.com\",80");
-ADDIU	R23, SP, 129
-ADDIU	R22, R23, 42
-LUI	R24, hi_addr(?ICS?lstr90_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr90_Sim800+0)
-JAL	___CC2DW+0
-NOP	
-ADDIU	R2, SP, 129
-MOVZ	R25, R2, R0
-JAL	_UART2_Write_Text+0
-NOP	
-;Sim800.c,1035 :: 		UART2_Write(0x0D);
-ORI	R25, R0, 13
-JAL	_UART2_Write+0
-NOP	
-;Sim800.c,1036 :: 		UART2_Write(0x0A);
-ORI	R25, R0, 10
-JAL	_UART2_Write+0
-NOP	
-;Sim800.c,1037 :: 		TestForOK(0);
-MOVZ	R25, R0, R0
-JAL	_TestForOK+0
-NOP	
-;Sim800.c,1038 :: 		Delay_ms(1000);
-LUI	R24, 406
-ORI	R24, R24, 59050
-L_SendData160:
-ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData160
-NOP	
-;Sim800.c,1039 :: 		UART2_Write_Text("AT+CIPSEND");
+;Sim800.c,1026 :: 		UART2_Write_Text("AT+CIPSEND");
 ADDIU	R23, SP, 171
 ADDIU	R22, R23, 11
 LUI	R24, hi_addr(?ICS?lstr91_Sim800+0)
@@ -3978,59 +4047,59 @@ ADDIU	R2, SP, 171
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
-;Sim800.c,1040 :: 		UART2_Write(0x0D);
+;Sim800.c,1027 :: 		UART2_Write(0x0D);
 ORI	R25, R0, 13
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,1041 :: 		UART2_Write(0x0A);
+;Sim800.c,1028 :: 		UART2_Write(0x0A);
 ORI	R25, R0, 10
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,1042 :: 		Delay_ms(1000);
+;Sim800.c,1029 :: 		Delay_ms(1000);
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_SendData162:
+L_SendData165:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData162
+BNE	R24, R0, L_SendData165
 NOP	
-;Sim800.c,1043 :: 		UART2_Write_Text(str);
+;Sim800.c,1030 :: 		UART2_Write_Text(str);
 LW	R25, Offset(_str+0)(GP)
 JAL	_UART2_Write_Text+0
 NOP	
-;Sim800.c,1044 :: 		UART2_Write(0x0D);
+;Sim800.c,1031 :: 		UART2_Write(0x0D);
 ORI	R25, R0, 13
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,1045 :: 		UART2_Write(0x0A);
+;Sim800.c,1032 :: 		UART2_Write(0x0A);
 ORI	R25, R0, 10
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,1046 :: 		UART2_Write(0x0D);
+;Sim800.c,1033 :: 		UART2_Write(0x0D);
 ORI	R25, R0, 13
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,1047 :: 		UART2_Write(0x0A);
+;Sim800.c,1034 :: 		UART2_Write(0x0A);
 ORI	R25, R0, 10
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,1048 :: 		UART2_Write(0x1A);
+;Sim800.c,1035 :: 		UART2_Write(0x1A);
 ORI	R25, R0, 26
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,1049 :: 		TestForOK(1);
+;Sim800.c,1036 :: 		TestForOK(1);
 ORI	R25, R0, 1
 JAL	_TestForOK+0
 NOP	
-;Sim800.c,1050 :: 		Delay_ms(50);
+;Sim800.c,1037 :: 		Delay_ms(50);
 LUI	R24, 20
 ORI	R24, R24, 22612
-L_SendData164:
+L_SendData167:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData164
+BNE	R24, R0, L_SendData167
 NOP	
 NOP	
 NOP	
-;Sim800.c,1051 :: 		UART2_Write_Text("AT+CIPSHUT");
+;Sim800.c,1038 :: 		UART2_Write_Text("AT+CIPSHUT");
 ADDIU	R23, SP, 182
 ADDIU	R22, R23, 11
 LUI	R24, hi_addr(?ICS?lstr92_Sim800+0)
@@ -4041,33 +4110,28 @@ ADDIU	R2, SP, 182
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
-;Sim800.c,1052 :: 		UART2_Write(0x0D);
+;Sim800.c,1039 :: 		UART2_Write(0x0D);
 ORI	R25, R0, 13
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,1053 :: 		UART2_Write(0x0A);
+;Sim800.c,1040 :: 		UART2_Write(0x0A);
 ORI	R25, R0, 10
 JAL	_UART2_Write+0
 NOP	
-;Sim800.c,1054 :: 		TestForOK(0);
+;Sim800.c,1041 :: 		TestForOK(0);
 MOVZ	R25, R0, R0
 JAL	_TestForOK+0
 NOP	
-;Sim800.c,1055 :: 		Delay_ms(50);
+;Sim800.c,1042 :: 		Delay_ms(50);
 LUI	R24, 20
 ORI	R24, R24, 22612
-L_SendData166:
+L_SendData169:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData166
+BNE	R24, R0, L_SendData169
 NOP	
 NOP	
 NOP	
-;Sim800.c,1057 :: 		Free(str,150*sizeof(char*));
-ORI	R26, R0, 600
-LW	R25, Offset(_str+0)(GP)
-JAL	_Free+0
-NOP	
-;Sim800.c,1058 :: 		}
+;Sim800.c,1044 :: 		}
 L_end_SendData:
 LW	R26, 8(SP)
 LW	R25, 4(SP)
@@ -4077,59 +4141,59 @@ JR	RA
 NOP	
 ; end of _SendData
 _TestForOK:
-;Sim800.c,1064 :: 		void TestForOK(char c){
+;Sim800.c,1050 :: 		void TestForOK(char c){
 ADDIU	SP, SP, -20
 SW	RA, 0(SP)
-;Sim800.c,1066 :: 		WaitForResponse(1);
+;Sim800.c,1052 :: 		WaitForResponse(1);
 SW	R26, 4(SP)
 SB	R25, 8(SP)
 ORI	R25, R0, 1
 JAL	_WaitForResponse+0
 NOP	
 LBU	R25, 8(SP)
-;Sim800.c,1067 :: 		Delay_ms(100);
+;Sim800.c,1053 :: 		Delay_ms(100);
 LUI	R24, 40
 ORI	R24, R24, 45226
-L_TestForOK168:
+L_TestForOK171:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_TestForOK168
+BNE	R24, R0, L_TestForOK171
 NOP	
-;Sim800.c,1068 :: 		RingToTempBuf();
+;Sim800.c,1054 :: 		RingToTempBuf();
 JAL	_RingToTempBuf+0
 NOP	
-;Sim800.c,1072 :: 		,SimTestTxt);
+;Sim800.c,1058 :: 		,SimTestTxt);
 LUI	R2, hi_addr(_SimTestTxt+0)
 ORI	R2, R2, lo_addr(_SimTestTxt+0)
 SB	R25, 8(SP)
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-;Sim800.c,1071 :: 		" * %s\r\n"
+;Sim800.c,1057 :: 		" * %s\r\n"
 LUI	R2, hi_addr(?lstr_93_Sim800+0)
 ORI	R2, R2, lo_addr(?lstr_93_Sim800+0)
 SW	R2, 4(SP)
-;Sim800.c,1070 :: 		PrintOut(PrintHandler, "\r\n"
+;Sim800.c,1056 :: 		PrintOut(PrintHandler, "\r\n"
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
 SW	R2, 0(SP)
-;Sim800.c,1072 :: 		,SimTestTxt);
+;Sim800.c,1058 :: 		,SimTestTxt);
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 12
 LBU	R25, 8(SP)
-;Sim800.c,1074 :: 		lastMillis = TMR0.millis;
+;Sim800.c,1060 :: 		lastMillis = TMR0.millis;
 ; lastMillis start address is: 16 (R4)
 LW	R4, Offset(_TMR0+0)(GP)
-;Sim800.c,1075 :: 		if(c == 0)
+;Sim800.c,1061 :: 		if(c == 0)
 ANDI	R2, R25, 255
-BEQ	R2, R0, L__TestForOK303
+BEQ	R2, R0, L__TestForOK313
 NOP	
-J	L_TestForOK170
+J	L_TestForOK173
 NOP	
-L__TestForOK303:
+L__TestForOK313:
 ; lastMillis end address is: 16 (R4)
 MOVZ	R5, R4, R0
-;Sim800.c,1076 :: 		while(!strstr(SimTestTxt, "OK")){
-L_TestForOK171:
+;Sim800.c,1062 :: 		while(!strstr(SimTestTxt, "OK")){
+L_TestForOK174:
 ; lastMillis start address is: 20 (R5)
 ; lastMillis start address is: 20 (R5)
 ; lastMillis end address is: 20 (R5)
@@ -4147,50 +4211,50 @@ ORI	R25, R25, lo_addr(_SimTestTxt+0)
 JAL	_strstr+0
 NOP	
 LBU	R25, 8(SP)
-BEQ	R2, R0, L__TestForOK304
-NOP	
-J	L_TestForOK172
-NOP	
-L__TestForOK304:
-; lastMillis end address is: 20 (R5)
-;Sim800.c,1077 :: 		newMillis = TMR0.millis - lastMillis;
-; lastMillis start address is: 20 (R5)
-LW	R2, Offset(_TMR0+0)(GP)
-SUBU	R2, R2, R5
-;Sim800.c,1078 :: 		if(newMillis > 5000)
-SLTIU	R2, R2, 5001
-BEQ	R2, R0, L__TestForOK305
-NOP	
-J	L_TestForOK173
-NOP	
-L__TestForOK305:
-; lastMillis end address is: 20 (R5)
-;Sim800.c,1079 :: 		break;
-J	L_TestForOK172
-NOP	
-L_TestForOK173:
-;Sim800.c,1080 :: 		}
-; lastMillis start address is: 20 (R5)
-; lastMillis end address is: 20 (R5)
-J	L_TestForOK171
-NOP	
-L_TestForOK172:
-J	L_TestForOK174
-NOP	
-L_TestForOK170:
-;Sim800.c,1081 :: 		else if(c == 1)
-; lastMillis start address is: 16 (R4)
-ANDI	R3, R25, 255
-ORI	R2, R0, 1
-BEQ	R3, R2, L__TestForOK306
+BEQ	R2, R0, L__TestForOK314
 NOP	
 J	L_TestForOK175
 NOP	
-L__TestForOK306:
+L__TestForOK314:
+; lastMillis end address is: 20 (R5)
+;Sim800.c,1063 :: 		newMillis = TMR0.millis - lastMillis;
+; lastMillis start address is: 20 (R5)
+LW	R2, Offset(_TMR0+0)(GP)
+SUBU	R2, R2, R5
+;Sim800.c,1064 :: 		if(newMillis > 5000)
+SLTIU	R2, R2, 5001
+BEQ	R2, R0, L__TestForOK315
+NOP	
+J	L_TestForOK176
+NOP	
+L__TestForOK315:
+; lastMillis end address is: 20 (R5)
+;Sim800.c,1065 :: 		break;
+J	L_TestForOK175
+NOP	
+L_TestForOK176:
+;Sim800.c,1066 :: 		}
+; lastMillis start address is: 20 (R5)
+; lastMillis end address is: 20 (R5)
+J	L_TestForOK174
+NOP	
+L_TestForOK175:
+J	L_TestForOK177
+NOP	
+L_TestForOK173:
+;Sim800.c,1067 :: 		else if(c == 1)
+; lastMillis start address is: 16 (R4)
+ANDI	R3, R25, 255
+ORI	R2, R0, 1
+BEQ	R3, R2, L__TestForOK316
+NOP	
+J	L_TestForOK178
+NOP	
+L__TestForOK316:
 ; lastMillis end address is: 16 (R4)
 MOVZ	R5, R4, R0
-;Sim800.c,1082 :: 		while(!strstr(SimTestTxt, "CONNECT")){
-L_TestForOK176:
+;Sim800.c,1068 :: 		while(!strstr(SimTestTxt, "CONNECT")){
+L_TestForOK179:
 ; lastMillis start address is: 20 (R5)
 ; lastMillis start address is: 20 (R5)
 ; lastMillis end address is: 20 (R5)
@@ -4208,37 +4272,37 @@ ORI	R25, R25, lo_addr(_SimTestTxt+0)
 JAL	_strstr+0
 NOP	
 LBU	R25, 8(SP)
-BEQ	R2, R0, L__TestForOK307
+BEQ	R2, R0, L__TestForOK317
 NOP	
-J	L_TestForOK177
+J	L_TestForOK180
 NOP	
-L__TestForOK307:
+L__TestForOK317:
 ; lastMillis end address is: 20 (R5)
-;Sim800.c,1083 :: 		newMillis = TMR0.millis - lastMillis;
+;Sim800.c,1069 :: 		newMillis = TMR0.millis - lastMillis;
 ; lastMillis start address is: 20 (R5)
 LW	R2, Offset(_TMR0+0)(GP)
 SUBU	R2, R2, R5
-;Sim800.c,1084 :: 		if(newMillis > 5000)
+;Sim800.c,1070 :: 		if(newMillis > 5000)
 SLTIU	R2, R2, 5001
-BEQ	R2, R0, L__TestForOK308
+BEQ	R2, R0, L__TestForOK318
 NOP	
-J	L_TestForOK178
+J	L_TestForOK181
 NOP	
-L__TestForOK308:
+L__TestForOK318:
 ; lastMillis end address is: 20 (R5)
-;Sim800.c,1085 :: 		break;
-J	L_TestForOK177
+;Sim800.c,1071 :: 		break;
+J	L_TestForOK180
 NOP	
-L_TestForOK178:
-;Sim800.c,1086 :: 		}
+L_TestForOK181:
+;Sim800.c,1072 :: 		}
 ; lastMillis start address is: 20 (R5)
 ; lastMillis end address is: 20 (R5)
-J	L_TestForOK176
+J	L_TestForOK179
 NOP	
+L_TestForOK180:
+L_TestForOK178:
 L_TestForOK177:
-L_TestForOK175:
-L_TestForOK174:
-;Sim800.c,1087 :: 		}
+;Sim800.c,1073 :: 		}
 L_end_TestForOK:
 LW	R26, 4(SP)
 LW	RA, 0(SP)

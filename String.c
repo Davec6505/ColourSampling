@@ -11,25 +11,26 @@ const code char *comc[13]={
    "G"
 };
 const code char *com[20]={
-   "CONFIG",      //0
-   "SENDC",       //1
-   "SENDR",       //2
-   "SENDG",       //3
-   "SENDB",       //4
-   "SENDA",       //5
-   "READA",       //6
-   "READR",       //7
-   "READG",       //8
-   "READB",       //9
-   "READC",       //10
-   "READT",       //11
-   "READT_DN40",  //12
-   "READA_SCL",   //13
-   "READA_THV",   //14
-   "WRITE_MAN",   //15
-   "WRITE_RAW",   //16
-   "START",       //17
-   "CANCEL"         //18
+   "CONFIG"       //0
+   ,"SENDC"       //1
+   ,"SENDR"       //2
+   ,"SENDG"       //3
+   ,"SENDB"       //4
+   ,"SENDA"       //5
+   ,"READA"       //6
+   ,"READR"       //7
+   ,"READG"       //8
+   ,"READB"       //9
+   ,"READC"       //10
+   ,"READT"       //11
+   ,"READT_DN40"  //12
+   ,"READA_SCL"   //13
+   ,"READA_THV"   //14
+   ,"WRITE_MAN"   //15
+   ,"WRITE_RAW"   //16
+   ,"START"       //17
+   ,"CANCEL"      //18
+   ,"ERROR"
 };
 
 
@@ -237,13 +238,17 @@ int i,j;
 int StrChecker(char *str){
 static int enum_val;
 static bit once;
-int i;
+int i,length;
     if(!once){
        once = 1;
        enum_val = enum_num;
     }
-    for(i = 0;i < enum_val+1;i++){
-         if(strncmp(str,com[i],strlen(str)-1)==0)
+    length = strlen(str);
+    if(length < 5){
+       return 20;
+    }
+    for(i = 0;i < enum_val;i++){
+         if(strncmp(str,com[i],length)==0)
             break;
     }
    return i;
@@ -256,8 +261,8 @@ char* RemoveWhiteSpace(char* str){
 char* temp;
 int i,j;
 j=0;
-  for(i=0;i<strlen(str);i++){
-      if(str[i] == ' ')
+  for(i=0;i<strlen(str)+1;i++){
+      if(str[i] == 0x20)
         continue;
       temp[j] = str[i];
       j++;

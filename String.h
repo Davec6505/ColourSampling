@@ -10,7 +10,7 @@
 
 //////////////////////////////////////////////////
 //defines
-#define enum_num ((CANCEL - CONFIG)+1)
+#define enum_num ((ERROR - CONFIG)+1)
 //#define StrDebug
 
 #define size 20
@@ -37,7 +37,8 @@ READA_THV,          //14
 WRITE_MAN,          //15
 WRITE_RAW,          //16
 START,              //17
-CANCEL              //18
+CANCEL,             //18
+ERROR               //20
 };
 
 struct Constants{

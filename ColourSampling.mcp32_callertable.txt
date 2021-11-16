@@ -296,7 +296,6 @@ main
 		TCS3472_SetGain
 		SendData
 			sprintf
-			Malloc
 			strcat
 			UART2_Write_Text
 			UART2_Write
@@ -309,7 +308,6 @@ main
 					strncmp
 					strchr
 				__CC2DW
-			Free
 			__CC2DW
 		Read_Send_AllColour
 		Read_Send_OneColour
@@ -404,8 +402,7 @@ main
 			RemoveWhiteSpace
 				strlen
 			StrChecker
-			strcmp
-			UART1_Write_Text
+			strncmp
 			SendSMS
 			TestRecievedSMS
 				sprintf

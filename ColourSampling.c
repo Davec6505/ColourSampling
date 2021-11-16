@@ -1,7 +1,7 @@
 #include "Config.h"
 
 
-int (*Update_Test)(uint16_t s,uint16_t m, uint16_t h);
+int (*Update_Test)();
 
 PString str_t;
 Timer_Setpoint T0_SP={
@@ -30,8 +30,8 @@ unsigned char cel_num[20];
 char num;
 unsigned short i;
 unsigned int cell_ok,str_num,deg;
-char txtR[6],txtH[6],txtT[6];
-int res;
+char txtR[6],txtH[6],txtT[6],txtI[6];
+int resA=0, resB=0, diff = 0;;
 
    Update_Test = Test_Update_ThingSpeak;
 
@@ -99,7 +99,7 @@ int res;
    
    PrintOut(PrintHandler, "\r\n"
                            " *Run");
-   res = 0;
+   resA = resB = 0;
 /***************************************************
 * main loop forever!!
 ***************************************************/
@@ -110,33 +110,37 @@ int res;
      if(num != 0){
         DoStrings(num);
      }
-     //////////////////////////////////////////////
-     //Get sms input
+     
+     //Update Thingspeak
      if(SimVars.init_inc >= 5){
        if(T0_SP.one_per_sec){
-         res = Update_Test(T0_SP.sec,T0_SP.min,T0_SP.hr);
-         if(res >= 1){
-           T0_SP.sec = T0_SP.min = T0_SP.hr = 0; //start timming again
-           T0_SP.one_per_sec = 0;
-         }
+         Update_Test();
+         T0_SP.sec = T0_SP.min = T0_SP.hr = 0; //start timming again
+         T0_SP.one_per_sec = 0;
        }
      }
-
-     //test for incoming SMS from
-     res = TestRingPointers();
-     if(res > 1){
+     
+     //test for incoming SMS using difference in ring ptr
+     if(!T0_SP.one_per_sec){
+       diff = TestRingPointers();
+       if(diff > 1){
+          SimVars.init_inc = 3;
+          resB = GetSMSText();
 #ifdef MainDebug
-       sprintf(txtR,"%d",res);
-       sprintf(txtT,"%d",RB.tail);
-       sprintf(txtH,"%d",RB.head);
-       PrintOut(PrintHandler, "\r\n"
-                              " *Tail:= %s\r\n"
-                              " *Head:= %s\r\n"
-                              " *Diff in pointers:= %s\r\n"
-                              ,txtT,txtH,txtR);
+         sprintf(txtI,"%d",resB);
+         sprintf(txtR,"%d",diff);
+         sprintf(txtT,"%d",RB.tail);
+         sprintf(txtH,"%d",RB.head);
+         PrintOut(PrintHandler, "\r\n"
+                                " *Tail:= %s\r\n"
+                                " *Head:= %s\r\n"
+                                " *Diff in pointers:= %s\r\n"
+                                " *Reply from GetSmsTxt():= %s\r\n"
+                                ,txtT,txtH,txtR,txtI);
 #endif
-
-        GetSMSText();
+         Delay_ms(500);
+       }
+       SimVars.init_inc = 5;
      }
 
 
