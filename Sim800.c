@@ -45,11 +45,6 @@ unsigned long temp[128];
 char rcvSimTxt[200];
 char SimTestTxt[200];
 char rcvPcTxt[200];
-char *text;
-char *text1;
-char *str_rcv;
-char *ptr;
-char *str;
 char sms[6];
 
 /***********************************************
@@ -89,6 +84,7 @@ void InitGSM3(){
    RB.tail = 0;
    RB.rcv_txt_fin = -1;
    memset(SF.SimCelNum,0,sizeof(SF.SimCelNum));
+   memset(SF.StartCell,0,sizeof(SF.StartCell));
    memset(SF.WriteAPIKey,0,sizeof(SF.WriteAPIKey));
    memset(SF.ReadAPIKey,0,sizeof(SF.ReadAPIKey));
    memset(SF.APN,0,sizeof(SF.APN));
@@ -156,7 +152,7 @@ static int i,j;
 *************************************************/
 char* GetValuesFromFlash(){
 unsigned long i,j;
-
+char *ptr;
    GetStrLengths();
    ptr = (unsigned char*)FLASH_Settings_VAddr;
    ptr += 20;
@@ -330,7 +326,7 @@ int i;
 *******************************************************/
 char SetupIOT(){
 int res,i,num_strs;
-
+char *str_rcv;
 /*******************************************************
 *check to see if network is registered AT+CREG? = 0,[1/5]
 *1= home / 5 = Roaming network wait in a loop until reg
@@ -420,7 +416,6 @@ wait:
 char WaitForSetupSMS(unsigned int Indx){
 int i,res,num_strs;
 
-
   //Set sms to text mode = 1
   UART2_Write_Text("AT+CMGF=1");
   UART2_Write(0x0D);
@@ -471,7 +466,6 @@ int i,res,num_strs;
     WaitForResponse(1);
     Delay_ms(1000);
     RingToTempBuf();
-    //str_rcv = setstr(SimTestTxt);
     num_strs = strsplit(SimTestTxt,',');
  #ifdef SimConfDebug
     sprintf(txtA,"%d",num_strs);
@@ -535,13 +529,12 @@ int i,res,num_strs;
     Delay_ms(500);
     RemoveSMSText(res);
     res = strcmp(SimTestTxt,"OK,");
-    sprintf(txtA,"%d",res);
 #ifdef SimConfDebug
+    sprintf(txtA,"%d",res);
     PrintOut(PrintHandler, "\r\n"
                            " * SimTestTxt: %s\r\n"
-                           " * str_rcv: %s\r\n"
                            " * OK-0: %s\r\n"
-                           ,SimTestTxt,str_rcv,txtA);
+                           ,SimTestTxt,txtA);
 #endif
 
    if((res == 0)&&(Indx == 1)){
@@ -612,6 +605,8 @@ static short onecA;
 int res;
 char b[64];
 char tempCellNum[20];
+char *str;
+     str = (char*)Malloc(100*sizeof(char*));
      if(!cellNum)
         strcpy(tempCellNum,string[1]);
      else
@@ -677,6 +672,15 @@ char tempCellNum[20];
       case 12:
              UART2_Write_Text("Not a recognised command!");
              break;
+      case 13:
+             UART2_Write_Text("You cannot stop this test contact the owner of this test!");
+             break;
+      case 14:
+             UART2_Write_Text("Test already started contact owner of this test!");
+             break;
+      case 15:
+             UART2_Write_Text("Test has not been started!");
+             break;
       default:
              UART2_Write_Text("Error Power cycle the device!");
              break;
@@ -685,6 +689,8 @@ char tempCellNum[20];
     UART2_Write(0x0A);
     UART2_Write(0x1A);
     Delay_ms(5000);
+    
+    Free(str,100*sizeof(char*));
 
 }
 
@@ -753,7 +759,7 @@ int num_strs,res,err;
 **********************************************************************/
 char* ReadMSG(int msg_num){
 int i,num_strs,res;
-
+char *text;
     sprintf(sms,"%d",msg_num);
     Delay_ms(1000);
 #ifdef SMSDebug
@@ -815,11 +821,46 @@ int i,num_strs,res;
         if(string[6] != NULL){
           strcpy(string[6],RemoveWhiteSpace(string[6]));
           res = StrChecker(string[6]);
+          
           //if configuration msg and not primary cell no return
-          if((res == 16) && (strncmp(string[1],SF.SimCelNum,8))){
+          if((res == 16) && (strncmp(string[1],SF.SimCelNum,15))){
              SendSMS(11,0);
              return 255;
           }
+
+          if(res == 18){
+             if((SimVars.start)&&
+               (!strncmp(string[1],SF.StartCell,15)||
+                !strncmp(string[1],SF.SimCelNum,15))){
+                    SimVars.start = 0;
+ #ifdef SMSDebug
+                    PrintOut(PrintHandler,       "\r\n"
+                             " *SimVars.start:=  0\r\n"
+                             " *SF.StartCell:=   %s\r\n"
+                             " *string[1]:=      %s\r\n"
+                             ,SF.StartCell,string[1]);
+ #endif
+                    goto next; //if cell matches allow to CANCEL
+             }else{
+                  if(!SimVars.start){
+                       SendSMS(15,0);
+                        return 15;
+                  }
+                  else{
+                    SendSMS(13,0);
+                    return 13;
+                  }
+                 }
+         }else if(res == 17 && !SimVars.start){
+               strncpy(SF.StartCell,string[1],15);
+               SimVars.start = 1;
+         }else if(res == 17 && SimVars.start){
+               SendSMS(14,0);
+               return 14;
+         }else
+             goto next;
+
+          next:
           TestRecievedSMS(res);
         }
      return 0;
@@ -870,6 +911,7 @@ char *t,B[64],txtDig[9];
             if(string[5] != NULL){
                strcpy(B,string[5]);
                Threshold.time_to_log = atoi(B);
+               Threshold.time_to_log -= 1;
             }
             WriteToFlashTemp();
             t =  Write_Thresholds(0);
@@ -883,6 +925,7 @@ char *t,B[64],txtDig[9];
            break;
       case 17:
            SimVars.init_inc = 5;  //Test started
+           T0_SP.sec = T0_SP.min = T0_SP.hr = 0;
            SendSMS(9,0);
            break;
       case 18:
@@ -943,17 +986,25 @@ int Test_Update_ThingSpeak(){
 ****************************************************/
 void SendData(unsigned int* rgbc){
 int len;
-
+char *str;
     
+    str = (char*)Malloc(200*sizeof(char*));
     //get the colour valuse prior to sending to ThingSpek
     sprintf(txtC,"%u",rgbc[0]);
     sprintf(txtR,"%u",rgbc[1]);
     sprintf(txtG,"%u",rgbc[2]);
     sprintf(txtB,"%u",rgbc[3]);
     
+    
+    UART2_Write_Text("AT+CIPSHUT");
+    UART2_Write(0x0D);
+    UART2_Write(0x0A);
+    TestForOK(0);
+    Delay_ms(50);
+    
     //allocate memory for string
     //ensure 1st byte is a null terminating value
-    *str  = 0;
+    str[0]  = 0;
     //build string
     strcat(str,str_api);
     strcat(str,SF.WriteAPIKey);
@@ -1041,6 +1092,7 @@ int len;
     TestForOK(0);
     Delay_ms(50);
     
+    Free(str,200*sizeof(char*));
 }
 
 /**************************************************************

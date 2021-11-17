@@ -295,6 +295,7 @@ struct Sim800Flash{
 char SimDate[9];
 char SimTime[9];
 char SimCelNum[20];
+char StartCell[20];
 char WriteAPIKey[20];
 char ReadAPIKey[20];
 char APN[20];
@@ -315,9 +316,6 @@ struct sim_lengths{
  int l1l2l3;
  int l1l2l3l4;
 };
-
-
-
 
 
 
@@ -515,7 +513,6 @@ int resA=0, resB=0, diff = 0;;
  diff = TestRingPointers();
  if(diff > 1){
  SimVars.init_inc = 3;
- resB = GetSMSText();
 
  sprintf(txtI,"%d",resB);
  sprintf(txtR,"%d",diff);
@@ -528,6 +525,7 @@ int resA=0, resB=0, diff = 0;;
  " *Reply from GetSmsTxt():= %s\r\n"
  ,txtT,txtH,txtR,txtI);
 
+ resB = GetSMSText();
  Delay_ms(500);
  }
  SimVars.init_inc = 5;

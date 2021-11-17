@@ -124,8 +124,7 @@ int resA=0, resB=0, diff = 0;;
      if(!T0_SP.one_per_sec){
        diff = TestRingPointers();
        if(diff > 1){
-          SimVars.init_inc = 3;
-          resB = GetSMSText();
+         SimVars.init_inc = 3;
 #ifdef MainDebug
          sprintf(txtI,"%d",resB);
          sprintf(txtR,"%d",diff);
@@ -138,6 +137,7 @@ int resA=0, resB=0, diff = 0;;
                                 " *Reply from GetSmsTxt():= %s\r\n"
                                 ,txtT,txtH,txtR,txtI);
 #endif
+          resB = GetSMSText();
          Delay_ms(500);
        }
        SimVars.init_inc = 5;

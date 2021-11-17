@@ -236,6 +236,7 @@ main
 		__CC2DW
 	SendSMS
 		__CC2DW
+		Malloc
 		strcpy
 		AT_Initial
 			__CC2DW
@@ -273,6 +274,7 @@ main
 			strcat
 			TCS3472_C2RGB_Error
 			__CC2DW
+		Free
 	WaitForResponse
 	Read_Thresholds
 	HID_Read
@@ -295,8 +297,8 @@ main
 		TCS3472_SetIntergration_Time
 		TCS3472_SetGain
 		SendData
+			Malloc
 			sprintf
-			strcat
 			UART2_Write_Text
 			UART2_Write
 			TestForOK
@@ -308,6 +310,8 @@ main
 					strncmp
 					strchr
 				__CC2DW
+			strcat
+			Free
 			__CC2DW
 		Read_Send_AllColour
 		Read_Send_OneColour

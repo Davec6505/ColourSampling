@@ -17969,7 +17969,6 @@ pten9
 pten9
 pten9
 pten9_bit
-ptr
 ptrden
 ptrden
 ptrden
@@ -19654,6 +19653,7 @@ stallif
 stallif
 stallif_bit
 start
+startcell
 stat
 stov
 stov
@@ -19698,9 +19698,7 @@ stov8_bit
 stov9
 stov9_bit
 str
-str
 str_api
-str_rcv
 str_t
 str_vars
 strcat
@@ -20474,8 +20472,6 @@ testrecievedsms
 testringpointers
 teststr
 teststrings
-text
-text1
 tgate
 tgate
 tgate

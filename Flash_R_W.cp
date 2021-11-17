@@ -238,6 +238,7 @@ struct Sim800Flash{
 char SimDate[9];
 char SimTime[9];
 char SimCelNum[20];
+char StartCell[20];
 char WriteAPIKey[20];
 char ReadAPIKey[20];
 char APN[20];
@@ -258,9 +259,6 @@ struct sim_lengths{
  int l1l2l3;
  int l1l2l3l4;
 };
-
-
-
 
 
 

@@ -1,6 +1,6 @@
 _main:
 ;ColourSampling.c,28 :: 		void main() {
-ADDIU	SP, SP, -52
+ADDIU	SP, SP, -56
 ;ColourSampling.c,34 :: 		int resA=0, resB=0, diff = 0;;
 ;ColourSampling.c,36 :: 		Update_Test = Test_Update_ThingSpeak;
 LUI	R2, hi_addr(_Test_Update_ThingSpeak+0)
@@ -99,24 +99,22 @@ SH	R0, Offset(_T0_SP+6)(GP)
 ;ColourSampling.c,67 :: 		strcpy(cel_num,GetValuesFromFlash());
 JAL	_GetValuesFromFlash+0
 NOP	
-ADDIU	R3, SP, 2
+ADDIU	R3, SP, 0
 MOVZ	R26, R2, R0
 MOVZ	R25, R3, R0
 JAL	_strcpy+0
 NOP	
 ;ColourSampling.c,68 :: 		str_num = strncmp(cel_num,sub_txt,4);
-ADDIU	R2, SP, 2
+ADDIU	R2, SP, 0
 ORI	R27, R0, 4
 LUI	R26, hi_addr(_sub_txt+0)
 ORI	R26, R26, lo_addr(_sub_txt+0)
 MOVZ	R25, R2, R0
 JAL	_strncmp+0
 NOP	
-; str_num start address is: 16 (R4)
-SEH	R4, R2
+SH	R2, 20(SP)
 ;ColourSampling.c,70 :: 		sprintf(txtR,"%u",str_num);
 ADDIU	R3, SP, 22
-SH	R4, 0(SP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
 LUI	R2, hi_addr(?lstr_3_ColourSampling+0)
@@ -128,7 +126,7 @@ NOP
 ADDIU	SP, SP, 12
 ;ColourSampling.c,74 :: 		,cel_num,txtR);
 ADDIU	R3, SP, 22
-ADDIU	R2, SP, 2
+ADDIU	R2, SP, 0
 ADDIU	SP, SP, -16
 SW	R3, 12(SP)
 SW	R2, 8(SP)
@@ -144,10 +142,8 @@ SW	R2, 0(SP)
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 16
-LHU	R4, 0(SP)
 ;ColourSampling.c,76 :: 		if(str_num != 0){
-ANDI	R2, R4, 65535
-; str_num end address is: 16 (R4)
+LHU	R2, 20(SP)
 BNE	R2, R0, L__main25
 NOP	
 J	L_main4
@@ -249,6 +245,8 @@ SW	R2, 0(SP)
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 8
+;ColourSampling.c,102 :: 		resA = resB = 0;
+SH	R0, 52(SP)
 ;ColourSampling.c,106 :: 		while(1){
 L_main11:
 ;ColourSampling.c,109 :: 		num = HID_Read();
@@ -309,8 +307,8 @@ L__main34:
 ;ColourSampling.c,125 :: 		diff = TestRingPointers();
 JAL	_TestRingPointers+0
 NOP	
-; diff start address is: 16 (R4)
-SEH	R4, R2
+; diff start address is: 84 (R21)
+SEH	R21, R2
 ;ColourSampling.c,126 :: 		if(diff > 1){
 SEH	R2, R2
 SLTI	R2, R2, 2
@@ -322,12 +320,9 @@ L__main35:
 ;ColourSampling.c,127 :: 		SimVars.init_inc = 3;
 ORI	R2, R0, 3
 SB	R2, Offset(_SimVars+1)(GP)
-;ColourSampling.c,128 :: 		resB = GetSMSText();
-SH	R4, 0(SP)
-JAL	_GetSMSText+0
-NOP	
-;ColourSampling.c,130 :: 		sprintf(txtI,"%d",resB);
+;ColourSampling.c,129 :: 		sprintf(txtI,"%d",resB);
 ADDIU	R3, SP, 40
+LH	R2, 52(SP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
 LUI	R2, hi_addr(?lstr_6_ColourSampling+0)
@@ -337,12 +332,11 @@ SW	R3, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-LH	R4, 0(SP)
-;ColourSampling.c,131 :: 		sprintf(txtR,"%d",diff);
+;ColourSampling.c,130 :: 		sprintf(txtR,"%d",diff);
 ADDIU	R3, SP, 22
 ADDIU	SP, SP, -12
-SH	R4, 8(SP)
-; diff end address is: 16 (R4)
+SH	R21, 8(SP)
+; diff end address is: 84 (R21)
 LUI	R2, hi_addr(?lstr_7_ColourSampling+0)
 ORI	R2, R2, lo_addr(?lstr_7_ColourSampling+0)
 SW	R2, 4(SP)
@@ -350,7 +344,7 @@ SW	R3, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;ColourSampling.c,132 :: 		sprintf(txtT,"%d",RB.tail);
+;ColourSampling.c,131 :: 		sprintf(txtT,"%d",RB.tail);
 ADDIU	R3, SP, 34
 LHU	R2, Offset(_RB+1004)(GP)
 ADDIU	SP, SP, -12
@@ -362,7 +356,7 @@ SW	R3, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;ColourSampling.c,133 :: 		sprintf(txtH,"%d",RB.head);
+;ColourSampling.c,132 :: 		sprintf(txtH,"%d",RB.head);
 ADDIU	R3, SP, 28
 LHU	R2, Offset(_RB+1002)(GP)
 ADDIU	SP, SP, -12
@@ -374,7 +368,7 @@ SW	R3, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-;ColourSampling.c,139 :: 		,txtT,txtH,txtR,txtI);
+;ColourSampling.c,138 :: 		,txtT,txtH,txtR,txtI);
 ADDIU	R5, SP, 40
 ADDIU	R4, SP, 22
 ADDIU	R3, SP, 28
@@ -384,18 +378,22 @@ SW	R5, 20(SP)
 SW	R4, 16(SP)
 SW	R3, 12(SP)
 SW	R2, 8(SP)
-;ColourSampling.c,138 :: 		" *Reply from GetSmsTxt():= %s\r\n"
+;ColourSampling.c,137 :: 		" *Reply from GetSmsTxt():= %s\r\n"
 LUI	R2, hi_addr(?lstr_10_ColourSampling+0)
 ORI	R2, R2, lo_addr(?lstr_10_ColourSampling+0)
 SW	R2, 4(SP)
-;ColourSampling.c,134 :: 		PrintOut(PrintHandler, "\r\n"
+;ColourSampling.c,133 :: 		PrintOut(PrintHandler, "\r\n"
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
 SW	R2, 0(SP)
-;ColourSampling.c,139 :: 		,txtT,txtH,txtR,txtI);
+;ColourSampling.c,138 :: 		,txtT,txtH,txtR,txtI);
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 24
+;ColourSampling.c,140 :: 		resB = GetSMSText();
+JAL	_GetSMSText+0
+NOP	
+SH	R2, 52(SP)
 ;ColourSampling.c,141 :: 		Delay_ms(500);
 LUI	R24, 203
 ORI	R24, R24, 29524
