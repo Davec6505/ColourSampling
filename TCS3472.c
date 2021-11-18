@@ -293,13 +293,68 @@ float c,r,g,b;
        b =  (float)CRGB[3];
 
        r /= c;
-       r *= 256.0;
+       r *= 255.0;
        rgb[0] = r;
        g /= c;
-       g *= 256.0;
+       g *= 255.0;
        rgb[1] = g;
        b /= c;
-       b *= 256.0;
+       b *= 255.0;
        rgb[2] = b;
        
+}
+
+float TCS3472_CalcHue(float* rgb){
+float rR,gG,bB,min_,max_;
+float HUE;
+float minF,maxF;
+/****************************************************
+*  if R = max  => Hue = (G-B)/(max-min)
+*  if G = max  => HUE = 2 + ((B-R)/9MAX-MIN))
+*  if B = max  => HUE = 4 + ((R-G)/(max-min))
+****************************************************/
+
+   rR = rgb[0];
+   gG = rgb[1];
+   bB = rgb[2];
+
+   maxF = max_(rgb);
+   minF = min_(rgb);
+   
+   if(rR >= gG && rR >= bB){ //Red = max
+      if(gG == bB)
+         gG += 1.0;
+      HUE = ((gG - bB)/(maxF - minF))*60.0;
+   }else if(gG >= rR && gG >= bB){//Green = max
+      if(rR == bB)
+         bB += 1.0;
+      HUE = (2.0 + ((bB - rR)/(maxF - minF)))*60.0;
+   }else if(bB >= rR && bB >= gG){//Blue = max
+      if(rR == bB)
+         rR += 1.0;
+      HUE = (4.0 + ((rR - gG)/(maxF - minF)))*60.0;
+   }
+    return HUE = 360 - HUE;
+}
+
+float max_(float* rgb){
+float temp1 = 0.0;
+int i = 0;
+   temp1 = rgb[0];
+  for (i=1;i<3;i++){
+     if(rgb[i] > temp1)
+         temp1 = rgb[i];
+  }
+  return temp1;
+}
+
+float min_(float* rgb){
+float temp1 = 0.0;
+int i = 0;
+   temp1 = rgb[0];
+  for (i=1;i<3;i++){
+     if(rgb[i] < temp1)
+         temp1 = rgb[i];
+  }
+  return temp1;
 }

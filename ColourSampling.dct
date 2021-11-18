@@ -10929,6 +10929,7 @@ flash_write_row
 flash_write_word
 floattostr
 floor
+fltdata
 form
 form
 form
@@ -13826,6 +13827,7 @@ lvdstat_bit
 main
 malloc
 max
+max_
 memchr
 memcmp
 memcpy
@@ -13835,6 +13837,7 @@ millis
 min
 min
 min
+min_
 min01
 min01
 min01
@@ -18461,6 +18464,7 @@ read_thresholds
 readapikey
 readbuff
 readflashword
+readhue
 readmsg
 removechars
 removesmstext
@@ -20449,6 +20453,7 @@ tcs3472_c2rgb_error
 tcs3472_calc_lux
 tcs3472_calccoltemp
 tcs3472_calccoltemp_dn40
+tcs3472_calchue
 tcs3472_clearinterrupt
 tcs3472_disable
 tcs3472_enable

@@ -143,4 +143,7 @@ unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
 void GetScaledValues(int* CRGB,float rgb[3]);
+float TCS3472_CalcHue(float* RGBC);
+float max_(float *rgb);
+float min_(float *rgb);
 #endif

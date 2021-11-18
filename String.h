@@ -10,9 +10,9 @@
 
 //////////////////////////////////////////////////
 //defines
-#define enum_num ((ERROR - CONFIG)+1)
 //#define StrDebug
 
+#define enum_num ((ERROR - CONFIG)+1)
 #define size 20
 #define str_size 64
 //structs and enums
@@ -38,6 +38,7 @@ WRITE_MAN,          //15
 WRITE_RAW,          //16
 START,              //17
 CANCEL,             //18
+READA_HUE,          //19
 ERROR               //20
 };
 
@@ -82,6 +83,7 @@ void clr_str_arrays(char *str[10]);
 char* RemoveWhiteSpace(char* str);
 char* Read_Send_AllColour(short data_src);
 char* Read_Send_OneColour(int colr);
+char* ReadHUE();
 char* Read_Thresholds();
 char* Write_Thresholds(short data_src);
 int Get_It();

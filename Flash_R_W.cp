@@ -128,6 +128,9 @@ unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
 void GetScaledValues(int* CRGB,float rgb[3]);
+float TCS3472_CalcHue(float* RGBC);
+float max_(float *rgb);
+float min_(float *rgb);
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/_timers.h"
@@ -200,6 +203,7 @@ extern sfr sbit CRS;
 extern sfr sbit RST;
 extern sfr sbit PWR;
 extern sfr sbit STAT;
+
 
 
 
@@ -308,6 +312,7 @@ WRITE_MAN,
 WRITE_RAW,
 START,
 CANCEL,
+READA_HUE,
 ERROR
 };
 
@@ -352,6 +357,7 @@ void clr_str_arrays(char *str[10]);
 char* RemoveWhiteSpace(char* str);
 char* Read_Send_AllColour(short data_src);
 char* Read_Send_OneColour(int colr);
+char* ReadHUE();
 char* Read_Thresholds();
 char* Write_Thresholds(short data_src);
 int Get_It();

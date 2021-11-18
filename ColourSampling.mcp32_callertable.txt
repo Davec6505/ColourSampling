@@ -274,6 +274,24 @@ main
 			strcat
 			TCS3472_C2RGB_Error
 			__CC2DW
+		ReadHUE
+			memset
+			TCS3472_getRawData
+			GetScaledValues
+			TCS3472_CalcHue
+				max_
+					_Compare_FP
+				min_
+					_Compare_FP
+				_Compare_FP
+				_Add_FP
+				_Sub_FP
+				_Div_FP
+				_Mul_FP
+			sprintf
+			strcpy
+			strcat
+			__CC2DW
 		Free
 	WaitForResponse
 	Read_Thresholds
@@ -297,7 +315,6 @@ main
 		TCS3472_SetIntergration_Time
 		TCS3472_SetGain
 		SendData
-			Malloc
 			sprintf
 			UART2_Write_Text
 			UART2_Write
@@ -310,8 +327,11 @@ main
 					strncmp
 					strchr
 				__CC2DW
-			strcat
-			Free
+			UART1_Write_Text
+			UART1_Write
+			strncpy
+			strncat
+			strlen
 			__CC2DW
 		Read_Send_AllColour
 		Read_Send_OneColour
@@ -370,6 +390,7 @@ main
 			sprintf
 			strcpy
 			strcat
+		ReadHUE
 		strlen
 		strncat
 		HID_Write

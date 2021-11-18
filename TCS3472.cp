@@ -124,6 +124,9 @@ unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
 void GetScaledValues(int* CRGB,float rgb[3]);
+float TCS3472_CalcHue(float* RGBC);
+float max_(float *rgb);
+float min_(float *rgb);
 #line 3 "C:/Users/Git/ColourSampling/TCS3472.c"
 unsigned int RawData[4];
 unsigned int CCT;
@@ -379,13 +382,63 @@ float c,r,g,b;
  b = (float)CRGB[3];
 
  r /= c;
- r *= 256.0;
+ r *= 255.0;
  rgb[0] = r;
  g /= c;
- g *= 256.0;
+ g *= 255.0;
  rgb[1] = g;
  b /= c;
- b *= 256.0;
+ b *= 255.0;
  rgb[2] = b;
 
+}
+
+float TCS3472_CalcHue(float* rgb){
+float rR,gG,bB,min_,max_;
+float HUE;
+float minF,maxF;
+#line 317 "C:/Users/Git/ColourSampling/TCS3472.c"
+ rR = rgb[0];
+ gG = rgb[1];
+ bB = rgb[2];
+
+ maxF = max_(rgb);
+ minF = min_(rgb);
+
+ if(rR >= gG && rR >= bB){
+ if(gG == bB)
+ gG += 1.0;
+ HUE = ((gG - bB)/(maxF - minF))*60.0;
+ }else if(gG >= rR && gG >= bB){
+ if(rR == bB)
+ bB += 1.0;
+ HUE = (2.0 + ((bB - rR)/(maxF - minF)))*60.0;
+ }else if(bB >= rR && bB >= gG){
+ if(rR == bB)
+ rR += 1.0;
+ HUE = (4.0 + ((rR - gG)/(maxF - minF)))*60.0;
+ }
+ return HUE = 360 - HUE;
+}
+
+float max_(float* rgb){
+float temp1 = 0.0;
+int i = 0;
+ temp1 = rgb[0];
+ for (i=1;i<3;i++){
+ if(rgb[i] > temp1)
+ temp1 = rgb[i];
+ }
+ return temp1;
+}
+
+float min_(float* rgb){
+float temp1 = 0.0;
+int i = 0;
+ temp1 = rgb[0];
+ for (i=1;i<3;i++){
+ if(rgb[i] < temp1)
+ temp1 = rgb[i];
+ }
+ return temp1;
 }

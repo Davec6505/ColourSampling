@@ -681,6 +681,11 @@ char *str;
       case 15:
              UART2_Write_Text("Test has not been started!");
              break;
+      case 16: //read scaled values
+             str = ReadHUE();
+             strncpy(b,str,strlen(str));
+             UART2_Write_Text(b);
+             break;
       default:
              UART2_Write_Text("Error Power cycle the device!");
              break;
@@ -799,10 +804,10 @@ char *text;
     strcpy(string[6], RemoveChars(text,'"','O'));
     strcpy(string[3], RemoveChars(string[3],'"',0x0A));
     memset(string[4]+8,0,1);
-    strncpy(string[4],string[4],8);//RemoveChars(string[4],0x02,'+'));
+    strncpy(string[4],string[4],8);
 
 
- #ifdef SMSDebug
+#ifdef SMSDebug
     sprintf(sms,"%d",num_strs);
     PrintOut(PrintHandler, "\r\n"
                            " *num_strs:= %s\r\n"
@@ -821,14 +826,23 @@ char *text;
         if(string[6] != NULL){
           strcpy(string[6],RemoveWhiteSpace(string[6]));
           res = StrChecker(string[6]);
-          
-          //if configuration msg and not primary cell no return
-          if((res == 16) && (strncmp(string[1],SF.SimCelNum,15))){
-             SendSMS(11,0);
-             return 255;
-          }
 
-          if(res == 18){
+          //if configuration msg and not primary cell no return
+          if(res == 16){   //write_raw
+             if((res == 16) && (strncmp(string[1],SF.SimCelNum,15))){
+                SendSMS(11,0);
+                return 11;
+             }
+          }else if(res == 17){ //start
+             if(res == 17 && !SimVars.start){
+                   strncpy(SF.StartCell,string[1],15);
+                   SimVars.start = 1;
+             }else if(res == 17 && SimVars.start){
+                   SendSMS(14,0);
+                   return 14;
+             }else
+                goto next;
+          }else if(res == 18){ //cancel
              if((SimVars.start)&&
                (!strncmp(string[1],SF.StartCell,15)||
                 !strncmp(string[1],SF.SimCelNum,15))){
@@ -842,27 +856,21 @@ char *text;
  #endif
                     goto next; //if cell matches allow to CANCEL
              }else{
-                  if(!SimVars.start){
-                       SendSMS(15,0);
-                        return 15;
-                  }
-                  else{
-                    SendSMS(13,0);
-                    return 13;
-                  }
-                 }
-         }else if(res == 17 && !SimVars.start){
-               strncpy(SF.StartCell,string[1],15);
-               SimVars.start = 1;
-         }else if(res == 17 && SimVars.start){
-               SendSMS(14,0);
-               return 14;
-         }else
-             goto next;
-
-          next:
-          TestRecievedSMS(res);
-        }
+               if(!SimVars.start){
+                 SendSMS(15,0);
+                 return 15;
+               }else{
+                 SendSMS(13,0);
+                 return 13;
+               }
+             }
+          }else if(res == 19){//HUE
+              goto next;
+          }else
+             SendSMS(12,0);
+next:
+       TestRecievedSMS(res);
+     }
      return 0;
 }
 
@@ -932,6 +940,9 @@ char *t,B[64],txtDig[9];
            SimVars.init_inc = 3;  //Test Stopped
            SendSMS(10,0);
            break;
+    case 19:
+           SendSMS(16,0);
+           break;
        case 20:
            SendSMS(12,0);
            break;
@@ -986,9 +997,9 @@ int Test_Update_ThingSpeak(){
 ****************************************************/
 void SendData(unsigned int* rgbc){
 int len;
-char *str;
-    
-    str = (char*)Malloc(200*sizeof(char*));
+char str[200];
+ 
+
     //get the colour valuse prior to sending to ThingSpek
     sprintf(txtC,"%u",rgbc[0]);
     sprintf(txtR,"%u",rgbc[1]);
@@ -1000,23 +1011,30 @@ char *str;
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     TestForOK(0);
-    Delay_ms(50);
+    Delay_ms(500);
     
-    //allocate memory for string
-    //ensure 1st byte is a null terminating value
-    str[0]  = 0;
+ #ifdef ThingDebug
+    UART1_Write_Text("Prepare str for thingspeak");
+    UART1_Write(0x0A);
+    UART1_Write(0x0D);
+ #endif
     //build string
-    strcat(str,str_api);
-    strcat(str,SF.WriteAPIKey);
-    strcat(str,field1);
-    strcat(str,txtC);
-    strcat(str,field2);
-    strcat(str,txtR);
-    strcat(str,field3);
-    strcat(str,txtG);
-    strcat(str,field4);
-    strcat(str,txtB);
+    strncpy(str,str_api,46);//strlen(str_api));
+    strncat(str,SF.WriteAPIKey,strlen(SF.WriteAPIKey));
+    strncat(str,field1,strlen(field1));
+    strncat(str,txtC,strlen(txtC));
+    strncat(str,field2,strlen(field2));
+    strncat(str,txtR,strlen(txtR));
+    strncat(str,field3,strlen(field3));
+    strncat(str,txtG,strlen(txtG));
+    strncat(str,field4,strlen(field4));
+    strncat(str,txtB,strlen(txtB));
     
+ #ifdef ThingDebug
+    UART1_Write_Text(str);
+    UART1_Write(0x0A);
+    UART1_Write(0x0D);
+ #endif
     //start the send sequence
     UART2_Write_Text("AT+CPIN?");
     UART2_Write(0x0D);
@@ -1092,7 +1110,6 @@ char *str;
     TestForOK(0);
     Delay_ms(50);
     
-    Free(str,200*sizeof(char*));
 }
 
 /**************************************************************
@@ -1105,8 +1122,8 @@ unsigned long lastMillis,newMillis;
     Delay_ms(100);
     RingToTempBuf();
 #ifdef SimConfDebug
-    PrintOut(PrintHandler, "\r\n"
-                           " * %s\r\n"
+    PrintOut(PrintHandler, "Test for OK:"
+                           " *    %s\r\n"
                            ,SimTestTxt);
 #endif
     lastMillis = TMR0.millis;

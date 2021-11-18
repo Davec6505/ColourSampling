@@ -6,11 +6,13 @@ struct Constants str_vars;
 struct Thresh Threshold;
 char string[size][str_size];
 
+float FltData[3];//c,r,g,b;
+
 const code char *comc[13]={
    "T",
    "G"
 };
-const code char *com[20]={
+const code char *com[21]={
    "CONFIG"       //0
    ,"SENDC"       //1
    ,"SENDR"       //2
@@ -30,6 +32,7 @@ const code char *com[20]={
    ,"WRITE_RAW"   //16
    ,"START"       //17
    ,"CANCEL"      //18
+   ,"READA_HUE"   //19
    ,"ERROR"
 };
 
@@ -59,7 +62,7 @@ char *str,err,i;
       if(res0 > 0)
          res1 = StrChecker(string[1]);//Test current string index for equality return index
       else
-          res1 = enum_num + 1;
+          res1 = enum_num;
       memset(writebuff,0,64);     //empty usb write buffer
 
 #ifdef StrDebug
@@ -145,6 +148,9 @@ char *str,err,i;
         case CANCEL :
             SimVars.init_inc = 3;
             break;
+        case READA_HUE :
+            str = ReadHUE();
+            break;
         default:
             str = "No data requested!\r\n";
            break;
@@ -179,7 +185,7 @@ int i,j;
 char* setstr(char conf[250]){
  int i;
       for(i=0;i < strlen(conf);i++){
-         if(conf[i] == NULL)
+         if(conf[i] == '\0')
              break;
       }
       conf[i+1] = 0;
@@ -311,7 +317,6 @@ void WriteData(char *_data){
 * Read TCS3472 and send RGBC Data
 ********************************************************************/
 char* Read_Send_AllColour(short data_src){
-float FltData[3];//c,r,g,b;
 char txtR[15];
 char str[64];
 unsigned int cct;
@@ -413,6 +418,29 @@ char str[64];
      }
      return &str;
 }
+
+/*********************************************************************
+* Calculate the HUE of the colour
+*********************************************************************/
+char* ReadHUE(){
+char str[64];
+char txtF[15];
+float HUE;
+
+        memset(str,0,64);
+        
+        TCS3472_getRawData(RawData);
+        GetScaledValues(RawData,&FltData);
+        HUE = TCS3472_CalcHue(&FltData);
+        sprintf(txtF,"%3.2f",HUE); //HUE
+        
+       strcpy(str,"HUE = || ");
+       strcat(str,txtF);
+       strcat(str," ||\r\n");
+       
+       return &str;
+}
+
 
 int Get_It(){
     return 0;
