@@ -269,6 +269,8 @@ main
 				_SignedIntegralToFloat
 				_Div_FP
 				_Mul_FP
+				fabs
+					_Compare_FP
 			strcpy
 			sprintf
 			strcat

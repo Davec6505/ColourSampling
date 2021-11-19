@@ -10920,6 +10920,10 @@ field1
 field2
 field3
 field4
+field5
+field6
+field7
+field8
 filler1
 findnumber
 flash_erase_page
@@ -21733,12 +21737,16 @@ twip_bit
 txt
 txta
 txtb
+txtb_scl
 txtc
 txtg
+txtg_scl
 txth
+txthue
 txtlen
 txtm
 txtr
+txtr_scl
 txts
 u1addr
 u1addrbits

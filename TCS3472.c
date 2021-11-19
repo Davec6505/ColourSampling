@@ -294,13 +294,13 @@ float c,r,g,b;
 
        r /= c;
        r *= 255.0;
-       rgb[0] = r;
+       rgb[0] = fabs(r);
        g /= c;
        g *= 255.0;
-       rgb[1] = g;
+       rgb[1] = fabs(g);
        b /= c;
        b *= 255.0;
-       rgb[2] = b;
+       rgb[2] = fabs(b);
        
 }
 
@@ -321,20 +321,24 @@ float minF,maxF;
    maxF = max_(rgb);
    minF = min_(rgb);
    
+   //avoiddevide by zero
+   maxF += (maxF == minF)? 1.0:0;
+   
    if(rR >= gG && rR >= bB){ //Red = max
-      if(gG == bB)
-         gG += 1.0;
+      //avoid zero
+      gG += (gG == bB)? 1.0:0.0;
       HUE = ((gG - bB)/(maxF - minF))*60.0;
    }else if(gG >= rR && gG >= bB){//Green = max
-      if(rR == bB)
-         bB += 1.0;
+      //avoid zero
+      bB += (rR == bB)? 1.0:0.0;
       HUE = (2.0 + ((bB - rR)/(maxF - minF)))*60.0;
    }else if(bB >= rR && bB >= gG){//Blue = max
-      if(rR == bB)
-         rR += 1.0;
+      //avoid zero
+      rR += (rR == bB)? 1.0:0.0;
       HUE = (4.0 + ((rR - gG)/(maxF - minF)))*60.0;
    }
-    return HUE = 360 - HUE;
+    //check the quadrant iv > 180 result = -ve
+    return HUE += (HUE < 0.0)? 360.0 : 0.0;
 }
 
 float max_(float* rgb){

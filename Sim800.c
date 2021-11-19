@@ -11,6 +11,10 @@ const char field1[]   = "&field1=";
 const char field2[]   = "&field2=";
 const char field3[]   = "&field3=";
 const char field4[]   = "&field4=";
+const char field5[]   = "&field5=";
+const char field6[]   = "&field6=";
+const char field7[]   = "&field7=";
+const char field8[]   = "&field8=";
 const char sms_test[] = "+CMTI";
 
 struct sim_lengths SL ={
@@ -50,11 +54,12 @@ char sms[6];
 /***********************************************
 * buffers to write for Debugging
 ***********************************************/
+#ifdef SMSDebug
 char txtA[6];
 char txtS[6];
 char txtM[6];
 char txtH[20];
-
+#endif
 /************************************************
 * bufers for Colour sampling and logging
 ************************************************/
@@ -62,6 +67,10 @@ char txtC[15];
 char txtR[15];
 char txtG[15];
 char txtB[15];
+char txtR_Scl[15];
+char txtG_Scl[15];
+char txtB_Scl[15];
+char txtHUE[15];
 char txtLen[6];
 
 Sim800Vars SimVars = {
@@ -1029,6 +1038,17 @@ char str[200];
     strncat(str,txtG,strlen(txtG));
     strncat(str,field4,strlen(field4));
     strncat(str,txtB,strlen(txtB));
+    
+ /*
+    strncat(str,field5,strlen(field5));
+    strncat(str,txtR_Scl,strlen(txtR_Scl));
+    strncat(str,field6,strlen(field6));
+    strncat(str,txtG_Scl,strlen(txtG_Scl));
+    strncat(str,field7,strlen(field7));
+    strncat(str,txtB_Scl,strlen(txtB_Scl));
+    strncat(str,field8,strlen(field8));
+    strncat(str,txtHUE,strlen(txtHUE));
+ */
     
  #ifdef ThingDebug
     UART1_Write_Text(str);

@@ -17,11 +17,11 @@ SB	R2, 11(SP)
 ;TCS3472.c,22 :: 		if(id != Id)
 ANDI	R3, R2, 255
 ANDI	R2, R27, 255
-BNE	R3, R2, L__TCS3472_Init72
+BNE	R3, R2, L__TCS3472_Init76
 NOP	
 J	L_TCS3472_Init0
 NOP	
-L__TCS3472_Init72:
+L__TCS3472_Init76:
 ;TCS3472.c,23 :: 		return 0x00;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_Init
@@ -30,11 +30,11 @@ L_TCS3472_Init0:
 ;TCS3472.c,24 :: 		if(!TCS3472_Initialised){
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_Init73
+BEQ	R2, R0, L__TCS3472_Init77
 NOP	
 J	L_TCS3472_Init1
 NOP	
-L__TCS3472_Init73:
+L__TCS3472_Init77:
 ;TCS3472.c,25 :: 		TCS3472_Initialised = 1;
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 ORI	R2, R2, 1
@@ -329,11 +329,11 @@ SW	R25, 4(SP)
 SW	R26, 8(SP)
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_SetIntergration_Time82
+BEQ	R2, R0, L__TCS3472_SetIntergration_Time86
 NOP	
 J	L_TCS3472_SetIntergration_Time4
 NOP	
-L__TCS3472_SetIntergration_Time82:
+L__TCS3472_SetIntergration_Time86:
 ;TCS3472.c,99 :: 		return 0x00;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_SetIntergration_Time
@@ -366,11 +366,11 @@ SW	R25, 4(SP)
 SW	R26, 8(SP)
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_SetGain84
+BEQ	R2, R0, L__TCS3472_SetGain88
 NOP	
 J	L_TCS3472_SetGain5
 NOP	
-L__TCS3472_SetGain84:
+L__TCS3472_SetGain88:
 ;TCS3472.c,107 :: 		return 0x00;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_SetGain
@@ -472,32 +472,32 @@ SW	RA, 0(SP)
 SW	R25, 4(SP)
 SW	R26, 8(SP)
 ANDI	R2, R25, 65535
-BEQ	R2, R0, L__TCS3472_CalcColTemp88
+BEQ	R2, R0, L__TCS3472_CalcColTemp92
 NOP	
-J	L__TCS3472_CalcColTemp51
+J	L__TCS3472_CalcColTemp58
 NOP	
-L__TCS3472_CalcColTemp88:
+L__TCS3472_CalcColTemp92:
 ANDI	R2, R26, 65535
-BEQ	R2, R0, L__TCS3472_CalcColTemp89
+BEQ	R2, R0, L__TCS3472_CalcColTemp93
 NOP	
-J	L__TCS3472_CalcColTemp50
+J	L__TCS3472_CalcColTemp57
 NOP	
-L__TCS3472_CalcColTemp89:
+L__TCS3472_CalcColTemp93:
 ANDI	R2, R27, 65535
-BEQ	R2, R0, L__TCS3472_CalcColTemp90
+BEQ	R2, R0, L__TCS3472_CalcColTemp94
 NOP	
-J	L__TCS3472_CalcColTemp49
+J	L__TCS3472_CalcColTemp56
 NOP	
-L__TCS3472_CalcColTemp90:
-L__TCS3472_CalcColTemp48:
+L__TCS3472_CalcColTemp94:
+L__TCS3472_CalcColTemp55:
 ;TCS3472.c,132 :: 		return 0;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_CalcColTemp
 NOP	
 ;TCS3472.c,131 :: 		if (r == 0 && g == 0 && b == 0) {
-L__TCS3472_CalcColTemp51:
-L__TCS3472_CalcColTemp50:
-L__TCS3472_CalcColTemp49:
+L__TCS3472_CalcColTemp58:
+L__TCS3472_CalcColTemp57:
+L__TCS3472_CalcColTemp56:
 ;TCS3472.c,145 :: 		X = (-0.3895 * r) + (1.4933 * g) + (-0.0491 * b);
 ANDI	R4, R25, 65535
 JAL	__Unsigned16IntToFloat+0
@@ -702,11 +702,11 @@ _TCS3472_CalcColTemp_dn40:
 ;TCS3472.c,170 :: 		if (RGBC[0] == 0) {
 LHU	R2, 0(R25)
 ANDI	R2, R2, 65535
-BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4092
+BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4096
 NOP	
 J	L_TCS3472_CalcColTemp_dn409
 NOP	
-L__TCS3472_CalcColTemp_dn4092:
+L__TCS3472_CalcColTemp_dn4096:
 ;TCS3472.c,171 :: 		return 0;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_CalcColTemp_dn40
@@ -719,11 +719,11 @@ ORI	R2, R0, 256
 SUBU	R2, R2, R3
 SEH	R2, R2
 SLTI	R2, R2, 64
-BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4093
+BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4097
 NOP	
 J	L_TCS3472_CalcColTemp_dn4010
 NOP	
-L__TCS3472_CalcColTemp_dn4093:
+L__TCS3472_CalcColTemp_dn4097:
 ;TCS3472.c,188 :: 		sat = 65535;
 ; sat start address is: 16 (R4)
 ORI	R4, R0, 65535
@@ -750,11 +750,11 @@ ORI	R2, R0, 256
 SUBU	R2, R2, R3
 SEH	R2, R2
 SLTI	R2, R2, 64
-BNE	R2, R0, L__TCS3472_CalcColTemp_dn4094
+BNE	R2, R0, L__TCS3472_CalcColTemp_dn4098
 NOP	
-J	L__TCS3472_CalcColTemp_dn4052
+J	L__TCS3472_CalcColTemp_dn4059
 NOP	
-L__TCS3472_CalcColTemp_dn4094:
+L__TCS3472_CalcColTemp_dn4098:
 ;TCS3472.c,213 :: 		sat -= sat / 4;
 ANDI	R2, R4, 65535
 SRL	R2, R2, 2
@@ -764,7 +764,7 @@ ANDI	R4, R2, 65535
 ;TCS3472.c,214 :: 		}
 J	L_TCS3472_CalcColTemp_dn4012
 NOP	
-L__TCS3472_CalcColTemp_dn4052:
+L__TCS3472_CalcColTemp_dn4059:
 ;TCS3472.c,211 :: 		if ((256 - It) <= 63) {
 ;TCS3472.c,214 :: 		}
 L_TCS3472_CalcColTemp_dn4012:
@@ -775,11 +775,11 @@ ANDI	R3, R2, 65535
 ANDI	R2, R4, 65535
 ; sat end address is: 16 (R4)
 SLTU	R2, R3, R2
-BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4095
+BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4099
 NOP	
 J	L_TCS3472_CalcColTemp_dn4013
 NOP	
-L__TCS3472_CalcColTemp_dn4095:
+L__TCS3472_CalcColTemp_dn4099:
 ;TCS3472.c,218 :: 		return 0;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_CalcColTemp_dn40
@@ -799,11 +799,11 @@ LHU	R2, 0(R25)
 ANDI	R3, R3, 65535
 ANDI	R2, R2, 65535
 SLTU	R2, R2, R3
-BNE	R2, R0, L__TCS3472_CalcColTemp_dn4096
+BNE	R2, R0, L__TCS3472_CalcColTemp_dn40100
 NOP	
 J	L_TCS3472_CalcColTemp_dn4014
 NOP	
-L__TCS3472_CalcColTemp_dn4096:
+L__TCS3472_CalcColTemp_dn40100:
 ADDIU	R2, R25, 2
 LHU	R3, 0(R2)
 ADDIU	R2, R25, 4
@@ -842,11 +842,11 @@ SUBU	R2, R2, R5
 ANDI	R5, R2, 65535
 ;TCS3472.c,230 :: 		if (r2 == 0) {
 ANDI	R2, R3, 65535
-BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4097
+BEQ	R2, R0, L__TCS3472_CalcColTemp_dn40101
 NOP	
 J	L_TCS3472_CalcColTemp_dn4016
 NOP	
-L__TCS3472_CalcColTemp_dn4097:
+L__TCS3472_CalcColTemp_dn40101:
 ; r2 end address is: 16 (R4)
 ; b2 end address is: 20 (R5)
 ;TCS3472.c,231 :: 		return 0;
@@ -890,11 +890,11 @@ SW	R25, 4(SP)
 SW	R26, 8(SP)
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_SetInterrupt100
+BEQ	R2, R0, L__TCS3472_SetInterrupt104
 NOP	
 J	L_TCS3472_SetInterrupt17
 NOP	
-L__TCS3472_SetInterrupt100:
+L__TCS3472_SetInterrupt104:
 ;TCS3472.c,248 :: 		return 0x00;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_SetInterrupt
@@ -938,11 +938,11 @@ SW	RA, 0(SP)
 SW	R25, 4(SP)
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_ClearInterrupt102
+BEQ	R2, R0, L__TCS3472_ClearInterrupt106
 NOP	
 J	L_TCS3472_ClearInterrupt20
 NOP	
-L__TCS3472_ClearInterrupt102:
+L__TCS3472_ClearInterrupt106:
 ;TCS3472.c,263 :: 		return 0x00;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_ClearInterrupt
@@ -973,11 +973,11 @@ SW	R25, 4(SP)
 SW	R26, 8(SP)
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_SetInterrupt_Limits104
+BEQ	R2, R0, L__TCS3472_SetInterrupt_Limits108
 NOP	
 J	L_TCS3472_SetInterrupt_Limits21
 NOP	
-L__TCS3472_SetInterrupt_Limits104:
+L__TCS3472_SetInterrupt_Limits108:
 ;TCS3472.c,270 :: 		return 0x00;
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_SetInterrupt_Limits
@@ -1046,23 +1046,23 @@ ANDI	R3, R2, 65535
 ;TCS3472.c,282 :: 		if((err < -32600)||(err > 32600))
 SEH	R2, R2
 SLTI	R2, R2, -32600
-BEQ	R2, R0, L__TCS3472_C2RGB_Error106
+BEQ	R2, R0, L__TCS3472_C2RGB_Error110
 NOP	
-J	L__TCS3472_C2RGB_Error55
+J	L__TCS3472_C2RGB_Error62
 NOP	
-L__TCS3472_C2RGB_Error106:
+L__TCS3472_C2RGB_Error110:
 SEH	R2, R3
 SLTI	R2, R2, 32601
-BNE	R2, R0, L__TCS3472_C2RGB_Error107
+BNE	R2, R0, L__TCS3472_C2RGB_Error111
 NOP	
-J	L__TCS3472_C2RGB_Error54
+J	L__TCS3472_C2RGB_Error61
 NOP	
-L__TCS3472_C2RGB_Error107:
+L__TCS3472_C2RGB_Error111:
 J	L_TCS3472_C2RGB_Error24
 NOP	
 ; err end address is: 12 (R3)
-L__TCS3472_C2RGB_Error55:
-L__TCS3472_C2RGB_Error54:
+L__TCS3472_C2RGB_Error62:
+L__TCS3472_C2RGB_Error61:
 ;TCS3472.c,283 :: 		return -32666;
 ORI	R2, R0, 32870
 J	L_end_TCS3472_C2RGB_Error
@@ -1079,9 +1079,10 @@ NOP
 ; end of _TCS3472_C2RGB_Error
 _GetScaledValues:
 ;TCS3472.c,288 :: 		void GetScaledValues(int* CRGB,float* rgb){
-ADDIU	SP, SP, -4
+ADDIU	SP, SP, -12
 SW	RA, 0(SP)
 ;TCS3472.c,290 :: 		c =  (float)CRGB[0];
+SW	R25, 4(SP)
 LH	R2, 0(R25)
 SEH	R4, R2
 JAL	__SignedIntegralToFloat+0
@@ -1102,16 +1103,16 @@ LH	R2, 0(R2)
 SEH	R4, R2
 JAL	__SignedIntegralToFloat+0
 NOP	
-; g start address is: 72 (R18)
-MOVZ	R18, R2, R0
+; g start address is: 68 (R17)
+MOVZ	R17, R2, R0
 ;TCS3472.c,293 :: 		b =  (float)CRGB[3];
 ADDIU	R2, R25, 6
 LH	R2, 0(R2)
 SEH	R4, R2
 JAL	__SignedIntegralToFloat+0
 NOP	
-; b start address is: 68 (R17)
-MOVZ	R17, R2, R0
+; b start address is: 72 (R18)
+MOVZ	R18, R2, R0
 ;TCS3472.c,295 :: 		r /= c;
 MOVZ	R6, R16, R0
 MOVZ	R4, R9, R0
@@ -1124,43 +1125,60 @@ ORI	R4, R4, 0
 MOVZ	R6, R2, R0
 JAL	__Mul_FP+0
 NOP	
-;TCS3472.c,297 :: 		rgb[0] = r;
-SW	R2, 0(R26)
+;TCS3472.c,297 :: 		rgb[0] = fabs(r);
+MOVZ	R3, R26, R0
+SW	R3, 8(SP)
+MOVZ	R25, R2, R0
+JAL	_fabs+0
+NOP	
+LW	R3, 8(SP)
+SW	R2, 0(R3)
 ;TCS3472.c,298 :: 		g /= c;
 MOVZ	R6, R16, R0
-MOVZ	R4, R18, R0
+MOVZ	R4, R17, R0
 JAL	__Div_FP+0
 NOP	
-; g end address is: 72 (R18)
+; g end address is: 68 (R17)
 ;TCS3472.c,299 :: 		g *= 255.0;
 LUI	R4, 17279
 ORI	R4, R4, 0
 MOVZ	R6, R2, R0
 JAL	__Mul_FP+0
 NOP	
-;TCS3472.c,300 :: 		rgb[1] = g;
+;TCS3472.c,300 :: 		rgb[1] = fabs(g);
 ADDIU	R3, R26, 4
+SW	R3, 8(SP)
+MOVZ	R25, R2, R0
+JAL	_fabs+0
+NOP	
+LW	R3, 8(SP)
 SW	R2, 0(R3)
 ;TCS3472.c,301 :: 		b /= c;
 MOVZ	R6, R16, R0
-MOVZ	R4, R17, R0
+MOVZ	R4, R18, R0
 JAL	__Div_FP+0
 NOP	
 ; c end address is: 64 (R16)
-; b end address is: 68 (R17)
+; b end address is: 72 (R18)
 ;TCS3472.c,302 :: 		b *= 255.0;
 LUI	R4, 17279
 ORI	R4, R4, 0
 MOVZ	R6, R2, R0
 JAL	__Mul_FP+0
 NOP	
-;TCS3472.c,303 :: 		rgb[2] = b;
+;TCS3472.c,303 :: 		rgb[2] = fabs(b);
 ADDIU	R3, R26, 8
+SW	R3, 8(SP)
+MOVZ	R25, R2, R0
+JAL	_fabs+0
+NOP	
+LW	R3, 8(SP)
 SW	R2, 0(R3)
 ;TCS3472.c,305 :: 		}
 L_end_GetScaledValues:
+LW	R25, 4(SP)
 LW	RA, 0(SP)
-ADDIU	SP, SP, 4
+ADDIU	SP, SP, 12
 JR	RA
 NOP	
 ; end of _GetScaledValues
@@ -1170,97 +1188,126 @@ ADDIU	SP, SP, -20
 SW	RA, 0(SP)
 ;TCS3472.c,317 :: 		rR = rgb[0];
 LW	R2, 0(R25)
-; rR start address is: 68 (R17)
-MOVZ	R17, R2, R0
+; rR start address is: 64 (R16)
+MOVZ	R16, R2, R0
 ;TCS3472.c,318 :: 		gG = rgb[1];
 ADDIU	R2, R25, 4
 LW	R2, 0(R2)
-; gG start address is: 72 (R18)
-MOVZ	R18, R2, R0
+; gG start address is: 68 (R17)
+MOVZ	R17, R2, R0
 ;TCS3472.c,319 :: 		bB = rgb[2];
 ADDIU	R2, R25, 8
 LW	R2, 0(R2)
-; bB start address is: 76 (R19)
-MOVZ	R19, R2, R0
+; bB start address is: 72 (R18)
+MOVZ	R18, R2, R0
 ;TCS3472.c,321 :: 		maxF = max_(rgb);
 JAL	_max_+0
 NOP	
-; maxF start address is: 64 (R16)
-MOVZ	R16, R2, R0
+; maxF start address is: 44 (R11)
+MOVZ	R11, R2, R0
 ;TCS3472.c,322 :: 		minF = min_(rgb);
 JAL	_min_+0
 NOP	
 ; minF start address is: 12 (R3)
 MOVZ	R3, R2, R0
-;TCS3472.c,324 :: 		if(rR >= gG && rR >= bB){ //Red = max
-MOVZ	R6, R18, R0
-MOVZ	R4, R17, R0
-JAL	__Compare_FP+0
-NOP	
-SLTI	R2, R2, 0
-XORI	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHue112
-NOP	
-J	L__TCS3472_CalcHue62
-NOP	
-L__TCS3472_CalcHue112:
-MOVZ	R6, R19, R0
-MOVZ	R4, R17, R0
-JAL	__Compare_FP+0
-NOP	
-SLTI	R2, R2, 0
-XORI	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHue115
-NOP	
-J	L__TCS3472_CalcHue61
-NOP	
-L__TCS3472_CalcHue115:
-; rR end address is: 68 (R17)
-L__TCS3472_CalcHue60:
-;TCS3472.c,325 :: 		if(gG == bB)
-MOVZ	R4, R18, R0
-MOVZ	R6, R19, R0
+;TCS3472.c,325 :: 		maxF += (maxF == minF)? 1.0:0;
+MOVZ	R4, R11, R0
+MOVZ	R6, R2, R0
 JAL	__Compare_FP+0
 NOP	
 SLTIU	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHue118
+BNE	R2, R0, L__TCS3472_CalcHue116
 NOP	
-J	L__TCS3472_CalcHue67
+J	L_TCS3472_CalcHue26
 NOP	
-L__TCS3472_CalcHue118:
-;TCS3472.c,326 :: 		gG += 1.0;
-LUI	R4, 16256
-ORI	R4, R4, 0
-MOVZ	R6, R18, R0
+L__TCS3472_CalcHue116:
+; ?FLOC___TCS3472_CalcHue?T211 start address is: 8 (R2)
+LUI	R2, 16256
+ORI	R2, R2, 0
+; ?FLOC___TCS3472_CalcHue?T211 end address is: 8 (R2)
+J	L_TCS3472_CalcHue27
+NOP	
+L_TCS3472_CalcHue26:
+; ?FLOC___TCS3472_CalcHue?T211 start address is: 8 (R2)
+MOVZ	R2, R0, R0
+; ?FLOC___TCS3472_CalcHue?T211 end address is: 8 (R2)
+L_TCS3472_CalcHue27:
+; ?FLOC___TCS3472_CalcHue?T211 start address is: 8 (R2)
+MOVZ	R4, R11, R0
+MOVZ	R6, R2, R0
 JAL	__Add_FP+0
 NOP	
-; gG end address is: 72 (R18)
-; gG start address is: 16 (R4)
-MOVZ	R4, R2, R0
-; gG end address is: 16 (R4)
-MOVZ	R2, R4, R0
-J	L_TCS3472_CalcHue29
+; maxF end address is: 44 (R11)
+; ?FLOC___TCS3472_CalcHue?T211 end address is: 8 (R2)
+; maxF start address is: 76 (R19)
+MOVZ	R19, R2, R0
+;TCS3472.c,327 :: 		if(rR >= gG && rR >= bB){ //Red = max
+MOVZ	R6, R17, R0
+MOVZ	R4, R16, R0
+JAL	__Compare_FP+0
 NOP	
+SLTI	R2, R2, 0
+XORI	R2, R2, 1
+BNE	R2, R0, L__TCS3472_CalcHue119
+NOP	
+J	L__TCS3472_CalcHue69
+NOP	
+L__TCS3472_CalcHue119:
+MOVZ	R6, R18, R0
+MOVZ	R4, R16, R0
+JAL	__Compare_FP+0
+NOP	
+SLTI	R2, R2, 0
+XORI	R2, R2, 1
+BNE	R2, R0, L__TCS3472_CalcHue122
+NOP	
+J	L__TCS3472_CalcHue68
+NOP	
+L__TCS3472_CalcHue122:
+; rR end address is: 64 (R16)
 L__TCS3472_CalcHue67:
-;TCS3472.c,325 :: 		if(gG == bB)
-MOVZ	R2, R18, R0
-;TCS3472.c,326 :: 		gG += 1.0;
-L_TCS3472_CalcHue29:
-;TCS3472.c,327 :: 		HUE = ((gG - bB)/(maxF - minF))*60.0;
-; gG start address is: 8 (R2)
-MOVZ	R6, R19, R0
+;TCS3472.c,329 :: 		gG += (gG == bB)? 1.0:0.0;
+MOVZ	R4, R17, R0
+MOVZ	R6, R18, R0
+JAL	__Compare_FP+0
+NOP	
+SLTIU	R2, R2, 1
+BNE	R2, R0, L__TCS3472_CalcHue125
+NOP	
+J	L_TCS3472_CalcHue31
+NOP	
+L__TCS3472_CalcHue125:
+; ?FLOC___TCS3472_CalcHue?T217 start address is: 8 (R2)
+LUI	R2, 16256
+ORI	R2, R2, 0
+; ?FLOC___TCS3472_CalcHue?T217 end address is: 8 (R2)
+J	L_TCS3472_CalcHue32
+NOP	
+L_TCS3472_CalcHue31:
+; ?FLOC___TCS3472_CalcHue?T217 start address is: 8 (R2)
+MOVZ	R2, R0, R0
+; ?FLOC___TCS3472_CalcHue?T217 end address is: 8 (R2)
+L_TCS3472_CalcHue32:
+; ?FLOC___TCS3472_CalcHue?T217 start address is: 8 (R2)
+MOVZ	R4, R17, R0
+MOVZ	R6, R2, R0
+JAL	__Add_FP+0
+NOP	
+; gG end address is: 68 (R17)
+; ?FLOC___TCS3472_CalcHue?T217 end address is: 8 (R2)
+;TCS3472.c,330 :: 		HUE = ((gG - bB)/(maxF - minF))*60.0;
+MOVZ	R6, R18, R0
 MOVZ	R4, R2, R0
 JAL	__Sub_FP+0
 NOP	
-; bB end address is: 76 (R19)
-; gG end address is: 8 (R2)
+; bB end address is: 72 (R18)
 SW	R2, 16(SP)
 MOVZ	R6, R3, R0
-MOVZ	R4, R16, R0
+MOVZ	R4, R19, R0
 JAL	__Sub_FP+0
 NOP	
-; maxF end address is: 64 (R16)
 ; minF end address is: 12 (R3)
+; maxF end address is: 76 (R19)
 LW	R4, 16(SP)
 MOVZ	R6, R2, R0
 JAL	__Div_FP+0
@@ -1271,86 +1318,84 @@ MOVZ	R6, R2, R0
 JAL	__Mul_FP+0
 NOP	
 SW	R2, 12(SP)
-;TCS3472.c,328 :: 		}else if(gG >= rR && gG >= bB){//Green = max
-J	L_TCS3472_CalcHue30
+;TCS3472.c,331 :: 		}else if(gG >= rR && gG >= bB){//Green = max
+J	L_TCS3472_CalcHue33
 NOP	
-;TCS3472.c,324 :: 		if(rR >= gG && rR >= bB){ //Red = max
-L__TCS3472_CalcHue62:
+;TCS3472.c,327 :: 		if(rR >= gG && rR >= bB){ //Red = max
+L__TCS3472_CalcHue69:
+; maxF start address is: 76 (R19)
 ; minF start address is: 12 (R3)
-; maxF start address is: 64 (R16)
-; bB start address is: 76 (R19)
-; gG start address is: 72 (R18)
-; rR start address is: 68 (R17)
-L__TCS3472_CalcHue61:
-;TCS3472.c,328 :: 		}else if(gG >= rR && gG >= bB){//Green = max
-MOVZ	R6, R17, R0
-MOVZ	R4, R18, R0
-JAL	__Compare_FP+0
-NOP	
-SLTI	R2, R2, 0
-XORI	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHue121
-NOP	
-J	L__TCS3472_CalcHue64
-NOP	
-L__TCS3472_CalcHue121:
-MOVZ	R6, R19, R0
-MOVZ	R4, R18, R0
-JAL	__Compare_FP+0
-NOP	
-SLTI	R2, R2, 0
-XORI	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHue124
-NOP	
-J	L__TCS3472_CalcHue63
-NOP	
-L__TCS3472_CalcHue124:
-; gG end address is: 72 (R18)
-L__TCS3472_CalcHue59:
-;TCS3472.c,329 :: 		if(rR == bB)
+; bB start address is: 72 (R18)
+; gG start address is: 68 (R17)
+; rR start address is: 64 (R16)
+L__TCS3472_CalcHue68:
+;TCS3472.c,331 :: 		}else if(gG >= rR && gG >= bB){//Green = max
+MOVZ	R6, R16, R0
 MOVZ	R4, R17, R0
-MOVZ	R6, R19, R0
+JAL	__Compare_FP+0
+NOP	
+SLTI	R2, R2, 0
+XORI	R2, R2, 1
+BNE	R2, R0, L__TCS3472_CalcHue128
+NOP	
+J	L__TCS3472_CalcHue71
+NOP	
+L__TCS3472_CalcHue128:
+MOVZ	R6, R18, R0
+MOVZ	R4, R17, R0
+JAL	__Compare_FP+0
+NOP	
+SLTI	R2, R2, 0
+XORI	R2, R2, 1
+BNE	R2, R0, L__TCS3472_CalcHue131
+NOP	
+J	L__TCS3472_CalcHue70
+NOP	
+L__TCS3472_CalcHue131:
+; gG end address is: 68 (R17)
+L__TCS3472_CalcHue66:
+;TCS3472.c,333 :: 		bB += (rR == bB)? 1.0:0.0;
+MOVZ	R4, R16, R0
+MOVZ	R6, R18, R0
 JAL	__Compare_FP+0
 NOP	
 SLTIU	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHue127
+BNE	R2, R0, L__TCS3472_CalcHue134
 NOP	
-J	L__TCS3472_CalcHue68
+J	L_TCS3472_CalcHue37
 NOP	
-L__TCS3472_CalcHue127:
-;TCS3472.c,330 :: 		bB += 1.0;
-LUI	R4, 16256
-ORI	R4, R4, 0
-MOVZ	R6, R19, R0
+L__TCS3472_CalcHue134:
+; ?FLOC___TCS3472_CalcHue?T227 start address is: 8 (R2)
+LUI	R2, 16256
+ORI	R2, R2, 0
+; ?FLOC___TCS3472_CalcHue?T227 end address is: 8 (R2)
+J	L_TCS3472_CalcHue38
+NOP	
+L_TCS3472_CalcHue37:
+; ?FLOC___TCS3472_CalcHue?T227 start address is: 8 (R2)
+MOVZ	R2, R0, R0
+; ?FLOC___TCS3472_CalcHue?T227 end address is: 8 (R2)
+L_TCS3472_CalcHue38:
+; ?FLOC___TCS3472_CalcHue?T227 start address is: 8 (R2)
+MOVZ	R4, R18, R0
+MOVZ	R6, R2, R0
 JAL	__Add_FP+0
 NOP	
-; bB end address is: 76 (R19)
-; bB start address is: 16 (R4)
-MOVZ	R4, R2, R0
-; bB end address is: 16 (R4)
-MOVZ	R2, R4, R0
-J	L_TCS3472_CalcHue34
-NOP	
-L__TCS3472_CalcHue68:
-;TCS3472.c,329 :: 		if(rR == bB)
-MOVZ	R2, R19, R0
-;TCS3472.c,330 :: 		bB += 1.0;
-L_TCS3472_CalcHue34:
-;TCS3472.c,331 :: 		HUE = (2.0 + ((bB - rR)/(maxF - minF)))*60.0;
-; bB start address is: 8 (R2)
-MOVZ	R6, R17, R0
+; bB end address is: 72 (R18)
+; ?FLOC___TCS3472_CalcHue?T227 end address is: 8 (R2)
+;TCS3472.c,334 :: 		HUE = (2.0 + ((bB - rR)/(maxF - minF)))*60.0;
+MOVZ	R6, R16, R0
 MOVZ	R4, R2, R0
 JAL	__Sub_FP+0
 NOP	
-; rR end address is: 68 (R17)
-; bB end address is: 8 (R2)
+; rR end address is: 64 (R16)
 SW	R2, 16(SP)
 MOVZ	R6, R3, R0
-MOVZ	R4, R16, R0
+MOVZ	R4, R19, R0
 JAL	__Sub_FP+0
 NOP	
-; maxF end address is: 64 (R16)
 ; minF end address is: 12 (R3)
+; maxF end address is: 76 (R19)
 LW	R4, 16(SP)
 MOVZ	R6, R2, R0
 JAL	__Div_FP+0
@@ -1366,86 +1411,84 @@ MOVZ	R6, R2, R0
 JAL	__Mul_FP+0
 NOP	
 SW	R2, 12(SP)
-;TCS3472.c,332 :: 		}else if(bB >= rR && bB >= gG){//Blue = max
-J	L_TCS3472_CalcHue35
+;TCS3472.c,335 :: 		}else if(bB >= rR && bB >= gG){//Blue = max
+J	L_TCS3472_CalcHue39
 NOP	
-;TCS3472.c,328 :: 		}else if(gG >= rR && gG >= bB){//Green = max
-L__TCS3472_CalcHue64:
+;TCS3472.c,331 :: 		}else if(gG >= rR && gG >= bB){//Green = max
+L__TCS3472_CalcHue71:
+; maxF start address is: 76 (R19)
 ; minF start address is: 12 (R3)
-; maxF start address is: 64 (R16)
-; bB start address is: 76 (R19)
-; gG start address is: 72 (R18)
-; rR start address is: 68 (R17)
-L__TCS3472_CalcHue63:
-;TCS3472.c,332 :: 		}else if(bB >= rR && bB >= gG){//Blue = max
+; bB start address is: 72 (R18)
+; gG start address is: 68 (R17)
+; rR start address is: 64 (R16)
+L__TCS3472_CalcHue70:
+;TCS3472.c,335 :: 		}else if(bB >= rR && bB >= gG){//Blue = max
+MOVZ	R6, R16, R0
+MOVZ	R4, R18, R0
+JAL	__Compare_FP+0
+NOP	
+SLTI	R2, R2, 0
+XORI	R2, R2, 1
+BNE	R2, R0, L__TCS3472_CalcHue137
+NOP	
+J	L__TCS3472_CalcHue73
+NOP	
+L__TCS3472_CalcHue137:
 MOVZ	R6, R17, R0
-MOVZ	R4, R19, R0
+MOVZ	R4, R18, R0
 JAL	__Compare_FP+0
 NOP	
 SLTI	R2, R2, 0
 XORI	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHue130
+BNE	R2, R0, L__TCS3472_CalcHue140
 NOP	
-J	L__TCS3472_CalcHue66
+J	L__TCS3472_CalcHue72
 NOP	
-L__TCS3472_CalcHue130:
+L__TCS3472_CalcHue140:
+L__TCS3472_CalcHue65:
+;TCS3472.c,337 :: 		rR += (rR == bB)? 1.0:0.0;
+MOVZ	R4, R16, R0
 MOVZ	R6, R18, R0
-MOVZ	R4, R19, R0
-JAL	__Compare_FP+0
-NOP	
-SLTI	R2, R2, 0
-XORI	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHue133
-NOP	
-J	L__TCS3472_CalcHue65
-NOP	
-L__TCS3472_CalcHue133:
-L__TCS3472_CalcHue58:
-;TCS3472.c,333 :: 		if(rR == bB)
-MOVZ	R4, R17, R0
-MOVZ	R6, R19, R0
 JAL	__Compare_FP+0
 NOP	
 SLTIU	R2, R2, 1
-; bB end address is: 76 (R19)
-BNE	R2, R0, L__TCS3472_CalcHue136
+; bB end address is: 72 (R18)
+BNE	R2, R0, L__TCS3472_CalcHue143
 NOP	
-J	L__TCS3472_CalcHue69
+J	L_TCS3472_CalcHue43
 NOP	
-L__TCS3472_CalcHue136:
-;TCS3472.c,334 :: 		rR += 1.0;
-LUI	R4, 16256
-ORI	R4, R4, 0
-MOVZ	R6, R17, R0
+L__TCS3472_CalcHue143:
+; ?FLOC___TCS3472_CalcHue?T238 start address is: 8 (R2)
+LUI	R2, 16256
+ORI	R2, R2, 0
+; ?FLOC___TCS3472_CalcHue?T238 end address is: 8 (R2)
+J	L_TCS3472_CalcHue44
+NOP	
+L_TCS3472_CalcHue43:
+; ?FLOC___TCS3472_CalcHue?T238 start address is: 8 (R2)
+MOVZ	R2, R0, R0
+; ?FLOC___TCS3472_CalcHue?T238 end address is: 8 (R2)
+L_TCS3472_CalcHue44:
+; ?FLOC___TCS3472_CalcHue?T238 start address is: 8 (R2)
+MOVZ	R4, R16, R0
+MOVZ	R6, R2, R0
 JAL	__Add_FP+0
 NOP	
-; rR end address is: 68 (R17)
-; rR start address is: 16 (R4)
-MOVZ	R4, R2, R0
-; rR end address is: 16 (R4)
-MOVZ	R2, R4, R0
-J	L_TCS3472_CalcHue39
-NOP	
-L__TCS3472_CalcHue69:
-;TCS3472.c,333 :: 		if(rR == bB)
-MOVZ	R2, R17, R0
-;TCS3472.c,334 :: 		rR += 1.0;
-L_TCS3472_CalcHue39:
-;TCS3472.c,335 :: 		HUE = (4.0 + ((rR - gG)/(maxF - minF)))*60.0;
-; rR start address is: 8 (R2)
-MOVZ	R6, R18, R0
+; rR end address is: 64 (R16)
+; ?FLOC___TCS3472_CalcHue?T238 end address is: 8 (R2)
+;TCS3472.c,338 :: 		HUE = (4.0 + ((rR - gG)/(maxF - minF)))*60.0;
+MOVZ	R6, R17, R0
 MOVZ	R4, R2, R0
 JAL	__Sub_FP+0
 NOP	
-; gG end address is: 72 (R18)
-; rR end address is: 8 (R2)
+; gG end address is: 68 (R17)
 SW	R2, 16(SP)
 MOVZ	R6, R3, R0
-MOVZ	R4, R16, R0
+MOVZ	R4, R19, R0
 JAL	__Sub_FP+0
 NOP	
-; maxF end address is: 64 (R16)
 ; minF end address is: 12 (R3)
+; maxF end address is: 76 (R19)
 LW	R4, 16(SP)
 MOVZ	R6, R2, R0
 JAL	__Div_FP+0
@@ -1461,19 +1504,41 @@ MOVZ	R6, R2, R0
 JAL	__Mul_FP+0
 NOP	
 SW	R2, 12(SP)
-;TCS3472.c,332 :: 		}else if(bB >= rR && bB >= gG){//Blue = max
-L__TCS3472_CalcHue66:
-L__TCS3472_CalcHue65:
-;TCS3472.c,336 :: 		}
-L_TCS3472_CalcHue35:
-L_TCS3472_CalcHue30:
-;TCS3472.c,337 :: 		return HUE = 360 - HUE;
+;TCS3472.c,335 :: 		}else if(bB >= rR && bB >= gG){//Blue = max
+L__TCS3472_CalcHue73:
+L__TCS3472_CalcHue72:
+;TCS3472.c,339 :: 		}
+L_TCS3472_CalcHue39:
+L_TCS3472_CalcHue33:
+;TCS3472.c,341 :: 		return HUE += (HUE < 0.0)? 360.0 : 0.0;
 LW	R6, 12(SP)
-LUI	R4, 17332
-ORI	R4, R4, 0
-JAL	__Sub_FP+0
+MOVZ	R4, R0, R0
+JAL	__Compare_FP+0
 NOP	
-;TCS3472.c,338 :: 		}
+SLT	R2, R0, R2
+BNE	R2, R0, L__TCS3472_CalcHue146
+NOP	
+J	L_TCS3472_CalcHue45
+NOP	
+L__TCS3472_CalcHue146:
+; ?FLOC___TCS3472_CalcHue?T246 start address is: 8 (R2)
+LUI	R2, 17332
+ORI	R2, R2, 0
+; ?FLOC___TCS3472_CalcHue?T246 end address is: 8 (R2)
+J	L_TCS3472_CalcHue46
+NOP	
+L_TCS3472_CalcHue45:
+; ?FLOC___TCS3472_CalcHue?T246 start address is: 8 (R2)
+MOVZ	R2, R0, R0
+; ?FLOC___TCS3472_CalcHue?T246 end address is: 8 (R2)
+L_TCS3472_CalcHue46:
+; ?FLOC___TCS3472_CalcHue?T246 start address is: 8 (R2)
+LW	R4, 12(SP)
+MOVZ	R6, R2, R0
+JAL	__Add_FP+0
+NOP	
+; ?FLOC___TCS3472_CalcHue?T246 end address is: 8 (R2)
+;TCS3472.c,342 :: 		}
 L_end_TCS3472_CalcHue:
 LW	RA, 0(SP)
 ADDIU	SP, SP, 20
@@ -1481,31 +1546,31 @@ JR	RA
 NOP	
 ; end of _TCS3472_CalcHue
 _max_:
-;TCS3472.c,340 :: 		float max_(float* rgb){
+;TCS3472.c,344 :: 		float max_(float* rgb){
 ADDIU	SP, SP, -4
 SW	RA, 0(SP)
-;TCS3472.c,341 :: 		float temp1 = 0.0;
-;TCS3472.c,342 :: 		int i = 0;
-;TCS3472.c,343 :: 		temp1 = rgb[0];
+;TCS3472.c,345 :: 		float temp1 = 0.0;
+;TCS3472.c,346 :: 		int i = 0;
+;TCS3472.c,347 :: 		temp1 = rgb[0];
 LW	R2, 0(R25)
 ; temp1 start address is: 40 (R10)
 MOVZ	R10, R2, R0
-;TCS3472.c,344 :: 		for (i=1;i<3;i++){
+;TCS3472.c,348 :: 		for (i=1;i<3;i++){
 ; i start address is: 12 (R3)
 ORI	R3, R0, 1
 ; temp1 end address is: 40 (R10)
 ; i end address is: 12 (R3)
-L_max_40:
+L_max_47:
 ; i start address is: 12 (R3)
 ; temp1 start address is: 40 (R10)
 SEH	R2, R3
 SLTI	R2, R2, 3
-BNE	R2, R0, L__max_138
+BNE	R2, R0, L__max_148
 NOP	
-J	L_max_41
+J	L_max_48
 NOP	
-L__max_138:
-;TCS3472.c,345 :: 		if(rgb[i] > temp1)
+L__max_148:
+;TCS3472.c,349 :: 		if(rgb[i] > temp1)
 SEH	R2, R3
 SLL	R2, R2, 2
 ADDU	R2, R25, R2
@@ -1514,13 +1579,13 @@ MOVZ	R6, R10, R0
 JAL	__Compare_FP+0
 NOP	
 SLT	R2, R0, R2
-BNE	R2, R0, L__max_141
+BNE	R2, R0, L__max_151
 NOP	
-J	L__max_56
+J	L__max_63
 NOP	
-L__max_141:
+L__max_151:
 ; temp1 end address is: 40 (R10)
-;TCS3472.c,346 :: 		temp1 = rgb[i];
+;TCS3472.c,350 :: 		temp1 = rgb[i];
 SEH	R2, R3
 SLL	R2, R2, 2
 ADDU	R2, R25, R2
@@ -1529,25 +1594,25 @@ LW	R2, 0(R2)
 MOVZ	R4, R2, R0
 ; temp1 end address is: 16 (R4)
 MOVZ	R10, R4, R0
-J	L_max_43
+J	L_max_50
 NOP	
-L__max_56:
-;TCS3472.c,345 :: 		if(rgb[i] > temp1)
-;TCS3472.c,346 :: 		temp1 = rgb[i];
-L_max_43:
-;TCS3472.c,344 :: 		for (i=1;i<3;i++){
+L__max_63:
+;TCS3472.c,349 :: 		if(rgb[i] > temp1)
+;TCS3472.c,350 :: 		temp1 = rgb[i];
+L_max_50:
+;TCS3472.c,348 :: 		for (i=1;i<3;i++){
 ; temp1 start address is: 40 (R10)
 ADDIU	R2, R3, 1
 SEH	R3, R2
-;TCS3472.c,347 :: 		}
+;TCS3472.c,351 :: 		}
 ; i end address is: 12 (R3)
-J	L_max_40
+J	L_max_47
 NOP	
-L_max_41:
-;TCS3472.c,348 :: 		return temp1;
+L_max_48:
+;TCS3472.c,352 :: 		return temp1;
 MOVZ	R2, R10, R0
 ; temp1 end address is: 40 (R10)
-;TCS3472.c,349 :: 		}
+;TCS3472.c,353 :: 		}
 L_end_max_:
 LW	RA, 0(SP)
 ADDIU	SP, SP, 4
@@ -1555,31 +1620,31 @@ JR	RA
 NOP	
 ; end of _max_
 _min_:
-;TCS3472.c,351 :: 		float min_(float* rgb){
+;TCS3472.c,355 :: 		float min_(float* rgb){
 ADDIU	SP, SP, -4
 SW	RA, 0(SP)
-;TCS3472.c,352 :: 		float temp1 = 0.0;
-;TCS3472.c,353 :: 		int i = 0;
-;TCS3472.c,354 :: 		temp1 = rgb[0];
+;TCS3472.c,356 :: 		float temp1 = 0.0;
+;TCS3472.c,357 :: 		int i = 0;
+;TCS3472.c,358 :: 		temp1 = rgb[0];
 LW	R2, 0(R25)
 ; temp1 start address is: 40 (R10)
 MOVZ	R10, R2, R0
-;TCS3472.c,355 :: 		for (i=1;i<3;i++){
+;TCS3472.c,359 :: 		for (i=1;i<3;i++){
 ; i start address is: 12 (R3)
 ORI	R3, R0, 1
 ; temp1 end address is: 40 (R10)
 ; i end address is: 12 (R3)
-L_min_44:
+L_min_51:
 ; i start address is: 12 (R3)
 ; temp1 start address is: 40 (R10)
 SEH	R2, R3
 SLTI	R2, R2, 3
-BNE	R2, R0, L__min_143
+BNE	R2, R0, L__min_153
 NOP	
-J	L_min_45
+J	L_min_52
 NOP	
-L__min_143:
-;TCS3472.c,356 :: 		if(rgb[i] < temp1)
+L__min_153:
+;TCS3472.c,360 :: 		if(rgb[i] < temp1)
 SEH	R2, R3
 SLL	R2, R2, 2
 ADDU	R2, R25, R2
@@ -1588,13 +1653,13 @@ MOVZ	R6, R10, R0
 JAL	__Compare_FP+0
 NOP	
 SLTI	R2, R2, 0
-BNE	R2, R0, L__min_146
+BNE	R2, R0, L__min_156
 NOP	
-J	L__min_57
+J	L__min_64
 NOP	
-L__min_146:
+L__min_156:
 ; temp1 end address is: 40 (R10)
-;TCS3472.c,357 :: 		temp1 = rgb[i];
+;TCS3472.c,361 :: 		temp1 = rgb[i];
 SEH	R2, R3
 SLL	R2, R2, 2
 ADDU	R2, R25, R2
@@ -1603,25 +1668,25 @@ LW	R2, 0(R2)
 MOVZ	R4, R2, R0
 ; temp1 end address is: 16 (R4)
 MOVZ	R10, R4, R0
-J	L_min_47
+J	L_min_54
 NOP	
-L__min_57:
-;TCS3472.c,356 :: 		if(rgb[i] < temp1)
-;TCS3472.c,357 :: 		temp1 = rgb[i];
-L_min_47:
-;TCS3472.c,355 :: 		for (i=1;i<3;i++){
+L__min_64:
+;TCS3472.c,360 :: 		if(rgb[i] < temp1)
+;TCS3472.c,361 :: 		temp1 = rgb[i];
+L_min_54:
+;TCS3472.c,359 :: 		for (i=1;i<3;i++){
 ; temp1 start address is: 40 (R10)
 ADDIU	R2, R3, 1
 SEH	R3, R2
-;TCS3472.c,358 :: 		}
+;TCS3472.c,362 :: 		}
 ; i end address is: 12 (R3)
-J	L_min_44
+J	L_min_51
 NOP	
-L_min_45:
-;TCS3472.c,359 :: 		return temp1;
+L_min_52:
+;TCS3472.c,363 :: 		return temp1;
 MOVZ	R2, R10, R0
 ; temp1 end address is: 40 (R10)
-;TCS3472.c,360 :: 		}
+;TCS3472.c,364 :: 		}
 L_end_min_:
 LW	RA, 0(SP)
 ADDIU	SP, SP, 4
