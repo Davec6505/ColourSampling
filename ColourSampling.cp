@@ -101,6 +101,7 @@ extern TCS3472_Error device_Error;
 
 
 extern unsigned int RawData[4];
+extern float FltData[4];
 extern unsigned int CCT;
 
 
@@ -345,9 +346,10 @@ char* ReadMSG(int msg_num);
 void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
 int Test_Update_ThingSpeak();
-void SendData(unsigned int* rgbc);
+void SendData(unsigned int* rgbc,float* rgbh);
 char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
+int SignalStrength();
 #line 20 "c:/users/git/coloursampling/_timers.h"
 typedef struct{
 unsigned long millis;
@@ -367,7 +369,8 @@ unsigned int sec;
 unsigned int min;
 unsigned int hr;
 unsigned int lastMin;
-unsigned short one_per_sec;
+unsigned short one_per_sec : 1;
+unsigned short one_per_Xmin : 1;
 }Timer_Setpoint;
 
 extern Timer_Setpoint T0_SP;
@@ -430,12 +433,15 @@ char sub_txt[] = "\"+44";
 
 
 void main() {
-unsigned char cel_num[20];
-char num;
+char cel_num[20];
+char num,last_rec_inc;
 unsigned short i;
 unsigned int cell_ok,str_num,deg;
+int resA=0, resB=0, diff = 0;
+
 char txtR[6],txtH[6],txtT[6],txtI[6];
-int resA=0, resB=0, diff = 0;;
+
+
 
  Update_Test = Test_Update_ThingSpeak;
 
@@ -462,7 +468,7 @@ int resA=0, resB=0, diff = 0;;
  T0_SP.sec = 0;
  T0_SP.min = 0;
  T0_SP.hr = 0;
-#line 67 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 70 "C:/Users/Git/ColourSampling/ColourSampling.c"
  strcpy(cel_num,GetValuesFromFlash());
  str_num = strncmp(cel_num,sub_txt,4);
 
@@ -486,17 +492,24 @@ int resA=0, resB=0, diff = 0;;
  SimVars.init_inc = 3;
  cell_ok = 1;
  }
-#line 94 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 97 "C:/Users/Git/ColourSampling/ColourSampling.c"
  if(cell_ok == 1){
  Read_Thresholds();
  Delay_ms(3000);
  SendSMS(4,1);
+ SimVars.init_inc = 3;
  }
 
+
+ sprintf(txtR,"%d",SimVars.init_inc);
  PrintOut(PrintHandler, "\r\n"
- " *Run");
+ " *Run      \r\n"
+ " *Initial Incrament:= %s\r\n"
+ ,txtR);
+
+ T0_SP.one_per_Xmin = 0;
  resA = resB = 0;
-#line 106 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 116 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
 
 
@@ -507,10 +520,10 @@ int resA=0, resB=0, diff = 0;;
 
 
  if(SimVars.init_inc >= 5){
- if(T0_SP.one_per_sec){
+ if(T0_SP.one_per_Xmin){
  Update_Test();
  T0_SP.sec = T0_SP.min = T0_SP.hr = 0;
- T0_SP.one_per_sec = 0;
+ T0_SP.one_per_Xmin = 0;
  }
  }
 
@@ -518,6 +531,7 @@ int resA=0, resB=0, diff = 0;;
  if(!T0_SP.one_per_sec){
  diff = TestRingPointers();
  if(diff > 1){
+ last_rec_inc = SimVars.init_inc;
  SimVars.init_inc = 3;
 
  sprintf(txtI,"%d",resB);
@@ -531,10 +545,12 @@ int resA=0, resB=0, diff = 0;;
  " *Reply from GetSmsTxt():= %s\r\n"
  ,txtT,txtH,txtR,txtI);
 
- resB = GetSMSText();
+ GetSMSText();
  Delay_ms(500);
+ if(SimVars.init_inc != 5)
+ SimVars.init_inc = last_rec_inc;
  }
- SimVars.init_inc = 5;
+
  }
 
 
@@ -543,7 +559,9 @@ int resA=0, resB=0, diff = 0;;
  if(!RE4_bit){
  GetValuesFromFlash();
  TCS3472_getRawData(RawData);
- SendData(RawData);
+ GetScaledValues(RawData,&FltData);
+ FltData[3] = TCS3472_CalcHue(&FltData);
+ SendData(RawData,FltData);
  }
  }
 }

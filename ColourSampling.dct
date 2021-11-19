@@ -16616,6 +16616,7 @@ on__u1mode_bit
 on__u2mode_bit
 on_bit
 one_per_sec
+one_per_xmin
 osccon
 oscconbits
 oscconclr
@@ -19152,6 +19153,7 @@ sidl_t4con_bit
 sidl_t5con_bit
 sidl_u1mode_bit
 sidl_u2mode_bit
+signalstrength
 sim800_uart2
 sim800text
 simcelnum

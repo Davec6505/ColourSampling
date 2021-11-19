@@ -119,6 +119,7 @@ extern TCS3472_Error device_Error;
 ////////////////////////////////////////////////////////
 //Vars and Consts
 extern unsigned int RawData[4];
+extern float FltData[4];
 extern unsigned int CCT;
 
 

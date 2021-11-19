@@ -35,7 +35,8 @@ unsigned int sec;
 unsigned int min;
 unsigned int hr;
 unsigned int lastMin;
-unsigned short one_per_sec;
+unsigned short one_per_sec  : 1;
+unsigned short one_per_Xmin : 1;
 }Timer_Setpoint;
 
 extern  Timer_Setpoint T0_SP;

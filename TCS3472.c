@@ -1,6 +1,7 @@
 #include "TCS3472.h"
 
 unsigned int RawData[4];
+float FltData[4];//c,r,g,b;
 unsigned int CCT;
 
 TCS3472_IntegrationTime_t it;
@@ -309,9 +310,9 @@ float rR,gG,bB,min_,max_;
 float HUE;
 float minF,maxF;
 /****************************************************
-*  if R = max  => Hue = (G-B)/(max-min)
-*  if G = max  => HUE = 2 + ((B-R)/9MAX-MIN))
-*  if B = max  => HUE = 4 + ((R-G)/(max-min))
+*  if R = max  => Hue = ((G-B)/(max-min))*60
+*  if G = max  => HUE = 2 + (((B-R)/MAX-MIN)))*60
+*  if B = max  => HUE = 4 + (((R-G)/(max-min)))*60
 ****************************************************/
 
    rR = rgb[0];

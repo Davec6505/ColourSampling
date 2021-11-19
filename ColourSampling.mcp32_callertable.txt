@@ -317,7 +317,12 @@ main
 		TCS3472_SetIntergration_Time
 		TCS3472_SetGain
 		SendData
+			Malloc
+			memset
 			sprintf
+			strncpy
+			strncat
+			strlen
 			UART2_Write_Text
 			UART2_Write
 			TestForOK
@@ -329,11 +334,7 @@ main
 					strncmp
 					strchr
 				__CC2DW
-			UART1_Write_Text
-			UART1_Write
-			strncpy
-			strncat
-			strlen
+			Free
 			__CC2DW
 		Read_Send_AllColour
 		Read_Send_OneColour
@@ -447,11 +448,15 @@ main
 		__CC2DW
 	NVMErasePage
 	TCS3472_getRawData
+	GetScaledValues
+	TCS3472_CalcHue
 	SendData
 	__CC2DW
 	__FillZeros
 	Test_Update_ThingSpeak
 		TCS3472_getRawData
+		GetScaledValues
+		TCS3472_CalcHue
 		SendData
 PC_Uart1
 	UART1_Data_Ready

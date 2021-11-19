@@ -100,6 +100,7 @@ extern TCS3472_Error device_Error;
 
 
 extern unsigned int RawData[4];
+extern float FltData[4];
 extern unsigned int CCT;
 
 
@@ -129,6 +130,7 @@ float max_(float *rgb);
 float min_(float *rgb);
 #line 3 "C:/Users/Git/ColourSampling/TCS3472.c"
 unsigned int RawData[4];
+float FltData[4];
 unsigned int CCT;
 
 TCS3472_IntegrationTime_t it;
@@ -259,7 +261,7 @@ unsigned int TCS3472_CalcColTemp(unsigned int r,unsigned int g,unsigned int b){
  if (r == 0 && g == 0 && b == 0) {
  return 0;
  }
-#line 145 "C:/Users/Git/ColourSampling/TCS3472.c"
+#line 146 "C:/Users/Git/ColourSampling/TCS3472.c"
  X = (-0.3895 * r) + (1.4933 * g) + (-0.0491 * b);
  Y = (-0.1212 * r) + (0.8890 * g) + (-0.1231 * b);
  Z = ( 0.0343 * r) + (-0.2657 * g) + (0.9438 * b);
@@ -288,7 +290,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime
  if (RGBC[0] == 0) {
  return 0;
  }
-#line 186 "C:/Users/Git/ColourSampling/TCS3472.c"
+#line 187 "C:/Users/Git/ColourSampling/TCS3472.c"
  if ((256 - It) > 63) {
 
  sat = 65535;
@@ -296,7 +298,7 @@ unsigned int TCS3472_CalcColTemp_dn40(unsigned int *RGBC,TCS3472_IntegrationTime
 
  sat = 1024 * (256 - It);
  }
-#line 211 "C:/Users/Git/ColourSampling/TCS3472.c"
+#line 212 "C:/Users/Git/ColourSampling/TCS3472.c"
  if ((256 - It) <= 63) {
 
  sat -= sat / 4;
@@ -397,7 +399,7 @@ float TCS3472_CalcHue(float* rgb){
 float rR,gG,bB,min_,max_;
 float HUE;
 float minF,maxF;
-#line 317 "C:/Users/Git/ColourSampling/TCS3472.c"
+#line 318 "C:/Users/Git/ColourSampling/TCS3472.c"
  rR = rgb[0];
  gG = rgb[1];
  bB = rgb[2];

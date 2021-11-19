@@ -26,12 +26,15 @@ char sub_txt[] = "\"+44";
 
 //program
 void main() {
-unsigned char cel_num[20];
-char num;
+char cel_num[20];
+char num,last_rec_inc;
 unsigned short i;
 unsigned int cell_ok,str_num,deg;
+int resA=0, resB=0, diff = 0;
+#ifdef MainDebug
 char txtR[6],txtH[6],txtT[6],txtI[6];
-int resA=0, resB=0, diff = 0;;
+#endif
+
 
    Update_Test = Test_Update_ThingSpeak;
 
@@ -95,10 +98,17 @@ int resA=0, resB=0, diff = 0;;
        Read_Thresholds();
        Delay_ms(3000);
        SendSMS(4,1);
+       SimVars.init_inc = 3;
    }
    
-   PrintOut(PrintHandler, "\r\n"
-                           " *Run");
+#ifdef MainDebug
+         sprintf(txtR,"%d",SimVars.init_inc);
+         PrintOut(PrintHandler, "\r\n"
+                                " *Run      \r\n"
+                                " *Initial Incrament:= %s\r\n"
+                                ,txtR);
+#endif
+   T0_SP.one_per_Xmin = 0;
    resA = resB = 0;
 /***************************************************
 * main loop forever!!
@@ -113,10 +123,10 @@ int resA=0, resB=0, diff = 0;;
      
      //Update Thingspeak
      if(SimVars.init_inc >= 5){
-       if(T0_SP.one_per_sec){
+       if(T0_SP.one_per_Xmin){
          Update_Test();
          T0_SP.sec = T0_SP.min = T0_SP.hr = 0; //start timming again
-         T0_SP.one_per_sec = 0;
+         T0_SP.one_per_Xmin = 0;
        }
      }
      
@@ -124,6 +134,7 @@ int resA=0, resB=0, diff = 0;;
      if(!T0_SP.one_per_sec){
        diff = TestRingPointers();
        if(diff > 1){
+         last_rec_inc = SimVars.init_inc;
          SimVars.init_inc = 3;
 #ifdef MainDebug
          sprintf(txtI,"%d",resB);
@@ -137,10 +148,12 @@ int resA=0, resB=0, diff = 0;;
                                 " *Reply from GetSmsTxt():= %s\r\n"
                                 ,txtT,txtH,txtR,txtI);
 #endif
-          resB = GetSMSText();
+         GetSMSText();
          Delay_ms(500);
+         if(SimVars.init_inc != 5)
+             SimVars.init_inc = last_rec_inc;
        }
-       SimVars.init_inc = 5;
+
      }
 
 
@@ -149,7 +162,9 @@ int resA=0, resB=0, diff = 0;;
      if(!RE4_bit){
         GetValuesFromFlash();
         TCS3472_getRawData(RawData);
-        SendData(RawData);
+        GetScaledValues(RawData,&FltData);
+        FltData[3] = TCS3472_CalcHue(&FltData);
+        SendData(RawData,FltData);
      }
    }
 }

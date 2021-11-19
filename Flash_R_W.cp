@@ -104,6 +104,7 @@ extern TCS3472_Error device_Error;
 
 
 extern unsigned int RawData[4];
+extern float FltData[4];
 extern unsigned int CCT;
 
 
@@ -184,7 +185,8 @@ unsigned int sec;
 unsigned int min;
 unsigned int hr;
 unsigned int lastMin;
-unsigned short one_per_sec;
+unsigned short one_per_sec : 1;
+unsigned short one_per_Xmin : 1;
 }Timer_Setpoint;
 
 extern Timer_Setpoint T0_SP;
@@ -286,9 +288,10 @@ char* ReadMSG(int msg_num);
 void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
 int Test_Update_ThingSpeak();
-void SendData(unsigned int* rgbc);
+void SendData(unsigned int* rgbc,float* rgbh);
 char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
+int SignalStrength();
 #line 19 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 

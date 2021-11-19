@@ -113,6 +113,7 @@ void PwrUpGSM3(){
     LATE3_bit = !LATE3_bit;
      Delay_ms(100);
  }
+ LATE3_bit = 0;
  Delay_ms(5000);
 }
 
@@ -255,7 +256,7 @@ char txt;
           RB.head++;
        }
        if(RB.head > 999){
-           RB.head = 0;             //rest head when buffer is full
+           RB.head = 0;             //reset head when buffer is full
        }
     }
     RB.rcv_txt_fin = 1;
@@ -303,6 +304,7 @@ unsigned long lastMillis,newMillis;
       if(newMillis > 59000)
            break;
    }while(!RB.rcv_txt_fin);
+   LATE3_bit = 0;
 }
 
 /******************************************************
@@ -313,7 +315,7 @@ int i;
     i=0;
     RB.tail = RB.last_tail;
    // if(RB.head > RB.last_head){
-      while(RB.tail != RB.head){
+      while(RB.tail < RB.head){
          SimTestTxt[i] = RB.buff[RB.tail];
 #ifdef RingBuffDeBug
          UART1_Write(SimTestTxt[i]);
@@ -614,8 +616,10 @@ static short onecA;
 int res;
 char b[64];
 char tempCellNum[20];
-char *str;
-     str = (char*)Malloc(100*sizeof(char*));
+char *str_;
+
+     str_ = (char*)Malloc(100*sizeof(char*));
+     
      if(!cellNum)
         strcpy(tempCellNum,string[1]);
      else
@@ -655,18 +659,18 @@ char *str;
              UART2_Write_Text("SMS Not recieved!");
              break;
       case 6: //read the set points
-             str = Read_Thresholds();
-             strncpy(b,str,strlen(str)-4);
+             str_ = Read_Thresholds();
+             strncpy(b,str_,strlen(str_)-4);
              UART2_Write_Text(b);
              break;
       case 7: //read raw values
-             str = Read_Send_AllColour(0);
-             strncpy(b,str,strlen(str));
+             str_ = Read_Send_AllColour(0);
+             strncpy(b,str_,strlen(str_));
              UART2_Write_Text(b);
              break;
       case 8: //read scaled values
-             str = Read_Send_AllColour(1);
-             strncpy(b,str,strlen(str));
+             str_ = Read_Send_AllColour(1);
+             strncpy(b,str_,strlen(str_));
              UART2_Write_Text(b);
              break;
       case 9:
@@ -682,17 +686,19 @@ char *str;
              UART2_Write_Text("Not a recognised command!");
              break;
       case 13:
-             UART2_Write_Text("You cannot stop this test contact the owner of this test!");
+             UART2_Write_Text("You are not permitted to stop this test contact ");
+             UART2_Write_Text(SF.StartCell);
              break;
       case 14:
-             UART2_Write_Text("Test already started contact owner of this test!");
+             UART2_Write_Text("Test already started contact ");
+             UART2_Write_Text(SF.StartCell);
              break;
       case 15:
              UART2_Write_Text("Test has not been started!");
              break;
       case 16: //read scaled values
-             str = ReadHUE();
-             strncpy(b,str,strlen(str));
+             str_ = ReadHUE();
+             strncpy(b,str_,strlen(str_));
              UART2_Write_Text(b);
              break;
       default:
@@ -704,7 +710,7 @@ char *str;
     UART2_Write(0x1A);
     Delay_ms(5000);
     
-    Free(str,100*sizeof(char*));
+    Free(str_,100*sizeof(char*));
 
 }
 
@@ -712,7 +718,6 @@ char *str;
 *Get SMS if recieved during run
 ***********************************************************************/
 char* GetSMSText(){
-
 int num_strs,res,err;
     UART1_Write_Text("=================\r\n");
     RingToTempBuf();
@@ -756,7 +761,7 @@ int num_strs,res,err;
                                " *no of sms's:= %s\r\n"
                                ,sms);
 #endif
-         ReadMSG(res);
+        ReadMSG(res);
        }else{
          SendSMS(5,0);
          res = 1;
@@ -837,12 +842,27 @@ char *text;
           res = StrChecker(string[6]);
 
           //if configuration msg and not primary cell no return
-          if(res == 16){   //write_raw
+          if(res == 6){         //Reada_Scl
+             goto next;
+          }
+          else if(res == 10){         //Readc
+             goto next;
+          }
+          else if(res == 11){         //Readt
+             goto next;
+          }
+          else if(res == 13){         //Reada_Scl
+             goto next;
+          }
+          else if(res == 14){         //Reada_thv
+             goto next;
+          }
+          else if(res == 16){   //write_raw
              if((res == 16) && (strncmp(string[1],SF.SimCelNum,15))){
                 SendSMS(11,0);
                 return 11;
              }
-          }else if(res == 17){ //start
+          }else if(res == 17){  //start
              if(res == 17 && !SimVars.start){
                    strncpy(SF.StartCell,string[1],15);
                    SimVars.start = 1;
@@ -851,7 +871,7 @@ char *text;
                    return 14;
              }else
                 goto next;
-          }else if(res == 18){ //cancel
+          }else if(res == 18){   //cancel
              if((SimVars.start)&&
                (!strncmp(string[1],SF.StartCell,15)||
                 !strncmp(string[1],SF.SimCelNum,15))){
@@ -863,17 +883,17 @@ char *text;
                              " *string[1]:=      %s\r\n"
                              ,SF.StartCell,string[1]);
  #endif
-                    goto next; //if cell matches allow to CANCEL
+                    goto next;   //if cell matches allow to CANCEL
              }else{
                if(!SimVars.start){
-                 SendSMS(15,0);
+                 SendSMS(15,0);  //test has not been started
                  return 15;
                }else{
-                 SendSMS(13,0);
+                 SendSMS(13,0);  //not a recognized command
                  return 13;
                }
              }
-          }else if(res == 19){//HUE
+          }else if(res == 19){   //HUE
               goto next;
           }else
              SendSMS(12,0);
@@ -997,64 +1017,59 @@ int RemoveSMSText(int sms_cnt){
 int Test_Update_ThingSpeak(){
 
        TCS3472_getRawData(RawData);
-       SendData(RawData);
+       GetScaledValues(RawData,FltData);
+       FltData[3] = TCS3472_CalcHue(FltData);
+       SendData(RawData,FltData);
        return 2;
 }
 
 /****************************************************
 *Send the data to thingspeak
 ****************************************************/
-void SendData(unsigned int* rgbc){
+void SendData(unsigned int* rgbc,float* rgbh){
 int len;
-char str[200];
+char *_str_;
  
-
+    _str_ = (char*)Malloc(200*sizeof(char));
+    memset(_str_,0,sizeof(_str_));
     //get the colour valuse prior to sending to ThingSpek
     sprintf(txtC,"%u",rgbc[0]);
     sprintf(txtR,"%u",rgbc[1]);
     sprintf(txtG,"%u",rgbc[2]);
     sprintf(txtB,"%u",rgbc[3]);
+    sprintf(txtR_Scl,"%3.2f",rgbh[0]);
+    sprintf(txtG_Scl,"%3.2f",rgbh[1]);
+    sprintf(txtB_Scl,"%3.2f",rgbh[2]);
+    sprintf(txtHUE  ,"%3.2f",rgbh[3]);
     
-    
-    UART2_Write_Text("AT+CIPSHUT");
-    UART2_Write(0x0D);
-    UART2_Write(0x0A);
-    TestForOK(0);
+
+    //Raw Values
+    strncpy(_str_,str_api,46);//strlen(str_api));
+    strncat(_str_,SF.WriteAPIKey,strlen(SF.WriteAPIKey));
+    strncat(_str_,field1,strlen(field1));
+    strncat(_str_,txtC,strlen(txtC));
+    strncat(_str_,field2,strlen(field2));
+    strncat(_str_,txtR,strlen(txtR));
+    strncat(_str_,field3,strlen(field3));
+    strncat(_str_,txtG,strlen(txtG));
+    strncat(_str_,field4,strlen(field4));
+    strncat(_str_,txtB,strlen(txtB));
+    //scaled and HUE Values
+    strncat(_str_,field5,strlen(field5));
+    strncat(_str_,txtR_Scl,strlen(txtR_Scl));
+    strncat(_str_,field6,strlen(field6));
+    strncat(_str_,txtG_Scl,strlen(txtG_Scl));
+    strncat(_str_,field7,strlen(field7));
+    strncat(_str_,txtB_Scl,strlen(txtB_Scl));
+    strncat(_str_,field8,strlen(field8));
+    strncat(_str_,txtHUE,strlen(txtHUE));
+
+#ifdef ThingDebug
+    PrintOut(PrintHandler, "String for ThingSpeak: \r\n"
+                           " *    %s\r\n"
+                           ,_str);
+#endif
     Delay_ms(500);
-    
- #ifdef ThingDebug
-    UART1_Write_Text("Prepare str for thingspeak");
-    UART1_Write(0x0A);
-    UART1_Write(0x0D);
- #endif
-    //build string
-    strncpy(str,str_api,46);//strlen(str_api));
-    strncat(str,SF.WriteAPIKey,strlen(SF.WriteAPIKey));
-    strncat(str,field1,strlen(field1));
-    strncat(str,txtC,strlen(txtC));
-    strncat(str,field2,strlen(field2));
-    strncat(str,txtR,strlen(txtR));
-    strncat(str,field3,strlen(field3));
-    strncat(str,txtG,strlen(txtG));
-    strncat(str,field4,strlen(field4));
-    strncat(str,txtB,strlen(txtB));
-    
- /*
-    strncat(str,field5,strlen(field5));
-    strncat(str,txtR_Scl,strlen(txtR_Scl));
-    strncat(str,field6,strlen(field6));
-    strncat(str,txtG_Scl,strlen(txtG_Scl));
-    strncat(str,field7,strlen(field7));
-    strncat(str,txtB_Scl,strlen(txtB_Scl));
-    strncat(str,field8,strlen(field8));
-    strncat(str,txtHUE,strlen(txtHUE));
- */
-    
- #ifdef ThingDebug
-    UART1_Write_Text(str);
-    UART1_Write(0x0A);
-    UART1_Write(0x0D);
- #endif
     //start the send sequence
     UART2_Write_Text("AT+CPIN?");
     UART2_Write(0x0D);
@@ -1116,7 +1131,7 @@ char str[200];
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     Delay_ms(1000);
-    UART2_Write_Text(str);
+    UART2_Write_Text(_str_);
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     UART2_Write(0x0D);
@@ -1130,6 +1145,20 @@ char str[200];
     TestForOK(0);
     Delay_ms(50);
     
+    Free(_str_,200*sizeof(char));
+}
+
+/**************************************************************
+* Get the signal strength to display on PWM output
+**************************************************************/
+int  SignalStrength(){
+
+    UART2_Write_Text("AT+CPIN?");
+    UART2_Write(0x0D);
+    UART2_Write(0x0A);
+    TestForOK(0);
+    Delay_ms(50);
+
 }
 
 /**************************************************************

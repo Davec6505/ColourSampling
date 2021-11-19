@@ -55,7 +55,7 @@ int res,minsPassed;
        }
        
        if(T0_SP.min > Threshold.time_to_log ){
-             T0_SP.one_per_sec = 1;
+             T0_SP.one_per_Xmin = 1;
        }
        
        //every second
@@ -102,6 +102,7 @@ int i;
           LATE3_bit = !LATE3_bit;
           Delay_ms(100);
      }
+      LATE3_bit = 0;
    }
 
    if (errorCode == _I2C_TIMEOUT_WR) {
@@ -110,6 +111,7 @@ int i;
           LATE3_bit = !LATE3_bit;
           Delay_ms(500);
      }
+       LATE3_bit = 0;
    }
 
    if (errorCode == _I2C_TIMEOUT_STOP) {

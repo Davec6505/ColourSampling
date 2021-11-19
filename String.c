@@ -6,8 +6,6 @@ struct Constants str_vars;
 struct Thresh Threshold;
 char string[size][str_size];
 
-float FltData[3];//c,r,g,b;
-
 const code char *comc[13]={
    "T",
    "G"
@@ -107,7 +105,7 @@ char *str,err,i;
              LATE3_bit = 0;
              break;
         case SENDA :
-             SendData(RawData);
+             SendData(RawData,FltData);
              break;
         case READA :
              str = Read_Send_AllColour(0);

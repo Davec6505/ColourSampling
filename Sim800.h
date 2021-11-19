@@ -21,7 +21,7 @@ extern sfr sbit STAT;
 //#define SimDebug
 #define SimConfDebug
 #define SMSDebug
-#define ThingDebug
+//#define ThingDebug
 //#define RingBuffDeBug
 //////////////////////////////////////////////////////
 //constants and vars
@@ -98,7 +98,8 @@ char* ReadMSG(int msg_num);
 void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
 int Test_Update_ThingSpeak();
-void SendData(unsigned int* rgbc);
+void SendData(unsigned int* rgbc,float* rgbh);
 char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
+int  SignalStrength();
 #endif
