@@ -1028,9 +1028,9 @@ int Test_Update_ThingSpeak(){
 ****************************************************/
 void SendData(unsigned int* rgbc,float* rgbh){
 int len;
-char *_str_;
+char _str_[200];
  
-    _str_ = (char*)Malloc(200*sizeof(char));
+   // _str_ = (char*)Malloc(200*sizeof(char));
     memset(_str_,0,sizeof(_str_));
     //get the colour valuse prior to sending to ThingSpek
     sprintf(txtC,"%u",rgbc[0]);
@@ -1067,40 +1067,44 @@ char *_str_;
 #ifdef ThingDebug
     PrintOut(PrintHandler, "String for ThingSpeak: \r\n"
                            " *    %s\r\n"
-                           ,_str);
+                           ,_str_);
 #endif
+    UART2_Write_Text("AT+CIPSHUT");
+    UART2_Write(0x0D);
+    UART2_Write(0x0A);
+    TestForOK(0);
     Delay_ms(500);
     //start the send sequence
     UART2_Write_Text("AT+CPIN?");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     TestForOK(0);
-    Delay_ms(50);
+    Delay_ms(150);
     UART2_Write_Text("AT+CREG?");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     TestForOK(0);
-    Delay_ms(50);
+    Delay_ms(150);
     UART2_Write_Text("AT+CGATT?");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     TestForOK(0);
-    Delay_ms(50);
+    Delay_ms(150);
     UART2_Write_Text("AT+CIPSHUT");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     TestForOK(0);
-    Delay_ms(50);
+    Delay_ms(150);
     UART2_Write_Text("AT+CIPSTATUS");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     TestForOK(0);
-    Delay_ms(50);
+    Delay_ms(150);
     UART2_Write_Text("AT+CIPMUX=0");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     TestForOK(0);
-    Delay_ms(50);
+    Delay_ms(150);
     UART2_Write_Text("AT+CSTT=");//\"data.uk\",\"user\",\"one2one\"");
     UART2_Write_Text(SF.APN);
     UART2_Write_Text(",\"user\",");
@@ -1108,11 +1112,12 @@ char *_str_;
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     TestForOK(0);
-    Delay_ms(50);
+    Delay_ms(150);
     UART2_Write_Text("AT+CIICR");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     TestForOK(0);
+    Delay_ms(150);
     UART2_Write_Text("AT+CIFSR");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
@@ -1121,7 +1126,7 @@ char *_str_;
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     TestForOK(0);
-    Delay_ms(50);
+    Delay_ms(150);
     UART2_Write_Text("AT+CIPSTART=\"TCP\",\"api.thingspeak.com\",80");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
@@ -1145,7 +1150,7 @@ char *_str_;
     TestForOK(0);
     Delay_ms(50);
     
-    Free(_str_,200*sizeof(char));
+  //  Free(_str_,200*sizeof(char));
 }
 
 /**************************************************************

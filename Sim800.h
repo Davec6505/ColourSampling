@@ -21,7 +21,7 @@ extern sfr sbit STAT;
 //#define SimDebug
 #define SimConfDebug
 #define SMSDebug
-//#define ThingDebug
+#define ThingDebug
 //#define RingBuffDeBug
 //////////////////////////////////////////////////////
 //constants and vars

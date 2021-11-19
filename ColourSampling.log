@@ -116,8 +116,8 @@ warning: 1062	1505	Suspicious pointer conversion	Sim800.c
 warning: 1064	1505	Suspicious pointer conversion	Sim800.c
 warning: 1064	1505	Suspicious pointer conversion	Sim800.c
 hint: 1030	1163	Variable 'len' has been declared, but not used	Sim800.c
-warning: 1162	1503	Result is not defined in function: 'SignalStrength'	Sim800.c
-diagnostics: 1191	123	Compiled Successfully	Sim800.c
+warning: 1167	1503	Result is not defined in function: 'SignalStrength'	Sim800.c
+diagnostics: 1196	123	Compiled Successfully	Sim800.c
 hint: 283	1164	Variable 'newMillis' has been eliminated by optimizer	Sim800.c
 hint: 339	1164	Variable 'num_strs' has been eliminated by optimizer	Sim800.c
 hint: 340	1164	Variable 'str_rcv' has been eliminated by optimizer	Sim800.c
@@ -125,14 +125,14 @@ hint: 584	1164	Variable 'response' has been eliminated by optimizer	Sim800.c
 hint: 753	1164	Variable 'is_digit' has been eliminated by optimizer	Sim800.c
 hint: 781	1164	Variable 'text' has been eliminated by optimizer	Sim800.c
 hint: 910	1164	Variable 't' has been eliminated by optimizer	Sim800.c
-hint: 1169	1164	Variable 'newMillis' has been eliminated by optimizer	Sim800.c
-diagnostics: 0	127	All files Compiled in 1141 ms	 
+hint: 1174	1164	Variable 'newMillis' has been eliminated by optimizer	Sim800.c
+diagnostics: 0	127	All files Compiled in 2171 ms	 
 hint: 0	1144	Used RX: 32 (100%)   Free RX: 0 (0%)	Used RX: 32 (100%)   Free RX: 0 (0%)
 hint: 0	1144	Static RAM (bytes): 4830   Dynamic RAM (bytes): 21933	Static RAM (bytes): 4830   Dynamic RAM (bytes): 21933
 hint: 0	1144	HEAP RAM (bytes): 6000	HEAP RAM (bytes): 6000
-hint: 0	1144	Used ROM (bytes): 72711 (14%)  Free ROM (bytes): 451577 (86%)	Used ROM (bytes): 72711 (14%)  Free ROM (bytes): 451577 (86%)
+hint: 0	1144	Used ROM (bytes): 72898 (14%)  Free ROM (bytes): 451390 (86%)	Used ROM (bytes): 72898 (14%)  Free ROM (bytes): 451390 (86%)
 hint: 0	1144	Used BOOTROM (bytes): 1912 (16%)  Free BOOTROM (bytes): 10361 (84%)	Used BOOTROM (bytes): 1912 (16%)  Free BOOTROM (bytes): 10361 (84%)
 diagnostics: 0	125	Project Linked Successfully	ColourSampling.mcp32
-diagnostics: 0	128	Linked in 218 ms	 
-diagnostics: 0	129	Project 'ColourSampling.mcp32' completed: 1937 ms	 
-diagnostics: 0	103	Finished successfully: 19 Nov 2021, 22:37:41	ColourSampling.mcp32
+diagnostics: 0	128	Linked in 657 ms	 
+diagnostics: 0	129	Project 'ColourSampling.mcp32' completed: 3719 ms	 
+diagnostics: 0	103	Finished successfully: 19 Nov 2021, 23:11:36	ColourSampling.mcp32

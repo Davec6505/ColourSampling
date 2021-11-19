@@ -317,12 +317,12 @@ main
 		TCS3472_SetIntergration_Time
 		TCS3472_SetGain
 		SendData
-			Malloc
 			memset
 			sprintf
 			strncpy
 			strncat
 			strlen
+			PrintOut
 			UART2_Write_Text
 			UART2_Write
 			TestForOK
@@ -334,7 +334,6 @@ main
 					strncmp
 					strchr
 				__CC2DW
-			Free
 			__CC2DW
 		Read_Send_AllColour
 		Read_Send_OneColour

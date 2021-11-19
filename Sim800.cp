@@ -1310,9 +1310,9 @@ int Test_Update_ThingSpeak(){
 #line 1029 "C:/Users/Git/ColourSampling/Sim800.c"
 void SendData(unsigned int* rgbc,float* rgbh){
 int len;
-char *_str_;
+char _str_[200];
 
- _str_ = (char*)Malloc(200*sizeof(char));
+
  memset(_str_,0,sizeof(_str_));
 
  sprintf(txtC,"%u",rgbc[0]);
@@ -1345,39 +1345,48 @@ char *_str_;
  strncat(_str_,txtB_Scl,strlen(txtB_Scl));
  strncat(_str_,field8,strlen(field8));
  strncat(_str_,txtHUE,strlen(txtHUE));
-#line 1072 "C:/Users/Git/ColourSampling/Sim800.c"
+
+
+ PrintOut(PrintHandler, "String for ThingSpeak: \r\n"
+ " *    %s\r\n"
+ ,_str_);
+
+ UART2_Write_Text("AT+CIPSHUT");
+ UART2_Write(0x0D);
+ UART2_Write(0x0A);
+ TestForOK(0);
  Delay_ms(500);
 
  UART2_Write_Text("AT+CPIN?");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
  TestForOK(0);
- Delay_ms(50);
+ Delay_ms(150);
  UART2_Write_Text("AT+CREG?");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
  TestForOK(0);
- Delay_ms(50);
+ Delay_ms(150);
  UART2_Write_Text("AT+CGATT?");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
  TestForOK(0);
- Delay_ms(50);
+ Delay_ms(150);
  UART2_Write_Text("AT+CIPSHUT");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
  TestForOK(0);
- Delay_ms(50);
+ Delay_ms(150);
  UART2_Write_Text("AT+CIPSTATUS");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
  TestForOK(0);
- Delay_ms(50);
+ Delay_ms(150);
  UART2_Write_Text("AT+CIPMUX=0");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
  TestForOK(0);
- Delay_ms(50);
+ Delay_ms(150);
  UART2_Write_Text("AT+CSTT=");
  UART2_Write_Text(SF.APN);
  UART2_Write_Text(",\"user\",");
@@ -1385,11 +1394,12 @@ char *_str_;
  UART2_Write(0x0D);
  UART2_Write(0x0A);
  TestForOK(0);
- Delay_ms(50);
+ Delay_ms(150);
  UART2_Write_Text("AT+CIICR");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
  TestForOK(0);
+ Delay_ms(150);
  UART2_Write_Text("AT+CIFSR");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
@@ -1398,7 +1408,7 @@ char *_str_;
  UART2_Write(0x0D);
  UART2_Write(0x0A);
  TestForOK(0);
- Delay_ms(50);
+ Delay_ms(150);
  UART2_Write_Text("AT+CIPSTART=\"TCP\",\"api.thingspeak.com\",80");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
@@ -1422,9 +1432,9 @@ char *_str_;
  TestForOK(0);
  Delay_ms(50);
 
- Free(_str_,200*sizeof(char));
+
 }
-#line 1154 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 1159 "C:/Users/Git/ColourSampling/Sim800.c"
 int SignalStrength(){
 
  UART2_Write_Text("AT+CPIN?");
@@ -1434,7 +1444,7 @@ int SignalStrength(){
  Delay_ms(50);
 
 }
-#line 1168 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 1173 "C:/Users/Git/ColourSampling/Sim800.c"
 void TestForOK(char c){
 unsigned long lastMillis,newMillis;
  WaitForResponse(1);
