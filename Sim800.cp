@@ -281,8 +281,9 @@ extern Timer_Setpoint T0_SP;
 
 
 
-
+void InitTimers();
 void InitTimer1();
+void InitTimer2_3();
 void Get_Time();
 void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);
@@ -293,16 +294,7 @@ extern sfr sbit CRS;
 extern sfr sbit RST;
 extern sfr sbit PWR;
 extern sfr sbit STAT;
-
-
-
-
-
-
-
-
-
-
+#line 29 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -314,6 +306,10 @@ typedef struct{
  char initial_str;
  char init_inc;
  char start: 1;
+ int rssi;
+ int ber;
+ long lastSigMillis;
+ int sigStrength;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 
@@ -371,8 +367,8 @@ void PwrUpGSM3();
 char SetupIOT();
 char WaitForSetupSMS(unsigned int Indx);
 char GetAPI_Key_SMS();
-char* GetSMSText();
-char* ReadMSG(int msg_num);
+char GetSMSText();
+char ReadMSG(int msg_num);
 void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
 int Test_Update_ThingSpeak();
@@ -380,7 +376,8 @@ void SendData(unsigned int* rgbc,float* rgbh);
 char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
 int SignalStrength();
-#line 9 "C:/Users/Git/ColourSampling/Sim800.c"
+void PWM_SigStrength(int sigstrength);
+#line 26 "C:/Users/Git/ColourSampling/Sim800.c"
 const char str_api[] = "GET https://api.thingspeak.com/update?api_key=";
 const char field1[] = "&field1=";
 const char field2[] = "&field2=";
@@ -395,7 +392,7 @@ const char sms_test[] = "+CMTI";
 struct sim_lengths SL ={
  0,0,0,0,0,0
 };
-#line 27 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 44 "C:/Users/Git/ColourSampling/Sim800.c"
 sbit RTS at LATB1_bit;
 sbit CTS at RE9_bit;
 sbit RST at LATB2_bit;
@@ -404,20 +401,20 @@ sbit STAT at RB4_bit;
 
 
  char a[6], b[6], c[6], d[6], e[6], f[6];
-#line 43 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 60 "C:/Users/Git/ColourSampling/Sim800.c"
 char buff[512];
 unsigned long temp[128];
-#line 49 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 66 "C:/Users/Git/ColourSampling/Sim800.c"
 char rcvSimTxt[200];
 char SimTestTxt[200];
 char rcvPcTxt[200];
 char sms[6];
-#line 58 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 75 "C:/Users/Git/ColourSampling/Sim800.c"
 char txtA[6];
 char txtS[6];
 char txtM[6];
 char txtH[20];
-#line 66 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 83 "C:/Users/Git/ColourSampling/Sim800.c"
 char txtC[15];
 char txtR[15];
 char txtG[15];
@@ -436,7 +433,7 @@ Sim800Vars SimVars = {
 
 struct RingBuffer RB;
 struct Sim800Flash SF;
-#line 88 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 105 "C:/Users/Git/ColourSampling/Sim800.c"
 void InitGSM3(){
  SimVars.initial_str = 0;
  SimVars.init_inc = 0;
@@ -451,7 +448,7 @@ void InitGSM3(){
  memset(SF.APN,0,sizeof(SF.APN));
  memset(SF.PWD,0,sizeof(SF.PWD));
 }
-#line 106 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 123 "C:/Users/Git/ColourSampling/Sim800.c"
 void PwrUpGSM3(){
  RST = 0;
  PWR = 0;
@@ -465,7 +462,7 @@ void PwrUpGSM3(){
  LATE3_bit = 0;
  Delay_ms(5000);
 }
-#line 123 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 140 "C:/Users/Git/ColourSampling/Sim800.c"
 void WriteToFlashTemp(){
 unsigned long pos;
 static int i,j;
@@ -502,7 +499,7 @@ static int i,j;
  ,a,b);
 
 }
-#line 163 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 180 "C:/Users/Git/ColourSampling/Sim800.c"
 char* GetValuesFromFlash(){
 unsigned long i,j;
 char *ptr;
@@ -534,7 +531,7 @@ char *ptr;
 
  return SF.SimCelNum;
 }
-#line 198 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 215 "C:/Users/Git/ColourSampling/Sim800.c"
 void GetStrLengths(){
 
  SL.l1 = sizeof(SF.SimCelNum)-1;
@@ -570,7 +567,7 @@ void GetStrLengths(){
  ,a,b,c,d,e,f);
 
 }
-#line 237 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 254 "C:/Users/Git/ColourSampling/Sim800.c"
 void RcvSimTxt(){
 char txt;
  while(UART2_Data_Ready()) {
@@ -598,7 +595,7 @@ char txt;
  }
  RB.rcv_txt_fin = 1;
 }
-#line 268 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 285 "C:/Users/Git/ColourSampling/Sim800.c"
 int TestRingPointers(){
 int diff;
  if(RB.tail > RB.head){
@@ -609,7 +606,7 @@ int diff;
  }
  return diff;
 }
-#line 282 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 299 "C:/Users/Git/ColourSampling/Sim800.c"
 void WaitForResponse(short dly){
 unsigned long lastMillis,newMillis;
  lastMillis = TMR0.millis;
@@ -637,15 +634,19 @@ unsigned long lastMillis,newMillis;
  }while(!RB.rcv_txt_fin);
  LATE3_bit = 0;
 }
-#line 313 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 330 "C:/Users/Git/ColourSampling/Sim800.c"
 void RingToTempBuf(){
 int i;
  i=0;
  RB.tail = RB.last_tail;
 
- while(RB.tail < RB.head){
+ while(RB.tail != RB.head){
+
+ if(RB.tail > RB.head && RB.head > 150)
+ RB.tail = RB.head;
+
  SimTestTxt[i] = RB.buff[RB.tail];
-#line 324 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 345 "C:/Users/Git/ColourSampling/Sim800.c"
  i++;
  RB.tail++;
  if(RB.tail > 999)
@@ -655,11 +656,11 @@ int i;
 
  RB.last_tail = RB.tail;
 }
-#line 338 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 359 "C:/Users/Git/ColourSampling/Sim800.c"
 char SetupIOT(){
 int res,i,num_strs;
 char *str_rcv;
-#line 345 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 366 "C:/Users/Git/ColourSampling/Sim800.c"
  res = -1;
 
  PrintOut(PrintHandler, "\r\n"
@@ -736,7 +737,7 @@ wait:
 
  return 1;
 }
-#line 427 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 448 "C:/Users/Git/ColourSampling/Sim800.c"
 char WaitForSetupSMS(unsigned int Indx){
 int i,res,num_strs;
 
@@ -870,7 +871,7 @@ int i,res,num_strs;
  else
  return res;
 }
-#line 565 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 586 "C:/Users/Git/ColourSampling/Sim800.c"
 void AT_Initial(){
 
 
@@ -883,7 +884,7 @@ void AT_Initial(){
  Delay_ms(1000);
  RingToTempBuf();
 }
-#line 581 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 602 "C:/Users/Git/ColourSampling/Sim800.c"
 char GetAPI_Key_SMS(){
 int i;
 
@@ -913,7 +914,7 @@ char response;
 
  return response;
 }
-#line 614 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 635 "C:/Users/Git/ColourSampling/Sim800.c"
 char SendSMS(char sms_type,char cellNum){
 static short onecA;
 int res;
@@ -1016,8 +1017,8 @@ char *str_;
  Free(str_,100*sizeof(char*));
 
 }
-#line 720 "C:/Users/Git/ColourSampling/Sim800.c"
-char* GetSMSText(){
+#line 741 "C:/Users/Git/ColourSampling/Sim800.c"
+char GetSMSText(){
 int num_strs,res,err;
  UART1_Write_Text("=================\r\n");
  RingToTempBuf();
@@ -1071,8 +1072,8 @@ int num_strs,res,err;
 
  return -1;
 }
-#line 779 "C:/Users/Git/ColourSampling/Sim800.c"
-char* ReadMSG(int msg_num){
+#line 800 "C:/Users/Git/ColourSampling/Sim800.c"
+char ReadMSG(int msg_num){
 int i,num_strs,res;
 char *text;
  sprintf(sms,"%d",msg_num);
@@ -1191,14 +1192,16 @@ char *text;
  }
  }else if(res == 19){
  goto next;
- }else
+ }else{
  SendSMS(12,0);
+ return 12;
+ }
 next:
  TestRecievedSMS(res);
  }
  return 0;
 }
-#line 909 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 932 "C:/Users/Git/ColourSampling/Sim800.c"
 void TestRecievedSMS(int res){
 char *t,B[64],txtDig[9];
 
@@ -1273,7 +1276,7 @@ char *t,B[64],txtDig[9];
  }
 
 }
-#line 988 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 1011 "C:/Users/Git/ColourSampling/Sim800.c"
 int RemoveSMSText(int sms_cnt){
 
 
@@ -1298,7 +1301,7 @@ int RemoveSMSText(int sms_cnt){
 
  return sms_cnt;
 }
-#line 1017 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 1040 "C:/Users/Git/ColourSampling/Sim800.c"
 int Test_Update_ThingSpeak(){
 
  TCS3472_getRawData(RawData);
@@ -1307,11 +1310,10 @@ int Test_Update_ThingSpeak(){
  SendData(RawData,FltData);
  return 2;
 }
-#line 1029 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 1052 "C:/Users/Git/ColourSampling/Sim800.c"
 void SendData(unsigned int* rgbc,float* rgbh){
 int len;
 char _str_[200];
-
 
  memset(_str_,0,sizeof(_str_));
 
@@ -1434,17 +1436,63 @@ char _str_[200];
 
 
 }
-#line 1159 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 1181 "C:/Users/Git/ColourSampling/Sim800.c"
 int SignalStrength(){
+int i,num_strs,res,is_digit;
+char *text;
 
- UART2_Write_Text("AT+CPIN?");
+ UART2_Write_Text("AT+CSQ");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
- TestForOK(0);
- Delay_ms(50);
+ WaitForResponse(1);
+ RingToTempBuf();
+ Delay_ms(150);
 
+
+ PrintOut(PrintHandler, "\r\n"
+ "**Signal Strength** \r\n");
+
+
+
+
+ num_strs = strsplit(SimTestTxt,',');
+
+ strncpy(string[0],RemoveChars(string[0],':','\0'),2);
+
+ strncpy(string[1], RemoveChars(string[1],0x02,'O'),2);
+ is_digit = isdigit(string[0][1]);
+ if(is_digit)
+ SimVars.rssi = atoi(string[0]);
+ else
+ SimVars.rssi = 0;
+
+ sprintf(sms,"%d",num_strs);
+ sprintf(txtA,"%d",is_digit);
+ sprintf(txtS,"%d",SimVars.rssi);
+ PrintOut(PrintHandler, "\r\n"
+ " *num_strs:= %s\r\n"
+ " *string[0]  %s\r\n"
+ " *string[1]  %s\r\n"
+ " *string[2]  %s\r\n"
+ " *string[3]  %s\r\n"
+ " *string[4]  %s\r\n"
+ " *string[5]  %s\r\n"
+ " *string[6]  %s\r\n"
+ " *is_digit:= %s\r\n"
+ " *rssi:=     %s\r\n"
+ ,sms,string[0],string[1]
+ ,string[2],string[3]
+ ,string[4],string[5]
+ ,string[6],txtA,txtS);
+
+
+ return SimVars.rssi;
 }
-#line 1173 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 1236 "C:/Users/Git/ColourSampling/Sim800.c"
+void PWM_SigStrength(int sigstrength){
+int milli = TMR0.millis - SimVars.lastSigMillis;
+}
+#line 1243 "C:/Users/Git/ColourSampling/Sim800.c"
 void TestForOK(char c){
 unsigned long lastMillis,newMillis;
  WaitForResponse(1);

@@ -114,6 +114,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
 * main loop forever!!
 ***************************************************/
    while(1){
+   int signal;
      ///////////////////////////////////////////////
      //Get input from USB to set up thresholds
      num = HID_Read();
@@ -160,11 +161,19 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
      if(!RG9_bit)
         NVMErasePage(FLASH_Settings_PAddr);//SendSMS(100);
      if(!RE4_bit){
+#ifdef MainFlashDebug
         GetValuesFromFlash();
+#endif
+#ifdef MainColDebug
         TCS3472_getRawData(RawData);
         GetScaledValues(RawData,&FltData);
         FltData[3] = TCS3472_CalcHue(&FltData);
         SendData(RawData,FltData);
+#endif
+#ifdef MainSigStrengthDebug
+        signal = SignalStrength();
+        PWM_SigStrength(signal);
+#endif
      }
    }
 }

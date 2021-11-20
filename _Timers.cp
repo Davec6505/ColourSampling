@@ -261,16 +261,7 @@ extern sfr sbit CRS;
 extern sfr sbit RST;
 extern sfr sbit PWR;
 extern sfr sbit STAT;
-
-
-
-
-
-
-
-
-
-
+#line 29 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -282,6 +273,10 @@ typedef struct{
  char initial_str;
  char init_inc;
  char start: 1;
+ int rssi;
+ int ber;
+ long lastSigMillis;
+ int sigStrength;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 
@@ -339,8 +334,8 @@ void PwrUpGSM3();
 char SetupIOT();
 char WaitForSetupSMS(unsigned int Indx);
 char GetAPI_Key_SMS();
-char* GetSMSText();
-char* ReadMSG(int msg_num);
+char GetSMSText();
+char ReadMSG(int msg_num);
 void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
 int Test_Update_ThingSpeak();
@@ -348,6 +343,7 @@ void SendData(unsigned int* rgbc,float* rgbh);
 char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
 int SignalStrength();
+void PWM_SigStrength(int sigstrength);
 #line 20 "c:/users/git/coloursampling/_timers.h"
 typedef struct{
 unsigned long millis;
@@ -375,8 +371,9 @@ extern Timer_Setpoint T0_SP;
 
 
 
-
+void InitTimers();
 void InitTimer1();
+void InitTimer2_3();
 void Get_Time();
 void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);
@@ -389,7 +386,10 @@ Timers TMR0 ={
  0
 };
 
-
+void InitTimers(){
+ InitTimer1();
+ InitTimer2_3();
+}
 
 void InitTimer1(){
  char txt[6];
@@ -401,6 +401,20 @@ void InitTimer1(){
  T1IE_bit = 1;
  PR1 = 10000;
  TMR1 = 0;
+}
+
+void InitTimer2_3(){
+ T2CON = 0x8008;
+ T3CON = 0x0;
+ TMR2 = 0;
+ TMR3 = 0;
+ T3IP0_bit = 1;
+ T3IP1_bit = 1;
+ T3IP2_bit = 1;
+ T3IF_bit = 0;
+ T3IE_bit = 1;
+ PR2 = 46080;
+ PR3 = 1220;
 }
 
 
@@ -459,14 +473,14 @@ int res,minsPassed;
  LATA10_bit = !LATA10_bit;
  }
 }
-#line 86 "C:/Users/Git/ColourSampling/_Timers.c"
+#line 103 "C:/Users/Git/ColourSampling/_Timers.c"
 void Day_Month(int hr,int day,int mnth){
 int i;
  for(i=0;i<6;i++){
 
  }
 }
-#line 97 "C:/Users/Git/ColourSampling/_Timers.c"
+#line 114 "C:/Users/Git/ColourSampling/_Timers.c"
 void I2C2_TimeoutCallback(char errorCode) {
 int i;
  if (errorCode == _I2C_TIMEOUT_RD) {

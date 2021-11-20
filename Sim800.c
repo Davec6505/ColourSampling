@@ -1,3 +1,20 @@
+/*******************************************************
+*ME (Mobile Equipment);
+*MS (Mobile Station);
+*TA (Terminal Adapter);
+*DCE (Data Communication Equipment) or facsimile DCE 
+*    (FAX modem, FAX board);
+* ==================================================== *
+*   ("In application, controlling device controls the
+*     GSM engine by sending AT Command via its serial 
+*     interface. The controlling device at the other end
+*     of the serial line is referred to as following term:")
+*TE (Terminal Equipment);
+*DTE (Data Terminal Equipment) or plainly "the application" 
+*     which is running on an embedded system;
+*******************************************************/
+
+
 #include "Sim800.h"
 
 /******************************************************
@@ -315,7 +332,11 @@ int i;
     i=0;
     RB.tail = RB.last_tail;
    // if(RB.head > RB.last_head){
-      while(RB.tail < RB.head){
+      while(RB.tail != RB.head){
+   //if the tail hasnt got to 999 when head hits 150 then force tail to head
+          if(RB.tail > RB.head && RB.head > 150)
+               RB.tail = RB.head;
+               
          SimTestTxt[i] = RB.buff[RB.tail];
 #ifdef RingBuffDeBug
          UART1_Write(SimTestTxt[i]);
@@ -717,7 +738,7 @@ char *str_;
 /***********************************************************************
 *Get SMS if recieved during run
 ***********************************************************************/
-char* GetSMSText(){
+char GetSMSText(){
 int num_strs,res,err;
     UART1_Write_Text("=================\r\n");
     RingToTempBuf();
@@ -776,7 +797,7 @@ int num_strs,res,err;
 *read the msg that was recieved from the sim memory
 *[sim can only store 20 messages ]
 **********************************************************************/
-char* ReadMSG(int msg_num){
+char ReadMSG(int msg_num){
 int i,num_strs,res;
 char *text;
     sprintf(sms,"%d",msg_num);
@@ -895,8 +916,10 @@ char *text;
              }
           }else if(res == 19){   //HUE
               goto next;
-          }else
+          }else{
              SendSMS(12,0);
+             return 12;
+          }
 next:
        TestRecievedSMS(res);
      }
@@ -1030,7 +1053,6 @@ void SendData(unsigned int* rgbc,float* rgbh){
 int len;
 char _str_[200];
  
-   // _str_ = (char*)Malloc(200*sizeof(char));
     memset(_str_,0,sizeof(_str_));
     //get the colour valuse prior to sending to ThingSpek
     sprintf(txtC,"%u",rgbc[0]);
@@ -1150,22 +1172,77 @@ char _str_[200];
     TestForOK(0);
     Delay_ms(50);
     
-  //  Free(_str_,200*sizeof(char));
+
 }
 
 /**************************************************************
 * Get the signal strength to display on PWM output
 **************************************************************/
 int  SignalStrength(){
+int i,num_strs,res,is_digit;
+char *text;
 
-    UART2_Write_Text("AT+CPIN?");
+    UART2_Write_Text("AT+CSQ");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
-    TestForOK(0);
-    Delay_ms(50);
+    WaitForResponse(1);
+    RingToTempBuf();
+    Delay_ms(150);
+    
+ #ifdef SigStrengthDebug
+     PrintOut(PrintHandler, "\r\n"
+                           "**Signal Strength** \r\n");
+#endif
 
+
+
+    num_strs = strsplit(SimTestTxt,',');
+    //signal strength dBm
+    strncpy(string[0],RemoveChars(string[0],':','\0'),2);
+    //channel bit error reate %age
+    strncpy(string[1], RemoveChars(string[1],0x02,'O'),2);
+    is_digit = isdigit(string[0][1]);
+    if(is_digit)
+         SimVars.rssi = atoi(string[0]);
+    else
+         SimVars.rssi = 0;
+#ifdef SigStrengthDebug
+    sprintf(sms,"%d",num_strs);
+    sprintf(txtA,"%d",is_digit);
+    sprintf(txtS,"%d",SimVars.rssi);
+    PrintOut(PrintHandler, "\r\n"
+                           " *num_strs:= %s\r\n"
+                           " *string[0]  %s\r\n"
+                           " *string[1]  %s\r\n"
+                           " *string[2]  %s\r\n"
+                           " *string[3]  %s\r\n"
+                           " *string[4]  %s\r\n"
+                           " *string[5]  %s\r\n"
+                           " *string[6]  %s\r\n"
+                           " *is_digit:= %s\r\n"
+                           " *rssi:=     %s\r\n"
+                           ,sms,string[0],string[1]
+                           ,string[2],string[3]
+                           ,string[4],string[5]
+                           ,string[6],txtA,txtS);
+#endif
+
+       return SimVars.rssi;
 }
 
+/**************************************************************
+* once you have aquired signal strength display it
+**************************************************************/
+void PWM_SigStrength(int sigstrength){
+
+     /*  PR2 = 46080; PR3 = 1220;  //1000ms
+         PR2 = 32256; PR3 = 854;   //700ms
+         PR2 = 23040; PR3 = 610;   //500ms
+         PR2 = 11520; PR3 = 305;   //250ms
+         PR2 = 4608;  PR3 = 122;   //100ms
+         PR2 = 14464;  PR3 = 1;    //1ms  */
+         
+}
 /**************************************************************
 *General functions to test Sim800 responses
 *this function test for "OK"

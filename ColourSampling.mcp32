@@ -6,7 +6,7 @@ Value=0
 [BUILD_TYPE]
 Value=0
 [ACTIVE_TAB]
-Value=String.c
+Value=Config.c
 [USE_EEPROM]
 Value=0
 [USE_HEAP]
@@ -43,7 +43,9 @@ File6=TCS3472.c
 File7=TCS3472.h
 File8=String.c
 File9=String.h
-Count=10
+File10=Config.h
+File11=Config.c
+Count=12
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]

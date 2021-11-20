@@ -42,7 +42,7 @@ void ConfigPic(){
 
   LATA10_bit = 0;
   LATE3_bit = 0;
-  InitTimer1();
+  InitTimers();
   InitISR();
   InitGSM3();
   PwrUpGSM3();

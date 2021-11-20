@@ -263,16 +263,7 @@ extern sfr sbit CRS;
 extern sfr sbit RST;
 extern sfr sbit PWR;
 extern sfr sbit STAT;
-
-
-
-
-
-
-
-
-
-
+#line 29 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -284,6 +275,10 @@ typedef struct{
  char initial_str;
  char init_inc;
  char start: 1;
+ int rssi;
+ int ber;
+ long lastSigMillis;
+ int sigStrength;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 
@@ -341,8 +336,8 @@ void PwrUpGSM3();
 char SetupIOT();
 char WaitForSetupSMS(unsigned int Indx);
 char GetAPI_Key_SMS();
-char* GetSMSText();
-char* ReadMSG(int msg_num);
+char GetSMSText();
+char ReadMSG(int msg_num);
 void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
 int Test_Update_ThingSpeak();
@@ -350,6 +345,7 @@ void SendData(unsigned int* rgbc,float* rgbh);
 char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
 int SignalStrength();
+void PWM_SigStrength(int sigstrength);
 #line 20 "c:/users/git/coloursampling/_timers.h"
 typedef struct{
 unsigned long millis;
@@ -377,15 +373,16 @@ extern Timer_Setpoint T0_SP;
 
 
 
-
+void InitTimers();
 void InitTimer1();
+void InitTimer2_3();
 void Get_Time();
 void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 1 "c:/users/git/coloursampling/string.h"
-#line 20 "c:/users/git/coloursampling/config.h"
+#line 22 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
@@ -427,6 +424,10 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
  Get_Timer_Values();
 }
 
+void Timer2Interrupt() iv IVT_TIMER_2 ilevel 7 ics ICS_SRS {
+ T2IF_bit = 0;
+
+}
 
 void PC_Uart1() iv IVT_UART_1 ilevel 6 ics ICS_AUTO {
 int i,j;

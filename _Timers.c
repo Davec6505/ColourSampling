@@ -9,7 +9,10 @@ Timers TMR0 ={
   0
 };
 
-
+void InitTimers(){
+  InitTimer1();
+  //InitTimer2_3();
+}
 
 void InitTimer1(){
  char txt[6];
@@ -21,6 +24,20 @@ void InitTimer1(){
   T1IE_bit      = 1;
   PR1           = 10000;
   TMR1          = 0;
+}
+
+void InitTimer2_3(){
+  T2CON		 = 0x8008;
+  T3CON		 = 0x0;
+  TMR2	         = 0;
+  TMR3	         = 0;
+  T3IP0_bit	 = 1;
+  T3IP1_bit	 = 1;
+  T3IP2_bit	 = 1;
+  T3IF_bit	 = 0;
+  T3IE_bit	 = 1;
+  PR2		 = 46080;
+  PR3		 = 1220;
 }
 
 //run time

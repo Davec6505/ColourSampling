@@ -22,6 +22,7 @@ extern sfr sbit STAT;
 #define SimConfDebug
 #define SMSDebug
 #define ThingDebug
+#define SigStrengthDebug
 //#define RingBuffDeBug
 //////////////////////////////////////////////////////
 //constants and vars
@@ -36,6 +37,10 @@ typedef struct{
  char  initial_str;
  char  init_inc;
  char  start: 1;
+ int rssi;  //signal strength quality in dBm
+ int ber;   //bit rate error report in %
+ long lastSigMillis;
+ int  sigStrength;
 }Sim800Vars;
 extern Sim800Vars SimVars;
 
@@ -93,8 +98,8 @@ void PwrUpGSM3();
 char SetupIOT();
 char WaitForSetupSMS(unsigned int Indx);
 char GetAPI_Key_SMS();
-char* GetSMSText();
-char* ReadMSG(int msg_num);
+char GetSMSText();
+char ReadMSG(int msg_num);
 void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
 int Test_Update_ThingSpeak();
@@ -102,4 +107,5 @@ void SendData(unsigned int* rgbc,float* rgbh);
 char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
 int  SignalStrength();
+void PWM_SigStrength(int sigstrength);
 #endif

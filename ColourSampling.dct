@@ -1990,6 +1990,7 @@ bdtptru6
 bdtptru6_bit
 bdtptru7
 bdtptru7_bit
+ber
 bito
 bito
 bito
@@ -12557,6 +12558,8 @@ initial_str
 initisr
 initstring
 inittimer1
+inittimer2_3
+inittimers
 inituart1
 inituart2
 initvars
@@ -13036,6 +13039,7 @@ labs
 last_head
 last_tail
 lastmin
+lastsigmillis
 lata
 lata0
 lata0
@@ -17990,6 +17994,7 @@ ptwren
 ptwren
 ptwren_bit
 pwd
+pwm_sigstrength
 pwr
 pwrupgsm3
 r_thresh
@@ -18666,6 +18671,7 @@ rsen
 rsen
 rsen_bit
 rsen_i2c2con_bit
+rssi
 rst
 rswrst
 rswrstbits
@@ -19154,6 +19160,7 @@ sidl_t5con_bit
 sidl_u1mode_bit
 sidl_u2mode_bit
 signalstrength
+sigstrength
 sim800_uart2
 sim800text
 simcelnum
@@ -20552,6 +20559,7 @@ tgate_t5con_bit
 threshold
 time_to_log
 timer1interrupt
+timer2interrupt
 tmr0
 tmr1
 tmr10

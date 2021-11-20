@@ -113,8 +113,8 @@ _SX
 LUI	R2, BitMask(LATE3_bit+0)
 ORI	R2, R2, BitMask(LATE3_bit+0)
 _SX	
-;Config.c,45 :: 		InitTimer1();
-JAL	_InitTimer1+0
+;Config.c,45 :: 		InitTimers();
+JAL	_InitTimers+0
 NOP	
 ;Config.c,46 :: 		InitISR();
 JAL	_InitISR+0
