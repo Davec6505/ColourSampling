@@ -1182,12 +1182,15 @@ int  SignalStrength(){
 int i,num_strs,res,is_digit;
 char *text;
 
+
+    clr_str_arrays(string);
+    
     UART2_Write_Text("AT+CSQ");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     WaitForResponse(1);
     RingToTempBuf();
-    Delay_ms(150);
+    Delay_ms(250);
     
  #ifdef SigStrengthDebug
      PrintOut(PrintHandler, "\r\n"
@@ -1200,7 +1203,13 @@ char *text;
     //signal strength dBm
     strncpy(string[0],RemoveChars(string[0],':','\0'),2);
     //channel bit error reate %age
-    strncpy(string[1], RemoveChars(string[1],0x02,'O'),2);
+    for(i=0;i<10;i++){
+         if(!isdigit(*(string[1]+i))){
+            string[1][i] = '\0';
+            break;
+         }
+    }
+    //check if the 1st char of result is digit, otherwise ERROR
     is_digit = isdigit(string[0][1]);
     if(is_digit)
          SimVars.rssi = atoi(string[0]);
@@ -1226,7 +1235,7 @@ char *text;
                            ,string[4],string[5]
                            ,string[6],txtA,txtS);
 #endif
-
+       PWM_SigStrength(SimVars.rssi);
        return SimVars.rssi;
 }
 
@@ -1234,15 +1243,30 @@ char *text;
 * once you have aquired signal strength display it
 **************************************************************/
 void PWM_SigStrength(int sigstrength){
-
-     /*  PR2 = 46080; PR3 = 1220;  //1000ms
-         PR2 = 32256; PR3 = 854;   //700ms
-         PR2 = 23040; PR3 = 610;   //500ms
-         PR2 = 11520; PR3 = 305;   //250ms
-         PR2 = 4608;  PR3 = 122;   //100ms
-         PR2 = 14464;  PR3 = 1;    //1ms  */
-         
+     T2CONCLR = 0x8008;
+     if(sigstrength < 6){
+        PR4 = 46080; PR5 = 1220;  //1000ms    1  - 5 weak
+     }else if(sigstrength >= 6 && sigstrength < 11){
+        PR4 = 32256; PR5 = 854;  //700ms     6  - 10
+     }else if(sigstrength >= 11 && sigstrength < 16){
+        PR4 = 23040; PR5 = 610;  //500ms     11 - 15
+     }else if(sigstrength >= 16 && sigstrength < 22){
+        PR4 = 11520; PR5 = 305;  //250ms     16 - 21 medium
+     }else if(sigstrength >= 22 && sigstrength < 26){
+        PR4 = 4608;  PR5 = 122;  //100ms     22 - 25
+     }else if(sigstrength >= 26 && sigstrength < 30){
+        PR4 = 2304;  PR5 = 61;  //50ms       26 - 31
+     }else{
+        PR4 = 14464;  PR5 = 1;  //1ms        >30   strong
+     }
+    TMR4 = 0;
+    TMR5 = 0;
+    T4CONSET = 0x8008;
+    T4IF_bit      = 0;
+    T5IE_bit      = 1;
 }
+
+
 /**************************************************************
 *General functions to test Sim800 responses
 *this function test for "OK"

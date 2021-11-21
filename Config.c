@@ -4,7 +4,8 @@ sbit RD at LATB0_bit;
 sbit GR at LATG13_bit;
 sbit BL at LATD4_bit;
 
-
+unsigned int current_duty, old_duty, current_duty1, old_duty1;
+unsigned int pwm_period1, pwm_period2;
 
 void ConfigPic(){
 
@@ -37,6 +38,14 @@ void ConfigPic(){
    InitUart2();
    //ADC1_Init();
    
+   //Initialize PWMs and set duty cycle
+   current_duty  = 10000;                        // initial value for current_duty
+   current_duty1 = 15000;                        // initial value for current_duty1
+   pwm_period1 = PWM_Init(5000 , 1, 0, 3);//pwm frk,pwm pin 1-latd0,pre-scal,tmr2
+   pwm_period2 = PWM_Init(5000 , 2, 0, 3); //pwm frk,pwm pin 1-latd1,pre-scal,tmr5
+   PWM_Set_Duty(current_duty,  1);            // Set current duty for PWM1
+   PWM_Set_Duty(current_duty1, 2);            // Set current duty for PWM2
+  
    MM_Init();
 
 
@@ -66,6 +75,10 @@ void InitUart2(){
      U2RXIF_bit = 0;
 }
 
-void InitVars(){
+
+
+void Led_Pwm_Control(){
+  PWM_Start(1);
+  PWM_Start(2);
 
 }

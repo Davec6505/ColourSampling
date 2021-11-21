@@ -373,7 +373,7 @@ extern Timer_Setpoint T0_SP;
 
 void InitTimers();
 void InitTimer1();
-void InitTimer2_3();
+void InitTimer4_5();
 void Get_Time();
 void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);
@@ -388,33 +388,45 @@ Timers TMR0 ={
 
 void InitTimers(){
  InitTimer1();
- InitTimer2_3();
+ InitTimer4_5();
 }
 
 void InitTimer1(){
  char txt[6];
  T1CON = 0x8010;
+
  T1IP0_bit = 1;
  T1IP1_bit = 1;
  T1IP2_bit = 1;
+
+ T1IS0_bit = 0;
+ T1IS1_bit = 1;
  T1IF_bit = 0;
+
  T1IE_bit = 1;
+
  PR1 = 10000;
  TMR1 = 0;
 }
 
-void InitTimer2_3(){
- T2CON = 0x8008;
- T3CON = 0x0;
- TMR2 = 0;
- TMR3 = 0;
- T3IP0_bit = 1;
- T3IP1_bit = 1;
- T3IP2_bit = 1;
- T3IF_bit = 0;
- T3IE_bit = 1;
- PR2 = 46080;
- PR3 = 1220;
+void InitTimer4_5(){
+ T4CON = 0x8008;
+ T5CON = 0x0;
+ TMR4 = 0;
+ TMR5 = 0;
+
+ T5IP0_bit = 1;
+ T5IP1_bit = 1;
+ T5IP2_bit = 1;
+
+ T5IS0_bit = 1;
+ T5IS1_bit = 1;
+
+ T5IF_bit = 0;
+ T5IE_bit = 1;
+
+ PR4 = 33792;
+ PR5 = 6103;
 }
 
 
@@ -473,14 +485,14 @@ int res,minsPassed;
  LATA10_bit = !LATA10_bit;
  }
 }
-#line 103 "C:/Users/Git/ColourSampling/_Timers.c"
+#line 115 "C:/Users/Git/ColourSampling/_Timers.c"
 void Day_Month(int hr,int day,int mnth){
 int i;
  for(i=0;i<6;i++){
 
  }
 }
-#line 114 "C:/Users/Git/ColourSampling/_Timers.c"
+#line 126 "C:/Users/Git/ColourSampling/_Timers.c"
 void I2C2_TimeoutCallback(char errorCode) {
 int i;
  if (errorCode == _I2C_TIMEOUT_RD) {

@@ -8554,6 +8554,8 @@ ctis0_bit
 ctis1
 ctis1_bit
 cts
+current_duty
+current_duty1
 cvr
 cvr
 cvr
@@ -12558,11 +12560,10 @@ initial_str
 initisr
 initstring
 inittimer1
-inittimer2_3
+inittimer4_5
 inittimers
 inituart1
 inituart2
-initvars
 int0ep
 int0ep
 int0ep
@@ -13596,6 +13597,7 @@ latgset
 latgsetbits
 ldexp
 ldiv
+led_pwm_control
 llock
 llock
 llock
@@ -16395,6 +16397,8 @@ offcal
 offcal
 offcal
 offcal_bit
+old_duty
+old_duty1
 on
 on
 on
@@ -17994,7 +17998,14 @@ ptwren
 ptwren
 ptwren_bit
 pwd
+pwm_init
+pwm_init_advanced
+pwm_period1
+pwm_period2
+pwm_set_duty
 pwm_sigstrength
+pwm_start
+pwm_stop
 pwr
 pwrupgsm3
 r_thresh
@@ -20559,7 +20570,7 @@ tgate_t5con_bit
 threshold
 time_to_log
 timer1interrupt
-timer2interrupt
+timer4_5interrupt
 tmr0
 tmr1
 tmr10

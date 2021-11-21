@@ -167,7 +167,7 @@ ret:
 /*********************************************************************
 * Clear the string within the 2D matrix
 *********************************************************************/
-void clr_str_arrays(char str[20][64]){
+void clr_str_arrays(char str[size][str_size]){
 int i,j;
     for(i = 0;i < 20;i++){
        for(j = 0;j<64;j++){
@@ -186,7 +186,7 @@ char* setstr(char conf[250]){
          if(conf[i] == '\0')
              break;
       }
-      conf[i+1] = 0;
+      conf[i] = 0;
 
       return conf;
 }
@@ -287,16 +287,16 @@ int i=0;
            temp = strchr(str,a);
            strcpy(str,temp+1);
         }else{
-           strcpy(temp,str);
+           strncpy(temp,str,strlen(temp)+1);
         }
         for(i=0;i<strlen(temp)+1;i++){
-            if(temp[i]==b)
+            if(*(temp+i)==b)
                break;
             *(temp+i) = *(str+i);
         }
         *(temp+i) = 0;
 
-         Free(temp,100);
+        Free(temp,100*sizeof(char*));//??
         return temp;
 }
 

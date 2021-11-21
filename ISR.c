@@ -20,9 +20,10 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
     Get_Timer_Values();
 }
 
-void Timer2_3Interrupt() iv IVT_TIMER_3 ilevel 7 ics ICS_SRS{
-  T3IF_bit		 = 0;
+void Timer4_5Interrupt() iv IVT_TIMER_5 ilevel 7 ics ICS_SRS{
+  T5IF_bit                 = 0;
   //Enter your code here
+  LATE3_bit = !LATE3_bit;
 }
 
 void PC_Uart1() iv IVT_UART_1 ilevel 6 ics ICS_AUTO {

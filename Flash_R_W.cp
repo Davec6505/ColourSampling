@@ -195,7 +195,7 @@ extern Timer_Setpoint T0_SP;
 
 void InitTimers();
 void InitTimer1();
-void InitTimer2_3();
+void InitTimer4_5();
 void Get_Time();
 void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);

@@ -30,6 +30,9 @@ char cel_num[20];
 char num,last_rec_inc;
 unsigned short i;
 unsigned int cell_ok,str_num,deg;
+static long last_millis_sigstr = 0;
+static long millis_sigstr_sp = 0;
+long res_millis_sigstr = 0;
 int resA=0, resB=0, diff = 0;
 #ifdef MainDebug
 char txtR[6],txtH[6],txtT[6],txtI[6];
@@ -41,7 +44,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
    ConfigPic();
 
    Delay_ms(500);
-
+   
    it = TCS3472_INTEGRATIONTIME_24MS;//TCS3472_INTEGRATIONTIME_2_4MS;
    G  = TCS3472_GAIN_1X;
    device_Id = TCS3472_1_5;          //TCS347_11_15;
@@ -110,11 +113,28 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
 #endif
    T0_SP.one_per_Xmin = 0;
    resA = resB = 0;
+   //check for signal strength on START tmr2-3
+  // SignalStrength();
+   last_millis_sigstr = TMR0.millis;
+   millis_sigstr_sp = 5000;
+  //start pwm for led
+  Led_Pwm_Control();
 /***************************************************
 * main loop forever!!
 ***************************************************/
    while(1){
-   int signal;
+
+     ///////////////////////////////////////////////
+     //test millis for time to check sig strength
+     res_millis_sigstr = TMR0.millis - last_millis_sigstr;
+      if(res_millis_sigstr >= millis_sigstr_sp){
+         millis_sigstr_sp   = 600000;
+         last_millis_sigstr = TMR0.millis;
+         res_millis_sigstr  = 0;
+         SignalStrength();
+      }
+
+     
      ///////////////////////////////////////////////
      //Get input from USB to set up thresholds
      num = HID_Read();
@@ -171,8 +191,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
         SendData(RawData,FltData);
 #endif
 #ifdef MainSigStrengthDebug
-        signal = SignalStrength();
-        PWM_SigStrength(signal);
+        SignalStrength();
 #endif
      }
    }

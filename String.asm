@@ -664,7 +664,7 @@ JR	RA
 NOP	
 ; end of _DoStrings
 _clr_str_arrays:
-;String.c,170 :: 		void clr_str_arrays(char str[20][64]){
+;String.c,170 :: 		void clr_str_arrays(char str[size][str_size]){
 ;String.c,172 :: 		for(i = 0;i < 20;i++){
 ; i start address is: 16 (R4)
 MOVZ	R4, R0, R0
@@ -762,10 +762,9 @@ SEH	R5, R2
 J	L_setstr56
 NOP	
 L_setstr57:
-;String.c,189 :: 		conf[i+1] = 0;
-ADDIU	R2, R5, 1
+;String.c,189 :: 		conf[i] = 0;
+SEH	R2, R5
 ; i end address is: 20 (R5)
-SEH	R2, R2
 ADDU	R2, R25, R2
 SB	R0, 0(R2)
 ;String.c,191 :: 		return conf;
@@ -1200,7 +1199,7 @@ NOP
 ; end of _RemoveWhiteSpace
 _RemoveChars:
 ;String.c,280 :: 		char* RemoveChars(char* str,char a,char b){
-ADDIU	SP, SP, -16
+ADDIU	SP, SP, -20
 SW	RA, 0(SP)
 ;String.c,282 :: 		int i=0;
 SW	R25, 4(SP)
@@ -1239,14 +1238,23 @@ MOVZ	R8, R6, R0
 J	L_RemoveChars85
 NOP	
 L_RemoveChars84:
-;String.c,290 :: 		strcpy(temp,str);
+;String.c,290 :: 		strncpy(temp,str,strlen(temp)+1);
 SW	R25, 12(SP)
+MOVZ	R25, R6, R0
+JAL	_strlen+0
+NOP	
+LW	R25, 12(SP)
+ADDIU	R2, R2, 1
+SB	R27, 12(SP)
+SW	R25, 16(SP)
+SEH	R27, R2
 MOVZ	R26, R25, R0
 MOVZ	R25, R6, R0
-JAL	_strcpy+0
+JAL	_strncpy+0
 NOP	
 ; temp end address is: 24 (R6)
-LW	R25, 12(SP)
+LW	R25, 16(SP)
+LBU	R27, 12(SP)
 MOVZ	R8, R6, R0
 ;String.c,291 :: 		}
 L_RemoveChars85:
@@ -1273,7 +1281,7 @@ NOP
 J	L_RemoveChars87
 NOP	
 L__RemoveChars212:
-;String.c,293 :: 		if(temp[i]==b)
+;String.c,293 :: 		if(*(temp+i)==b)
 SEH	R2, R9
 ADDU	R2, R8, R2
 LBU	R2, 0(R2)
@@ -1307,8 +1315,8 @@ SEH	R2, R9
 ; i end address is: 36 (R9)
 ADDU	R2, R8, R2
 SB	R0, 0(R2)
-;String.c,299 :: 		Free(temp,100);
-ORI	R26, R0, 100
+;String.c,299 :: 		Free(temp,100*sizeof(char*));//??
+ORI	R26, R0, 400
 MOVZ	R25, R8, R0
 JAL	_Free+0
 NOP	
@@ -1322,7 +1330,7 @@ L_end_RemoveChars:
 LW	R26, 8(SP)
 LW	R25, 4(SP)
 LW	RA, 0(SP)
-ADDIU	SP, SP, 16
+ADDIU	SP, SP, 20
 JR	RA
 NOP	
 ; end of _RemoveChars

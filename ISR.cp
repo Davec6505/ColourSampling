@@ -375,7 +375,7 @@ extern Timer_Setpoint T0_SP;
 
 void InitTimers();
 void InitTimer1();
-void InitTimer2_3();
+void InitTimer4_5();
 void Get_Time();
 void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);
@@ -390,7 +390,8 @@ extern sfr sbit RD;
 extern sfr sbit GR;
 extern sfr sbit BL;
 
-
+extern unsigned int current_duty, old_duty, current_duty1, old_duty1;
+extern unsigned int pwm_period1, pwm_period2;
 
 
 
@@ -400,8 +401,8 @@ extern sfr sbit BL;
 void ConfigPic();
 void InitUart1();
 void InitUart2();
-void InitVars();
 void InitISR();
+void Led_Pwm_Control();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
 #line 4 "C:/Users/Git/ColourSampling/ISR.c"
@@ -424,9 +425,10 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
  Get_Timer_Values();
 }
 
-void Timer2Interrupt() iv IVT_TIMER_2 ilevel 7 ics ICS_SRS {
- T2IF_bit = 0;
+void Timer4_5Interrupt() iv IVT_TIMER_5 ilevel 7 ics ICS_SRS{
+ T5IF_bit = 0;
 
+ LATE3_bit = !LATE3_bit;
 }
 
 void PC_Uart1() iv IVT_UART_1 ilevel 6 ics ICS_AUTO {

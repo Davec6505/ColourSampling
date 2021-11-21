@@ -11,33 +11,45 @@ Timers TMR0 ={
 
 void InitTimers(){
   InitTimer1();
-  //InitTimer2_3();
+  InitTimer4_5();
 }
 
 void InitTimer1(){
  char txt[6];
   T1CON         = 0x8010;
+  //priority level 7
   T1IP0_bit     = 1;
   T1IP1_bit     = 1;
   T1IP2_bit     = 1;
+  //sub priority level 2
+  T1IS0_bit     = 0;
+  T1IS1_bit     = 1;
   T1IF_bit      = 0;
+  //enable interrupt
   T1IE_bit      = 1;
+  //1ms pulse
   PR1           = 10000;
   TMR1          = 0;
 }
 
-void InitTimer2_3(){
-  T2CON		 = 0x8008;
-  T3CON		 = 0x0;
-  TMR2	         = 0;
-  TMR3	         = 0;
-  T3IP0_bit	 = 1;
-  T3IP1_bit	 = 1;
-  T3IP2_bit	 = 1;
-  T3IF_bit	 = 0;
-  T3IE_bit	 = 1;
-  PR2		 = 46080;
-  PR3		 = 1220;
+void InitTimer4_5(){
+  T4CON		 = 0x8008;
+  T5CON		 = 0x0;
+  TMR4			 = 0;
+  TMR5			 = 0;
+  //priority level 7
+  T5IP0_bit     = 1;
+  T5IP1_bit     = 1;
+  T5IP2_bit     = 1;
+  //sub priority level 3
+  T5IS0_bit     = 1;
+  T5IS1_bit     = 1;
+  //enable interrupt
+  T5IF_bit      = 0;
+  T5IE_bit      = 1;
+  //initial setting at 5sec
+  PR4           = 33792;
+  PR5           = 6103;
 }
 
 //run time

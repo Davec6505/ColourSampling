@@ -283,7 +283,7 @@ extern Timer_Setpoint T0_SP;
 
 void InitTimers();
 void InitTimer1();
-void InitTimer2_3();
+void InitTimer4_5();
 void Get_Time();
 void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);
@@ -1441,12 +1441,15 @@ int SignalStrength(){
 int i,num_strs,res,is_digit;
 char *text;
 
+
+ clr_str_arrays(string);
+
  UART2_Write_Text("AT+CSQ");
  UART2_Write(0x0D);
  UART2_Write(0x0A);
  WaitForResponse(1);
  RingToTempBuf();
- Delay_ms(150);
+ Delay_ms(250);
 
 
  PrintOut(PrintHandler, "\r\n"
@@ -1459,7 +1462,13 @@ char *text;
 
  strncpy(string[0],RemoveChars(string[0],':','\0'),2);
 
- strncpy(string[1], RemoveChars(string[1],0x02,'O'),2);
+ for(i=0;i<10;i++){
+ if(!isdigit(*(string[1]+i))){
+ string[1][i] = '\0';
+ break;
+ }
+ }
+
  is_digit = isdigit(string[0][1]);
  if(is_digit)
  SimVars.rssi = atoi(string[0]);
@@ -1485,14 +1494,34 @@ char *text;
  ,string[4],string[5]
  ,string[6],txtA,txtS);
 
-
+ PWM_SigStrength(SimVars.rssi);
  return SimVars.rssi;
 }
-#line 1236 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 1245 "C:/Users/Git/ColourSampling/Sim800.c"
 void PWM_SigStrength(int sigstrength){
-int milli = TMR0.millis - SimVars.lastSigMillis;
+ T2CONCLR = 0x8008;
+ if(sigstrength < 6){
+ PR4 = 46080; PR5 = 1220;
+ }else if(sigstrength >= 6 && sigstrength < 11){
+ PR4 = 32256; PR5 = 854;
+ }else if(sigstrength >= 11 && sigstrength < 16){
+ PR4 = 23040; PR5 = 610;
+ }else if(sigstrength >= 16 && sigstrength < 22){
+ PR4 = 11520; PR5 = 305;
+ }else if(sigstrength >= 22 && sigstrength < 26){
+ PR4 = 4608; PR5 = 122;
+ }else if(sigstrength >= 26 && sigstrength < 30){
+ PR4 = 2304; PR5 = 61;
+ }else{
+ PR4 = 14464; PR5 = 1;
+ }
+ TMR4 = 0;
+ TMR5 = 0;
+ T4CONSET = 0x8008;
+ T4IF_bit = 0;
+ T5IE_bit = 1;
 }
-#line 1243 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 1274 "C:/Users/Git/ColourSampling/Sim800.c"
 void TestForOK(char c){
 unsigned long lastMillis,newMillis;
  WaitForResponse(1);

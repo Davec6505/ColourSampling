@@ -27,10 +27,15 @@ main
 			UART2_Init
 				Get_Fosc_kHz
 				UART_Calc_BRG
+		PWM_Init
+			Get_Fosc_kHz
+			PWM_Init_Advanced
+				Pwm_Calc_Period
+		PWM_Set_Duty
 		MM_Init
 		InitTimers
 			InitTimer1
-			InitTimer2_3
+			InitTimer4_5
 		InitISR
 		InitGSM3
 			memset
@@ -299,6 +304,28 @@ main
 		Free
 	WaitForResponse
 	Read_Thresholds
+	Led_Pwm_Control
+		PWM_Start
+	SignalStrength
+		clr_str_arrays
+		UART2_Write_Text
+		UART2_Write
+		WaitForResponse
+		RingToTempBuf
+		PrintOut
+		strsplit
+		strncpy
+		RemoveChars
+			Malloc
+			strchr
+			strcpy
+			strlen
+			strncpy
+			Free
+		isdigit
+		atoi
+		sprintf
+		PWM_SigStrength
 	HID_Read
 		Gen_Read
 			USB_Handle_Busy
@@ -421,11 +448,6 @@ main
 			strchr
 			strcpy
 			RemoveChars
-				Malloc
-				strchr
-				strcpy
-				strlen
-				Free
 			memset
 			strncpy
 			RemoveWhiteSpace
@@ -448,19 +470,6 @@ main
 		RemoveSMSText
 		__CC2DW
 	NVMErasePage
-	SignalStrength
-		UART2_Write_Text
-		UART2_Write
-		WaitForResponse
-		RingToTempBuf
-		PrintOut
-		strsplit
-		strncpy
-		RemoveChars
-		isdigit
-		atoi
-		sprintf
-	PWM_SigStrength
 	__CC2DW
 	__FillZeros
 	Test_Update_ThingSpeak
@@ -475,7 +484,7 @@ Sim800_Uart2
 	Get_Time
 	RcvSimTxt
 	I2C1_Stop
-Timer2Interrupt
+Timer4_5Interrupt
 USB1Interrupt
 	USB_Interrupt_Proc
 		USB_Device_Service

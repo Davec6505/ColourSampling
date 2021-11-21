@@ -375,7 +375,7 @@ extern Timer_Setpoint T0_SP;
 
 void InitTimers();
 void InitTimer1();
-void InitTimer2_3();
+void InitTimer4_5();
 void Get_Time();
 void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);
@@ -390,7 +390,8 @@ extern sfr sbit RD;
 extern sfr sbit GR;
 extern sfr sbit BL;
 
-
+extern unsigned int current_duty, old_duty, current_duty1, old_duty1;
+extern unsigned int pwm_period1, pwm_period2;
 
 
 
@@ -400,8 +401,8 @@ extern sfr sbit BL;
 void ConfigPic();
 void InitUart1();
 void InitUart2();
-void InitVars();
 void InitISR();
+void Led_Pwm_Control();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
 #line 4 "C:/Users/Git/ColourSampling/ColourSampling.c"
@@ -434,6 +435,9 @@ char cel_num[20];
 char num,last_rec_inc;
 unsigned short i;
 unsigned int cell_ok,str_num,deg;
+static long last_millis_sigstr = 0;
+static long millis_sigstr_sp = 0;
+long res_millis_sigstr = 0;
 int resA=0, resB=0, diff = 0;
 
 char txtR[6],txtH[6],txtT[6],txtI[6];
@@ -465,7 +469,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  T0_SP.sec = 0;
  T0_SP.min = 0;
  T0_SP.hr = 0;
-#line 70 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 73 "C:/Users/Git/ColourSampling/ColourSampling.c"
  strcpy(cel_num,GetValuesFromFlash());
  str_num = strncmp(cel_num,sub_txt,4);
 
@@ -489,7 +493,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  SimVars.init_inc = 3;
  cell_ok = 1;
  }
-#line 97 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 100 "C:/Users/Git/ColourSampling/ColourSampling.c"
  if(cell_ok == 1){
  Read_Thresholds();
  Delay_ms(3000);
@@ -506,9 +510,26 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
 
  T0_SP.one_per_Xmin = 0;
  resA = resB = 0;
-#line 116 "C:/Users/Git/ColourSampling/ColourSampling.c"
+
+
+ last_millis_sigstr = TMR0.millis;
+ millis_sigstr_sp = 5000;
+
+ Led_Pwm_Control();
+#line 125 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
- int signal;
+
+
+
+ res_millis_sigstr = TMR0.millis - last_millis_sigstr;
+ if(res_millis_sigstr >= millis_sigstr_sp){
+ millis_sigstr_sp = 600000;
+ last_millis_sigstr = TMR0.millis;
+ res_millis_sigstr = 0;
+ SignalStrength();
+ }
+
+
 
 
  num = HID_Read();
@@ -555,9 +576,8 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  if(!RG9_bit)
  NVMErasePage(FLASH_Settings_PAddr);
  if(!RE4_bit){
-#line 174 "C:/Users/Git/ColourSampling/ColourSampling.c"
- signal = SignalStrength();
- PWM_SigStrength(signal);
+#line 194 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ SignalStrength();
 
  }
  }

@@ -375,7 +375,7 @@ extern Timer_Setpoint T0_SP;
 
 void InitTimers();
 void InitTimer1();
-void InitTimer2_3();
+void InitTimer4_5();
 void Get_Time();
 void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);
@@ -390,7 +390,8 @@ extern sfr sbit RD;
 extern sfr sbit GR;
 extern sfr sbit BL;
 
-
+extern unsigned int current_duty, old_duty, current_duty1, old_duty1;
+extern unsigned int pwm_period1, pwm_period2;
 
 
 
@@ -400,8 +401,8 @@ extern sfr sbit BL;
 void ConfigPic();
 void InitUart1();
 void InitUart2();
-void InitVars();
 void InitISR();
+void Led_Pwm_Control();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
 #line 3 "C:/Users/Git/ColourSampling/Config.c"
@@ -409,7 +410,8 @@ sbit RD at LATB0_bit;
 sbit GR at LATG13_bit;
 sbit BL at LATD4_bit;
 
-
+unsigned int current_duty, old_duty, current_duty1, old_duty1;
+unsigned int pwm_period1, pwm_period2;
 
 void ConfigPic(){
 
@@ -442,6 +444,14 @@ void ConfigPic(){
  InitUart2();
 
 
+
+ current_duty = 10000;
+ current_duty1 = 15000;
+ pwm_period1 = PWM_Init(5000 , 1, 0, 3);
+ pwm_period2 = PWM_Init(5000 , 2, 0, 3);
+ PWM_Set_Duty(current_duty, 1);
+ PWM_Set_Duty(current_duty1, 2);
+
  MM_Init();
 
 
@@ -471,6 +481,10 @@ void InitUart2(){
  U2RXIF_bit = 0;
 }
 
-void InitVars(){
+
+
+void Led_Pwm_Control(){
+ PWM_Start(1);
+ PWM_Start(2);
 
 }
