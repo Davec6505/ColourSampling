@@ -44,15 +44,15 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
    ConfigPic();
 
    Delay_ms(500);
-   
+
    it = TCS3472_INTEGRATIONTIME_24MS;//TCS3472_INTEGRATIONTIME_2_4MS;
    G  = TCS3472_GAIN_1X;
    device_Id = TCS3472_1_5;          //TCS347_11_15;
    i = 0;
    i = TCS3472_Init(it,G,device_Id);
-   sprintf(txtR,"%2x",i);
-   strcat(writebuff,txtR);
-   while(!HID_Write(&writebuff,64));
+  // sprintf(txtR,"%2x",i);
+  // strcat(writebuff,txtR);
+  // while(!HID_Write(&writebuff,64));
 
  // RD = GR = BL = 1;
 
@@ -117,8 +117,11 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
   // SignalStrength();
    last_millis_sigstr = TMR0.millis;
    millis_sigstr_sp = 5000;
-  //start pwm for led
-  Led_Pwm_Control();
+   
+   PWM_Start(2);
+   Delay_ms(500);
+   SetLedPWM();
+   PWM_Stop(2);
 /***************************************************
 * main loop forever!!
 ***************************************************/
@@ -145,9 +148,13 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
      //Update Thingspeak
      if(SimVars.init_inc >= 5){
        if(T0_SP.one_per_Xmin){
+         PWM_Start(2);
+         Delay_ms(500);
+        // SetLedPWM();
          Update_Test();
          T0_SP.sec = T0_SP.min = T0_SP.hr = 0; //start timming again
          T0_SP.one_per_Xmin = 0;
+         PWM_Stop(2);
        }
      }
      

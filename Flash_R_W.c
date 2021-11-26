@@ -93,10 +93,13 @@ unsigned int NVMUnlock (unsigned int nvmop){
 unsigned int status;
 // Suspend or Disable all Interrupts
  status = (unsigned int)DI();
+ 
 // Enable Flash Write/Erase Operations and Select
 // Flash operation to perfor
 NVMCON = nvmop & 0x00004007;
 
+//Wait for LDV circuit to energise
+ Delay_ms(50);
 // Write Keys
 NVMKEY = 0xAA996655;
 NVMKEY = 0x556699AA;

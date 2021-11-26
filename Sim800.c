@@ -88,6 +88,8 @@ char txtR_Scl[15];
 char txtG_Scl[15];
 char txtB_Scl[15];
 char txtHUE[15];
+char txtLUM[15];
+char txtSAT[15];
 char txtLen[6];
 
 Sim800Vars SimVars = {
@@ -143,26 +145,34 @@ static int i,j;
 
   GetStrLengths();
 
-  memset(buff,0,512);                  //make every byte NULL
-  memcpy(buff,SF.SimCelNum,SL.l1);          //Save Cell num
-  memcpy(buff+SL.l1,SF.WriteAPIKey,SL.l2);//Save API Wr Key
-  memcpy(buff+SL.l1l2,SF.ReadAPIKey,SL.l3); //Save API Rd Key
-  memcpy(buff+SL.l1l2l3,SF.APN,SL.l4);        //Save APN
-  memcpy(buff+SL.l1l2l3l4,SF.PWD,SL.l5);        //Save PWD
+  memset(buff,0,512);                            //make every byte NULL
+  memcpy(buff,SF.SimCelNum,SL.l1);               //Save Cell num
+  memcpy(buff+SL.l1,SF.WriteAPIKey,SL.l2);       //Save API Wr Key
+  memcpy(buff+SL.l1l2,SF.ReadAPIKey,SL.l3);      //Save API Rd Key
+  memcpy(buff+SL.l1l2l3,SF.APN,SL.l4);           //Save APN
+  memcpy(buff+SL.l1l2l3l4,SF.PWD,SL.l5);         //Save PWD
   
+  for(i=1;i<128;i++)
+     temp[i] = 0x00000000;
+     
   memcpy(temp,buff,SL.lTotA+4);
 
-  pos = FLASH_Settings_PAddr;
+  pos = FLASH_Settings_PAddr;  //P?
+  
+ // Flash_Erase_Page(pos);
+
   j = NVMErasePage(pos);
   if(j==0){
-    pos += 20 ;
-    for(i=0;i<100;i++){
+    pos += 20;
+    for(i=0;i<128;i++){
+       //Flash_Write_Word(pos,temp[i]);
          j = NVMWriteWord(pos,temp[i]);
          pos += 4;
-         Delay_ms(5);
+        // Delay_ms(50);
     }
-   }
-   // j = NVMWriteRow(pos,&temp);
+       // j = NVMWriteRow(pos,temp);
+  }
+
 
 #ifdef SimConfDebug
       sprintf(a,"%d",i);
@@ -1041,7 +1051,7 @@ int Test_Update_ThingSpeak(){
 
        TCS3472_getRawData(RawData);
        GetScaledValues(RawData,FltData);
-       FltData[3] = TCS3472_CalcHue(FltData);
+       TCS3472_CalcHSL(FltData);
        SendData(RawData,FltData);
        return 2;
 }
@@ -1062,9 +1072,9 @@ char _str_[200];
     sprintf(txtR_Scl,"%3.2f",rgbh[0]);
     sprintf(txtG_Scl,"%3.2f",rgbh[1]);
     sprintf(txtB_Scl,"%3.2f",rgbh[2]);
-    sprintf(txtHUE  ,"%3.2f",rgbh[3]);
-    
-
+    sprintf(txtHUE  ,"%3.2f",rgbh[4]);
+    sprintf(txtSAT  ,"%3.2f",rgbh[5]);
+    sprintf(txtLUM  ,"%3.2f",rgbh[6]);
     //Raw Values
     strncpy(_str_,str_api,46);//strlen(str_api));
     strncat(_str_,SF.WriteAPIKey,strlen(SF.WriteAPIKey));
@@ -1078,11 +1088,11 @@ char _str_[200];
     strncat(_str_,txtB,strlen(txtB));
     //scaled and HUE Values
     strncat(_str_,field5,strlen(field5));
-    strncat(_str_,txtR_Scl,strlen(txtR_Scl));
+    strncat(_str_,txtHUE,strlen(txtHUE)); //strncat(_str_,txtR_Scl,strlen(txtR_Scl));
     strncat(_str_,field6,strlen(field6));
-    strncat(_str_,txtG_Scl,strlen(txtG_Scl));
+    strncat(_str_,txtLUM,strlen(txtLUM)); //strncat(_str_,txtG_Scl,strlen(txtG_Scl));
     strncat(_str_,field7,strlen(field7));
-    strncat(_str_,txtB_Scl,strlen(txtB_Scl));
+    strncat(_str_,txtSAT,strlen(txtSAT)); //strncat(_str_,txtB_Scl,strlen(txtB_Scl));
     strncat(_str_,field8,strlen(field8));
     strncat(_str_,txtHUE,strlen(txtHUE));
 

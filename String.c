@@ -10,7 +10,7 @@ const code char *comc[13]={
    "T",
    "G"
 };
-const code char *com[21]={
+const code char *com[22]={
    "CONFIG"       //0
    ,"SENDC"       //1
    ,"SENDR"       //2
@@ -31,6 +31,7 @@ const code char *com[21]={
    ,"START"       //17
    ,"CANCEL"      //18
    ,"READA_HUE"   //19
+   ,"READA_PWM"   //20
    ,"ERROR"
 };
 
@@ -148,6 +149,12 @@ char *str,err,i;
             break;
         case READA_HUE :
             str = ReadHUE();
+            break;
+        case READA_PWM :
+            PWM_Start(2);
+            Delay_ms(500);
+            SetLedPWM();
+            PWM_Stop(2);
             break;
         default:
             str = "No data requested!\r\n";
@@ -319,17 +326,25 @@ char txtR[15];
 char str[64];
 unsigned int cct;
 int err;
+
+       PWM_Start(2);
+       Delay_ms(500);
       // FltData = (float*)Malloc(3);
        //0 = get raw data 1 = get scaled data
        TCS3472_getRawData(RawData);
+       
        if(data_src)
-         GetScaledValues(RawData,&FltData);
+         GetScaledValues(RawData,FltData);
 
-       strcpy(str,"C || R | G | B | = || ");
-       if(!data_src )
+
+       if(!data_src ){
+          strcpy(str,"C || R | G | B | = || ");
           sprintf(txtR,"%u",RawData[0]); //C
-       else
+          
+       }else{
+          strcpy(str,"|| R | G | B | = || ");
           sprintf(txtR,"%3.2f",FltData[0]); //R
+       }
        strcat(str,txtR);
        strcat(str," || ");
 
@@ -355,10 +370,13 @@ int err;
          err = TCS3472_C2RGB_Error(RawData);
          sprintf(txtR,"%5d",err);
          strcat(str,txtR);
-       }
-       strcat(str," ||\r\n");
+         strcat(str," || \r\n");
+       }else
+          strcat(str,"\r\n");
+
       // Free(FltData,sizeof(FltData));
-        return &str;
+      PWM_Stop(2);
+      return &str;
 }
 
 /********************************************************************
@@ -368,6 +386,9 @@ char* Read_Send_OneColour(int colr){
 unsigned int col;
 char txtR[10];
 char str[64];
+
+     PWM_Start(2);
+     Delay_ms(500);
      switch(colr){
         case READR:
            col = TCS3472_Read16(TCS3472_RDATAL);
@@ -414,6 +435,7 @@ char str[64];
            strcat(str," ||\r\n");
            break;
      }
+     PWM_Stop(2);
      return &str;
 }
 
@@ -423,19 +445,30 @@ char str[64];
 char* ReadHUE(){
 char str[64];
 char txtF[15];
-float HUE;
+char txtG[15];
+char txtH[15];
+float HUE,LUMENANCE,SATURATION;
 
+        PWM_Start(2);
+        Delay_ms(500);
         memset(str,0,64);
         
         TCS3472_getRawData(RawData);
         GetScaledValues(RawData,&FltData);
-        HUE = TCS3472_CalcHue(&FltData);
-        sprintf(txtF,"%3.2f",HUE); //HUE
+        TCS3472_CalcHSL(&FltData);
         
-       strcpy(str,"HUE = || ");
+        sprintf(txtF,"%3.2f",FltData[4]); //HUE
+        sprintf(txtG,"%3.2f",FltData[5]); //SAT
+        sprintf(txtH,"%3.2f",FltData[6]); //LUM
+        
+       strcpy(str,"HUE, SAT, LUM  || ");
        strcat(str,txtF);
-       strcat(str," ||\r\n");
-       
+       strcat(str," | ");
+       strcat(str,txtG);
+       strcat(str," | ");
+       strcat(str,txtH);
+       strcat(str," ||\r\n ");
+       PWM_Stop(2);
        return &str;
 }
 
@@ -491,7 +524,7 @@ unsigned long pos;
 int i,err;
 char txtR[15];
 char str[64];
-         pos =  FLASH_Settings_PAddr;
+         pos =  FLASH_Settings_PAddr; //P?
         for(i=1;i<128;i++)
            val[i] = 0x00000000;
 

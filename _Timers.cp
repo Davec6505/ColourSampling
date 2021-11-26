@@ -79,21 +79,7 @@ typedef unsigned long clock_t;
 typedef unsigned long time_t;
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/git/coloursampling/string.h"
-#line 1 "c:/users/git/coloursampling/flash_r_w.h"
-#line 1 "c:/users/git/coloursampling/string.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
-#line 20 "c:/users/git/coloursampling/flash_r_w.h"
-extern unsigned long FLASH_Settings_VAddr;
-extern unsigned long FLASH_Settings_PAddr;
-
-
-unsigned int NVMWriteWord (void* address, unsigned long _data);
-unsigned int NVMWriteRow (void* address, void* _data);
-unsigned int NVMErasePage(void* address);
-unsigned int NVMUnlock(unsigned int nvmop);
-void NVMRead(void* addr,struct Thresh *vals);
-unsigned long ReadFlashWord();
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
+#line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 8 "c:/users/git/coloursampling/tcs3472.h"
@@ -148,7 +134,7 @@ extern TCS3472_Error device_Error;
 
 
 extern unsigned int RawData[4];
-extern float FltData[4];
+extern float FltData[8];
 extern unsigned int CCT;
 
 
@@ -173,11 +159,54 @@ unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
 void GetScaledValues(int* CRGB,float rgb[3]);
-float TCS3472_CalcHue(float* RGBC);
+void TCS3472_CalcHSL(float* RGBC);
 float max_(float *rgb);
 float min_(float *rgb);
+#line 1 "c:/users/git/coloursampling/_timers.h"
 #line 1 "c:/users/git/coloursampling/sim800.h"
-#line 19 "c:/users/git/coloursampling/string.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
+#line 1 "c:/users/git/coloursampling/string.h"
+#line 22 "c:/users/git/coloursampling/config.h"
+extern unsigned short i;
+extern char kk;
+
+extern sfr sbit RD;
+extern sfr sbit GR;
+extern sfr sbit BL;
+
+extern unsigned int current_duty1, current_duty2;
+extern unsigned int pwm_period1, pwm_period2;
+
+
+
+
+
+
+void ConfigPic();
+void InitUart1();
+void InitUart2();
+void InitISR();
+void WriteData(char *_data);
+void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
+void SetLedPWM();
+#line 1 "c:/users/git/coloursampling/flash_r_w.h"
+#line 1 "c:/users/git/coloursampling/string.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
+#line 20 "c:/users/git/coloursampling/flash_r_w.h"
+extern unsigned long FLASH_Settings_VAddr;
+extern unsigned long FLASH_Settings_PAddr;
+
+
+unsigned int NVMWriteWord (void* address, unsigned long _data);
+unsigned int NVMWriteRow (void* address, void* _data);
+unsigned int NVMErasePage(void* address);
+unsigned int NVMUnlock(unsigned int nvmop);
+void NVMRead(void* addr,struct Thresh *vals);
+unsigned long ReadFlashWord();
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
+#line 1 "c:/users/git/coloursampling/tcs3472.h"
+#line 1 "c:/users/git/coloursampling/sim800.h"
+#line 20 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 
 enum ControlColorIO{
@@ -201,6 +230,7 @@ WRITE_RAW,
 START,
 CANCEL,
 READA_HUE,
+READA_PWM,
 ERROR
 };
 

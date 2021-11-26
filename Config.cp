@@ -101,7 +101,7 @@ extern TCS3472_Error device_Error;
 
 
 extern unsigned int RawData[4];
-extern float FltData[4];
+extern float FltData[8];
 extern unsigned int CCT;
 
 
@@ -126,7 +126,7 @@ unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
 void GetScaledValues(int* CRGB,float rgb[3]);
-float TCS3472_CalcHue(float* RGBC);
+void TCS3472_CalcHSL(float* RGBC);
 float max_(float *rgb);
 float min_(float *rgb);
 #line 1 "c:/users/git/coloursampling/_timers.h"
@@ -162,6 +162,7 @@ typedef unsigned long clock_t;
 typedef unsigned long time_t;
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/git/coloursampling/string.h"
+#line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
@@ -179,7 +180,7 @@ unsigned long ReadFlashWord();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/git/coloursampling/sim800.h"
-#line 19 "c:/users/git/coloursampling/string.h"
+#line 20 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 
 enum ControlColorIO{
@@ -203,6 +204,7 @@ WRITE_RAW,
 START,
 CANCEL,
 READA_HUE,
+READA_PWM,
 ERROR
 };
 
@@ -390,7 +392,7 @@ extern sfr sbit RD;
 extern sfr sbit GR;
 extern sfr sbit BL;
 
-extern unsigned int current_duty, old_duty, current_duty1, old_duty1;
+extern unsigned int current_duty1, current_duty2;
 extern unsigned int pwm_period1, pwm_period2;
 
 
@@ -402,15 +404,15 @@ void ConfigPic();
 void InitUart1();
 void InitUart2();
 void InitISR();
-void Led_Pwm_Control();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
+void SetLedPWM();
 #line 3 "C:/Users/Git/ColourSampling/Config.c"
 sbit RD at LATB0_bit;
 sbit GR at LATG13_bit;
 sbit BL at LATD4_bit;
 
-unsigned int current_duty, old_duty, current_duty1, old_duty1;
+unsigned int current_duty1,current_duty2;
 unsigned int pwm_period1, pwm_period2;
 
 void ConfigPic(){
@@ -427,7 +429,7 @@ void ConfigPic(){
  TRISF = 0X0000;
  TRISG = 0X0200;
 
-
+ LATD = 0;
 
 
  USBIE_bit = 0;
@@ -445,12 +447,15 @@ void ConfigPic(){
 
 
 
- current_duty = 10000;
- current_duty1 = 15000;
+ current_duty1 = 2000;
+ current_duty2 = 10000;
  pwm_period1 = PWM_Init(5000 , 1, 0, 3);
  pwm_period2 = PWM_Init(5000 , 2, 0, 3);
- PWM_Set_Duty(current_duty, 1);
- PWM_Set_Duty(current_duty1, 2);
+ PWM_Set_Duty(current_duty1, 1);
+ PWM_Set_Duty(current_duty2, 2);
+ PWM_Stop(1);
+ PWM_Stop(2);
+
 
  MM_Init();
 
@@ -481,10 +486,16 @@ void InitUart2(){
  U2RXIF_bit = 0;
 }
 
-
-
-void Led_Pwm_Control(){
- PWM_Start(1);
- PWM_Start(2);
+void SetLedPWM(){
+int err;
+ TCS3472_getRawData(RawData);
+ err = TCS3472_C2RGB_Error(RawData);
+ do{
+ current_duty2 += err;
+ PWM_Set_Duty(current_duty2, 2);
+ Delay_ms(500);
+ TCS3472_getRawData(RawData);
+ err = TCS3472_C2RGB_Error(RawData);
+ }while(err < -50 || err > 50);
 
 }

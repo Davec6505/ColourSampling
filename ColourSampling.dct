@@ -8554,8 +8554,8 @@ ctis0_bit
 ctis1
 ctis1_bit
 cts
-current_duty
 current_duty1
+current_duty2
 cvr
 cvr
 cvr
@@ -13597,7 +13597,6 @@ latgset
 latgsetbits
 ldexp
 ldiv
-led_pwm_control
 llock
 llock
 llock
@@ -16397,8 +16396,6 @@ offcal
 offcal
 offcal
 offcal_bit
-old_duty
-old_duty1
 on
 on
 on
@@ -18955,6 +18952,7 @@ sesvdif
 sesvdif
 sesvdif_bit
 setcolourthresholds
+setledpwm
 setstr
 setupiot
 sf
@@ -20477,7 +20475,7 @@ tcs3472_c2rgb_error
 tcs3472_calc_lux
 tcs3472_calccoltemp
 tcs3472_calccoltemp_dn40
-tcs3472_calchue
+tcs3472_calchsl
 tcs3472_clearinterrupt
 tcs3472_disable
 tcs3472_enable
@@ -21765,10 +21763,12 @@ txtg_scl
 txth
 txthue
 txtlen
+txtlum
 txtm
 txtr
 txtr_scl
 txts
+txtsat
 u1addr
 u1addrbits
 u1addrclr

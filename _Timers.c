@@ -33,10 +33,10 @@ void InitTimer1(){
 }
 
 void InitTimer4_5(){
-  T4CON		 = 0x8008;
-  T5CON		 = 0x0;
-  TMR4			 = 0;
-  TMR5			 = 0;
+  T4CON         = 0x8008;
+  T5CON         = 0x0;
+  TMR4          = 0;
+  TMR5          = 0;
   //priority level 7
   T5IP0_bit     = 1;
   T5IP1_bit     = 1;
