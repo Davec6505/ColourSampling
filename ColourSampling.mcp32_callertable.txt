@@ -180,6 +180,7 @@ main
 	SendSMS
 		__CC2DW
 		Malloc
+		memset
 		strcpy
 		AT_Initial
 			__CC2DW
@@ -244,75 +245,9 @@ main
 			strcat
 			PWM_Stop
 			__CC2DW
-		Free
-	WaitForResponse
-	Read_Thresholds
-	PWM_Start
-	SetLedPWM
-		TCS3472_getRawData
-		TCS3472_C2RGB_Error
-		PWM_Set_Duty
-	PWM_Stop
-	SignalStrength
-		clr_str_arrays
-		UART2_Write_Text
-		UART2_Write
-		WaitForResponse
-		RingToTempBuf
-		PrintOut
-		strsplit
-		strncpy
-		RemoveChars
-			Malloc
-			strchr
-			strcpy
-			strlen
-			strncpy
-			Free
-		isdigit
-		atoi
-		sprintf
-		PWM_SigStrength
-	HID_Read
-		Gen_Read
-			USB_Handle_Busy
-			USB_Transfer_Packet
-	DoStrings
-		__CC2DW
-		clr_str_arrays
-		memcpy
-		setstr
-			strlen
-		strsplit
-		StrChecker
-			strlen
-			strncmp
-		memset
-		strcmp
-		atoi
-		TCS3472_SetIntergration_Time
-		TCS3472_SetGain
-		SendData
-			memset
-			sprintf
-			strncpy
-			strncat
-			strlen
-			PrintOut
-			UART2_Write_Text
-			UART2_Write
-			TestForOK
-				WaitForResponse
-				RingToTempBuf
-				PrintOut
-				strstr
-					strlen
-					strncmp
-					strchr
-				__CC2DW
-			__CC2DW
-		Read_Send_AllColour
 		Read_Send_OneColour
+			memset
+			strlen
 			PWM_Start
 			TCS3472_Read16
 			strcpy
@@ -359,12 +294,64 @@ main
 			TCS3472_CalcColTemp_dn40
 			PWM_Stop
 			__CC2DW
+		Free
+	WaitForResponse
+	Read_Thresholds
+	PWM_Start
+	SetLedPWM
+		TCS3472_getRawData
+		TCS3472_C2RGB_Error
+		PWM_Set_Duty
+	PWM_Stop
+	HID_Read
+		Gen_Read
+			USB_Handle_Busy
+			USB_Transfer_Packet
+	DoStrings
+		__CC2DW
+		clr_str_arrays
+		memcpy
+		setstr
+			strlen
+		strsplit
+		StrChecker
+			strlen
+			strncmp
+		memset
+		strcmp
+		atoi
+		TCS3472_SetIntergration_Time
+		TCS3472_SetGain
+		SendData
+			memset
+			sprintf
+			strncpy
+			strncat
+			strlen
+			PrintOut
+			UART2_Write_Text
+			UART2_Write
+			TestForOK
+				WaitForResponse
+				RingToTempBuf
+				PrintOut
+				strstr
+					strlen
+					strncmp
+					strchr
+				__CC2DW
+			__CC2DW
+		Read_Send_AllColour
+		Read_Send_OneColour
 		Read_Thresholds
 		Write_Thresholds
+			PWM_Start
+			memset
 			TCS3472_getRawData
 			atol
 				isdigit
 			NVMWriteWord
+			PWM_Stop
 			sprintf
 			strcpy
 			strcat
@@ -438,6 +425,26 @@ main
 								Get_Time
 								RcvSimTxt
 								I2C1_Stop
+	SignalStrength
+		clr_str_arrays
+		UART2_Write_Text
+		UART2_Write
+		WaitForResponse
+		RingToTempBuf
+		PrintOut
+		strsplit
+		strncpy
+		RemoveChars
+			Malloc
+			strchr
+			strcpy
+			strlen
+			strncpy
+			Free
+		isdigit
+		atoi
+		sprintf
+		PWM_SigStrength
 	TestRingPointers
 	GetSMSText
 		UART1_Write_Text
@@ -468,6 +475,7 @@ main
 			StrChecker
 			strncmp
 			SendSMS
+			SetLedPWM
 			TestRecievedSMS
 				sprintf
 				PrintOut

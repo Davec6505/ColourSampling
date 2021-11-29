@@ -448,7 +448,7 @@ void ConfigPic(){
 
 
  current_duty1 = 2000;
- current_duty2 = 10000;
+ current_duty2 = 20000;
  pwm_period1 = PWM_Init(5000 , 1, 0, 3);
  pwm_period2 = PWM_Init(5000 , 2, 0, 3);
  PWM_Set_Duty(current_duty1, 1);

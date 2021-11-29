@@ -741,7 +741,6 @@ int err;
  sprintf(txtR,"%u",RawData[3]);
  strcat(str,txtR);
  strcat(str," || ");
-
  err = TCS3472_C2RGB_Error(RawData);
  sprintf(txtR,"%5d",err);
  strcat(str,txtR);
@@ -751,14 +750,15 @@ int err;
 
 
  PWM_Stop(2);
- return &str;
+ return str;
 }
-#line 385 "C:/Users/Git/ColourSampling/String.c"
+#line 384 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_OneColour(int colr){
 unsigned int col;
 char txtR[10];
 char str[64];
 
+ memset(str,0,strlen(str));
  PWM_Start(2);
  Delay_ms(500);
  switch(colr){
@@ -808,7 +808,7 @@ char str[64];
  break;
  }
  PWM_Stop(2);
- return &str;
+ return str;
 }
 #line 445 "C:/Users/Git/ColourSampling/String.c"
 char* ReadHUE(){
@@ -838,7 +838,7 @@ float HUE,LUMENANCE,SATURATION;
  strcat(str,txtH);
  strcat(str," ||\r\n ");
  PWM_Stop(2);
- return &str;
+ return str;
 }
 
 
@@ -878,7 +878,7 @@ unsigned long Val;
  strcat(str,txtR);
  strcat(str," ||\r\n ");
 
- return &str;
+ return str;
 }
 #line 521 "C:/Users/Git/ColourSampling/String.c"
 char* Write_Thresholds(short data_src){
@@ -891,6 +891,9 @@ char str[64];
  for(i=1;i<128;i++)
  val[i] = 0x00000000;
 
+ PWM_Start(2);
+ Delay_ms(500);
+ memset(str,0,64);
 
  if(!data_src)
  TCS3472_getRawData(RawData);
@@ -936,7 +939,7 @@ char str[64];
  err = NVMWriteWord(pos,val[4]);
  }
 
-
+ PWM_Stop(2);
 
 
  sprintf(txtR,"%x",err);
@@ -944,7 +947,7 @@ char str[64];
  strcat(str," \r\n ");
  return str;
 }
-#line 588 "C:/Users/Git/ColourSampling/String.c"
+#line 591 "C:/Users/Git/ColourSampling/String.c"
 void testStrings(char* writebuff){
  if(strlen(string[0])!=0){
  strncat(writebuff,string[0],strlen(string[0]));
@@ -1006,7 +1009,7 @@ unsigned int res,i;
 
  return &str;
 }
-#line 655 "C:/Users/Git/ColourSampling/String.c"
+#line 658 "C:/Users/Git/ColourSampling/String.c"
 void PrintHandler(char c){
 
  UART1_Write(c);

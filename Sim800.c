@@ -84,6 +84,7 @@ char txtC[15];
 char txtR[15];
 char txtG[15];
 char txtB[15];
+char txtERR[15];
 char txtR_Scl[15];
 char txtG_Scl[15];
 char txtB_Scl[15];
@@ -650,7 +651,8 @@ char tempCellNum[20];
 char *str_;
 
      str_ = (char*)Malloc(100*sizeof(char*));
-     
+     memset(str_,0,100);
+     memset(b,0,64);
      if(!cellNum)
         strcpy(tempCellNum,string[1]);
      else
@@ -729,6 +731,31 @@ char *str_;
              break;
       case 16: //read scaled values
              str_ = ReadHUE();
+             strncpy(b,str_,strlen(str_));
+             UART2_Write_Text(b);
+             break;
+      case 17: //read Red chan
+             str_ = Read_Send_OneColour(READR);
+             strncpy(b,str_,strlen(str_));
+             UART2_Write_Text(b);
+             break;
+      case 18: //read Green chan
+             str_ = Read_Send_OneColour(READG);
+             strncpy(b,str_,strlen(str_));
+             UART2_Write_Text(b);
+             break;
+      case 19: //read Blue chan
+             str_ = Read_Send_OneColour(READB);
+             strncpy(b,str_,strlen(str_));
+             UART2_Write_Text(b);
+             break;
+      case 20: //read Clear chan
+             str_ = Read_Send_OneColour(READC);
+             strncpy(b,str_,strlen(str_));
+             UART2_Write_Text(b);
+             break;
+      case 21: //read Temp chan
+             str_ = Read_Send_OneColour(READT);
              strncpy(b,str_,strlen(str_));
              UART2_Write_Text(b);
              break;
@@ -876,11 +903,20 @@ char *text;
           if(res == 6){         //Reada_Scl
              goto next;
           }
-          else if(res == 10){         //Readc
-             goto next;
+          else if(res == 7){         //ReadR
+               goto next;
           }
-          else if(res == 11){         //Readt
-             goto next;
+          else if(res == 8){         //ReadG
+               goto next;
+          }
+          else if(res == 9){         //ReadB
+              goto next;
+          }
+          else if(res == 10){         //ReadC
+              goto next;
+          }
+          else if(res == 11){         //ReadT
+              goto next;
           }
           else if(res == 13){         //Reada_Scl
              goto next;
@@ -897,6 +933,7 @@ char *text;
              if(res == 17 && !SimVars.start){
                    strncpy(SF.StartCell,string[1],15);
                    SimVars.start = 1;
+                   SetLedPWM();
              }else if(res == 17 && SimVars.start){
                    SendSMS(14,0);
                    return 14;
@@ -955,16 +992,22 @@ char *t,B[64],txtDig[9];
            SendSMS(7,0);
            break;
       case 7: //R
-           SendSMS(12,0);
+           SendSMS(17,0);
            break;
       case 8: //G
-           SendSMS(12,0);
+           SendSMS(18,0);
            break;
       case 9: //B
-           SendSMS(12,0);
+           SendSMS(19,0);
            break;
       case 10: //C
-           SendSMS(12,0);
+           SendSMS(20,0);
+           break;
+      case 11: //C
+           SendSMS(21,0);
+           break;
+      case 12: //C
+           SendSMS(22,0);
            break;
       case 13:
            SendSMS(8,0);
@@ -1065,36 +1108,36 @@ char _str_[200];
  
     memset(_str_,0,sizeof(_str_));
     //get the colour valuse prior to sending to ThingSpek
-    sprintf(txtC,"%u",rgbc[0]);
-    sprintf(txtR,"%u",rgbc[1]);
-    sprintf(txtG,"%u",rgbc[2]);
-    sprintf(txtB,"%u",rgbc[3]);
     sprintf(txtR_Scl,"%3.2f",rgbh[0]);
     sprintf(txtG_Scl,"%3.2f",rgbh[1]);
     sprintf(txtB_Scl,"%3.2f",rgbh[2]);
-    sprintf(txtHUE  ,"%3.2f",rgbh[4]);
-    sprintf(txtSAT  ,"%3.2f",rgbh[5]);
-    sprintf(txtLUM  ,"%3.2f",rgbh[6]);
+    sprintf(txtHUE ,"%3.2f",rgbc[4]);
+    sprintf(txtSAT,"%3.2f",rgbh[5]);
+    sprintf(txtLUM,"%3.2f",rgbh[6]);
+    sprintf(txtC,"%u",rgbc[0]);
+    sprintf(txtERR  ,"%u",rgbc[4]);
+    sprintf(txtG  ,"%u",rgbc[5]);
+    sprintf(txtB  ,"%u",rgbc[6]);
     //Raw Values
+    //scaled and HUE Values
     strncpy(_str_,str_api,46);//strlen(str_api));
     strncat(_str_,SF.WriteAPIKey,strlen(SF.WriteAPIKey));
     strncat(_str_,field1,strlen(field1));
-    strncat(_str_,txtC,strlen(txtC));
+    strncat(_str_,txtR_Scl,strlen(txtR_Scl));   //R
     strncat(_str_,field2,strlen(field2));
-    strncat(_str_,txtR,strlen(txtR));
+    strncat(_str_,txtG_Scl,strlen(txtG_Scl));   //G
     strncat(_str_,field3,strlen(field3));
-    strncat(_str_,txtG,strlen(txtG));
+    strncat(_str_,txtB_Scl,strlen(txtB_Scl));   //B
     strncat(_str_,field4,strlen(field4));
-    strncat(_str_,txtB,strlen(txtB));
-    //scaled and HUE Values
+    strncat(_str_,txtHUE,strlen(txtHUE));       //hue
     strncat(_str_,field5,strlen(field5));
-    strncat(_str_,txtHUE,strlen(txtHUE)); //strncat(_str_,txtR_Scl,strlen(txtR_Scl));
+    strncat(_str_,txtSAT,strlen(txtSAT));       //saturation
     strncat(_str_,field6,strlen(field6));
-    strncat(_str_,txtLUM,strlen(txtLUM)); //strncat(_str_,txtG_Scl,strlen(txtG_Scl));
+    strncat(_str_,txtLUM,strlen(txtLUM));       //luminance
     strncat(_str_,field7,strlen(field7));
-    strncat(_str_,txtSAT,strlen(txtSAT)); //strncat(_str_,txtB_Scl,strlen(txtB_Scl));
+    strncat(_str_,txtC,strlen(txtC));           //clear chan
     strncat(_str_,field8,strlen(field8));
-    strncat(_str_,txtHUE,strlen(txtHUE));
+    strncat(_str_,txtERR ,strlen(txtERR ));     //error
 
 #ifdef ThingDebug
     PrintOut(PrintHandler, "String for ThingSpeak: \r\n"
