@@ -514,15 +514,29 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  resA = resB = 0;
 
 
- last_millis_sigstr = TMR0.millis;
- millis_sigstr_sp = 5000;
-
  PWM_Start(2);
  Delay_ms(500);
  SetLedPWM();
  PWM_Stop(2);
-#line 128 "C:/Users/Git/ColourSampling/ColourSampling.c"
+
+
+
+
+ last_millis_sigstr = TMR0.millis;
+ millis_sigstr_sp = 5000;
+
+
+ WDTCONSET = 0x8000;
+#line 134 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
+ WDTCONSET = 0x01;
+
+
+
+ num = HID_Read();
+ if(num != 0){
+ DoStrings(num);
+ }
 
 
 
@@ -532,14 +546,6 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  last_millis_sigstr = TMR0.millis;
  res_millis_sigstr = 0;
  SignalStrength();
- }
-
-
-
-
- num = HID_Read();
- if(num != 0){
- DoStrings(num);
  }
 
 
@@ -587,7 +593,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  if(!RE4_bit){
 
  GetValuesFromFlash();
-#line 203 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 209 "C:/Users/Git/ColourSampling/ColourSampling.c"
  }
  }
 }

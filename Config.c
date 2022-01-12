@@ -40,7 +40,7 @@ void ConfigPic(){
    
    //Initialize PWMs and set duty cycle
    current_duty1  = 2000;                        // initial value for current_duty
-   current_duty2 = 10000;                        // initial value for current_duty1
+   current_duty2 = 20000;                        // initial value for current_duty1
    pwm_period1 = PWM_Init(5000 , 1, 0, 3);//pwm frk,pwm pin 1-latd0,pre-scal,tmr2
    pwm_period2 = PWM_Init(5000 , 2, 0, 3); //pwm frk,pwm pin 1-latd1,pre-scal,tmr5
    PWM_Set_Duty(current_duty1,  1);            // Set current duty for PWM1

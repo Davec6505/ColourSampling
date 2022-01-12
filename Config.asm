@@ -83,7 +83,7 @@ JAL	_InitUart2+0
 NOP	
 ORI	R2, R0, 2000
 SH	R2, Offset(_current_duty1+0)(GP)
-ORI	R2, R0, 10000
+ORI	R2, R0, 20000
 SH	R2, Offset(_current_duty2+0)(GP)
 ORI	R28, R0, 3
 MOVZ	R27, R0, R0

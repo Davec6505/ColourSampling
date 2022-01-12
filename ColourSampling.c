@@ -113,19 +113,33 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
 #endif
    T0_SP.one_per_Xmin = 0;
    resA = resB = 0;
-   //check for signal strength on START tmr2-3
-  // SignalStrength();
-   last_millis_sigstr = TMR0.millis;
-   millis_sigstr_sp = 5000;
+
    
    PWM_Start(2);
    Delay_ms(500);
    SetLedPWM();
    PWM_Stop(2);
+   
+   
+   //check for signal strength on START tmr2-3
+   // SignalStrength();
+   last_millis_sigstr = TMR0.millis;
+   millis_sigstr_sp = 5000;
+   
+   //WDT enable at 131.072s  || 1:131072
+   WDTCONSET = 0x8000; //Enable WDT
 /***************************************************
 * main loop forever!!
 ***************************************************/
    while(1){
+      WDTCONSET = 0x01; // service the WDT
+      
+      ///////////////////////////////////////////////
+     //Get input from USB to set up thresholds
+     num = HID_Read();
+     if(num != 0){
+        DoStrings(num);
+     }
 
      ///////////////////////////////////////////////
      //test millis for time to check sig strength
@@ -136,15 +150,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
          res_millis_sigstr  = 0;
          SignalStrength();
       }
-
-     
-     ///////////////////////////////////////////////
-     //Get input from USB to set up thresholds
-     num = HID_Read();
-     if(num != 0){
-        DoStrings(num);
-     }
-     
+      
      //Update Thingspeak
      if(SimVars.init_inc >= 5){
        if(T0_SP.one_per_Xmin){

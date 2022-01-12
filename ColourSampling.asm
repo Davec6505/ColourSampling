@@ -188,10 +188,6 @@ LBU	R2, Offset(_T0_SP+10)(GP)
 INS	R2, R0, 1, 1
 SB	R2, Offset(_T0_SP+10)(GP)
 SH	R0, 54(SP)
-LW	R2, Offset(_TMR0+0)(GP)
-SW	R2, Offset(main_last_millis_sigstr_L0+0)(GP)
-ORI	R2, R0, 5000
-SW	R2, Offset(main_millis_sigstr_sp_L0+0)(GP)
 ORI	R25, R0, 2
 JAL	_PWM_Start+0
 NOP	
@@ -208,38 +204,46 @@ NOP
 ORI	R25, R0, 2
 JAL	_PWM_Stop+0
 NOP	
+LW	R2, Offset(_TMR0+0)(GP)
+SW	R2, Offset(main_last_millis_sigstr_L0+0)(GP)
+ORI	R2, R0, 5000
+SW	R2, Offset(main_millis_sigstr_sp_L0+0)(GP)
+ORI	R2, R0, 32768
+SW	R2, Offset(WDTCONSET+0)(GP)
 L_main11:
+ORI	R2, R0, 1
+SW	R2, Offset(WDTCONSET+0)(GP)
+JAL	_HID_Read+0
+NOP	
+; num start address is: 12 (R3)
+ANDI	R3, R2, 255
+ANDI	R2, R2, 255
+BNE	R2, R0, L__main33
+NOP	
+J	L_main13
+NOP	
+L__main33:
+ANDI	R25, R3, 255
+; num end address is: 12 (R3)
+JAL	_DoStrings+0
+NOP	
+L_main13:
 LW	R3, Offset(main_last_millis_sigstr_L0+0)(GP)
 LW	R2, Offset(_TMR0+0)(GP)
 SUBU	R3, R2, R3
 LW	R2, Offset(main_millis_sigstr_sp_L0+0)(GP)
 SLT	R2, R3, R2
-BEQ	R2, R0, L__main32
+BEQ	R2, R0, L__main34
 NOP	
-J	L_main13
+J	L_main14
 NOP	
-L__main32:
+L__main34:
 LUI	R2, 9
 ORI	R2, R2, 10176
 SW	R2, Offset(main_millis_sigstr_sp_L0+0)(GP)
 LW	R2, Offset(_TMR0+0)(GP)
 SW	R2, Offset(main_last_millis_sigstr_L0+0)(GP)
 JAL	_SignalStrength+0
-NOP	
-L_main13:
-JAL	_HID_Read+0
-NOP	
-; num start address is: 12 (R3)
-ANDI	R3, R2, 255
-ANDI	R2, R2, 255
-BNE	R2, R0, L__main34
-NOP	
-J	L_main14
-NOP	
-L__main34:
-ANDI	R25, R3, 255
-; num end address is: 12 (R3)
-JAL	_DoStrings+0
 NOP	
 L_main14:
 LBU	R2, Offset(_SimVars+1)(GP)

@@ -363,12 +363,11 @@ int err;
        strcat(str," | ");
 
        if(!data_src ) {
-          sprintf(txtR,"%u",RawData[3]);  //ERR
-          strcat(str,txtR);
-          strcat(str," || ");
-      //cct = TCS3472_CalcColTemp_dn40(RawData,it);
+         sprintf(txtR,"%u",RawData[3]);
+         strcat(str,txtR);
+         strcat(str," || ");
          err = TCS3472_C2RGB_Error(RawData);
-         sprintf(txtR,"%5d",err);
+         sprintf(txtR,"%5d",err); //ERR
          strcat(str,txtR);
          strcat(str," || \r\n");
        }else
@@ -376,7 +375,7 @@ int err;
 
       // Free(FltData,sizeof(FltData));
       PWM_Stop(2);
-      return &str;
+      return str;
 }
 
 /********************************************************************
@@ -387,6 +386,7 @@ unsigned int col;
 char txtR[10];
 char str[64];
 
+     memset(str,0,strlen(str));
      PWM_Start(2);
      Delay_ms(500);
      switch(colr){
@@ -436,7 +436,7 @@ char str[64];
            break;
      }
      PWM_Stop(2);
-     return &str;
+     return str;
 }
 
 /*********************************************************************
@@ -469,7 +469,7 @@ float HUE,LUMENANCE,SATURATION;
        strcat(str,txtH);
        strcat(str," ||\r\n ");
        PWM_Stop(2);
-       return &str;
+       return str;
 }
 
 
@@ -512,7 +512,7 @@ unsigned long Val;
        strcat(str,txtR);
        strcat(str," ||\r\n ");
 
-        return &str;
+        return str;
 }
 
 /*********************************************************************
@@ -527,7 +527,10 @@ char str[64];
          pos =  FLASH_Settings_PAddr; //P?
         for(i=1;i<128;i++)
            val[i] = 0x00000000;
-
+           
+        PWM_Start(2);
+        Delay_ms(500);
+        memset(str,0,64);
         //0 = get the values for thresholds from the sensor
          if(!data_src)
              TCS3472_getRawData(RawData);
@@ -573,7 +576,7 @@ char str[64];
              err = NVMWriteWord(pos,val[4]);
         }
 
-
+       PWM_Stop(2);
        //  err = NVMWriteRow(FLASH_Settings_PAddr,val);
        
        sprintf(txtR,"%x",err);
