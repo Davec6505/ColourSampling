@@ -491,6 +491,10 @@ main
 		RemoveSMSText
 		__CC2DW
 	NVMErasePage
+	TCS3472_getRawData
+	GetScaledValues
+	TCS3472_CalcHSL
+	SendData
 	__CC2DW
 	__FillZeros
 	Test_Update_ThingSpeak

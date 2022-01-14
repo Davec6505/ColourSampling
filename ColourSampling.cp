@@ -561,13 +561,6 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  }
  }
 
-
- if(!T0_SP.one_per_sec){
- diff = TestRingPointers();
- if(diff > 1){
- last_rec_inc = SimVars.init_inc;
- SimVars.init_inc = 3;
-
  sprintf(txtI,"%d",resB);
  sprintf(txtR,"%d",diff);
  sprintf(txtT,"%d",RB.tail);
@@ -579,6 +572,13 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  " *Reply from GetSmsTxt():= %s\r\n"
  ,txtT,txtH,txtR,txtI);
 
+
+ if(!T0_SP.one_per_sec){
+ diff = TestRingPointers();
+ if(diff > 1){
+
+ last_rec_inc = SimVars.init_inc;
+ SimVars.init_inc = 3;
  GetSMSText();
  Delay_ms(500);
  if(SimVars.init_inc != 5)
@@ -593,6 +593,12 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  if(!RE4_bit){
 
  GetValuesFromFlash();
+
+
+ TCS3472_getRawData(RawData);
+ GetScaledValues(RawData,&FltData);
+ TCS3472_CalcHSL(&FltData);
+ SendData(RawData,FltData);
 #line 209 "C:/Users/Git/ColourSampling/ColourSampling.c"
  }
  }

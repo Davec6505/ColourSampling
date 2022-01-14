@@ -1,5 +1,7 @@
 _main:
-ADDIU	SP, SP, -56
+ADDIU	SP, SP, -60
+MOVZ	R30, R0, R0
+SH	R30, 54(SP)
 LUI	R2, hi_addr(_Test_Update_ThingSpeak+0)
 ORI	R2, R2, lo_addr(_Test_Update_ThingSpeak+0)
 SW	R2, Offset(_Update_Test+0)(GP)
@@ -187,7 +189,7 @@ ADDIU	SP, SP, 12
 LBU	R2, Offset(_T0_SP+10)(GP)
 INS	R2, R0, 1, 1
 SB	R2, Offset(_T0_SP+10)(GP)
-SH	R0, 54(SP)
+SH	R0, 56(SP)
 ORI	R25, R0, 2
 JAL	_PWM_Start+0
 NOP	
@@ -285,30 +287,8 @@ JAL	_PWM_Stop+0
 NOP	
 L_main16:
 L_main15:
-LBU	R2, Offset(_T0_SP+10)(GP)
-EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__main38
-NOP	
-J	L_main19
-NOP	
-L__main38:
-JAL	_TestRingPointers+0
-NOP	
-; diff start address is: 84 (R21)
-SEH	R21, R2
-SEH	R2, R2
-SLTI	R2, R2, 2
-BEQ	R2, R0, L__main39
-NOP	
-J	L_main20
-NOP	
-L__main39:
-LBU	R2, Offset(_SimVars+1)(GP)
-SB	R2, 20(SP)
-ORI	R2, R0, 3
-SB	R2, Offset(_SimVars+1)(GP)
 ADDIU	R3, SP, 42
-LH	R2, 54(SP)
+LH	R2, 56(SP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
 LUI	R2, hi_addr(?lstr_6_ColourSampling+0)
@@ -319,9 +299,9 @@ JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
 ADDIU	R3, SP, 24
+LH	R2, 54(SP)
 ADDIU	SP, SP, -12
-SH	R21, 8(SP)
-; diff end address is: 84 (R21)
+SH	R2, 8(SP)
 LUI	R2, hi_addr(?lstr_7_ColourSampling+0)
 ORI	R2, R2, lo_addr(?lstr_7_ColourSampling+0)
 SW	R2, 4(SP)
@@ -369,6 +349,27 @@ SW	R2, 0(SP)
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 24
+LBU	R2, Offset(_T0_SP+10)(GP)
+EXT	R2, R2, 0, 1
+BEQ	R2, R0, L__main38
+NOP	
+J	L_main19
+NOP	
+L__main38:
+JAL	_TestRingPointers+0
+NOP	
+SH	R2, 54(SP)
+SEH	R2, R2
+SLTI	R2, R2, 2
+BEQ	R2, R0, L__main39
+NOP	
+J	L_main20
+NOP	
+L__main39:
+LBU	R2, Offset(_SimVars+1)(GP)
+SB	R2, 20(SP)
+ORI	R2, R0, 3
+SB	R2, Offset(_SimVars+1)(GP)
 JAL	_GetSMSText+0
 NOP	
 LUI	R24, 203
@@ -410,6 +411,26 @@ J	L_main25
 NOP	
 L__main43:
 JAL	_GetValuesFromFlash+0
+NOP	
+LUI	R25, hi_addr(_RawData+0)
+ORI	R25, R25, lo_addr(_RawData+0)
+JAL	_TCS3472_getRawData+0
+NOP	
+LUI	R26, hi_addr(_FltData+0)
+ORI	R26, R26, lo_addr(_FltData+0)
+LUI	R25, hi_addr(_RawData+0)
+ORI	R25, R25, lo_addr(_RawData+0)
+JAL	_GetScaledValues+0
+NOP	
+LUI	R25, hi_addr(_FltData+0)
+ORI	R25, R25, lo_addr(_FltData+0)
+JAL	_TCS3472_CalcHSL+0
+NOP	
+LUI	R26, hi_addr(_FltData+0)
+ORI	R26, R26, lo_addr(_FltData+0)
+LUI	R25, hi_addr(_RawData+0)
+ORI	R25, R25, lo_addr(_RawData+0)
+JAL	_SendData+0
 NOP	
 L_main25:
 J	L_main11

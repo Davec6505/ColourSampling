@@ -13,7 +13,7 @@
 //defines
 #define MainDebug
 #define MainFlashDebug
-//#define MainColDebug
+#define MainColDebug
 //#define MainSigStrengthDebug
 
 
