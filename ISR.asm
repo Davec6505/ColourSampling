@@ -97,6 +97,12 @@ XORI	R3, R2, 1
 _LX	
 INS	R2, R3, BitPos(LATE3_bit+0), 1
 _SX	
+_LX	
+EXT	R2, R2, BitPos(LATD5_bit+0), 1
+XORI	R3, R2, 1
+_LX	
+INS	R2, R3, BitPos(LATD5_bit+0), 1
+_SX	
 L_end_Timer4_5Interrupt:
 DI	
 EHB	

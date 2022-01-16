@@ -431,6 +431,7 @@ void Timer4_5Interrupt() iv IVT_TIMER_5 ilevel 7 ics ICS_SRS{
  T5IF_bit = 0;
 
  LATE3_bit = !LATE3_bit;
+ LATD5_bit = !LATD5_bit;
 }
 
 void PC_Uart1() iv IVT_UART_1 ilevel 6 ics ICS_AUTO {
