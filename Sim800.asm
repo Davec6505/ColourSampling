@@ -77,11 +77,11 @@ _SX
 L_PwrUpGSM32:
 _LX	
 EXT	R2, R2, BitPos(RB4_bit+0), 1
-BNE	R2, R0, L__PwrUpGSM3317
+BNE	R2, R0, L__PwrUpGSM3298
 NOP	
 J	L_PwrUpGSM33
 NOP	
-L__PwrUpGSM3317:
+L__PwrUpGSM3298:
 _LX	
 EXT	R2, R2, BitPos(LATE3_bit+0), 1
 XORI	R3, R2, 1
@@ -173,28 +173,6 @@ ORI	R26, R26, lo_addr(_SF+118)
 MOVZ	R25, R2, R0
 JAL	_memcpy+0
 NOP	
-ORI	R2, R0, 1
-SH	R2, Offset(WriteToFlashTemp_i_L0+0)(GP)
-L_WriteToFlashTemp8:
-LH	R2, Offset(WriteToFlashTemp_i_L0+0)(GP)
-SLTI	R2, R2, 128
-BNE	R2, R0, L__WriteToFlashTemp319
-NOP	
-J	L_WriteToFlashTemp9
-NOP	
-L__WriteToFlashTemp319:
-LH	R2, Offset(WriteToFlashTemp_i_L0+0)(GP)
-SLL	R3, R2, 2
-LUI	R2, hi_addr(_temp+0)
-ORI	R2, R2, lo_addr(_temp+0)
-ADDU	R2, R2, R3
-SW	R0, 0(R2)
-LH	R2, Offset(WriteToFlashTemp_i_L0+0)(GP)
-ADDIU	R2, R2, 1
-SH	R2, Offset(WriteToFlashTemp_i_L0+0)(GP)
-J	L_WriteToFlashTemp8
-NOP	
-L_WriteToFlashTemp9:
 LH	R2, Offset(_SL+14)(GP)
 ADDIU	R2, R2, 4
 SEH	R27, R2
@@ -213,26 +191,26 @@ NOP
 LW	R3, 16(SP)
 SH	R2, Offset(WriteToFlashTemp_j_L0+0)(GP)
 SEH	R2, R2
-BEQ	R2, R0, L__WriteToFlashTemp320
+BEQ	R2, R0, L__WriteToFlashTemp300
 NOP	
-J	L_WriteToFlashTemp11
+J	L_WriteToFlashTemp8
 NOP	
-L__WriteToFlashTemp320:
+L__WriteToFlashTemp300:
 ADDIU	R2, R3, 20
 ; pos end address is: 12 (R3)
 ; pos start address is: 16 (R4)
 MOVZ	R4, R2, R0
 SH	R0, Offset(WriteToFlashTemp_i_L0+0)(GP)
 ; pos end address is: 16 (R4)
-L_WriteToFlashTemp12:
+L_WriteToFlashTemp9:
 ; pos start address is: 16 (R4)
 LH	R2, Offset(WriteToFlashTemp_i_L0+0)(GP)
-SLTI	R2, R2, 128
-BNE	R2, R0, L__WriteToFlashTemp321
+SLTI	R2, R2, 100
+BNE	R2, R0, L__WriteToFlashTemp301
 NOP	
-J	L_WriteToFlashTemp13
+J	L_WriteToFlashTemp10
 NOP	
-L__WriteToFlashTemp321:
+L__WriteToFlashTemp301:
 LH	R2, Offset(WriteToFlashTemp_i_L0+0)(GP)
 SLL	R3, R2, 2
 LUI	R2, hi_addr(_temp+0)
@@ -247,14 +225,22 @@ LW	R4, 16(SP)
 SH	R2, Offset(WriteToFlashTemp_j_L0+0)(GP)
 ADDIU	R2, R4, 4
 MOVZ	R4, R2, R0
+LUI	R24, 2
+ORI	R24, R24, 2260
+L_WriteToFlashTemp12:
+ADDIU	R24, R24, -1
+BNE	R24, R0, L_WriteToFlashTemp12
+NOP	
+NOP	
+NOP	
 LH	R2, Offset(WriteToFlashTemp_i_L0+0)(GP)
 ADDIU	R2, R2, 1
 SH	R2, Offset(WriteToFlashTemp_i_L0+0)(GP)
 ; pos end address is: 16 (R4)
-J	L_WriteToFlashTemp12
+J	L_WriteToFlashTemp9
 NOP	
-L_WriteToFlashTemp13:
-L_WriteToFlashTemp11:
+L_WriteToFlashTemp10:
+L_WriteToFlashTemp8:
 LH	R2, Offset(WriteToFlashTemp_i_L0+0)(GP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
@@ -319,17 +305,17 @@ MOVZ	R4, R2, R0
 ; i start address is: 20 (R5)
 MOVZ	R5, R0, R0
 ; i end address is: 20 (R5)
-L_GetValuesFromFlash15:
+L_GetValuesFromFlash14:
 ; i start address is: 20 (R5)
 ; ptr start address is: 16 (R4)
 ; ptr end address is: 16 (R4)
 LH	R2, Offset(_SL+14)(GP)
 SLTU	R2, R5, R2
-BNE	R2, R0, L__GetValuesFromFlash323
+BNE	R2, R0, L__GetValuesFromFlash303
 NOP	
-J	L_GetValuesFromFlash16
+J	L_GetValuesFromFlash15
 NOP	
-L__GetValuesFromFlash323:
+L__GetValuesFromFlash303:
 ; ptr end address is: 16 (R4)
 ; ptr start address is: 16 (R4)
 LUI	R2, hi_addr(_buff+0)
@@ -351,9 +337,9 @@ ADDIU	R2, R5, 1
 MOVZ	R5, R2, R0
 ; ptr end address is: 16 (R4)
 ; i end address is: 20 (R5)
-J	L_GetValuesFromFlash15
+J	L_GetValuesFromFlash14
 NOP	
-L_GetValuesFromFlash16:
+L_GetValuesFromFlash15:
 LH	R27, Offset(_SL+0)(GP)
 LUI	R26, hi_addr(_buff+0)
 ORI	R26, R26, lo_addr(_buff+0)
@@ -573,55 +559,55 @@ NOP
 _RcvSimTxt:
 ADDIU	SP, SP, -4
 SW	RA, 0(SP)
-L_RcvSimTxt18:
+L_RcvSimTxt17:
 JAL	_UART2_Data_Ready+0
 NOP	
-BNE	R2, R0, L__RcvSimTxt327
+BNE	R2, R0, L__RcvSimTxt307
 NOP	
-J	L_RcvSimTxt19
+J	L_RcvSimTxt18
 NOP	
-L__RcvSimTxt327:
+L__RcvSimTxt307:
 LBU	R2, Offset(U2STAbits+0)(GP)
 EXT	R2, R2, 2, 1
-BEQ	R2, R0, L__RcvSimTxt328
+BEQ	R2, R0, L__RcvSimTxt308
 NOP	
-J	L__RcvSimTxt274
+J	L__RcvSimTxt255
 NOP	
-L__RcvSimTxt328:
+L__RcvSimTxt308:
 LBU	R2, Offset(U2STAbits+0)(GP)
 EXT	R2, R2, 1, 1
-BEQ	R2, R0, L__RcvSimTxt329
+BEQ	R2, R0, L__RcvSimTxt309
 NOP	
-J	L__RcvSimTxt273
+J	L__RcvSimTxt254
 NOP	
-L__RcvSimTxt329:
-J	L_RcvSimTxt22
+L__RcvSimTxt309:
+J	L_RcvSimTxt21
 NOP	
-L__RcvSimTxt274:
-L__RcvSimTxt273:
+L__RcvSimTxt255:
+L__RcvSimTxt254:
 LBU	R2, Offset(U2STAbits+0)(GP)
 EXT	R2, R2, 2, 1
-BNE	R2, R0, L__RcvSimTxt331
+BNE	R2, R0, L__RcvSimTxt311
 NOP	
-J	L_RcvSimTxt23
+J	L_RcvSimTxt22
 NOP	
-L__RcvSimTxt331:
+L__RcvSimTxt311:
 ORI	R2, R0, 4
 SW	R2, Offset(U2STAbits+4)(GP)
 J	___RcvSimTxt_m0
 NOP	
-L_RcvSimTxt23:
+L_RcvSimTxt22:
 LBU	R2, Offset(U2STAbits+0)(GP)
 EXT	R2, R2, 1, 1
-BNE	R2, R0, L__RcvSimTxt333
+BNE	R2, R0, L__RcvSimTxt313
 NOP	
-J	L_RcvSimTxt24
+J	L_RcvSimTxt23
 NOP	
-L__RcvSimTxt333:
+L__RcvSimTxt313:
 ORI	R2, R0, 2
 SW	R2, Offset(U2STAbits+4)(GP)
-L_RcvSimTxt24:
-L_RcvSimTxt22:
+L_RcvSimTxt23:
+L_RcvSimTxt21:
 ___RcvSimTxt_m0:
 ; txt start address is: 16 (R4)
 LW	R4, Offset(U2RXREG+0)(GP)
@@ -629,11 +615,11 @@ ANDI	R2, R4, 255
 SW	R2, Offset(U1TXREG+0)(GP)
 ANDI	R2, R4, 255
 SLTIU	R2, R2, 32
-BEQ	R2, R0, L__RcvSimTxt334
+BEQ	R2, R0, L__RcvSimTxt314
 NOP	
-J	L_RcvSimTxt25
+J	L_RcvSimTxt24
 NOP	
-L__RcvSimTxt334:
+L__RcvSimTxt314:
 LHU	R3, Offset(_RB+1002)(GP)
 LUI	R2, hi_addr(_RB+1)
 ORI	R2, R2, lo_addr(_RB+1)
@@ -643,16 +629,16 @@ SB	R4, 0(R2)
 LHU	R2, Offset(_RB+1002)(GP)
 ADDIU	R2, R2, 1
 SH	R2, Offset(_RB+1002)(GP)
-J	L_RcvSimTxt26
+J	L_RcvSimTxt25
 NOP	
-L_RcvSimTxt25:
+L_RcvSimTxt24:
 LW	R3, Offset(U2RXREG+0)(GP)
 ORI	R2, R0, 10
-BEQ	R3, R2, L__RcvSimTxt335
+BEQ	R3, R2, L__RcvSimTxt315
 NOP	
-J	L_RcvSimTxt27
+J	L_RcvSimTxt26
 NOP	
-L__RcvSimTxt335:
+L__RcvSimTxt315:
 LHU	R3, Offset(_RB+1002)(GP)
 LUI	R2, hi_addr(_RB+1)
 ORI	R2, R2, lo_addr(_RB+1)
@@ -662,20 +648,20 @@ SB	R2, 0(R3)
 LHU	R2, Offset(_RB+1002)(GP)
 ADDIU	R2, R2, 1
 SH	R2, Offset(_RB+1002)(GP)
-L_RcvSimTxt27:
 L_RcvSimTxt26:
+L_RcvSimTxt25:
 LHU	R2, Offset(_RB+1002)(GP)
 SLTIU	R2, R2, 1000
-BEQ	R2, R0, L__RcvSimTxt336
+BEQ	R2, R0, L__RcvSimTxt316
 NOP	
-J	L_RcvSimTxt28
+J	L_RcvSimTxt27
 NOP	
-L__RcvSimTxt336:
+L__RcvSimTxt316:
 SH	R0, Offset(_RB+1002)(GP)
-L_RcvSimTxt28:
-J	L_RcvSimTxt18
+L_RcvSimTxt27:
+J	L_RcvSimTxt17
 NOP	
-L_RcvSimTxt19:
+L_RcvSimTxt18:
 ORI	R2, R0, 1
 SB	R2, Offset(_RB+0)(GP)
 L_end_RcvSimTxt:
@@ -688,11 +674,11 @@ _TestRingPointers:
 LHU	R3, Offset(_RB+1002)(GP)
 LHU	R2, Offset(_RB+1004)(GP)
 SLTU	R2, R3, R2
-BNE	R2, R0, L__TestRingPointers338
+BNE	R2, R0, L__TestRingPointers318
 NOP	
-J	L_TestRingPointers29
+J	L_TestRingPointers28
 NOP	
-L__TestRingPointers338:
+L__TestRingPointers318:
 LHU	R3, Offset(_RB+1004)(GP)
 ORI	R2, R0, 1000
 SUBU	R3, R2, R3
@@ -700,9 +686,9 @@ LHU	R2, Offset(_RB+1002)(GP)
 ADDU	R2, R3, R2
 ; diff start address is: 8 (R2)
 ; diff end address is: 8 (R2)
-J	L_TestRingPointers30
+J	L_TestRingPointers29
 NOP	
-L_TestRingPointers29:
+L_TestRingPointers28:
 LHU	R3, Offset(_RB+1004)(GP)
 LHU	R2, Offset(_RB+1002)(GP)
 SUBU	R2, R2, R3
@@ -710,7 +696,7 @@ SUBU	R2, R2, R3
 ANDI	R3, R2, 65535
 ; diff end address is: 12 (R3)
 SEH	R2, R3
-L_TestRingPointers30:
+L_TestRingPointers29:
 ; diff start address is: 8 (R2)
 ; diff end address is: 8 (R2)
 L_end_TestRingPointers:
@@ -725,10 +711,10 @@ LW	R5, Offset(_TMR0+0)(GP)
 SB	R0, Offset(_RB+0)(GP)
 LHU	R2, Offset(_RB+1002)(GP)
 SH	R2, Offset(_RB+1006)(GP)
-J	L_WaitForResponse31
+J	L_WaitForResponse30
 NOP	
-L__WaitForResponse275:
-L_WaitForResponse31:
+L__WaitForResponse256:
+L_WaitForResponse30:
 ; lastMillis start address is: 20 (R5)
 ; lastMillis end address is: 20 (R5)
 _LX	
@@ -738,47 +724,47 @@ _LX
 INS	R2, R3, BitPos(LATE3_bit+0), 1
 _SX	
 SEB	R2, R25
-BEQ	R2, R0, L__WaitForResponse340
+BEQ	R2, R0, L__WaitForResponse320
 NOP	
-J	L_WaitForResponse34
+J	L_WaitForResponse33
 NOP	
-L__WaitForResponse340:
+L__WaitForResponse320:
 ; lastMillis end address is: 20 (R5)
 ; lastMillis start address is: 20 (R5)
 LUI	R24, 40
 ORI	R24, R24, 45226
-L_WaitForResponse35:
+L_WaitForResponse34:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_WaitForResponse35
+BNE	R24, R0, L_WaitForResponse34
+NOP	
+J	L_WaitForResponse36
+NOP	
+L_WaitForResponse33:
+SEB	R3, R25
+ORI	R2, R0, 1
+BEQ	R3, R2, L__WaitForResponse321
 NOP	
 J	L_WaitForResponse37
 NOP	
-L_WaitForResponse34:
-SEB	R3, R25
-ORI	R2, R0, 1
-BEQ	R3, R2, L__WaitForResponse341
-NOP	
-J	L_WaitForResponse38
-NOP	
-L__WaitForResponse341:
+L__WaitForResponse321:
 LUI	R24, 203
 ORI	R24, R24, 29524
-L_WaitForResponse39:
+L_WaitForResponse38:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_WaitForResponse39
+BNE	R24, R0, L_WaitForResponse38
 NOP	
 NOP	
+NOP	
+J	L_WaitForResponse40
+NOP	
+L_WaitForResponse37:
+SEB	R3, R25
+ORI	R2, R0, 3
+BEQ	R3, R2, L__WaitForResponse322
 NOP	
 J	L_WaitForResponse41
 NOP	
-L_WaitForResponse38:
-SEB	R3, R25
-ORI	R2, R0, 3
-BEQ	R3, R2, L__WaitForResponse342
-NOP	
-J	L_WaitForResponse42
-NOP	
-L__WaitForResponse342:
+L__WaitForResponse322:
 ORI	R30, R0, 65
 SB	R30, 5(SP)
 ORI	R30, R0, 84
@@ -803,46 +789,46 @@ NOP
 LB	R25, 4(SP)
 LUI	R24, 813
 ORI	R24, R24, 52564
-L_WaitForResponse43:
-ADDIU	R24, R24, -1
-BNE	R24, R0, L_WaitForResponse43
-NOP	
-NOP	
-NOP	
-J	L_WaitForResponse45
-NOP	
 L_WaitForResponse42:
+ADDIU	R24, R24, -1
+BNE	R24, R0, L_WaitForResponse42
+NOP	
+NOP	
+NOP	
+J	L_WaitForResponse44
+NOP	
+L_WaitForResponse41:
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_WaitForResponse46:
-ADDIU	R24, R24, -1
-BNE	R24, R0, L_WaitForResponse46
-NOP	
 L_WaitForResponse45:
-L_WaitForResponse41:
-L_WaitForResponse37:
+ADDIU	R24, R24, -1
+BNE	R24, R0, L_WaitForResponse45
+NOP	
+L_WaitForResponse44:
+L_WaitForResponse40:
+L_WaitForResponse36:
 LW	R2, Offset(_TMR0+0)(GP)
 SUBU	R3, R2, R5
 ORI	R2, R0, 59000
 SLTU	R2, R2, R3
-BNE	R2, R0, L__WaitForResponse343
+BNE	R2, R0, L__WaitForResponse323
 NOP	
-J	L_WaitForResponse48
+J	L_WaitForResponse47
 NOP	
-L__WaitForResponse343:
+L__WaitForResponse323:
 ; lastMillis end address is: 20 (R5)
-J	L_WaitForResponse32
+J	L_WaitForResponse31
 NOP	
-L_WaitForResponse48:
+L_WaitForResponse47:
 ; lastMillis start address is: 20 (R5)
 LBU	R2, Offset(_RB+0)(GP)
-BNE	R2, R0, L__WaitForResponse345
+BNE	R2, R0, L__WaitForResponse325
 NOP	
-J	L__WaitForResponse275
+J	L__WaitForResponse256
 NOP	
-L__WaitForResponse345:
+L__WaitForResponse325:
 ; lastMillis end address is: 20 (R5)
-L_WaitForResponse32:
+L_WaitForResponse31:
 LUI	R2, BitMask(LATE3_bit+0)
 ORI	R2, R2, BitMask(LATE3_bit+0)
 _SX	
@@ -858,35 +844,35 @@ MOVZ	R5, R0, R0
 LHU	R2, Offset(_RB+1008)(GP)
 SH	R2, Offset(_RB+1004)(GP)
 ; i end address is: 20 (R5)
-L_RingToTempBuf49:
+L_RingToTempBuf48:
 ; i start address is: 20 (R5)
 LHU	R3, Offset(_RB+1002)(GP)
 LHU	R2, Offset(_RB+1004)(GP)
-BNE	R2, R3, L__RingToTempBuf348
+BNE	R2, R3, L__RingToTempBuf328
 NOP	
-J	L_RingToTempBuf50
+J	L_RingToTempBuf49
 NOP	
-L__RingToTempBuf348:
+L__RingToTempBuf328:
 LHU	R3, Offset(_RB+1002)(GP)
 LHU	R2, Offset(_RB+1004)(GP)
 SLTU	R2, R3, R2
-BNE	R2, R0, L__RingToTempBuf349
+BNE	R2, R0, L__RingToTempBuf329
 NOP	
-J	L__RingToTempBuf278
+J	L__RingToTempBuf259
 NOP	
-L__RingToTempBuf349:
+L__RingToTempBuf329:
 LHU	R2, Offset(_RB+1002)(GP)
 SLTIU	R2, R2, 151
-BEQ	R2, R0, L__RingToTempBuf350
+BEQ	R2, R0, L__RingToTempBuf330
 NOP	
-J	L__RingToTempBuf277
+J	L__RingToTempBuf258
 NOP	
-L__RingToTempBuf350:
-L__RingToTempBuf276:
+L__RingToTempBuf330:
+L__RingToTempBuf257:
 LHU	R2, Offset(_RB+1002)(GP)
 SH	R2, Offset(_RB+1004)(GP)
-L__RingToTempBuf278:
-L__RingToTempBuf277:
+L__RingToTempBuf259:
+L__RingToTempBuf258:
 SEH	R3, R5
 LUI	R2, hi_addr(_SimTestTxt+0)
 ORI	R2, R2, lo_addr(_SimTestTxt+0)
@@ -904,16 +890,16 @@ ADDIU	R2, R2, 1
 SH	R2, Offset(_RB+1004)(GP)
 ANDI	R2, R2, 65535
 SLTIU	R2, R2, 1000
-BEQ	R2, R0, L__RingToTempBuf351
+BEQ	R2, R0, L__RingToTempBuf331
 NOP	
-J	L_RingToTempBuf54
+J	L_RingToTempBuf53
 NOP	
-L__RingToTempBuf351:
+L__RingToTempBuf331:
 SH	R0, Offset(_RB+1004)(GP)
-L_RingToTempBuf54:
-J	L_RingToTempBuf49
+L_RingToTempBuf53:
+J	L_RingToTempBuf48
 NOP	
-L_RingToTempBuf50:
+L_RingToTempBuf49:
 SEH	R3, R5
 ; i end address is: 20 (R5)
 LUI	R2, hi_addr(_SimTestTxt+0)
@@ -946,9 +932,9 @@ JAL	_WaitForResponse+0
 NOP	
 LUI	R24, 1627
 ORI	R24, R24, 39594
-L_SetupIOT55:
+L_SetupIOT54:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SetupIOT55
+BNE	R24, R0, L_SetupIOT54
 NOP	
 JAL	_RingToTempBuf+0
 NOP	
@@ -987,9 +973,9 @@ JAL	_WaitForResponse+0
 NOP	
 LUI	R24, 2034
 ORI	R24, R24, 33108
-L_SetupIOT57:
+L_SetupIOT56:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SetupIOT57
+BNE	R24, R0, L_SetupIOT56
 NOP	
 NOP	
 NOP	
@@ -1011,11 +997,11 @@ ADDIU	SP, SP, 12
 LHU	R3, Offset(_RB+1006)(GP)
 LHU	R2, Offset(_RB+1002)(GP)
 SLTU	R2, R3, R2
-BNE	R2, R0, L__SetupIOT353
+BNE	R2, R0, L__SetupIOT333
 NOP	
-J	L_SetupIOT59
+J	L_SetupIOT58
 NOP	
-L__SetupIOT353:
+L__SetupIOT333:
 ORI	R26, R0, 44
 LUI	R25, hi_addr(_SimTestTxt+0)
 ORI	R25, R25, lo_addr(_SimTestTxt+0)
@@ -1071,11 +1057,11 @@ NOP
 SEH	R4, R2
 SEH	R3, R2
 ORI	R2, R0, 1
-BEQ	R3, R2, L__SetupIOT354
+BEQ	R3, R2, L__SetupIOT334
 NOP	
-J	L_SetupIOT60
+J	L_SetupIOT59
 NOP	
-L__SetupIOT354:
+L__SetupIOT334:
 ADDIU	SP, SP, -12
 SH	R4, 8(SP)
 ; res end address is: 16 (R4)
@@ -1101,9 +1087,9 @@ SW	R2, 0(SP)
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 12
-J	L_SetupIOT61
+J	L_SetupIOT60
 NOP	
-L_SetupIOT60:
+L_SetupIOT59:
 LUI	R2, hi_addr(?lstr_22_Sim800+0)
 ORI	R2, R2, lo_addr(?lstr_22_Sim800+0)
 ADDIU	SP, SP, -8
@@ -1116,16 +1102,16 @@ NOP
 ADDIU	SP, SP, 8
 LUI	R24, 203
 ORI	R24, R24, 29524
-L_SetupIOT62:
+L_SetupIOT61:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SetupIOT62
+BNE	R24, R0, L_SetupIOT61
 NOP	
 NOP	
 NOP	
 J	___SetupIOT_wait
 NOP	
-L_SetupIOT61:
-L_SetupIOT59:
+L_SetupIOT60:
+L_SetupIOT58:
 LUI	R2, hi_addr(?lstr_23_Sim800+0)
 ORI	R2, R2, lo_addr(?lstr_23_Sim800+0)
 ADDIU	SP, SP, -8
@@ -1175,9 +1161,9 @@ JAL	_RingToTempBuf+0
 NOP	
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_WaitForSetupSMS64:
+L_WaitForSetupSMS63:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_WaitForSetupSMS64
+BNE	R24, R0, L_WaitForSetupSMS63
 NOP	
 SH	R25, 12(SP)
 MOVZ	R25, R0, R0
@@ -1186,9 +1172,9 @@ NOP
 LHU	R25, 12(SP)
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_WaitForSetupSMS66:
+L_WaitForSetupSMS65:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_WaitForSetupSMS66
+BNE	R24, R0, L_WaitForSetupSMS65
 NOP	
 JAL	_RingToTempBuf+0
 NOP	
@@ -1309,9 +1295,9 @@ NOP
 LHU	R25, 12(SP)
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_WaitForSetupSMS68:
+L_WaitForSetupSMS67:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_WaitForSetupSMS68
+BNE	R24, R0, L_WaitForSetupSMS67
 NOP	
 JAL	_RingToTempBuf+0
 NOP	
@@ -1374,11 +1360,11 @@ NOP
 ADDIU	SP, SP, 48
 LHU	R25, 12(SP)
 ANDI	R2, R25, 65535
-BEQ	R2, R0, L__WaitForSetupSMS356
+BEQ	R2, R0, L__WaitForSetupSMS336
 NOP	
-J	L_WaitForSetupSMS70
+J	L_WaitForSetupSMS69
 NOP	
-L__WaitForSetupSMS356:
+L__WaitForSetupSMS336:
 SH	R25, 12(SP)
 LUI	R25, hi_addr(_string+64)
 ORI	R25, R25, lo_addr(_string+64)
@@ -1431,16 +1417,16 @@ JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 20
 LHU	R25, 12(SP)
-J	L_WaitForSetupSMS71
+J	L_WaitForSetupSMS70
 NOP	
-L_WaitForSetupSMS70:
+L_WaitForSetupSMS69:
 ANDI	R3, R25, 65535
 ORI	R2, R0, 1
-BEQ	R3, R2, L__WaitForSetupSMS357
+BEQ	R3, R2, L__WaitForSetupSMS337
 NOP	
-J	L_WaitForSetupSMS72
+J	L_WaitForSetupSMS71
 NOP	
-L__WaitForSetupSMS357:
+L__WaitForSetupSMS337:
 SH	R25, 12(SP)
 LUI	R25, hi_addr(_string+320)
 ORI	R25, R25, lo_addr(_string+320)
@@ -1513,13 +1499,13 @@ JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 24
 LHU	R25, 12(SP)
-L_WaitForSetupSMS72:
 L_WaitForSetupSMS71:
+L_WaitForSetupSMS70:
 LUI	R24, 203
 ORI	R24, R24, 29524
-L_WaitForSetupSMS73:
+L_WaitForSetupSMS72:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_WaitForSetupSMS73
+BNE	R24, R0, L_WaitForSetupSMS72
 NOP	
 NOP	
 NOP	
@@ -1571,44 +1557,44 @@ NOP
 ADDIU	SP, SP, 16
 LHU	R25, 12(SP)
 LH	R2, 14(SP)
-BEQ	R2, R0, L__WaitForSetupSMS358
+BEQ	R2, R0, L__WaitForSetupSMS338
 NOP	
-J	L__WaitForSetupSMS282
+J	L__WaitForSetupSMS263
 NOP	
-L__WaitForSetupSMS358:
+L__WaitForSetupSMS338:
 ANDI	R3, R25, 65535
 ORI	R2, R0, 1
-BEQ	R3, R2, L__WaitForSetupSMS359
+BEQ	R3, R2, L__WaitForSetupSMS339
 NOP	
-J	L__WaitForSetupSMS281
+J	L__WaitForSetupSMS262
 NOP	
-L__WaitForSetupSMS359:
-L__WaitForSetupSMS280:
+L__WaitForSetupSMS339:
+L__WaitForSetupSMS261:
 JAL	_WriteToFlashTemp+0
 NOP	
 ORI	R2, R0, 3
 J	L_end_WaitForSetupSMS
 NOP	
-L__WaitForSetupSMS282:
-L__WaitForSetupSMS281:
+L__WaitForSetupSMS263:
+L__WaitForSetupSMS262:
 LH	R2, 14(SP)
-BEQ	R2, R0, L__WaitForSetupSMS360
+BEQ	R2, R0, L__WaitForSetupSMS340
 NOP	
-J	L__WaitForSetupSMS284
+J	L__WaitForSetupSMS265
 NOP	
-L__WaitForSetupSMS360:
+L__WaitForSetupSMS340:
 ANDI	R2, R25, 65535
-BEQ	R2, R0, L__WaitForSetupSMS361
+BEQ	R2, R0, L__WaitForSetupSMS341
 NOP	
-J	L__WaitForSetupSMS283
+J	L__WaitForSetupSMS264
 NOP	
-L__WaitForSetupSMS361:
-L__WaitForSetupSMS279:
+L__WaitForSetupSMS341:
+L__WaitForSetupSMS260:
 ORI	R2, R0, 2
 J	L_end_WaitForSetupSMS
 NOP	
-L__WaitForSetupSMS284:
-L__WaitForSetupSMS283:
+L__WaitForSetupSMS265:
+L__WaitForSetupSMS264:
 LH	R2, 14(SP)
 L_end_WaitForSetupSMS:
 LW	R27, 8(SP)
@@ -1643,9 +1629,9 @@ JAL	_WaitForResponse+0
 NOP	
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_AT_Initial83:
+L_AT_Initial82:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_AT_Initial83
+BNE	R24, R0, L_AT_Initial82
 NOP	
 JAL	_RingToTempBuf+0
 NOP	
@@ -1687,9 +1673,9 @@ JAL	_RingToTempBuf+0
 NOP	
 LUI	R24, 203
 ORI	R24, R24, 29524
-L_GetAPI_Key_SMS85:
+L_GetAPI_Key_SMS84:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_GetAPI_Key_SMS85
+BNE	R24, R0, L_GetAPI_Key_SMS84
 NOP	
 NOP	
 NOP	
@@ -1748,27 +1734,12 @@ NOP
 LBU	R25, 16(SP)
 ; str_ start address is: 24 (R6)
 MOVZ	R6, R2, R0
-SB	R26, 16(SP)
-SB	R25, 17(SP)
-ORI	R27, R0, 100
-MOVZ	R26, R0, R0
-MOVZ	R25, R2, R0
-JAL	_memset+0
+BEQ	R26, R0, L__SendSMS345
 NOP	
-ADDIU	R2, SP, 18
-ORI	R27, R0, 64
-MOVZ	R26, R0, R0
-MOVZ	R25, R2, R0
-JAL	_memset+0
+J	L_SendSMS86
 NOP	
-LBU	R25, 17(SP)
-LBU	R26, 16(SP)
-BEQ	R26, R0, L__SendSMS365
-NOP	
-J	L_SendSMS87
-NOP	
-L__SendSMS365:
-ADDIU	R2, SP, 82
+L__SendSMS345:
+ADDIU	R2, SP, 81
 SB	R25, 16(SP)
 LUI	R26, hi_addr(_string+64)
 ORI	R26, R26, lo_addr(_string+64)
@@ -1776,10 +1747,10 @@ MOVZ	R25, R2, R0
 JAL	_strcpy+0
 NOP	
 LBU	R25, 16(SP)
-J	L_SendSMS88
+J	L_SendSMS87
 NOP	
-L_SendSMS87:
-ADDIU	R2, SP, 82
+L_SendSMS86:
+ADDIU	R2, SP, 81
 SB	R25, 16(SP)
 LUI	R26, hi_addr(_SF+18)
 ORI	R26, R26, lo_addr(_SF+18)
@@ -1787,25 +1758,25 @@ MOVZ	R25, R2, R0
 JAL	_strcpy+0
 NOP	
 LBU	R25, 16(SP)
-L_SendSMS88:
+L_SendSMS87:
 LB	R2, Offset(SendSMS_onecA_L0+0)(GP)
-BEQ	R2, R0, L__SendSMS366
+BEQ	R2, R0, L__SendSMS346
 NOP	
-J	L_SendSMS89
+J	L_SendSMS88
 NOP	
-L__SendSMS366:
+L__SendSMS346:
 ORI	R2, R0, 1
 SB	R2, Offset(SendSMS_onecA_L0+0)(GP)
 JAL	_AT_Initial+0
 NOP	
-L_SendSMS89:
-ADDIU	R23, SP, 102
+L_SendSMS88:
+ADDIU	R23, SP, 101
 ADDIU	R22, R23, 10
 LUI	R24, hi_addr(?ICS?lstr42_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr42_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 102
+ADDIU	R2, SP, 101
 SB	R25, 16(SP)
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
@@ -1818,21 +1789,21 @@ JAL	_UART2_Write+0
 NOP	
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_SendSMS90:
+L_SendSMS89:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendSMS90
+BNE	R24, R0, L_SendSMS89
 NOP	
-ADDIU	R23, SP, 112
+ADDIU	R23, SP, 111
 ADDIU	R22, R23, 9
 LUI	R24, hi_addr(?ICS?lstr43_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr43_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 112
+ADDIU	R2, SP, 111
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
-ADDIU	R2, SP, 82
+ADDIU	R2, SP, 81
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
@@ -1845,100 +1816,100 @@ NOP
 LBU	R25, 16(SP)
 LUI	R24, 813
 ORI	R24, R24, 52564
-L_SendSMS92:
+L_SendSMS91:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendSMS92
+BNE	R24, R0, L_SendSMS91
 NOP	
 NOP	
 NOP	
-J	L_SendSMS94
+J	L_SendSMS93
 NOP	
-L_SendSMS96:
-ADDIU	R23, SP, 121
+L_SendSMS95:
+ADDIU	R23, SP, 120
 ADDIU	R22, R23, 43
 LUI	R24, hi_addr(?ICS?lstr44_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr44_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 121
+ADDIU	R2, SP, 120
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS97:
-ADDIU	R23, SP, 164
+L_SendSMS96:
+ADDIU	R23, SP, 163
 ADDIU	R22, R23, 14
 LUI	R24, hi_addr(?ICS?lstr45_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr45_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 164
+ADDIU	R2, SP, 163
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS98:
-ADDIU	R23, SP, 178
+L_SendSMS97:
+ADDIU	R23, SP, 177
 ADDIU	R22, R23, 14
 LUI	R24, hi_addr(?ICS?lstr46_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr46_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 178
+ADDIU	R2, SP, 177
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS99:
-ADDIU	R23, SP, 192
+L_SendSMS98:
+ADDIU	R23, SP, 191
 ADDIU	R22, R23, 16
 LUI	R24, hi_addr(?ICS?lstr47_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr47_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 192
+ADDIU	R2, SP, 191
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS100:
-ADDIU	R23, SP, 208
+L_SendSMS99:
+ADDIU	R23, SP, 207
 ADDIU	R22, R23, 19
 LUI	R24, hi_addr(?ICS?lstr48_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr48_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 208
+ADDIU	R2, SP, 207
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS101:
-ADDIU	R23, SP, 227
+L_SendSMS100:
+ADDIU	R23, SP, 226
 ADDIU	R22, R23, 18
 LUI	R24, hi_addr(?ICS?lstr49_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr49_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 227
+ADDIU	R2, SP, 226
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
 ; str_ end address is: 24 (R6)
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS102:
+L_SendSMS101:
 JAL	_Read_Thresholds+0
 NOP	
 ; str_ start address is: 24 (R6)
@@ -1947,21 +1918,21 @@ MOVZ	R25, R2, R0
 JAL	_strlen+0
 NOP	
 ADDIU	R3, R2, -4
-ADDIU	R2, SP, 18
+ADDIU	R2, SP, 17
 SEH	R27, R3
 MOVZ	R26, R6, R0
 MOVZ	R25, R2, R0
 JAL	_strncpy+0
 NOP	
-ADDIU	R2, SP, 18
+ADDIU	R2, SP, 17
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
 ; str_ end address is: 24 (R6)
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS103:
+L_SendSMS102:
 MOVZ	R25, R0, R0
 JAL	_Read_Send_AllColour+0
 NOP	
@@ -1970,21 +1941,21 @@ MOVZ	R6, R2, R0
 MOVZ	R25, R2, R0
 JAL	_strlen+0
 NOP	
-ADDIU	R3, SP, 18
+ADDIU	R3, SP, 17
 SEH	R27, R2
 MOVZ	R26, R6, R0
 MOVZ	R25, R3, R0
 JAL	_strncpy+0
 NOP	
-ADDIU	R2, SP, 18
+ADDIU	R2, SP, 17
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
 ; str_ end address is: 24 (R6)
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS104:
+L_SendSMS103:
 ORI	R25, R0, 1
 JAL	_Read_Send_AllColour+0
 NOP	
@@ -1993,83 +1964,83 @@ MOVZ	R6, R2, R0
 MOVZ	R25, R2, R0
 JAL	_strlen+0
 NOP	
-ADDIU	R3, SP, 18
+ADDIU	R3, SP, 17
 SEH	R27, R2
 MOVZ	R26, R6, R0
 MOVZ	R25, R3, R0
 JAL	_strncpy+0
 NOP	
-ADDIU	R2, SP, 18
+ADDIU	R2, SP, 17
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS105:
-ADDIU	R23, SP, 245
+L_SendSMS104:
+ADDIU	R23, SP, 244
 ADDIU	R22, R23, 14
 LUI	R24, hi_addr(?ICS?lstr50_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr50_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 245
+ADDIU	R2, SP, 244
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS106:
-ADDIU	R23, SP, 259
+L_SendSMS105:
+ADDIU	R23, SP, 258
 ADDIU	R22, R23, 14
 LUI	R24, hi_addr(?ICS?lstr51_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr51_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 259
+ADDIU	R2, SP, 258
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS107:
-ADDIU	R23, SP, 273
+L_SendSMS106:
+ADDIU	R23, SP, 272
 ADDIU	R22, R23, 65
 LUI	R24, hi_addr(?ICS?lstr52_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr52_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 273
+ADDIU	R2, SP, 272
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS108:
-ADDIU	R23, SP, 338
+L_SendSMS107:
+ADDIU	R23, SP, 337
 ADDIU	R22, R23, 26
 LUI	R24, hi_addr(?ICS?lstr53_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr53_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 338
+ADDIU	R2, SP, 337
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS109:
-ADDIU	R23, SP, 364
+L_SendSMS108:
+ADDIU	R23, SP, 363
 ADDIU	R22, R23, 49
 LUI	R24, hi_addr(?ICS?lstr54_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr54_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 364
+ADDIU	R2, SP, 363
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
@@ -2078,16 +2049,16 @@ ORI	R25, R25, lo_addr(_SF+38)
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS110:
-ADDIU	R23, SP, 413
+L_SendSMS109:
+ADDIU	R23, SP, 412
 ADDIU	R22, R23, 30
 LUI	R24, hi_addr(?ICS?lstr55_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr55_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 413
+ADDIU	R2, SP, 412
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
@@ -2096,24 +2067,24 @@ ORI	R25, R25, lo_addr(_SF+38)
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS111:
-ADDIU	R23, SP, 443
+L_SendSMS110:
+ADDIU	R23, SP, 442
 ADDIU	R22, R23, 27
 LUI	R24, hi_addr(?ICS?lstr56_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr56_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 443
+ADDIU	R2, SP, 442
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
 ; str_ end address is: 24 (R6)
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS112:
+L_SendSMS111:
 JAL	_ReadHUE+0
 NOP	
 ; str_ start address is: 24 (R6)
@@ -2121,306 +2092,156 @@ MOVZ	R6, R2, R0
 MOVZ	R25, R2, R0
 JAL	_strlen+0
 NOP	
-ADDIU	R3, SP, 18
+ADDIU	R3, SP, 17
 SEH	R27, R2
 MOVZ	R26, R6, R0
 MOVZ	R25, R3, R0
 JAL	_strncpy+0
 NOP	
-ADDIU	R2, SP, 18
+ADDIU	R2, SP, 17
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
-; str_ end address is: 24 (R6)
-J	L_SendSMS95
+J	L_SendSMS94
 NOP	
-L_SendSMS113:
-ORI	R25, R0, 7
-JAL	_Read_Send_OneColour+0
-NOP	
-; str_ start address is: 24 (R6)
-MOVZ	R6, R2, R0
-MOVZ	R25, R2, R0
-JAL	_strlen+0
-NOP	
-ADDIU	R3, SP, 18
-SEH	R27, R2
-MOVZ	R26, R6, R0
-MOVZ	R25, R3, R0
-JAL	_strncpy+0
-NOP	
-ADDIU	R2, SP, 18
-MOVZ	R25, R2, R0
-JAL	_UART2_Write_Text+0
-NOP	
-MOVZ	R3, R6, R0
-; str_ end address is: 24 (R6)
-J	L_SendSMS95
-NOP	
-L_SendSMS114:
-ORI	R25, R0, 8
-JAL	_Read_Send_OneColour+0
-NOP	
-; str_ start address is: 24 (R6)
-MOVZ	R6, R2, R0
-MOVZ	R25, R2, R0
-JAL	_strlen+0
-NOP	
-ADDIU	R3, SP, 18
-SEH	R27, R2
-MOVZ	R26, R6, R0
-MOVZ	R25, R3, R0
-JAL	_strncpy+0
-NOP	
-ADDIU	R2, SP, 18
-MOVZ	R25, R2, R0
-JAL	_UART2_Write_Text+0
-NOP	
-MOVZ	R3, R6, R0
-; str_ end address is: 24 (R6)
-J	L_SendSMS95
-NOP	
-L_SendSMS115:
-ORI	R25, R0, 9
-JAL	_Read_Send_OneColour+0
-NOP	
-; str_ start address is: 24 (R6)
-MOVZ	R6, R2, R0
-MOVZ	R25, R2, R0
-JAL	_strlen+0
-NOP	
-ADDIU	R3, SP, 18
-SEH	R27, R2
-MOVZ	R26, R6, R0
-MOVZ	R25, R3, R0
-JAL	_strncpy+0
-NOP	
-ADDIU	R2, SP, 18
-MOVZ	R25, R2, R0
-JAL	_UART2_Write_Text+0
-NOP	
-MOVZ	R3, R6, R0
-; str_ end address is: 24 (R6)
-J	L_SendSMS95
-NOP	
-L_SendSMS116:
-ORI	R25, R0, 10
-JAL	_Read_Send_OneColour+0
-NOP	
-; str_ start address is: 24 (R6)
-MOVZ	R6, R2, R0
-MOVZ	R25, R2, R0
-JAL	_strlen+0
-NOP	
-ADDIU	R3, SP, 18
-SEH	R27, R2
-MOVZ	R26, R6, R0
-MOVZ	R25, R3, R0
-JAL	_strncpy+0
-NOP	
-ADDIU	R2, SP, 18
-MOVZ	R25, R2, R0
-JAL	_UART2_Write_Text+0
-NOP	
-MOVZ	R3, R6, R0
-; str_ end address is: 24 (R6)
-J	L_SendSMS95
-NOP	
-L_SendSMS117:
-ORI	R25, R0, 11
-JAL	_Read_Send_OneColour+0
-NOP	
-; str_ start address is: 24 (R6)
-MOVZ	R6, R2, R0
-MOVZ	R25, R2, R0
-JAL	_strlen+0
-NOP	
-ADDIU	R3, SP, 18
-SEH	R27, R2
-MOVZ	R26, R6, R0
-MOVZ	R25, R3, R0
-JAL	_strncpy+0
-NOP	
-ADDIU	R2, SP, 18
-MOVZ	R25, R2, R0
-JAL	_UART2_Write_Text+0
-NOP	
-MOVZ	R3, R6, R0
-J	L_SendSMS95
-NOP	
-L_SendSMS118:
-ADDIU	R23, SP, 470
+L_SendSMS112:
+ADDIU	R23, SP, 469
 ADDIU	R22, R23, 30
 LUI	R24, hi_addr(?ICS?lstr57_Sim800+0)
 ORI	R24, R24, lo_addr(?ICS?lstr57_Sim800+0)
 JAL	___CC2DW+0
 NOP	
-ADDIU	R2, SP, 470
+ADDIU	R2, SP, 469
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
 MOVZ	R3, R6, R0
+J	L_SendSMS94
+NOP	
+L_SendSMS93:
+ANDI	R2, R25, 255
+BNE	R2, R0, L__SendSMS348
+NOP	
 J	L_SendSMS95
 NOP	
-L_SendSMS94:
-ANDI	R2, R25, 255
-BNE	R2, R0, L__SendSMS368
+L__SendSMS348:
+ANDI	R3, R25, 255
+ORI	R2, R0, 1
+BNE	R3, R2, L__SendSMS350
 NOP	
 J	L_SendSMS96
 NOP	
-L__SendSMS368:
+L__SendSMS350:
 ANDI	R3, R25, 255
-ORI	R2, R0, 1
-BNE	R3, R2, L__SendSMS370
+ORI	R2, R0, 2
+BNE	R3, R2, L__SendSMS352
 NOP	
 J	L_SendSMS97
 NOP	
-L__SendSMS370:
+L__SendSMS352:
 ANDI	R3, R25, 255
-ORI	R2, R0, 2
-BNE	R3, R2, L__SendSMS372
+ORI	R2, R0, 3
+BNE	R3, R2, L__SendSMS354
 NOP	
 J	L_SendSMS98
 NOP	
-L__SendSMS372:
+L__SendSMS354:
 ANDI	R3, R25, 255
-ORI	R2, R0, 3
-BNE	R3, R2, L__SendSMS374
+ORI	R2, R0, 4
+BNE	R3, R2, L__SendSMS356
 NOP	
 J	L_SendSMS99
 NOP	
-L__SendSMS374:
+L__SendSMS356:
 ANDI	R3, R25, 255
-ORI	R2, R0, 4
-BNE	R3, R2, L__SendSMS376
+ORI	R2, R0, 5
+BNE	R3, R2, L__SendSMS358
 NOP	
 J	L_SendSMS100
 NOP	
-L__SendSMS376:
+L__SendSMS358:
 ANDI	R3, R25, 255
-ORI	R2, R0, 5
-BNE	R3, R2, L__SendSMS378
+ORI	R2, R0, 6
+BNE	R3, R2, L__SendSMS360
 NOP	
 J	L_SendSMS101
 NOP	
-L__SendSMS378:
+L__SendSMS360:
 ANDI	R3, R25, 255
-ORI	R2, R0, 6
-BNE	R3, R2, L__SendSMS380
+ORI	R2, R0, 7
+BNE	R3, R2, L__SendSMS362
 NOP	
 J	L_SendSMS102
 NOP	
-L__SendSMS380:
+L__SendSMS362:
 ANDI	R3, R25, 255
-ORI	R2, R0, 7
-BNE	R3, R2, L__SendSMS382
+ORI	R2, R0, 8
+BNE	R3, R2, L__SendSMS364
 NOP	
 J	L_SendSMS103
 NOP	
-L__SendSMS382:
+L__SendSMS364:
 ANDI	R3, R25, 255
-ORI	R2, R0, 8
-BNE	R3, R2, L__SendSMS384
+ORI	R2, R0, 9
+BNE	R3, R2, L__SendSMS366
 NOP	
 J	L_SendSMS104
 NOP	
-L__SendSMS384:
+L__SendSMS366:
 ANDI	R3, R25, 255
-ORI	R2, R0, 9
-BNE	R3, R2, L__SendSMS386
+ORI	R2, R0, 10
+BNE	R3, R2, L__SendSMS368
 NOP	
 J	L_SendSMS105
 NOP	
-L__SendSMS386:
+L__SendSMS368:
 ANDI	R3, R25, 255
-ORI	R2, R0, 10
-BNE	R3, R2, L__SendSMS388
+ORI	R2, R0, 11
+BNE	R3, R2, L__SendSMS370
 NOP	
 J	L_SendSMS106
 NOP	
-L__SendSMS388:
+L__SendSMS370:
 ANDI	R3, R25, 255
-ORI	R2, R0, 11
-BNE	R3, R2, L__SendSMS390
+ORI	R2, R0, 12
+BNE	R3, R2, L__SendSMS372
 NOP	
 J	L_SendSMS107
 NOP	
-L__SendSMS390:
+L__SendSMS372:
 ANDI	R3, R25, 255
-ORI	R2, R0, 12
-BNE	R3, R2, L__SendSMS392
+ORI	R2, R0, 13
+BNE	R3, R2, L__SendSMS374
 NOP	
 J	L_SendSMS108
 NOP	
-L__SendSMS392:
+L__SendSMS374:
 ANDI	R3, R25, 255
-ORI	R2, R0, 13
-BNE	R3, R2, L__SendSMS394
+ORI	R2, R0, 14
+BNE	R3, R2, L__SendSMS376
 NOP	
 J	L_SendSMS109
 NOP	
-L__SendSMS394:
+L__SendSMS376:
 ANDI	R3, R25, 255
-ORI	R2, R0, 14
-BNE	R3, R2, L__SendSMS396
+ORI	R2, R0, 15
+BNE	R3, R2, L__SendSMS378
 NOP	
 J	L_SendSMS110
 NOP	
-L__SendSMS396:
+L__SendSMS378:
 ANDI	R3, R25, 255
-ORI	R2, R0, 15
-BNE	R3, R2, L__SendSMS398
+ORI	R2, R0, 16
+BNE	R3, R2, L__SendSMS380
 NOP	
 J	L_SendSMS111
 NOP	
-L__SendSMS398:
-ANDI	R3, R25, 255
-ORI	R2, R0, 16
-BNE	R3, R2, L__SendSMS400
-NOP	
+L__SendSMS380:
 J	L_SendSMS112
 NOP	
-L__SendSMS400:
-ANDI	R3, R25, 255
-ORI	R2, R0, 17
-BNE	R3, R2, L__SendSMS402
-NOP	
-J	L_SendSMS113
-NOP	
-L__SendSMS402:
-ANDI	R3, R25, 255
-ORI	R2, R0, 18
-BNE	R3, R2, L__SendSMS404
-NOP	
-J	L_SendSMS114
-NOP	
-L__SendSMS404:
-ANDI	R3, R25, 255
-ORI	R2, R0, 19
-BNE	R3, R2, L__SendSMS406
-NOP	
-J	L_SendSMS115
-NOP	
-L__SendSMS406:
-ANDI	R3, R25, 255
-ORI	R2, R0, 20
-BNE	R3, R2, L__SendSMS408
-NOP	
-J	L_SendSMS116
-NOP	
-L__SendSMS408:
-ANDI	R3, R25, 255
-ORI	R2, R0, 21
-BNE	R3, R2, L__SendSMS410
-NOP	
-J	L_SendSMS117
-NOP	
-L__SendSMS410:
-J	L_SendSMS118
-NOP	
 ; str_ end address is: 24 (R6)
-L_SendSMS95:
+L_SendSMS94:
 ; str_ start address is: 12 (R3)
 ORI	R25, R0, 13
 JAL	_UART2_Write+0
@@ -2433,9 +2254,9 @@ JAL	_UART2_Write+0
 NOP	
 LUI	R24, 2034
 ORI	R24, R24, 33108
-L_SendSMS119:
+L_SendSMS113:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendSMS119
+BNE	R24, R0, L_SendSMS113
 NOP	
 NOP	
 NOP	
@@ -2554,21 +2375,21 @@ JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 52
 LH	R2, 18(SP)
-BEQ	R2, R0, L__GetSMSText412
+BEQ	R2, R0, L__GetSMSText382
 NOP	
-J	L_GetSMSText121
+J	L_GetSMSText115
 NOP	
-L__GetSMSText412:
+L__GetSMSText382:
 LBU	R25, Offset(_string+64)(GP)
 JAL	_isdigit+0
 NOP	
 ANDI	R3, R2, 65535
 ORI	R2, R0, 1
-BEQ	R3, R2, L__GetSMSText413
+BEQ	R3, R2, L__GetSMSText383
 NOP	
-J	L_GetSMSText122
+J	L_GetSMSText116
 NOP	
-L__GetSMSText413:
+L__GetSMSText383:
 LUI	R25, hi_addr(_string+64)
 ORI	R25, R25, lo_addr(_string+64)
 JAL	_atoi+0
@@ -2601,22 +2422,22 @@ ADDIU	SP, SP, 12
 LH	R25, 16(SP)
 JAL	_ReadMSG+0
 NOP	
-J	L_GetSMSText123
+J	L_GetSMSText117
 NOP	
-L_GetSMSText122:
+L_GetSMSText116:
 MOVZ	R26, R0, R0
 ORI	R25, R0, 5
 JAL	_SendSMS+0
 NOP	
 ORI	R2, R0, 1
 SH	R2, 16(SP)
-L_GetSMSText123:
+L_GetSMSText117:
 LH	R25, 16(SP)
 JAL	_RemoveSMSText+0
 NOP	
 J	L_end_GetSMSText
 NOP	
-L_GetSMSText121:
+L_GetSMSText115:
 ORI	R2, R0, 255
 L_end_GetSMSText:
 LW	R27, 12(SP)
@@ -2646,9 +2467,9 @@ NOP
 ADDIU	SP, SP, 12
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_ReadMSG124:
+L_ReadMSG118:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_ReadMSG124
+BNE	R24, R0, L_ReadMSG118
 NOP	
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
@@ -2686,9 +2507,9 @@ JAL	_RingToTempBuf+0
 NOP	
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_ReadMSG126:
+L_ReadMSG120:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_ReadMSG126
+BNE	R24, R0, L_ReadMSG120
 NOP	
 ADDIU	R23, SP, 30
 ADDIU	R22, R23, 9
@@ -2717,9 +2538,9 @@ JAL	_RingToTempBuf+0
 NOP	
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_ReadMSG128:
+L_ReadMSG122:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_ReadMSG128
+BNE	R24, R0, L_ReadMSG122
 NOP	
 LUI	R2, hi_addr(?lstr_68_Sim800+0)
 ORI	R2, R2, lo_addr(?lstr_68_Sim800+0)
@@ -2734,7 +2555,7 @@ ADDIU	SP, SP, 8
 ; i start address is: 20 (R5)
 MOVZ	R5, R0, R0
 ; i end address is: 20 (R5)
-L_ReadMSG130:
+L_ReadMSG124:
 ; i start address is: 20 (R5)
 SH	R25, 16(SP)
 LUI	R25, hi_addr(_SimTestTxt+0)
@@ -2745,11 +2566,11 @@ LH	R25, 16(SP)
 SEH	R3, R5
 SEH	R2, R2
 SLT	R2, R3, R2
-BNE	R2, R0, L__ReadMSG415
+BNE	R2, R0, L__ReadMSG385
 NOP	
-J	L_ReadMSG131
+J	L_ReadMSG125
 NOP	
-L__ReadMSG415:
+L__ReadMSG385:
 SEH	R3, R5
 LUI	R2, hi_addr(_SimTestTxt+0)
 ORI	R2, R2, lo_addr(_SimTestTxt+0)
@@ -2765,9 +2586,9 @@ SB	R2, 0(R3)
 ADDIU	R2, R5, 1
 SEH	R5, R2
 ; i end address is: 20 (R5)
-J	L_ReadMSG130
+J	L_ReadMSG124
 NOP	
-L_ReadMSG131:
+L_ReadMSG125:
 SH	R25, 16(SP)
 ORI	R26, R0, 44
 LUI	R25, hi_addr(_SimTestTxt+0)
@@ -2871,11 +2692,11 @@ LH	R25, 16(SP)
 MOVZ	R3, R0, R0
 LUI	R2, hi_addr(_string+384)
 ORI	R2, R2, lo_addr(_string+384)
-BNE	R3, R2, L__ReadMSG417
+BNE	R3, R2, L__ReadMSG387
 NOP	
-J	L_ReadMSG133
+J	L_ReadMSG127
 NOP	
-L__ReadMSG417:
+L__ReadMSG387:
 SH	R25, 16(SP)
 LUI	R25, hi_addr(_string+384)
 ORI	R25, R25, lo_addr(_string+384)
@@ -2895,98 +2716,68 @@ LH	R25, 16(SP)
 SEH	R4, R2
 SEH	R3, R2
 ORI	R2, R0, 6
-BEQ	R3, R2, L__ReadMSG418
+BEQ	R3, R2, L__ReadMSG388
+NOP	
+J	L_ReadMSG128
+NOP	
+L__ReadMSG388:
+J	___ReadMSG_next
+NOP	
+L_ReadMSG128:
+SEH	R3, R4
+ORI	R2, R0, 10
+BEQ	R3, R2, L__ReadMSG389
+NOP	
+J	L_ReadMSG130
+NOP	
+L__ReadMSG389:
+J	___ReadMSG_next
+NOP	
+L_ReadMSG130:
+SEH	R3, R4
+ORI	R2, R0, 11
+BEQ	R3, R2, L__ReadMSG390
+NOP	
+J	L_ReadMSG132
+NOP	
+L__ReadMSG390:
+J	___ReadMSG_next
+NOP	
+L_ReadMSG132:
+SEH	R3, R4
+ORI	R2, R0, 13
+BEQ	R3, R2, L__ReadMSG391
 NOP	
 J	L_ReadMSG134
 NOP	
-L__ReadMSG418:
+L__ReadMSG391:
 J	___ReadMSG_next
 NOP	
 L_ReadMSG134:
 SEH	R3, R4
-ORI	R2, R0, 7
-BEQ	R3, R2, L__ReadMSG419
+ORI	R2, R0, 14
+BEQ	R3, R2, L__ReadMSG392
 NOP	
 J	L_ReadMSG136
 NOP	
-L__ReadMSG419:
+L__ReadMSG392:
 J	___ReadMSG_next
 NOP	
 L_ReadMSG136:
 SEH	R3, R4
-ORI	R2, R0, 8
-BEQ	R3, R2, L__ReadMSG420
+ORI	R2, R0, 16
+BEQ	R3, R2, L__ReadMSG393
 NOP	
 J	L_ReadMSG138
 NOP	
-L__ReadMSG420:
-J	___ReadMSG_next
-NOP	
-L_ReadMSG138:
-SEH	R3, R4
-ORI	R2, R0, 9
-BEQ	R3, R2, L__ReadMSG421
-NOP	
-J	L_ReadMSG140
-NOP	
-L__ReadMSG421:
-J	___ReadMSG_next
-NOP	
-L_ReadMSG140:
-SEH	R3, R4
-ORI	R2, R0, 10
-BEQ	R3, R2, L__ReadMSG422
-NOP	
-J	L_ReadMSG142
-NOP	
-L__ReadMSG422:
-J	___ReadMSG_next
-NOP	
-L_ReadMSG142:
-SEH	R3, R4
-ORI	R2, R0, 11
-BEQ	R3, R2, L__ReadMSG423
-NOP	
-J	L_ReadMSG144
-NOP	
-L__ReadMSG423:
-J	___ReadMSG_next
-NOP	
-L_ReadMSG144:
-SEH	R3, R4
-ORI	R2, R0, 13
-BEQ	R3, R2, L__ReadMSG424
-NOP	
-J	L_ReadMSG146
-NOP	
-L__ReadMSG424:
-J	___ReadMSG_next
-NOP	
-L_ReadMSG146:
-SEH	R3, R4
-ORI	R2, R0, 14
-BEQ	R3, R2, L__ReadMSG425
-NOP	
-J	L_ReadMSG148
-NOP	
-L__ReadMSG425:
-J	___ReadMSG_next
-NOP	
-L_ReadMSG148:
+L__ReadMSG393:
 SEH	R3, R4
 ORI	R2, R0, 16
-BEQ	R3, R2, L__ReadMSG426
+BEQ	R3, R2, L__ReadMSG394
 NOP	
-J	L_ReadMSG150
+J	L__ReadMSG272
 NOP	
-L__ReadMSG426:
-SEH	R3, R4
-ORI	R2, R0, 16
-BEQ	R3, R2, L__ReadMSG427
-NOP	
-J	L__ReadMSG291
-NOP	
-L__ReadMSG427:
+L__ReadMSG394:
 SH	R4, 16(SP)
 SH	R25, 18(SP)
 ORI	R27, R0, 15
@@ -2998,13 +2789,13 @@ JAL	_strncmp+0
 NOP	
 LH	R25, 18(SP)
 LH	R4, 16(SP)
-BNE	R2, R0, L__ReadMSG429
+BNE	R2, R0, L__ReadMSG396
 NOP	
-J	L__ReadMSG290
+J	L__ReadMSG271
 NOP	
-L__ReadMSG429:
+L__ReadMSG396:
 ; res end address is: 16 (R4)
-L__ReadMSG289:
+L__ReadMSG270:
 SH	R25, 16(SP)
 MOVZ	R26, R0, R0
 ORI	R25, R0, 11
@@ -3014,34 +2805,34 @@ LH	R25, 16(SP)
 ORI	R2, R0, 11
 J	L_end_ReadMSG
 NOP	
-L__ReadMSG291:
+L__ReadMSG272:
 ; res start address is: 16 (R4)
-L__ReadMSG290:
-J	L_ReadMSG154
+L__ReadMSG271:
+J	L_ReadMSG142
 NOP	
-L_ReadMSG150:
+L_ReadMSG138:
 SEH	R3, R4
 ORI	R2, R0, 17
-BEQ	R3, R2, L__ReadMSG430
+BEQ	R3, R2, L__ReadMSG397
 NOP	
-J	L_ReadMSG155
+J	L_ReadMSG143
 NOP	
-L__ReadMSG430:
+L__ReadMSG397:
 SEH	R3, R4
 ORI	R2, R0, 17
-BEQ	R3, R2, L__ReadMSG431
+BEQ	R3, R2, L__ReadMSG398
 NOP	
-J	L__ReadMSG293
+J	L__ReadMSG274
 NOP	
-L__ReadMSG431:
+L__ReadMSG398:
 LBU	R2, Offset(_SimVars+2)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__ReadMSG432
+BEQ	R2, R0, L__ReadMSG399
 NOP	
-J	L__ReadMSG292
+J	L__ReadMSG273
 NOP	
-L__ReadMSG432:
-L__ReadMSG288:
+L__ReadMSG399:
+L__ReadMSG269:
 SH	R4, 16(SP)
 SH	R25, 18(SP)
 ORI	R27, R0, 15
@@ -3051,33 +2842,31 @@ LUI	R25, hi_addr(_SF+38)
 ORI	R25, R25, lo_addr(_SF+38)
 JAL	_strncpy+0
 NOP	
+LH	R25, 18(SP)
+LH	R4, 16(SP)
 LBU	R2, Offset(_SimVars+2)(GP)
 ORI	R2, R2, 1
 SB	R2, Offset(_SimVars+2)(GP)
-JAL	_SetLedPWM+0
+J	L_ReadMSG147
 NOP	
-LH	R25, 18(SP)
-LH	R4, 16(SP)
-J	L_ReadMSG159
-NOP	
-L__ReadMSG293:
-L__ReadMSG292:
+L__ReadMSG274:
+L__ReadMSG273:
 SEH	R3, R4
 ORI	R2, R0, 17
-BEQ	R3, R2, L__ReadMSG433
+BEQ	R3, R2, L__ReadMSG400
 NOP	
-J	L__ReadMSG295
+J	L__ReadMSG276
 NOP	
-L__ReadMSG433:
+L__ReadMSG400:
 LBU	R2, Offset(_SimVars+2)(GP)
 EXT	R2, R2, 0, 1
-BNE	R2, R0, L__ReadMSG435
+BNE	R2, R0, L__ReadMSG402
 NOP	
-J	L__ReadMSG294
+J	L__ReadMSG275
 NOP	
-L__ReadMSG435:
+L__ReadMSG402:
 ; res end address is: 16 (R4)
-L__ReadMSG287:
+L__ReadMSG268:
 SH	R25, 16(SP)
 MOVZ	R26, R0, R0
 ORI	R25, R0, 14
@@ -3087,29 +2876,29 @@ LH	R25, 16(SP)
 ORI	R2, R0, 14
 J	L_end_ReadMSG
 NOP	
-L__ReadMSG295:
+L__ReadMSG276:
 ; res start address is: 16 (R4)
-L__ReadMSG294:
+L__ReadMSG275:
 J	___ReadMSG_next
 NOP	
-L_ReadMSG159:
-J	L_ReadMSG164
+L_ReadMSG147:
+J	L_ReadMSG152
 NOP	
-L_ReadMSG155:
+L_ReadMSG143:
 SEH	R3, R4
 ORI	R2, R0, 18
-BEQ	R3, R2, L__ReadMSG436
+BEQ	R3, R2, L__ReadMSG403
 NOP	
-J	L_ReadMSG165
+J	L_ReadMSG153
 NOP	
-L__ReadMSG436:
+L__ReadMSG403:
 LBU	R2, Offset(_SimVars+2)(GP)
 EXT	R2, R2, 0, 1
-BNE	R2, R0, L__ReadMSG438
+BNE	R2, R0, L__ReadMSG405
 NOP	
-J	L__ReadMSG298
+J	L__ReadMSG279
 NOP	
-L__ReadMSG438:
+L__ReadMSG405:
 SH	R4, 16(SP)
 SH	R25, 18(SP)
 ORI	R27, R0, 15
@@ -3121,11 +2910,11 @@ JAL	_strncmp+0
 NOP	
 LH	R25, 18(SP)
 LH	R4, 16(SP)
-BNE	R2, R0, L__ReadMSG440
+BNE	R2, R0, L__ReadMSG407
 NOP	
-J	L__ReadMSG297
+J	L__ReadMSG278
 NOP	
-L__ReadMSG440:
+L__ReadMSG407:
 SH	R4, 16(SP)
 SH	R25, 18(SP)
 ORI	R27, R0, 15
@@ -3137,18 +2926,18 @@ JAL	_strncmp+0
 NOP	
 LH	R25, 18(SP)
 LH	R4, 16(SP)
-BNE	R2, R0, L__ReadMSG442
+BNE	R2, R0, L__ReadMSG409
 NOP	
-J	L__ReadMSG296
+J	L__ReadMSG277
 NOP	
-L__ReadMSG442:
+L__ReadMSG409:
 ; res end address is: 16 (R4)
-J	L_ReadMSG170
+J	L_ReadMSG158
 NOP	
-L__ReadMSG297:
+L__ReadMSG278:
 ; res start address is: 16 (R4)
-L__ReadMSG296:
-L__ReadMSG285:
+L__ReadMSG277:
+L__ReadMSG266:
 LBU	R2, Offset(_SimVars+2)(GP)
 INS	R2, R0, 0, 1
 SB	R2, Offset(_SimVars+2)(GP)
@@ -3175,15 +2964,15 @@ LH	R4, 16(SP)
 J	___ReadMSG_next
 NOP	
 ; res end address is: 16 (R4)
-L_ReadMSG170:
-L__ReadMSG298:
+L_ReadMSG158:
+L__ReadMSG279:
 LBU	R2, Offset(_SimVars+2)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__ReadMSG443
+BEQ	R2, R0, L__ReadMSG410
 NOP	
-J	L_ReadMSG172
+J	L_ReadMSG160
 NOP	
-L__ReadMSG443:
+L__ReadMSG410:
 SH	R25, 16(SP)
 MOVZ	R26, R0, R0
 ORI	R25, R0, 15
@@ -3193,7 +2982,7 @@ LH	R25, 16(SP)
 ORI	R2, R0, 15
 J	L_end_ReadMSG
 NOP	
-L_ReadMSG172:
+L_ReadMSG160:
 SH	R25, 16(SP)
 MOVZ	R26, R0, R0
 ORI	R25, R0, 13
@@ -3203,19 +2992,19 @@ LH	R25, 16(SP)
 ORI	R2, R0, 13
 J	L_end_ReadMSG
 NOP	
-L_ReadMSG165:
+L_ReadMSG153:
 ; res start address is: 16 (R4)
 SEH	R3, R4
 ORI	R2, R0, 19
-BEQ	R3, R2, L__ReadMSG444
+BEQ	R3, R2, L__ReadMSG411
 NOP	
-J	L_ReadMSG175
+J	L_ReadMSG163
 NOP	
-L__ReadMSG444:
+L__ReadMSG411:
 J	___ReadMSG_next
 NOP	
 ; res end address is: 16 (R4)
-L_ReadMSG175:
+L_ReadMSG163:
 SH	R25, 16(SP)
 MOVZ	R26, R0, R0
 ORI	R25, R0, 12
@@ -3225,9 +3014,9 @@ LH	R25, 16(SP)
 ORI	R2, R0, 12
 J	L_end_ReadMSG
 NOP	
-L_ReadMSG164:
+L_ReadMSG152:
 ; res start address is: 16 (R4)
-L_ReadMSG154:
+L_ReadMSG142:
 ___ReadMSG_next:
 SH	R25, 16(SP)
 ; res end address is: 16 (R4)
@@ -3235,7 +3024,7 @@ SEH	R25, R4
 JAL	_TestRecievedSMS+0
 NOP	
 LH	R25, 16(SP)
-L_ReadMSG133:
+L_ReadMSG127:
 MOVZ	R2, R0, R0
 L_end_ReadMSG:
 LW	R27, 12(SP)
@@ -3275,79 +3064,65 @@ JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 12
 LH	R25, 12(SP)
-J	L_TestRecievedSMS177
+J	L_TestRecievedSMS165
 NOP	
-L_TestRecievedSMS179:
+L_TestRecievedSMS167:
 MOVZ	R26, R0, R0
 ORI	R25, R0, 7
 JAL	_SendSMS+0
 NOP	
-J	L_TestRecievedSMS178
+J	L_TestRecievedSMS166
 NOP	
-L_TestRecievedSMS180:
-MOVZ	R26, R0, R0
-ORI	R25, R0, 17
-JAL	_SendSMS+0
-NOP	
-J	L_TestRecievedSMS178
-NOP	
-L_TestRecievedSMS181:
-MOVZ	R26, R0, R0
-ORI	R25, R0, 18
-JAL	_SendSMS+0
-NOP	
-J	L_TestRecievedSMS178
-NOP	
-L_TestRecievedSMS182:
-MOVZ	R26, R0, R0
-ORI	R25, R0, 19
-JAL	_SendSMS+0
-NOP	
-J	L_TestRecievedSMS178
-NOP	
-L_TestRecievedSMS183:
-MOVZ	R26, R0, R0
-ORI	R25, R0, 20
-JAL	_SendSMS+0
-NOP	
-J	L_TestRecievedSMS178
-NOP	
-L_TestRecievedSMS184:
-MOVZ	R26, R0, R0
-ORI	R25, R0, 21
-JAL	_SendSMS+0
-NOP	
-J	L_TestRecievedSMS178
-NOP	
-L_TestRecievedSMS185:
-MOVZ	R26, R0, R0
-ORI	R25, R0, 22
-JAL	_SendSMS+0
-NOP	
-J	L_TestRecievedSMS178
-NOP	
-L_TestRecievedSMS186:
-MOVZ	R26, R0, R0
-ORI	R25, R0, 8
-JAL	_SendSMS+0
-NOP	
-J	L_TestRecievedSMS178
-NOP	
-L_TestRecievedSMS187:
-MOVZ	R26, R0, R0
-ORI	R25, R0, 6
-JAL	_SendSMS+0
-NOP	
-J	L_TestRecievedSMS178
-NOP	
-L_TestRecievedSMS188:
+L_TestRecievedSMS168:
 MOVZ	R26, R0, R0
 ORI	R25, R0, 12
 JAL	_SendSMS+0
 NOP	
-J	L_TestRecievedSMS178
+J	L_TestRecievedSMS166
 NOP	
-L_TestRecievedSMS189:
+L_TestRecievedSMS169:
+MOVZ	R26, R0, R0
+ORI	R25, R0, 12
+JAL	_SendSMS+0
+NOP	
+J	L_TestRecievedSMS166
+NOP	
+L_TestRecievedSMS170:
+MOVZ	R26, R0, R0
+ORI	R25, R0, 12
+JAL	_SendSMS+0
+NOP	
+J	L_TestRecievedSMS166
+NOP	
+L_TestRecievedSMS171:
+MOVZ	R26, R0, R0
+ORI	R25, R0, 12
+JAL	_SendSMS+0
+NOP	
+J	L_TestRecievedSMS166
+NOP	
+L_TestRecievedSMS172:
+MOVZ	R26, R0, R0
+ORI	R25, R0, 8
+JAL	_SendSMS+0
+NOP	
+J	L_TestRecievedSMS166
+NOP	
+L_TestRecievedSMS173:
+MOVZ	R26, R0, R0
+ORI	R25, R0, 6
+JAL	_SendSMS+0
+NOP	
+J	L_TestRecievedSMS166
+NOP	
+L_TestRecievedSMS174:
+MOVZ	R26, R0, R0
+ORI	R25, R0, 12
+JAL	_SendSMS+0
+NOP	
+J	L_TestRecievedSMS166
+NOP	
+L_TestRecievedSMS175:
 JAL	_GetValuesFromFlash+0
 NOP	
 LW	R25, Offset(_FLASH_Settings_PAddr+0)(GP)
@@ -3356,11 +3131,11 @@ NOP
 MOVZ	R3, R0, R0
 LUI	R2, hi_addr(_string+320)
 ORI	R2, R2, lo_addr(_string+320)
-BNE	R3, R2, L__TestRecievedSMS447
+BNE	R3, R2, L__TestRecievedSMS414
 NOP	
-J	L_TestRecievedSMS190
+J	L_TestRecievedSMS176
 NOP	
-L__TestRecievedSMS447:
+L__TestRecievedSMS414:
 ADDIU	R2, SP, 14
 LUI	R26, hi_addr(_string+320)
 ORI	R26, R26, lo_addr(_string+320)
@@ -3374,7 +3149,7 @@ NOP
 SH	R2, Offset(_Threshold+8)(GP)
 ADDIU	R2, R2, -1
 SH	R2, Offset(_Threshold+8)(GP)
-L_TestRecievedSMS190:
+L_TestRecievedSMS176:
 JAL	_WriteToFlashTemp+0
 NOP	
 MOVZ	R25, R0, R0
@@ -3395,9 +3170,9 @@ MOVZ	R26, R0, R0
 ORI	R25, R0, 6
 JAL	_SendSMS+0
 NOP	
-J	L_TestRecievedSMS178
+J	L_TestRecievedSMS166
 NOP	
-L_TestRecievedSMS191:
+L_TestRecievedSMS177:
 ORI	R2, R0, 5
 SB	R2, Offset(_SimVars+1)(GP)
 SH	R0, Offset(_T0_SP+6)(GP)
@@ -3407,143 +3182,129 @@ MOVZ	R26, R0, R0
 ORI	R25, R0, 9
 JAL	_SendSMS+0
 NOP	
-J	L_TestRecievedSMS178
+J	L_TestRecievedSMS166
 NOP	
-L_TestRecievedSMS192:
+L_TestRecievedSMS178:
 ORI	R2, R0, 3
 SB	R2, Offset(_SimVars+1)(GP)
 MOVZ	R26, R0, R0
 ORI	R25, R0, 10
 JAL	_SendSMS+0
 NOP	
-J	L_TestRecievedSMS178
+J	L_TestRecievedSMS166
 NOP	
-L_TestRecievedSMS193:
+L_TestRecievedSMS179:
 MOVZ	R26, R0, R0
 ORI	R25, R0, 16
 JAL	_SendSMS+0
 NOP	
-J	L_TestRecievedSMS178
+J	L_TestRecievedSMS166
 NOP	
-L_TestRecievedSMS194:
+L_TestRecievedSMS180:
 MOVZ	R26, R0, R0
 ORI	R25, R0, 12
 JAL	_SendSMS+0
 NOP	
-J	L_TestRecievedSMS178
+J	L_TestRecievedSMS166
 NOP	
-L_TestRecievedSMS195:
-J	L_TestRecievedSMS178
+L_TestRecievedSMS181:
+J	L_TestRecievedSMS166
 NOP	
-L_TestRecievedSMS177:
+L_TestRecievedSMS165:
 SEH	R3, R25
 ORI	R2, R0, 6
-BNE	R3, R2, L__TestRecievedSMS449
+BNE	R3, R2, L__TestRecievedSMS416
+NOP	
+J	L_TestRecievedSMS167
+NOP	
+L__TestRecievedSMS416:
+SEH	R3, R25
+ORI	R2, R0, 7
+BNE	R3, R2, L__TestRecievedSMS418
+NOP	
+J	L_TestRecievedSMS168
+NOP	
+L__TestRecievedSMS418:
+SEH	R3, R25
+ORI	R2, R0, 8
+BNE	R3, R2, L__TestRecievedSMS420
+NOP	
+J	L_TestRecievedSMS169
+NOP	
+L__TestRecievedSMS420:
+SEH	R3, R25
+ORI	R2, R0, 9
+BNE	R3, R2, L__TestRecievedSMS422
+NOP	
+J	L_TestRecievedSMS170
+NOP	
+L__TestRecievedSMS422:
+SEH	R3, R25
+ORI	R2, R0, 10
+BNE	R3, R2, L__TestRecievedSMS424
+NOP	
+J	L_TestRecievedSMS171
+NOP	
+L__TestRecievedSMS424:
+SEH	R3, R25
+ORI	R2, R0, 13
+BNE	R3, R2, L__TestRecievedSMS426
+NOP	
+J	L_TestRecievedSMS172
+NOP	
+L__TestRecievedSMS426:
+SEH	R3, R25
+ORI	R2, R0, 14
+BNE	R3, R2, L__TestRecievedSMS428
+NOP	
+J	L_TestRecievedSMS173
+NOP	
+L__TestRecievedSMS428:
+SEH	R3, R25
+ORI	R2, R0, 15
+BNE	R3, R2, L__TestRecievedSMS430
+NOP	
+J	L_TestRecievedSMS174
+NOP	
+L__TestRecievedSMS430:
+SEH	R3, R25
+ORI	R2, R0, 16
+BNE	R3, R2, L__TestRecievedSMS432
+NOP	
+J	L_TestRecievedSMS175
+NOP	
+L__TestRecievedSMS432:
+SEH	R3, R25
+ORI	R2, R0, 17
+BNE	R3, R2, L__TestRecievedSMS434
+NOP	
+J	L_TestRecievedSMS177
+NOP	
+L__TestRecievedSMS434:
+SEH	R3, R25
+ORI	R2, R0, 18
+BNE	R3, R2, L__TestRecievedSMS436
+NOP	
+J	L_TestRecievedSMS178
+NOP	
+L__TestRecievedSMS436:
+SEH	R3, R25
+ORI	R2, R0, 19
+BNE	R3, R2, L__TestRecievedSMS438
 NOP	
 J	L_TestRecievedSMS179
 NOP	
-L__TestRecievedSMS449:
+L__TestRecievedSMS438:
 SEH	R3, R25
-ORI	R2, R0, 7
-BNE	R3, R2, L__TestRecievedSMS451
+ORI	R2, R0, 20
+BNE	R3, R2, L__TestRecievedSMS440
 NOP	
 J	L_TestRecievedSMS180
 NOP	
-L__TestRecievedSMS451:
-SEH	R3, R25
-ORI	R2, R0, 8
-BNE	R3, R2, L__TestRecievedSMS453
-NOP	
+L__TestRecievedSMS440:
 J	L_TestRecievedSMS181
 NOP	
-L__TestRecievedSMS453:
-SEH	R3, R25
-ORI	R2, R0, 9
-BNE	R3, R2, L__TestRecievedSMS455
-NOP	
-J	L_TestRecievedSMS182
-NOP	
-L__TestRecievedSMS455:
-SEH	R3, R25
-ORI	R2, R0, 10
-BNE	R3, R2, L__TestRecievedSMS457
-NOP	
-J	L_TestRecievedSMS183
-NOP	
-L__TestRecievedSMS457:
-SEH	R3, R25
-ORI	R2, R0, 11
-BNE	R3, R2, L__TestRecievedSMS459
-NOP	
-J	L_TestRecievedSMS184
-NOP	
-L__TestRecievedSMS459:
-SEH	R3, R25
-ORI	R2, R0, 12
-BNE	R3, R2, L__TestRecievedSMS461
-NOP	
-J	L_TestRecievedSMS185
-NOP	
-L__TestRecievedSMS461:
-SEH	R3, R25
-ORI	R2, R0, 13
-BNE	R3, R2, L__TestRecievedSMS463
-NOP	
-J	L_TestRecievedSMS186
-NOP	
-L__TestRecievedSMS463:
-SEH	R3, R25
-ORI	R2, R0, 14
-BNE	R3, R2, L__TestRecievedSMS465
-NOP	
-J	L_TestRecievedSMS187
-NOP	
-L__TestRecievedSMS465:
-SEH	R3, R25
-ORI	R2, R0, 15
-BNE	R3, R2, L__TestRecievedSMS467
-NOP	
-J	L_TestRecievedSMS188
-NOP	
-L__TestRecievedSMS467:
-SEH	R3, R25
-ORI	R2, R0, 16
-BNE	R3, R2, L__TestRecievedSMS469
-NOP	
-J	L_TestRecievedSMS189
-NOP	
-L__TestRecievedSMS469:
-SEH	R3, R25
-ORI	R2, R0, 17
-BNE	R3, R2, L__TestRecievedSMS471
-NOP	
-J	L_TestRecievedSMS191
-NOP	
-L__TestRecievedSMS471:
-SEH	R3, R25
-ORI	R2, R0, 18
-BNE	R3, R2, L__TestRecievedSMS473
-NOP	
-J	L_TestRecievedSMS192
-NOP	
-L__TestRecievedSMS473:
-SEH	R3, R25
-ORI	R2, R0, 19
-BNE	R3, R2, L__TestRecievedSMS475
-NOP	
-J	L_TestRecievedSMS193
-NOP	
-L__TestRecievedSMS475:
-SEH	R3, R25
-ORI	R2, R0, 20
-BNE	R3, R2, L__TestRecievedSMS477
-NOP	
-J	L_TestRecievedSMS194
-NOP	
-L__TestRecievedSMS477:
-J	L_TestRecievedSMS195
-NOP	
-L_TestRecievedSMS178:
+L_TestRecievedSMS166:
 L_end_TestRecievedSMS:
 LW	R26, 8(SP)
 LW	R25, 4(SP)
@@ -3581,7 +3342,7 @@ JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 12
 LH	R25, 4(SP)
-L_RemoveSMSText196:
+L_RemoveSMSText182:
 SH	R25, 4(SP)
 ADDIU	SP, SP, -12
 SH	R25, 8(SP)
@@ -3620,9 +3381,9 @@ NOP
 LH	R25, 4(SP)
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_RemoveSMSText199:
+L_RemoveSMSText185:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_RemoveSMSText199
+BNE	R24, R0, L_RemoveSMSText185
 NOP	
 JAL	_RingToTempBuf+0
 NOP	
@@ -3630,11 +3391,11 @@ ADDIU	R2, R25, -1
 SEH	R25, R2
 SEH	R2, R2
 SLTI	R2, R2, 1
-BNE	R2, R0, L__RemoveSMSText479
+BNE	R2, R0, L__RemoveSMSText442
 NOP	
-J	L_RemoveSMSText196
+J	L_RemoveSMSText182
 NOP	
-L__RemoveSMSText479:
+L__RemoveSMSText442:
 SEH	R2, R25
 L_end_RemoveSMSText:
 LW	RA, 0(SP)
@@ -3659,8 +3420,9 @@ JAL	_GetScaledValues+0
 NOP	
 LUI	R25, hi_addr(_FltData+0)
 ORI	R25, R25, lo_addr(_FltData+0)
-JAL	_TCS3472_CalcHSL+0
+JAL	_TCS3472_CalcHue+0
 NOP	
+SW	R2, Offset(_FltData+12)(GP)
 LUI	R26, hi_addr(_FltData+0)
 ORI	R26, R26, lo_addr(_FltData+0)
 LUI	R25, hi_addr(_RawData+0)
@@ -3691,110 +3453,12 @@ MOVZ	R25, R2, R0
 JAL	_memset+0
 NOP	
 LW	R25, 20(SP)
-LW	R26, 16(SP)
-LW	R2, 0(R26)
-SW	R26, 16(SP)
+LHU	R2, 0(R25)
 SW	R25, 20(SP)
 ADDIU	SP, SP, -12
-SW	R2, 8(SP)
+SH	R2, 8(SP)
 LUI	R2, hi_addr(?lstr_79_Sim800+0)
 ORI	R2, R2, lo_addr(?lstr_79_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtR_Scl+0)
-ORI	R2, R2, lo_addr(_txtR_Scl+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LW	R25, 20(SP)
-LW	R26, 16(SP)
-ADDIU	R2, R26, 4
-LW	R2, 0(R2)
-SW	R26, 16(SP)
-SW	R25, 20(SP)
-ADDIU	SP, SP, -12
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_80_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_80_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtG_Scl+0)
-ORI	R2, R2, lo_addr(_txtG_Scl+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LW	R25, 20(SP)
-LW	R26, 16(SP)
-ADDIU	R2, R26, 8
-LW	R2, 0(R2)
-SW	R26, 16(SP)
-SW	R25, 20(SP)
-ADDIU	SP, SP, -12
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_81_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_81_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtB_Scl+0)
-ORI	R2, R2, lo_addr(_txtB_Scl+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LW	R25, 20(SP)
-ADDIU	R2, R25, 8
-LHU	R2, 0(R2)
-SW	R25, 20(SP)
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_82_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_82_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtHUE+0)
-ORI	R2, R2, lo_addr(_txtHUE+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LW	R25, 20(SP)
-LW	R26, 16(SP)
-ADDIU	R2, R26, 20
-LW	R2, 0(R2)
-SW	R26, 16(SP)
-SW	R25, 20(SP)
-ADDIU	SP, SP, -12
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_83_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_83_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtSAT+0)
-ORI	R2, R2, lo_addr(_txtSAT+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LW	R25, 20(SP)
-LW	R26, 16(SP)
-ADDIU	R2, R26, 24
-LW	R2, 0(R2)
-SW	R25, 16(SP)
-ADDIU	SP, SP, -12
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_84_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_84_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtLUM+0)
-ORI	R2, R2, lo_addr(_txtLUM+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LW	R25, 16(SP)
-LHU	R2, 0(R25)
-SW	R25, 16(SP)
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_85_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_85_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtC+0)
 ORI	R2, R2, lo_addr(_txtC+0)
@@ -3802,29 +3466,29 @@ SW	R2, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-LW	R25, 16(SP)
-ADDIU	R2, R25, 8
+LW	R25, 20(SP)
+ADDIU	R2, R25, 2
 LHU	R2, 0(R2)
-SW	R25, 16(SP)
+SW	R25, 20(SP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_86_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_86_Sim800+0)
+LUI	R2, hi_addr(?lstr_80_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_80_Sim800+0)
 SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtERR+0)
-ORI	R2, R2, lo_addr(_txtERR+0)
+LUI	R2, hi_addr(_txtR+0)
+ORI	R2, R2, lo_addr(_txtR+0)
 SW	R2, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-LW	R25, 16(SP)
-ADDIU	R2, R25, 10
+LW	R25, 20(SP)
+ADDIU	R2, R25, 4
 LHU	R2, 0(R2)
-SW	R25, 16(SP)
+SW	R25, 20(SP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_87_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_87_Sim800+0)
+LUI	R2, hi_addr(?lstr_81_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_81_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtG+0)
 ORI	R2, R2, lo_addr(_txtG+0)
@@ -3832,16 +3496,74 @@ SW	R2, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-LW	R25, 16(SP)
-ADDIU	R2, R25, 12
+LW	R25, 20(SP)
+ADDIU	R2, R25, 6
 LHU	R2, 0(R2)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_88_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_88_Sim800+0)
+LUI	R2, hi_addr(?lstr_82_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_82_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtB+0)
 ORI	R2, R2, lo_addr(_txtB+0)
+SW	R2, 0(SP)
+JAL	_sprintf+0
+NOP	
+ADDIU	SP, SP, 12
+LW	R26, 16(SP)
+LW	R2, 0(R26)
+SW	R26, 16(SP)
+ADDIU	SP, SP, -12
+SW	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_83_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_83_Sim800+0)
+SW	R2, 4(SP)
+LUI	R2, hi_addr(_txtR_Scl+0)
+ORI	R2, R2, lo_addr(_txtR_Scl+0)
+SW	R2, 0(SP)
+JAL	_sprintf+0
+NOP	
+ADDIU	SP, SP, 12
+LW	R26, 16(SP)
+ADDIU	R2, R26, 4
+LW	R2, 0(R2)
+SW	R26, 16(SP)
+ADDIU	SP, SP, -12
+SW	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_84_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_84_Sim800+0)
+SW	R2, 4(SP)
+LUI	R2, hi_addr(_txtG_Scl+0)
+ORI	R2, R2, lo_addr(_txtG_Scl+0)
+SW	R2, 0(SP)
+JAL	_sprintf+0
+NOP	
+ADDIU	SP, SP, 12
+LW	R26, 16(SP)
+ADDIU	R2, R26, 8
+LW	R2, 0(R2)
+SW	R26, 16(SP)
+ADDIU	SP, SP, -12
+SW	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_85_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_85_Sim800+0)
+SW	R2, 4(SP)
+LUI	R2, hi_addr(_txtB_Scl+0)
+ORI	R2, R2, lo_addr(_txtB_Scl+0)
+SW	R2, 0(SP)
+JAL	_sprintf+0
+NOP	
+ADDIU	SP, SP, 12
+LW	R26, 16(SP)
+ADDIU	R2, R26, 12
+LW	R2, 0(R2)
+ADDIU	SP, SP, -12
+SW	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_86_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_86_Sim800+0)
+SW	R2, 4(SP)
+LUI	R2, hi_addr(_txtHUE+0)
+ORI	R2, R2, lo_addr(_txtHUE+0)
 SW	R2, 0(SP)
 JAL	_sprintf+0
 NOP	
@@ -3875,14 +3597,14 @@ ORI	R26, R26, lo_addr(_field1+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
-LUI	R25, hi_addr(_txtR_Scl+0)
-ORI	R25, R25, lo_addr(_txtR_Scl+0)
+LUI	R25, hi_addr(_txtC+0)
+ORI	R25, R25, lo_addr(_txtC+0)
 JAL	_strlen+0
 NOP	
 ADDIU	R3, SP, 24
 SEH	R27, R2
-LUI	R26, hi_addr(_txtR_Scl+0)
-ORI	R26, R26, lo_addr(_txtR_Scl+0)
+LUI	R26, hi_addr(_txtC+0)
+ORI	R26, R26, lo_addr(_txtC+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
@@ -3897,14 +3619,14 @@ ORI	R26, R26, lo_addr(_field2+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
-LUI	R25, hi_addr(_txtG_Scl+0)
-ORI	R25, R25, lo_addr(_txtG_Scl+0)
+LUI	R25, hi_addr(_txtR+0)
+ORI	R25, R25, lo_addr(_txtR+0)
 JAL	_strlen+0
 NOP	
 ADDIU	R3, SP, 24
 SEH	R27, R2
-LUI	R26, hi_addr(_txtG_Scl+0)
-ORI	R26, R26, lo_addr(_txtG_Scl+0)
+LUI	R26, hi_addr(_txtR+0)
+ORI	R26, R26, lo_addr(_txtR+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
@@ -3919,14 +3641,14 @@ ORI	R26, R26, lo_addr(_field3+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
-LUI	R25, hi_addr(_txtB_Scl+0)
-ORI	R25, R25, lo_addr(_txtB_Scl+0)
+LUI	R25, hi_addr(_txtG+0)
+ORI	R25, R25, lo_addr(_txtG+0)
 JAL	_strlen+0
 NOP	
 ADDIU	R3, SP, 24
 SEH	R27, R2
-LUI	R26, hi_addr(_txtB_Scl+0)
-ORI	R26, R26, lo_addr(_txtB_Scl+0)
+LUI	R26, hi_addr(_txtG+0)
+ORI	R26, R26, lo_addr(_txtG+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
@@ -3941,14 +3663,14 @@ ORI	R26, R26, lo_addr(_field4+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
-LUI	R25, hi_addr(_txtHUE+0)
-ORI	R25, R25, lo_addr(_txtHUE+0)
+LUI	R25, hi_addr(_txtB+0)
+ORI	R25, R25, lo_addr(_txtB+0)
 JAL	_strlen+0
 NOP	
 ADDIU	R3, SP, 24
 SEH	R27, R2
-LUI	R26, hi_addr(_txtHUE+0)
-ORI	R26, R26, lo_addr(_txtHUE+0)
+LUI	R26, hi_addr(_txtB+0)
+ORI	R26, R26, lo_addr(_txtB+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
@@ -3963,14 +3685,14 @@ ORI	R26, R26, lo_addr(_field5+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
-LUI	R25, hi_addr(_txtSAT+0)
-ORI	R25, R25, lo_addr(_txtSAT+0)
+LUI	R25, hi_addr(_txtR_Scl+0)
+ORI	R25, R25, lo_addr(_txtR_Scl+0)
 JAL	_strlen+0
 NOP	
 ADDIU	R3, SP, 24
 SEH	R27, R2
-LUI	R26, hi_addr(_txtSAT+0)
-ORI	R26, R26, lo_addr(_txtSAT+0)
+LUI	R26, hi_addr(_txtR_Scl+0)
+ORI	R26, R26, lo_addr(_txtR_Scl+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
@@ -3985,14 +3707,14 @@ ORI	R26, R26, lo_addr(_field6+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
-LUI	R25, hi_addr(_txtLUM+0)
-ORI	R25, R25, lo_addr(_txtLUM+0)
+LUI	R25, hi_addr(_txtG_Scl+0)
+ORI	R25, R25, lo_addr(_txtG_Scl+0)
 JAL	_strlen+0
 NOP	
 ADDIU	R3, SP, 24
 SEH	R27, R2
-LUI	R26, hi_addr(_txtLUM+0)
-ORI	R26, R26, lo_addr(_txtLUM+0)
+LUI	R26, hi_addr(_txtG_Scl+0)
+ORI	R26, R26, lo_addr(_txtG_Scl+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
@@ -4007,14 +3729,14 @@ ORI	R26, R26, lo_addr(_field7+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
-LUI	R25, hi_addr(_txtC+0)
-ORI	R25, R25, lo_addr(_txtC+0)
+LUI	R25, hi_addr(_txtB_Scl+0)
+ORI	R25, R25, lo_addr(_txtB_Scl+0)
 JAL	_strlen+0
 NOP	
 ADDIU	R3, SP, 24
 SEH	R27, R2
-LUI	R26, hi_addr(_txtC+0)
-ORI	R26, R26, lo_addr(_txtC+0)
+LUI	R26, hi_addr(_txtB_Scl+0)
+ORI	R26, R26, lo_addr(_txtB_Scl+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
@@ -4029,22 +3751,22 @@ ORI	R26, R26, lo_addr(_field8+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
-LUI	R25, hi_addr(_txtERR+0)
-ORI	R25, R25, lo_addr(_txtERR+0)
+LUI	R25, hi_addr(_txtHUE+0)
+ORI	R25, R25, lo_addr(_txtHUE+0)
 JAL	_strlen+0
 NOP	
 ADDIU	R3, SP, 24
 SEH	R27, R2
-LUI	R26, hi_addr(_txtERR+0)
-ORI	R26, R26, lo_addr(_txtERR+0)
+LUI	R26, hi_addr(_txtHUE+0)
+ORI	R26, R26, lo_addr(_txtHUE+0)
 MOVZ	R25, R3, R0
 JAL	_strncat+0
 NOP	
 ADDIU	R2, SP, 24
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_89_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_89_Sim800+0)
+LUI	R2, hi_addr(?lstr_87_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_87_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
@@ -4054,8 +3776,8 @@ NOP
 ADDIU	SP, SP, 12
 ADDIU	R23, SP, 224
 ADDIU	R22, R23, 11
-LUI	R24, hi_addr(?ICS?lstr90_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr90_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr88_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr88_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 224
@@ -4073,16 +3795,16 @@ JAL	_TestForOK+0
 NOP	
 LUI	R24, 203
 ORI	R24, R24, 29524
-L_SendData201:
+L_SendData187:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData201
+BNE	R24, R0, L_SendData187
 NOP	
 NOP	
 NOP	
 ADDIU	R23, SP, 235
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr91_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr91_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr89_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr89_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 235
@@ -4100,15 +3822,15 @@ JAL	_TestForOK+0
 NOP	
 LUI	R24, 61
 ORI	R24, R24, 2303
-L_SendData203:
+L_SendData189:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData203
+BNE	R24, R0, L_SendData189
 NOP	
 NOP	
 ADDIU	R23, SP, 244
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr92_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr92_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr90_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr90_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 244
@@ -4126,15 +3848,15 @@ JAL	_TestForOK+0
 NOP	
 LUI	R24, 61
 ORI	R24, R24, 2303
-L_SendData205:
+L_SendData191:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData205
+BNE	R24, R0, L_SendData191
 NOP	
 NOP	
 ADDIU	R23, SP, 253
 ADDIU	R22, R23, 10
-LUI	R24, hi_addr(?ICS?lstr93_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr93_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr91_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr91_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 253
@@ -4152,15 +3874,15 @@ JAL	_TestForOK+0
 NOP	
 LUI	R24, 61
 ORI	R24, R24, 2303
-L_SendData207:
+L_SendData193:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData207
+BNE	R24, R0, L_SendData193
 NOP	
 NOP	
 ADDIU	R23, SP, 263
 ADDIU	R22, R23, 11
-LUI	R24, hi_addr(?ICS?lstr94_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr94_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr92_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr92_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 263
@@ -4178,15 +3900,15 @@ JAL	_TestForOK+0
 NOP	
 LUI	R24, 61
 ORI	R24, R24, 2303
-L_SendData209:
+L_SendData195:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData209
+BNE	R24, R0, L_SendData195
 NOP	
 NOP	
 ADDIU	R23, SP, 274
 ADDIU	R22, R23, 13
-LUI	R24, hi_addr(?ICS?lstr95_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr95_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr93_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr93_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 274
@@ -4204,15 +3926,15 @@ JAL	_TestForOK+0
 NOP	
 LUI	R24, 61
 ORI	R24, R24, 2303
-L_SendData211:
+L_SendData197:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData211
+BNE	R24, R0, L_SendData197
 NOP	
 NOP	
 ADDIU	R23, SP, 287
 ADDIU	R22, R23, 12
-LUI	R24, hi_addr(?ICS?lstr96_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr96_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr94_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr94_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 287
@@ -4230,15 +3952,15 @@ JAL	_TestForOK+0
 NOP	
 LUI	R24, 61
 ORI	R24, R24, 2303
-L_SendData213:
+L_SendData199:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData213
+BNE	R24, R0, L_SendData199
 NOP	
 NOP	
 ADDIU	R23, SP, 299
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr97_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr97_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr95_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr95_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 299
@@ -4251,8 +3973,8 @@ JAL	_UART2_Write_Text+0
 NOP	
 ADDIU	R23, SP, 308
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr98_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr98_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr96_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr96_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 308
@@ -4274,15 +3996,15 @@ JAL	_TestForOK+0
 NOP	
 LUI	R24, 61
 ORI	R24, R24, 2303
-L_SendData215:
+L_SendData201:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData215
+BNE	R24, R0, L_SendData201
 NOP	
 NOP	
 ADDIU	R23, SP, 317
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr99_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr99_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr97_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr97_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 317
@@ -4300,15 +4022,15 @@ JAL	_TestForOK+0
 NOP	
 LUI	R24, 61
 ORI	R24, R24, 2303
-L_SendData217:
+L_SendData203:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData217
+BNE	R24, R0, L_SendData203
 NOP	
 NOP	
 ADDIU	R23, SP, 326
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr100_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr100_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr98_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr98_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 326
@@ -4323,14 +4045,14 @@ JAL	_UART2_Write+0
 NOP	
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_SendData219:
+L_SendData205:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData219
+BNE	R24, R0, L_SendData205
 NOP	
 ADDIU	R23, SP, 335
 ADDIU	R22, R23, 13
-LUI	R24, hi_addr(?ICS?lstr101_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr101_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr99_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr99_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 335
@@ -4348,15 +4070,15 @@ JAL	_TestForOK+0
 NOP	
 LUI	R24, 61
 ORI	R24, R24, 2303
-L_SendData221:
+L_SendData207:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData221
+BNE	R24, R0, L_SendData207
 NOP	
 NOP	
 ADDIU	R23, SP, 348
 ADDIU	R22, R23, 42
-LUI	R24, hi_addr(?ICS?lstr102_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr102_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr100_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr100_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 348
@@ -4374,14 +4096,14 @@ JAL	_TestForOK+0
 NOP	
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_SendData223:
+L_SendData209:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData223
+BNE	R24, R0, L_SendData209
 NOP	
 ADDIU	R23, SP, 390
 ADDIU	R22, R23, 11
-LUI	R24, hi_addr(?ICS?lstr103_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr103_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr101_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr101_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 390
@@ -4396,9 +4118,9 @@ JAL	_UART2_Write+0
 NOP	
 LUI	R24, 406
 ORI	R24, R24, 59050
-L_SendData225:
+L_SendData211:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData225
+BNE	R24, R0, L_SendData211
 NOP	
 ADDIU	R2, SP, 24
 MOVZ	R25, R2, R0
@@ -4424,16 +4146,16 @@ JAL	_TestForOK+0
 NOP	
 LUI	R24, 20
 ORI	R24, R24, 22612
-L_SendData227:
+L_SendData213:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData227
+BNE	R24, R0, L_SendData213
 NOP	
 NOP	
 NOP	
 ADDIU	R23, SP, 401
 ADDIU	R22, R23, 11
-LUI	R24, hi_addr(?ICS?lstr104_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr104_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr102_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr102_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 401
@@ -4451,9 +4173,9 @@ JAL	_TestForOK+0
 NOP	
 LUI	R24, 20
 ORI	R24, R24, 22612
-L_SendData229:
+L_SendData215:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SendData229
+BNE	R24, R0, L_SendData215
 NOP	
 NOP	
 NOP	
@@ -4472,10 +4194,6 @@ SW	RA, 0(SP)
 SW	R25, 4(SP)
 SW	R26, 8(SP)
 SW	R27, 12(SP)
-LUI	R25, hi_addr(_string+0)
-ORI	R25, R25, lo_addr(_string+0)
-JAL	_clr_str_arrays+0
-NOP	
 ORI	R30, R0, 65
 SB	R30, 18(SP)
 ORI	R30, R0, 84
@@ -4505,14 +4223,15 @@ JAL	_WaitForResponse+0
 NOP	
 JAL	_RingToTempBuf+0
 NOP	
-LUI	R24, 101
-ORI	R24, R24, 47530
-L_SignalStrength231:
+LUI	R24, 61
+ORI	R24, R24, 2303
+L_SignalStrength217:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SignalStrength231
+BNE	R24, R0, L_SignalStrength217
 NOP	
-LUI	R2, hi_addr(?lstr_106_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_106_Sim800+0)
+NOP	
+LUI	R2, hi_addr(?lstr_104_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_104_Sim800+0)
 ADDIU	SP, SP, -8
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_PrintHandler+0)
@@ -4526,9 +4245,7 @@ LUI	R25, hi_addr(_SimTestTxt+0)
 ORI	R25, R25, lo_addr(_SimTestTxt+0)
 JAL	_strsplit+0
 NOP	
-; num_strs start address is: 12 (R3)
-SEH	R3, R2
-SH	R3, 16(SP)
+SH	R2, 16(SP)
 MOVZ	R27, R0, R0
 ORI	R26, R0, 58
 LUI	R25, hi_addr(_string+0)
@@ -4541,75 +4258,43 @@ LUI	R25, hi_addr(_string+0)
 ORI	R25, R25, lo_addr(_string+0)
 JAL	_strncpy+0
 NOP	
-LH	R3, 16(SP)
-; i start address is: 16 (R4)
-MOVZ	R4, R0, R0
-; num_strs end address is: 12 (R3)
-; i end address is: 16 (R4)
-SEH	R7, R3
-L_SignalStrength233:
-; i start address is: 16 (R4)
-; num_strs start address is: 28 (R7)
-SEH	R2, R4
-SLTI	R2, R2, 10
-BNE	R2, R0, L__SignalStrength483
+ORI	R27, R0, 79
+ORI	R26, R0, 2
+LUI	R25, hi_addr(_string+64)
+ORI	R25, R25, lo_addr(_string+64)
+JAL	_RemoveChars+0
 NOP	
-J	L_SignalStrength234
+ORI	R27, R0, 2
+MOVZ	R26, R2, R0
+LUI	R25, hi_addr(_string+64)
+ORI	R25, R25, lo_addr(_string+64)
+JAL	_strncpy+0
 NOP	
-L__SignalStrength483:
-SEH	R3, R4
-LUI	R2, hi_addr(_string+64)
-ORI	R2, R2, lo_addr(_string+64)
-ADDU	R2, R2, R3
-LBU	R25, 0(R2)
-JAL	_isdigit+0
-NOP	
-BEQ	R2, R0, L__SignalStrength484
-NOP	
-J	L_SignalStrength236
-NOP	
-L__SignalStrength484:
-SEH	R3, R4
-; i end address is: 16 (R4)
-LUI	R2, hi_addr(_string+64)
-ORI	R2, R2, lo_addr(_string+64)
-ADDU	R2, R2, R3
-SB	R0, 0(R2)
-J	L_SignalStrength234
-NOP	
-L_SignalStrength236:
-; i start address is: 16 (R4)
-ADDIU	R2, R4, 1
-SEH	R4, R2
-; i end address is: 16 (R4)
-J	L_SignalStrength233
-NOP	
-L_SignalStrength234:
 LBU	R25, Offset(_string+1)(GP)
 JAL	_isdigit+0
 NOP	
 ; is_digit start address is: 84 (R21)
 ANDI	R21, R2, 65535
-BNE	R2, R0, L__SignalStrength486
+BNE	R2, R0, L__SignalStrength447
 NOP	
-J	L_SignalStrength237
+J	L_SignalStrength219
 NOP	
-L__SignalStrength486:
+L__SignalStrength447:
 LUI	R25, hi_addr(_string+0)
 ORI	R25, R25, lo_addr(_string+0)
 JAL	_atoi+0
 NOP	
 SH	R2, Offset(_SimVars+4)(GP)
-J	L_SignalStrength238
+J	L_SignalStrength220
 NOP	
-L_SignalStrength237:
+L_SignalStrength219:
 SH	R0, Offset(_SimVars+4)(GP)
-L_SignalStrength238:
+L_SignalStrength220:
+LH	R2, 16(SP)
 ADDIU	SP, SP, -12
-SH	R7, 8(SP)
-; num_strs end address is: 28 (R7)
-LUI	R2, hi_addr(?lstr_107_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_107_Sim800+0)
+SH	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_105_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_105_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
@@ -4620,8 +4305,8 @@ ADDIU	SP, SP, 12
 ADDIU	SP, SP, -12
 SH	R21, 8(SP)
 ; is_digit end address is: 84 (R21)
-LUI	R2, hi_addr(?lstr_108_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_108_Sim800+0)
+LUI	R2, hi_addr(?lstr_106_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_106_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtA+0)
 ORI	R2, R2, lo_addr(_txtA+0)
@@ -4632,8 +4317,8 @@ ADDIU	SP, SP, 12
 LH	R2, Offset(_SimVars+4)(GP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_109_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_109_Sim800+0)
+LUI	R2, hi_addr(?lstr_107_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_107_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtS+0)
 ORI	R2, R2, lo_addr(_txtS+0)
@@ -4672,8 +4357,8 @@ SW	R2, 12(SP)
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_110_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_110_Sim800+0)
+LUI	R2, hi_addr(?lstr_108_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_108_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
@@ -4681,9 +4366,6 @@ SW	R2, 0(SP)
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 48
-LH	R25, Offset(_SimVars+4)(GP)
-JAL	_PWM_SigStrength+0
-NOP	
 LH	R2, Offset(_SimVars+4)(GP)
 L_end_SignalStrength:
 LW	R27, 12(SP)
@@ -4695,157 +4377,138 @@ JR	RA
 NOP	
 ; end of _SignalStrength
 _PWM_SigStrength:
-ORI	R2, R0, 32776
-SW	R2, Offset(T2CONCLR+0)(GP)
 SEH	R2, R25
-SLTI	R2, R2, 6
-BNE	R2, R0, L__PWM_SigStrength488
+SLTI	R2, R2, 29
+BEQ	R2, R0, L__PWM_SigStrength449
 NOP	
-J	L_PWM_SigStrength239
+J	L_PWM_SigStrength221
 NOP	
-L__PWM_SigStrength488:
+L__PWM_SigStrength449:
 ORI	R2, R0, 46080
-SW	R2, Offset(PR4+0)(GP)
+SW	R2, Offset(PR2+0)(GP)
 ORI	R2, R0, 1220
-SW	R2, Offset(PR5+0)(GP)
-J	L_PWM_SigStrength240
+SW	R2, Offset(PR3+0)(GP)
+J	L_PWM_SigStrength222
 NOP	
-L_PWM_SigStrength239:
+L_PWM_SigStrength221:
 SEH	R2, R25
-SLTI	R2, R2, 6
-BEQ	R2, R0, L__PWM_SigStrength489
+SLTI	R2, R2, 24
+BEQ	R2, R0, L__PWM_SigStrength450
 NOP	
-J	L__PWM_SigStrength305
+J	L__PWM_SigStrength286
 NOP	
-L__PWM_SigStrength489:
+L__PWM_SigStrength450:
 SEH	R2, R25
-SLTI	R2, R2, 11
-BNE	R2, R0, L__PWM_SigStrength490
+SLTI	R2, R2, 28
+BNE	R2, R0, L__PWM_SigStrength451
 NOP	
-J	L__PWM_SigStrength304
+J	L__PWM_SigStrength285
 NOP	
-L__PWM_SigStrength490:
-L__PWM_SigStrength303:
+L__PWM_SigStrength451:
+L__PWM_SigStrength284:
 ORI	R2, R0, 32256
-SW	R2, Offset(PR4+0)(GP)
+SW	R2, Offset(PR2+0)(GP)
 ORI	R2, R0, 854
-SW	R2, Offset(PR5+0)(GP)
-J	L_PWM_SigStrength244
+SW	R2, Offset(PR3+0)(GP)
+J	L_PWM_SigStrength226
 NOP	
-L__PWM_SigStrength305:
-L__PWM_SigStrength304:
+L__PWM_SigStrength286:
+L__PWM_SigStrength285:
 SEH	R2, R25
-SLTI	R2, R2, 11
-BEQ	R2, R0, L__PWM_SigStrength491
+SLTI	R2, R2, 19
+BEQ	R2, R0, L__PWM_SigStrength452
 NOP	
-J	L__PWM_SigStrength307
+J	L__PWM_SigStrength288
 NOP	
-L__PWM_SigStrength491:
+L__PWM_SigStrength452:
 SEH	R2, R25
-SLTI	R2, R2, 16
-BNE	R2, R0, L__PWM_SigStrength492
+SLTI	R2, R2, 24
+BNE	R2, R0, L__PWM_SigStrength453
 NOP	
-J	L__PWM_SigStrength306
+J	L__PWM_SigStrength287
 NOP	
-L__PWM_SigStrength492:
-L__PWM_SigStrength302:
+L__PWM_SigStrength453:
+L__PWM_SigStrength283:
 ORI	R2, R0, 23040
-SW	R2, Offset(PR4+0)(GP)
+SW	R2, Offset(PR2+0)(GP)
 ORI	R2, R0, 610
-SW	R2, Offset(PR5+0)(GP)
-J	L_PWM_SigStrength248
+SW	R2, Offset(PR3+0)(GP)
+J	L_PWM_SigStrength230
 NOP	
-L__PWM_SigStrength307:
-L__PWM_SigStrength306:
+L__PWM_SigStrength288:
+L__PWM_SigStrength287:
 SEH	R2, R25
-SLTI	R2, R2, 16
-BEQ	R2, R0, L__PWM_SigStrength493
+SLTI	R2, R2, 14
+BEQ	R2, R0, L__PWM_SigStrength454
 NOP	
-J	L__PWM_SigStrength309
+J	L__PWM_SigStrength290
 NOP	
-L__PWM_SigStrength493:
+L__PWM_SigStrength454:
 SEH	R2, R25
-SLTI	R2, R2, 22
-BNE	R2, R0, L__PWM_SigStrength494
+SLTI	R2, R2, 19
+BNE	R2, R0, L__PWM_SigStrength455
 NOP	
-J	L__PWM_SigStrength308
+J	L__PWM_SigStrength289
 NOP	
-L__PWM_SigStrength494:
-L__PWM_SigStrength301:
+L__PWM_SigStrength455:
+L__PWM_SigStrength282:
 ORI	R2, R0, 11520
-SW	R2, Offset(PR4+0)(GP)
+SW	R2, Offset(PR2+0)(GP)
 ORI	R2, R0, 305
-SW	R2, Offset(PR5+0)(GP)
-J	L_PWM_SigStrength252
+SW	R2, Offset(PR3+0)(GP)
+J	L_PWM_SigStrength234
 NOP	
-L__PWM_SigStrength309:
-L__PWM_SigStrength308:
+L__PWM_SigStrength290:
+L__PWM_SigStrength289:
 SEH	R2, R25
-SLTI	R2, R2, 22
-BEQ	R2, R0, L__PWM_SigStrength495
+SLTI	R2, R2, 9
+BEQ	R2, R0, L__PWM_SigStrength456
 NOP	
-J	L__PWM_SigStrength311
+J	L__PWM_SigStrength292
 NOP	
-L__PWM_SigStrength495:
+L__PWM_SigStrength456:
 SEH	R2, R25
-SLTI	R2, R2, 26
-BNE	R2, R0, L__PWM_SigStrength496
+SLTI	R2, R2, 14
+BNE	R2, R0, L__PWM_SigStrength457
 NOP	
-J	L__PWM_SigStrength310
+J	L__PWM_SigStrength291
 NOP	
-L__PWM_SigStrength496:
-L__PWM_SigStrength300:
+L__PWM_SigStrength457:
+L__PWM_SigStrength281:
 ORI	R2, R0, 4608
-SW	R2, Offset(PR4+0)(GP)
+SW	R2, Offset(PR2+0)(GP)
 ORI	R2, R0, 122
-SW	R2, Offset(PR5+0)(GP)
-J	L_PWM_SigStrength256
+SW	R2, Offset(PR3+0)(GP)
+J	L_PWM_SigStrength238
 NOP	
-L__PWM_SigStrength311:
-L__PWM_SigStrength310:
+L__PWM_SigStrength292:
+L__PWM_SigStrength291:
 SEH	R2, R25
-SLTI	R2, R2, 26
-BEQ	R2, R0, L__PWM_SigStrength497
+SLTI	R2, R2, 4
+BEQ	R2, R0, L__PWM_SigStrength458
 NOP	
-J	L__PWM_SigStrength313
+J	L__PWM_SigStrength294
 NOP	
-L__PWM_SigStrength497:
+L__PWM_SigStrength458:
 SEH	R2, R25
-SLTI	R2, R2, 30
-BNE	R2, R0, L__PWM_SigStrength498
+SLTI	R2, R2, 9
+BNE	R2, R0, L__PWM_SigStrength459
 NOP	
-J	L__PWM_SigStrength312
+J	L__PWM_SigStrength293
 NOP	
-L__PWM_SigStrength498:
-L__PWM_SigStrength299:
-ORI	R2, R0, 2304
-SW	R2, Offset(PR4+0)(GP)
-ORI	R2, R0, 61
-SW	R2, Offset(PR5+0)(GP)
-J	L_PWM_SigStrength260
-NOP	
-L__PWM_SigStrength313:
-L__PWM_SigStrength312:
+L__PWM_SigStrength459:
+L__PWM_SigStrength280:
 ORI	R2, R0, 14464
-SW	R2, Offset(PR4+0)(GP)
+SW	R2, Offset(PR2+0)(GP)
 ORI	R2, R0, 1
-SW	R2, Offset(PR5+0)(GP)
-L_PWM_SigStrength260:
-L_PWM_SigStrength256:
-L_PWM_SigStrength252:
-L_PWM_SigStrength248:
-L_PWM_SigStrength244:
-L_PWM_SigStrength240:
-SW	R0, Offset(TMR4+0)(GP)
-SW	R0, Offset(TMR5+0)(GP)
-ORI	R2, R0, 32776
-SW	R2, Offset(T4CONSET+0)(GP)
-LUI	R2, BitMask(T4IF_bit+0)
-ORI	R2, R2, BitMask(T4IF_bit+0)
-_SX	
-LUI	R2, BitMask(T5IE_bit+0)
-ORI	R2, R2, BitMask(T5IE_bit+0)
-_SX	
+SW	R2, Offset(PR3+0)(GP)
+L__PWM_SigStrength294:
+L__PWM_SigStrength293:
+L_PWM_SigStrength238:
+L_PWM_SigStrength234:
+L_PWM_SigStrength230:
+L_PWM_SigStrength226:
+L_PWM_SigStrength222:
 L_end_PWM_SigStrength:
 JR	RA
 NOP	
@@ -4861,9 +4524,9 @@ NOP
 LBU	R25, 8(SP)
 LUI	R24, 40
 ORI	R24, R24, 45226
-L_TestForOK261:
+L_TestForOK242:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_TestForOK261
+BNE	R24, R0, L_TestForOK242
 NOP	
 JAL	_RingToTempBuf+0
 NOP	
@@ -4872,8 +4535,8 @@ ORI	R2, R2, lo_addr(_SimTestTxt+0)
 SB	R25, 8(SP)
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_111_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_111_Sim800+0)
+LUI	R2, hi_addr(?lstr_109_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_109_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
@@ -4885,14 +4548,14 @@ LBU	R25, 8(SP)
 ; lastMillis start address is: 16 (R4)
 LW	R4, Offset(_TMR0+0)(GP)
 ANDI	R2, R25, 255
-BEQ	R2, R0, L__TestForOK500
+BEQ	R2, R0, L__TestForOK461
 NOP	
-J	L_TestForOK263
+J	L_TestForOK244
 NOP	
-L__TestForOK500:
+L__TestForOK461:
 ; lastMillis end address is: 16 (R4)
 MOVZ	R5, R4, R0
-L_TestForOK264:
+L_TestForOK245:
 ; lastMillis start address is: 20 (R5)
 ; lastMillis start address is: 20 (R5)
 ; lastMillis end address is: 20 (R5)
@@ -4910,51 +4573,51 @@ ORI	R25, R25, lo_addr(_SimTestTxt+0)
 JAL	_strstr+0
 NOP	
 LBU	R25, 8(SP)
-BEQ	R2, R0, L__TestForOK501
+BEQ	R2, R0, L__TestForOK462
 NOP	
-J	L_TestForOK265
+J	L_TestForOK246
 NOP	
-L__TestForOK501:
+L__TestForOK462:
 ; lastMillis end address is: 20 (R5)
 ; lastMillis start address is: 20 (R5)
 LW	R2, Offset(_TMR0+0)(GP)
 SUBU	R2, R2, R5
 SLTIU	R2, R2, 5001
-BEQ	R2, R0, L__TestForOK502
+BEQ	R2, R0, L__TestForOK463
 NOP	
-J	L_TestForOK266
+J	L_TestForOK247
 NOP	
-L__TestForOK502:
+L__TestForOK463:
 ; lastMillis end address is: 20 (R5)
-J	L_TestForOK265
+J	L_TestForOK246
 NOP	
-L_TestForOK266:
+L_TestForOK247:
 ; lastMillis start address is: 20 (R5)
 ; lastMillis end address is: 20 (R5)
-J	L_TestForOK264
+J	L_TestForOK245
 NOP	
-L_TestForOK265:
-J	L_TestForOK267
+L_TestForOK246:
+J	L_TestForOK248
 NOP	
-L_TestForOK263:
+L_TestForOK244:
 ; lastMillis start address is: 16 (R4)
 ANDI	R3, R25, 255
 ORI	R2, R0, 1
-BEQ	R3, R2, L__TestForOK503
+BEQ	R3, R2, L__TestForOK464
 NOP	
-J	L_TestForOK268
+J	L_TestForOK249
 NOP	
-L__TestForOK503:
+L__TestForOK464:
 ; lastMillis end address is: 16 (R4)
 MOVZ	R5, R4, R0
-L_TestForOK269:
+L_TestForOK250:
 ; lastMillis start address is: 20 (R5)
 ; lastMillis start address is: 20 (R5)
 ; lastMillis end address is: 20 (R5)
 ADDIU	R23, SP, 12
 ADDIU	R22, R23, 8
-LUI	R24, hi_addr(?ICS?lstr113_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr113_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr111_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr111_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 12
@@ -4965,32 +4628,32 @@ ORI	R25, R25, lo_addr(_SimTestTxt+0)
 JAL	_strstr+0
 NOP	
 LBU	R25, 8(SP)
-BEQ	R2, R0, L__TestForOK504
+BEQ	R2, R0, L__TestForOK465
 NOP	
-J	L_TestForOK270
+J	L_TestForOK251
 NOP	
-L__TestForOK504:
+L__TestForOK465:
 ; lastMillis end address is: 20 (R5)
 ; lastMillis start address is: 20 (R5)
 LW	R2, Offset(_TMR0+0)(GP)
 SUBU	R2, R2, R5
 SLTIU	R2, R2, 5001
-BEQ	R2, R0, L__TestForOK505
+BEQ	R2, R0, L__TestForOK466
 NOP	
-J	L_TestForOK271
+J	L_TestForOK252
 NOP	
-L__TestForOK505:
+L__TestForOK466:
 ; lastMillis end address is: 20 (R5)
-J	L_TestForOK270
+J	L_TestForOK251
 NOP	
-L_TestForOK271:
+L_TestForOK252:
 ; lastMillis start address is: 20 (R5)
 ; lastMillis end address is: 20 (R5)
-J	L_TestForOK269
+J	L_TestForOK250
 NOP	
-L_TestForOK270:
-L_TestForOK268:
-L_TestForOK267:
+L_TestForOK251:
+L_TestForOK249:
+L_TestForOK248:
 L_end_TestForOK:
 LW	R26, 4(SP)
 LW	RA, 0(SP)

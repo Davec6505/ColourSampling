@@ -84,13 +84,10 @@ char txtC[15];
 char txtR[15];
 char txtG[15];
 char txtB[15];
-char txtERR[15];
 char txtR_Scl[15];
 char txtG_Scl[15];
 char txtB_Scl[15];
 char txtHUE[15];
-char txtLUM[15];
-char txtSAT[15];
 char txtLen[6];
 
 Sim800Vars SimVars = {
@@ -146,34 +143,26 @@ static int i,j;
 
   GetStrLengths();
 
-  memset(buff,0,512);                            //make every byte NULL
-  memcpy(buff,SF.SimCelNum,SL.l1);               //Save Cell num
-  memcpy(buff+SL.l1,SF.WriteAPIKey,SL.l2);       //Save API Wr Key
-  memcpy(buff+SL.l1l2,SF.ReadAPIKey,SL.l3);      //Save API Rd Key
-  memcpy(buff+SL.l1l2l3,SF.APN,SL.l4);           //Save APN
-  memcpy(buff+SL.l1l2l3l4,SF.PWD,SL.l5);         //Save PWD
+  memset(buff,0,512);                  //make every byte NULL
+  memcpy(buff,SF.SimCelNum,SL.l1);          //Save Cell num
+  memcpy(buff+SL.l1,SF.WriteAPIKey,SL.l2);//Save API Wr Key
+  memcpy(buff+SL.l1l2,SF.ReadAPIKey,SL.l3); //Save API Rd Key
+  memcpy(buff+SL.l1l2l3,SF.APN,SL.l4);        //Save APN
+  memcpy(buff+SL.l1l2l3l4,SF.PWD,SL.l5);        //Save PWD
   
-  for(i=1;i<128;i++)
-     temp[i] = 0x00000000;
-     
   memcpy(temp,buff,SL.lTotA+4);
 
-  pos = FLASH_Settings_PAddr;  //P?
-  
- // Flash_Erase_Page(pos);
-
+  pos = FLASH_Settings_PAddr;
   j = NVMErasePage(pos);
   if(j==0){
-    pos += 20;
-    for(i=0;i<128;i++){
-       //Flash_Write_Word(pos,temp[i]);
+    pos += 20 ;
+    for(i=0;i<100;i++){
          j = NVMWriteWord(pos,temp[i]);
          pos += 4;
-        // Delay_ms(50);
+         Delay_ms(5);
     }
-       // j = NVMWriteRow(pos,temp);
-  }
-
+   }
+   // j = NVMWriteRow(pos,&temp);
 
 #ifdef SimConfDebug
       sprintf(a,"%d",i);
@@ -651,8 +640,7 @@ char tempCellNum[20];
 char *str_;
 
      str_ = (char*)Malloc(100*sizeof(char*));
-     memset(str_,0,100);
-     memset(b,0,64);
+     
      if(!cellNum)
         strcpy(tempCellNum,string[1]);
      else
@@ -731,31 +719,6 @@ char *str_;
              break;
       case 16: //read scaled values
              str_ = ReadHUE();
-             strncpy(b,str_,strlen(str_));
-             UART2_Write_Text(b);
-             break;
-      case 17: //read Red chan
-             str_ = Read_Send_OneColour(READR);
-             strncpy(b,str_,strlen(str_));
-             UART2_Write_Text(b);
-             break;
-      case 18: //read Green chan
-             str_ = Read_Send_OneColour(READG);
-             strncpy(b,str_,strlen(str_));
-             UART2_Write_Text(b);
-             break;
-      case 19: //read Blue chan
-             str_ = Read_Send_OneColour(READB);
-             strncpy(b,str_,strlen(str_));
-             UART2_Write_Text(b);
-             break;
-      case 20: //read Clear chan
-             str_ = Read_Send_OneColour(READC);
-             strncpy(b,str_,strlen(str_));
-             UART2_Write_Text(b);
-             break;
-      case 21: //read Temp chan
-             str_ = Read_Send_OneColour(READT);
              strncpy(b,str_,strlen(str_));
              UART2_Write_Text(b);
              break;
@@ -903,20 +866,11 @@ char *text;
           if(res == 6){         //Reada_Scl
              goto next;
           }
-          else if(res == 7){         //ReadR
-               goto next;
+          else if(res == 10){         //Readc
+             goto next;
           }
-          else if(res == 8){         //ReadG
-               goto next;
-          }
-          else if(res == 9){         //ReadB
-              goto next;
-          }
-          else if(res == 10){         //ReadC
-              goto next;
-          }
-          else if(res == 11){         //ReadT
-              goto next;
+          else if(res == 11){         //Readt
+             goto next;
           }
           else if(res == 13){         //Reada_Scl
              goto next;
@@ -933,7 +887,6 @@ char *text;
              if(res == 17 && !SimVars.start){
                    strncpy(SF.StartCell,string[1],15);
                    SimVars.start = 1;
-                   SetLedPWM();
              }else if(res == 17 && SimVars.start){
                    SendSMS(14,0);
                    return 14;
@@ -992,22 +945,16 @@ char *t,B[64],txtDig[9];
            SendSMS(7,0);
            break;
       case 7: //R
-           SendSMS(17,0);
+           SendSMS(12,0);
            break;
       case 8: //G
-           SendSMS(18,0);
+           SendSMS(12,0);
            break;
       case 9: //B
-           SendSMS(19,0);
+           SendSMS(12,0);
            break;
       case 10: //C
-           SendSMS(20,0);
-           break;
-      case 11: //C
-           SendSMS(21,0);
-           break;
-      case 12: //C
-           SendSMS(22,0);
+           SendSMS(12,0);
            break;
       case 13:
            SendSMS(8,0);
@@ -1094,7 +1041,7 @@ int Test_Update_ThingSpeak(){
 
        TCS3472_getRawData(RawData);
        GetScaledValues(RawData,FltData);
-       TCS3472_CalcHSL(FltData);
+       FltData[3] = TCS3472_CalcHue(FltData);
        SendData(RawData,FltData);
        return 2;
 }
@@ -1108,36 +1055,36 @@ char _str_[200];
  
     memset(_str_,0,sizeof(_str_));
     //get the colour valuse prior to sending to ThingSpek
+    sprintf(txtC,"%u",rgbc[0]);
+    sprintf(txtR,"%u",rgbc[1]);
+    sprintf(txtG,"%u",rgbc[2]);
+    sprintf(txtB,"%u",rgbc[3]);
     sprintf(txtR_Scl,"%3.2f",rgbh[0]);
     sprintf(txtG_Scl,"%3.2f",rgbh[1]);
     sprintf(txtB_Scl,"%3.2f",rgbh[2]);
-    sprintf(txtHUE ,"%3.2f",rgbc[4]);
-    sprintf(txtSAT,"%3.2f",rgbh[5]);
-    sprintf(txtLUM,"%3.2f",rgbh[6]);
-    sprintf(txtC,"%u",rgbc[0]);
-    sprintf(txtERR  ,"%u",rgbc[4]);
-    sprintf(txtG  ,"%u",rgbc[5]);
-    sprintf(txtB  ,"%u",rgbc[6]);
+    sprintf(txtHUE  ,"%3.2f",rgbh[3]);
+    
+
     //Raw Values
-    //scaled and HUE Values
     strncpy(_str_,str_api,46);//strlen(str_api));
     strncat(_str_,SF.WriteAPIKey,strlen(SF.WriteAPIKey));
     strncat(_str_,field1,strlen(field1));
-    strncat(_str_,txtR_Scl,strlen(txtR_Scl));   //R
+    strncat(_str_,txtC,strlen(txtC));
     strncat(_str_,field2,strlen(field2));
-    strncat(_str_,txtG_Scl,strlen(txtG_Scl));   //G
+    strncat(_str_,txtR,strlen(txtR));
     strncat(_str_,field3,strlen(field3));
-    strncat(_str_,txtB_Scl,strlen(txtB_Scl));   //B
+    strncat(_str_,txtG,strlen(txtG));
     strncat(_str_,field4,strlen(field4));
-    strncat(_str_,txtHUE,strlen(txtHUE));       //hue
+    strncat(_str_,txtB,strlen(txtB));
+    //scaled and HUE Values
     strncat(_str_,field5,strlen(field5));
-    strncat(_str_,txtSAT,strlen(txtSAT));       //saturation
+    strncat(_str_,txtR_Scl,strlen(txtR_Scl));
     strncat(_str_,field6,strlen(field6));
-    strncat(_str_,txtLUM,strlen(txtLUM));       //luminance
+    strncat(_str_,txtG_Scl,strlen(txtG_Scl));
     strncat(_str_,field7,strlen(field7));
-    strncat(_str_,txtC,strlen(txtC));           //clear chan
+    strncat(_str_,txtB_Scl,strlen(txtB_Scl));
     strncat(_str_,field8,strlen(field8));
-    strncat(_str_,txtERR ,strlen(txtERR ));     //error
+    strncat(_str_,txtHUE,strlen(txtHUE));
 
 #ifdef ThingDebug
     PrintOut(PrintHandler, "String for ThingSpeak: \r\n"
@@ -1235,15 +1182,12 @@ int  SignalStrength(){
 int i,num_strs,res,is_digit;
 char *text;
 
-
-    clr_str_arrays(string);
-    
     UART2_Write_Text("AT+CSQ");
     UART2_Write(0x0D);
     UART2_Write(0x0A);
     WaitForResponse(1);
     RingToTempBuf();
-    Delay_ms(250);
+    Delay_ms(150);
     
  #ifdef SigStrengthDebug
      PrintOut(PrintHandler, "\r\n"
@@ -1256,13 +1200,7 @@ char *text;
     //signal strength dBm
     strncpy(string[0],RemoveChars(string[0],':','\0'),2);
     //channel bit error reate %age
-    for(i=0;i<10;i++){
-         if(!isdigit(*(string[1]+i))){
-            string[1][i] = '\0';
-            break;
-         }
-    }
-    //check if the 1st char of result is digit, otherwise ERROR
+    strncpy(string[1], RemoveChars(string[1],0x02,'O'),2);
     is_digit = isdigit(string[0][1]);
     if(is_digit)
          SimVars.rssi = atoi(string[0]);
@@ -1288,7 +1226,7 @@ char *text;
                            ,string[4],string[5]
                            ,string[6],txtA,txtS);
 #endif
-       PWM_SigStrength(SimVars.rssi);
+
        return SimVars.rssi;
 }
 
@@ -1296,30 +1234,28 @@ char *text;
 * once you have aquired signal strength display it
 **************************************************************/
 void PWM_SigStrength(int sigstrength){
-     T2CONCLR = 0x8008;
-     if(sigstrength < 6){
-        PR4 = 46080; PR5 = 1220;  //1000ms    1  - 5 weak
-     }else if(sigstrength >= 6 && sigstrength < 11){
-        PR4 = 32256; PR5 = 854;  //700ms     6  - 10
-     }else if(sigstrength >= 11 && sigstrength < 16){
-        PR4 = 23040; PR5 = 610;  //500ms     11 - 15
-     }else if(sigstrength >= 16 && sigstrength < 22){
-        PR4 = 11520; PR5 = 305;  //250ms     16 - 21 medium
-     }else if(sigstrength >= 22 && sigstrength < 26){
-        PR4 = 4608;  PR5 = 122;  //100ms     22 - 25
-     }else if(sigstrength >= 26 && sigstrength < 30){
-        PR4 = 2304;  PR5 = 61;  //50ms       26 - 31
-     }else{
-        PR4 = 14464;  PR5 = 1;  //1ms        >30   strong
-     }
-    TMR4 = 0;
-    TMR5 = 0;
-    T4CONSET = 0x8008;
-    T4IF_bit      = 0;
-    T5IE_bit      = 1;
+      if(sigstrength > 28){
+       PR2 = 46080; PR3 = 1220;  //1000ms
+       }
+      else if(sigstrength >= 24 && sigstrength < 28){
+       PR2 = 32256; PR3 = 854;   //700ms
+       }
+      else if(sigstrength >= 19 && sigstrength < 24){
+       PR2 = 23040; PR3 = 610;   //500ms
+       }
+      else if(sigstrength >= 14 && sigstrength < 19){
+       PR2 = 11520; PR3 = 305;   //250ms
+       }
+      else if(sigstrength >= 9 && sigstrength < 14){
+       PR2 = 4608;  PR3 = 122;   //100ms
+       }
+      else if(sigstrength >= 4 && sigstrength < 9){
+       PR2 = 14464;  PR3 = 1;    //1ms
+       }
+
+
+         
 }
-
-
 /**************************************************************
 *General functions to test Sim800 responses
 *this function test for "OK"

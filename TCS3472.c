@@ -286,41 +286,35 @@ int err;
          return err;
 }
 
-void GetScaledValues(unsigned int* CRGB,float* rgb){
+void GetScaledValues(int* CRGB,float* rgb){
 float c,r,g,b;
-char txt[20];
+       c =  (float)CRGB[0];
+       r =  (float)CRGB[1];
+       g =  (float)CRGB[2];
+       b =  (float)CRGB[3];
 
-       if(CRGB[0] == 0 && CRGB[1] == 0 && CRGB[2] == 0 && CRGB[3] == 0 )
-           return;
-           
-       c =  fabs((float)CRGB[0]);
-       r =  fabs((float)CRGB[1]);
-       g =  fabs((float)CRGB[2]);
-       b =  fabs((float)CRGB[3]);
+       r /= c;
+       r *= 255.0;
+       rgb[0] = fabs(r);
+       g /= c;
+       g *= 255.0;
+       rgb[1] = fabs(g);
+       b /= c;
+       b *= 255.0;
+       rgb[2] = fabs(b);
        
-        r = r / c;
-        r *= 256.0;
-        rgb[0] = (float)r;
-        g = g / c;
-        g *= 256.0;
-        rgb[1] = (float)g;
-        b = b / c;
-        b *= 256.0;
-        rgb[2] = (float)b;
 }
 
-void TCS3472_CalcHSL(float* rgb){
+float TCS3472_CalcHue(float* rgb){
 float rR,gG,bB,min_,max_;
-float H,S,L;
+float HUE;
 float minF,maxF;
 /****************************************************
 *  if R = max  => Hue = ((G-B)/(max-min))*60
 *  if G = max  => HUE = 2 + (((B-R)/MAX-MIN)))*60
 *  if B = max  => HUE = 4 + (((R-G)/(max-min)))*60
 ****************************************************/
-   if(rgb[0] == 0.0 && rgb[1] == 0.0 && rgb[2] == 0.0)
-      return;
-      
+
    rR = rgb[0];
    gG = rgb[1];
    bB = rgb[2];
@@ -334,40 +328,18 @@ float minF,maxF;
    if(rR >= gG && rR >= bB){ //Red = max
       //avoid zero
       gG += (gG == bB)? 1.0:0.0;
-      H = ((gG - bB)/(maxF - minF))*60.0;
+      HUE = ((gG - bB)/(maxF - minF))*60.0;
    }else if(gG >= rR && gG >= bB){//Green = max
       //avoid zero
       bB += (rR == bB)? 1.0:0.0;
-      H = (2.0 + ((bB - rR)/(maxF - minF)))*60.0;
+      HUE = (2.0 + ((bB - rR)/(maxF - minF)))*60.0;
    }else if(bB >= rR && bB >= gG){//Blue = max
       //avoid zero
       rR += (rR == bB)? 1.0:0.0;
-      H = (4.0 + ((rR - gG)/(maxF - minF)))*60.0;
+      HUE = (4.0 + ((rR - gG)/(maxF - minF)))*60.0;
    }
     //check the quadrant iv > 180 result = -ve
-     H += (H < 0.0)? 360.0 : 0.0;
-
-     //Luminance before Saturation ((max + min)/(255+255))/2
-     L = ((maxF + minF)/510.0)/2.0;
-     
-     //Saturation depends on result of L 
-     //if L <= 0.5 then L = (max-min)/(max+min)
-     //else L = ( max-min)/(2.0-max-min)
-     if(L <= 0.5){
-        S = (maxF - minF)/(maxF+minF);
-     }else{
-        S = (maxF-minF)/(2-maxF-minF);
-     }
-     
-     L = fabs(L);
-     L *= 100;
-     L += 10;
-     S = fabs(S);
-     S *= 100;
-     
-     rgb[4] = H;
-     rgb[5] = S;
-     rgb[6] = L;
+    return HUE += (HUE < 0.0)? 360.0 : 0.0;
 }
 
 float max_(float* rgb){

@@ -76,7 +76,7 @@ ADDIU	SP, SP, 12
 WRPGPR	SP, SP
 ERET	
 ; end of _Timer1Interrupt
-_Timer4_5Interrupt:
+_Timer2_3Interrupt:
 RDPGPR	SP, SP
 ADDIU	SP, SP, -12
 MFC0	R30, 12, 2
@@ -88,8 +88,14 @@ SW	R30, 0(SP)
 INS	R30, R0, 1, 15
 ORI	R30, R0, 7168
 MTC0	R30, 12, 0
-LUI	R2, BitMask(T5IF_bit+0)
-ORI	R2, R2, BitMask(T5IF_bit+0)
+LUI	R2, BitMask(T3IF_bit+0)
+ORI	R2, R2, BitMask(T3IF_bit+0)
+_SX	
+_LX	
+EXT	R2, R2, BitPos(LATD1_bit+0), 1
+XORI	R3, R2, 1
+_LX	
+INS	R2, R3, BitPos(LATD1_bit+0), 1
 _SX	
 _LX	
 EXT	R2, R2, BitPos(LATE3_bit+0), 1
@@ -97,7 +103,7 @@ XORI	R3, R2, 1
 _LX	
 INS	R2, R3, BitPos(LATE3_bit+0), 1
 _SX	
-L_end_Timer4_5Interrupt:
+L_end_Timer2_3Interrupt:
 DI	
 EHB	
 LW	R30, 8(SP)
@@ -109,7 +115,7 @@ MTC0	R30, 12, 0
 ADDIU	SP, SP, 12
 WRPGPR	SP, SP
 ERET	
-; end of _Timer4_5Interrupt
+; end of _Timer2_3Interrupt
 _PC_Uart1:
 ADDIU	SP, SP, -16
 SW	R30, 12(SP)

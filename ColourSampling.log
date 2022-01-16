@@ -1,4 +1,4 @@
-0	1	mikroCPIC32.exe -MSF -DBG -pP32MX460F512L -HEAP 2000 -RA -LHF -C -Y -DL -SSA -EBASE 0x9FC01000 -INTDEF MV_SRS7_IS32 -O11110004 -fo80 -N"C:\Users\Git\ColourSampling\ColourSampling.mcp32" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Uses\" -SP"C:\Users\Git\ColourSampling\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Uses\" -IP"C:\Users\Git\ColourSampling\" "ColourSampling.c" "Config.c" "ISR.c" "TCS3472.c" "_Timers.c" "USBdsc.c" "ColorMatch.c" "String.c" "Flash_R_W.c" "Sim800.c" "__Lib_CP0.emcl" "__Lib_Math.emcl" "__Lib_MathDouble.emcl" "__Lib_System.emcl" "__Lib_SoftResetDma.emcl" "__Lib_Delays.emcl" "__Lib_CType.emcl" "__Lib_CString.emcl" "__Lib_CStdlib.emcl" "__Lib_CMath.emcl" "__Lib_MemManager.emcl" "__Lib_Conversions.emcl" "__Lib_Sprintf.emcl" "__Lib_PrintOut.emcl" "__Lib_Button.emcl" "__Lib_FLASH.emcl" "__Lib_I2C_12.emcl" "__Lib_PWM.emcl" "__Lib_UART_12.emcl" "__Lib_USB.emcl"	 
+0	1	mikroCPIC32.exe -MSF -DBG -pP32MX460F512L -HEAP 6000 -RA -LHF -C -Y -DL -SSA -EBASE 0x9FC01000 -INTDEF MV_SRS7_IS32 -O11110004 -fo80 -N"C:\Users\Git\ColourSampling\ColourSampling.mcp32" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Uses\" -SP"C:\Users\Git\ColourSampling\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Uses\" -IP"C:\Users\Git\ColourSampling\" "ColourSampling.c" "Config.c" "ISR.c" "TCS3472.c" "_Timers.c" "USBdsc.c" "ColorMatch.c" "String.c" "Flash_R_W.c" "Sim800.c" "__Lib_CP0.emcl" "__Lib_Math.emcl" "__Lib_MathDouble.emcl" "__Lib_System.emcl" "__Lib_SoftResetDma.emcl" "__Lib_Delays.emcl" "__Lib_CType.emcl" "__Lib_CString.emcl" "__Lib_CStdlib.emcl" "__Lib_CMath.emcl" "__Lib_MemManager.emcl" "__Lib_Conversions.emcl" "__Lib_Sprintf.emcl" "__Lib_PrintOut.emcl" "__Lib_Button.emcl" "__Lib_FLASH.emcl" "__Lib_I2C_12.emcl" "__Lib_UART_12.emcl" "__Lib_USB.emcl"	 
 diagnostics: 0	122	Compilation Started	P32MX460F512L.c
 diagnostics: 15369	123	Compiled Successfully	P32MX460F512L.c
 diagnostics: 0	122	Compilation Started	__Lib_Delays.c
@@ -9,26 +9,24 @@ warning: 155	1506	Implicit conversion of pointer to int	__Lib_MemManager.c
 warning: 174	1508	Implicit conversion of int to ptr	__Lib_MemManager.c
 diagnostics: 297	123	Compiled Successfully	__Lib_MemManager.c
 diagnostics: 0	122	Compilation Started	stdint.h
-warning: 195	1508	Implicit conversion of int to ptr	ColourSampling.c
-warning: 202	1505	Suspicious pointer conversion	ColourSampling.c
+warning: 162	1508	Implicit conversion of int to ptr	ColourSampling.c
 hint: 32	1163	Variable 'deg' has been declared, but not used	ColourSampling.c
-diagnostics: 211	123	Compiled Successfully	ColourSampling.c
+diagnostics: 179	123	Compiled Successfully	ColourSampling.c
+hint: 117	1164	Variable 'signal' has been eliminated by optimizer	ColourSampling.c
 hint: 31	1164	Variable 'i' has been eliminated by optimizer	ColourSampling.c
-hint: 35	1164	Variable 'res_millis_sigstr' has been eliminated by optimizer	ColourSampling.c
-hint: 36	1164	Variable 'resA' has been eliminated by optimizer	ColourSampling.c
+hint: 33	1164	Variable 'resA' has been eliminated by optimizer	ColourSampling.c
 diagnostics: 0	122	Compilation Started	stdint.h
-diagnostics: 93	123	Compiled Successfully	Config.c
+diagnostics: 71	123	Compiled Successfully	Config.c
 diagnostics: 0	122	Compilation Started	stdint.h
 hint: 0	1004	interrupt handler (USB1Interrupt at 0x002D)	ISR.c
 hint: 0	1004	interrupt handler (Timer1Interrupt at 0x0004)	ISR.c
-hint: 0	1004	interrupt handler (Timer4_5Interrupt at 0x0014)	ISR.c
+hint: 0	1004	interrupt handler (Timer2_3Interrupt at 0x000C)	ISR.c
 hint: 0	1004	interrupt handler (PC_Uart1 at 0x0018)	ISR.c
 hint: 0	1004	interrupt handler (Sim800_Uart2 at 0x0020)	ISR.c
-diagnostics: 49	123	Compiled Successfully	ISR.c
+diagnostics: 50	123	Compiled Successfully	ISR.c
 diagnostics: 0	122	Compilation Started	stdint.h
 warning: 244	1503	Result is not defined in function: 'TCS3472_Calc_Lux'	TCS3472.c
-hint: 291	1163	Variable 'txt' has been declared, but not used	TCS3472.c
-diagnostics: 393	123	Compiled Successfully	TCS3472.c
+diagnostics: 365	123	Compiled Successfully	TCS3472.c
 hint: 93	1164	Variable 'read' has been eliminated by optimizer	TCS3472.c
 hint: 130	1164	Variable 'cct' has been eliminated by optimizer	TCS3472.c
 hint: 167	1164	Variable 'g2' has been eliminated by optimizer	TCS3472.c
@@ -36,103 +34,102 @@ hint: 169	1164	Variable 'ir' has been eliminated by optimizer	TCS3472.c
 hint: 170	1164	Variable 'cct' has been eliminated by optimizer	TCS3472.c
 diagnostics: 0	122	Compilation Started	stdint.h
 hint: 18	1163	Variable 'txt' has been declared, but not used	_Timers.c
-hint: 58	1163	Variable 'res' has been declared, but not used	_Timers.c
-hint: 58	1163	Variable 'minsPassed' has been declared, but not used	_Timers.c
-diagnostics: 166	123	Compiled Successfully	_Timers.c
+hint: 46	1163	Variable 'res' has been declared, but not used	_Timers.c
+hint: 46	1163	Variable 'minsPassed' has been declared, but not used	_Timers.c
+diagnostics: 154	123	Compiled Successfully	_Timers.c
 diagnostics: 0	122	Compilation Started	USBdsc.c
 diagnostics: 167	123	Compiled Successfully	USBdsc.c
 diagnostics: 0	122	Compilation Started	ColorMatch.c
 diagnostics: 0	123	Compiled Successfully	ColorMatch.c
 diagnostics: 1	122	Compilation Started	ColorMatch.c
-warning: 43	1503	Result is not defined in function: 'InitString'	String.c
-warning: 62	1505	Suspicious pointer conversion	String.c
-warning: 77	1505	Suspicious pointer conversion	String.c
-hint: 85	1354	argument may be out of range [Int_Time]	String.c
-warning: 91	1505	Suspicious pointer conversion	String.c
-hint: 99	1354	argument may be out of range [Gain]	String.c
-hint: 51	1163	Variable 'txtR' has been declared, but not used	String.c
-hint: 231	1163	Variable 'j' has been declared, but not used	String.c
-warning: 262	1505	Suspicious pointer conversion	String.c
-warning: 337	1505	Suspicious pointer conversion	String.c
-hint: 327	1163	Variable 'cct' has been declared, but not used	String.c
-warning: 457	1505	Suspicious pointer conversion	String.c
-hint: 450	1163	Variable 'HUE' has been declared, but not used	String.c
-hint: 450	1163	Variable 'LUMENANCE' has been declared, but not used	String.c
-hint: 450	1163	Variable 'SATURATION' has been declared, but not used	String.c
-warning: 492	1508	Implicit conversion of int to ptr	String.c
-hint: 490	1163	Variable 'Val' has been declared, but not used	String.c
-warning: 544	1508	Implicit conversion of int to ptr	String.c
-warning: 552	1508	Implicit conversion of int to ptr	String.c
-warning: 561	1508	Implicit conversion of int to ptr	String.c
-warning: 570	1508	Implicit conversion of int to ptr	String.c
-warning: 576	1508	Implicit conversion of int to ptr	String.c
-hint: 626	1163	Variable 'val' has been declared, but not used	String.c
-hint: 628	1163	Variable 'i' has been declared, but not used	String.c
-diagnostics: 662	123	Compiled Successfully	String.c
-warning: 281	1512	variable 'temp' might not have been initialized	String.c
-warning: 646	1512	variable 'res' might not have been initialized	String.c
-hint: 50	1164	Variable 'result' has been eliminated by optimizer	String.c
-hint: 52	1164	Variable 'res0' has been eliminated by optimizer	String.c
-hint: 328	1164	Variable 'err' has been eliminated by optimizer	String.c
-hint: 629	1164	Variable 'tr' has been eliminated by optimizer	String.c
-hint: 0	1164	Variable '?lstr87_String' has been eliminated by optimizer	String.c
+warning: 42	1503	Result is not defined in function: 'InitString'	String.c
+warning: 61	1505	Suspicious pointer conversion	String.c
+warning: 76	1505	Suspicious pointer conversion	String.c
+hint: 84	1354	argument may be out of range [Int_Time]	String.c
+warning: 90	1505	Suspicious pointer conversion	String.c
+hint: 98	1354	argument may be out of range [Gain]	String.c
+hint: 50	1163	Variable 'txtR' has been declared, but not used	String.c
+hint: 224	1163	Variable 'j' has been declared, but not used	String.c
+warning: 255	1505	Suspicious pointer conversion	String.c
+warning: 326	1505	Suspicious pointer conversion	String.c
+hint: 320	1163	Variable 'cct' has been declared, but not used	String.c
+warning: 431	1505	Suspicious pointer conversion	String.c
+warning: 459	1508	Implicit conversion of int to ptr	String.c
+hint: 457	1163	Variable 'Val' has been declared, but not used	String.c
+warning: 508	1508	Implicit conversion of int to ptr	String.c
+warning: 516	1508	Implicit conversion of int to ptr	String.c
+warning: 525	1508	Implicit conversion of int to ptr	String.c
+warning: 534	1508	Implicit conversion of int to ptr	String.c
+warning: 540	1508	Implicit conversion of int to ptr	String.c
+hint: 590	1163	Variable 'val' has been declared, but not used	String.c
+hint: 592	1163	Variable 'i' has been declared, but not used	String.c
+diagnostics: 626	123	Compiled Successfully	String.c
+warning: 274	1512	variable 'temp' might not have been initialized	String.c
+warning: 610	1512	variable 'res' might not have been initialized	String.c
+hint: 49	1164	Variable 'result' has been eliminated by optimizer	String.c
+hint: 51	1164	Variable 'res0' has been eliminated by optimizer	String.c
+hint: 321	1164	Variable 'err' has been eliminated by optimizer	String.c
+hint: 426	1164	Variable 'HUE' has been eliminated by optimizer	String.c
+hint: 593	1164	Variable 'tr' has been eliminated by optimizer	String.c
+hint: 0	1164	Variable '?lstr80_String' has been eliminated by optimizer	String.c
 diagnostics: 0	122	Compilation Started	stdint.h
-diagnostics: 147	123	Compiled Successfully	Flash_R_W.c
+diagnostics: 144	123	Compiled Successfully	Flash_R_W.c
 hint: 9	1164	Variable 'i' has been eliminated by optimizer	Flash_R_W.c
 hint: 53	1164	Variable 'res' has been eliminated by optimizer	Flash_R_W.c
 hint: 69	1164	Variable 'res' has been eliminated by optimizer	Flash_R_W.c
 hint: 83	1164	Variable 'res' has been eliminated by optimizer	Flash_R_W.c
-diagnostics: 0	122	Compilation Started	stdint.h
-warning: 111	1506	Implicit conversion of pointer to int	Sim800.c
-warning: 165	1508	Implicit conversion of int to ptr	Sim800.c
-warning: 170	1508	Implicit conversion of int to ptr	Sim800.c
-hint: 192	1163	Variable 'j' has been declared, but not used	Sim800.c
-hint: 371	1163	Variable 'i' has been declared, but not used	Sim800.c
-hint: 460	1163	Variable 'i' has been declared, but not used	Sim800.c
-hint: 614	1163	Variable 'i' has been declared, but not used	Sim800.c
-hint: 648	1163	Variable 'res' has been declared, but not used	Sim800.c
-warning: 773	1503	Result is not defined in function: 'SendSMS'	Sim800.c
-warning: 787	1505	Suspicious pointer conversion	Sim800.c
-warning: 900	1505	Suspicious pointer conversion	Sim800.c
-warning: 1023	1508	Implicit conversion of int to ptr	Sim800.c
-hint: 980	1163	Variable 'txtDig' has been declared, but not used	Sim800.c
-warning: 1096	1505	Suspicious pointer conversion	Sim800.c
-warning: 1123	1505	Suspicious pointer conversion	Sim800.c
-warning: 1125	1505	Suspicious pointer conversion	Sim800.c
-warning: 1125	1505	Suspicious pointer conversion	Sim800.c
-warning: 1127	1505	Suspicious pointer conversion	Sim800.c
-warning: 1127	1505	Suspicious pointer conversion	Sim800.c
-warning: 1129	1505	Suspicious pointer conversion	Sim800.c
-warning: 1129	1505	Suspicious pointer conversion	Sim800.c
-warning: 1131	1505	Suspicious pointer conversion	Sim800.c
-warning: 1131	1505	Suspicious pointer conversion	Sim800.c
-warning: 1133	1505	Suspicious pointer conversion	Sim800.c
-warning: 1133	1505	Suspicious pointer conversion	Sim800.c
-warning: 1135	1505	Suspicious pointer conversion	Sim800.c
-warning: 1135	1505	Suspicious pointer conversion	Sim800.c
-warning: 1137	1505	Suspicious pointer conversion	Sim800.c
-warning: 1137	1505	Suspicious pointer conversion	Sim800.c
-warning: 1139	1505	Suspicious pointer conversion	Sim800.c
-warning: 1139	1505	Suspicious pointer conversion	Sim800.c
-hint: 1106	1163	Variable 'len' has been declared, but not used	Sim800.c
-hint: 1235	1163	Variable 'res' has been declared, but not used	Sim800.c
-hint: 1236	1163	Variable 'text' has been declared, but not used	Sim800.c
-diagnostics: 1350	123	Compiled Successfully	Sim800.c
-hint: 311	1164	Variable 'newMillis' has been eliminated by optimizer	Sim800.c
-hint: 371	1164	Variable 'num_strs' has been eliminated by optimizer	Sim800.c
-hint: 372	1164	Variable 'str_rcv' has been eliminated by optimizer	Sim800.c
-hint: 616	1164	Variable 'response' has been eliminated by optimizer	Sim800.c
-hint: 811	1164	Variable 'is_digit' has been eliminated by optimizer	Sim800.c
-hint: 839	1164	Variable 'text' has been eliminated by optimizer	Sim800.c
-hint: 980	1164	Variable 't' has been eliminated by optimizer	Sim800.c
-hint: 1328	1164	Variable 'newMillis' has been eliminated by optimizer	Sim800.c
-diagnostics: 0	127	All files Compiled in 1141 ms	 
+diagnostics: 0	122	Compilation Started	flash_r_w.h
+warning: 108	1506	Implicit conversion of pointer to int	Sim800.c
+warning: 156	1508	Implicit conversion of int to ptr	Sim800.c
+warning: 160	1508	Implicit conversion of int to ptr	Sim800.c
+hint: 181	1163	Variable 'j' has been declared, but not used	Sim800.c
+hint: 360	1163	Variable 'i' has been declared, but not used	Sim800.c
+hint: 449	1163	Variable 'i' has been declared, but not used	Sim800.c
+hint: 603	1163	Variable 'i' has been declared, but not used	Sim800.c
+hint: 637	1163	Variable 'res' has been declared, but not used	Sim800.c
+warning: 736	1503	Result is not defined in function: 'SendSMS'	Sim800.c
+warning: 750	1505	Suspicious pointer conversion	Sim800.c
+warning: 863	1505	Suspicious pointer conversion	Sim800.c
+warning: 970	1508	Implicit conversion of int to ptr	Sim800.c
+hint: 933	1163	Variable 'txtDig' has been declared, but not used	Sim800.c
+warning: 1043	1505	Suspicious pointer conversion	Sim800.c
+warning: 1069	1505	Suspicious pointer conversion	Sim800.c
+warning: 1071	1505	Suspicious pointer conversion	Sim800.c
+warning: 1071	1505	Suspicious pointer conversion	Sim800.c
+warning: 1073	1505	Suspicious pointer conversion	Sim800.c
+warning: 1073	1505	Suspicious pointer conversion	Sim800.c
+warning: 1075	1505	Suspicious pointer conversion	Sim800.c
+warning: 1075	1505	Suspicious pointer conversion	Sim800.c
+warning: 1077	1505	Suspicious pointer conversion	Sim800.c
+warning: 1077	1505	Suspicious pointer conversion	Sim800.c
+warning: 1080	1505	Suspicious pointer conversion	Sim800.c
+warning: 1080	1505	Suspicious pointer conversion	Sim800.c
+warning: 1082	1505	Suspicious pointer conversion	Sim800.c
+warning: 1082	1505	Suspicious pointer conversion	Sim800.c
+warning: 1084	1505	Suspicious pointer conversion	Sim800.c
+warning: 1084	1505	Suspicious pointer conversion	Sim800.c
+warning: 1086	1505	Suspicious pointer conversion	Sim800.c
+warning: 1086	1505	Suspicious pointer conversion	Sim800.c
+hint: 1053	1163	Variable 'len' has been declared, but not used	Sim800.c
+hint: 1182	1163	Variable 'i' has been declared, but not used	Sim800.c
+hint: 1182	1163	Variable 'res' has been declared, but not used	Sim800.c
+hint: 1183	1163	Variable 'text' has been declared, but not used	Sim800.c
+diagnostics: 1286	123	Compiled Successfully	Sim800.c
+hint: 300	1164	Variable 'newMillis' has been eliminated by optimizer	Sim800.c
+hint: 360	1164	Variable 'num_strs' has been eliminated by optimizer	Sim800.c
+hint: 361	1164	Variable 'str_rcv' has been eliminated by optimizer	Sim800.c
+hint: 605	1164	Variable 'response' has been eliminated by optimizer	Sim800.c
+hint: 774	1164	Variable 'is_digit' has been eliminated by optimizer	Sim800.c
+hint: 802	1164	Variable 'text' has been eliminated by optimizer	Sim800.c
+hint: 933	1164	Variable 't' has been eliminated by optimizer	Sim800.c
+hint: 1264	1164	Variable 'newMillis' has been eliminated by optimizer	Sim800.c
+diagnostics: 0	127	All files Compiled in 1078 ms	 
 hint: 0	1144	Used RX: 32 (100%)   Free RX: 0 (0%)	Used RX: 32 (100%)   Free RX: 0 (0%)
-hint: 0	1144	Static RAM (bytes): 4899   Dynamic RAM (bytes): 25862	Static RAM (bytes): 4899   Dynamic RAM (bytes): 25862
-hint: 0	1144	HEAP RAM (bytes): 2000	HEAP RAM (bytes): 2000
-hint: 0	1144	Used ROM (bytes): 77918 (15%)  Free ROM (bytes): 446370 (85%)	Used ROM (bytes): 77918 (15%)  Free ROM (bytes): 446370 (85%)
+hint: 0	1144	Static RAM (bytes): 4849   Dynamic RAM (bytes): 21913	Static RAM (bytes): 4849   Dynamic RAM (bytes): 21913
+hint: 0	1144	HEAP RAM (bytes): 6000	HEAP RAM (bytes): 6000
+hint: 0	1144	Used ROM (bytes): 74214 (14%)  Free ROM (bytes): 450074 (86%)	Used ROM (bytes): 74214 (14%)  Free ROM (bytes): 450074 (86%)
 hint: 0	1144	Used BOOTROM (bytes): 1912 (16%)  Free BOOTROM (bytes): 10361 (84%)	Used BOOTROM (bytes): 1912 (16%)  Free BOOTROM (bytes): 10361 (84%)
 diagnostics: 0	125	Project Linked Successfully	ColourSampling.mcp32
-diagnostics: 0	128	Linked in 312 ms	 
-diagnostics: 0	129	Project 'ColourSampling.mcp32' completed: 1984 ms	 
-diagnostics: 0	103	Finished successfully: 13 Jan 2022, 21:30:05	ColourSampling.mcp32
+diagnostics: 0	128	Linked in 234 ms	 
+diagnostics: 0	129	Project 'ColourSampling.mcp32' completed: 1859 ms	 
+diagnostics: 0	103	Finished successfully: 16 Jan 2022, 22:01:58	ColourSampling.mcp32

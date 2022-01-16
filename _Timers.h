@@ -45,7 +45,7 @@ extern  Timer_Setpoint T0_SP;
 //function prototypes
 void InitTimers();
 void InitTimer1();
-void InitTimer4_5();
+void InitTimer2_3();
 void Get_Time();
 void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);

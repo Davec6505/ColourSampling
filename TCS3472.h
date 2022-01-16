@@ -119,7 +119,7 @@ extern TCS3472_Error device_Error;
 ////////////////////////////////////////////////////////
 //Vars and Consts
 extern unsigned int RawData[4];
-extern float FltData[8];
+extern float FltData[4];
 extern unsigned int CCT;
 
 
@@ -144,8 +144,7 @@ unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
 void GetScaledValues(int* CRGB,float rgb[3]);
-void TCS3472_CalcHSL(float* RGBC);
+float TCS3472_CalcHue(float* RGBC);
 float max_(float *rgb);
 float min_(float *rgb);
-
 #endif

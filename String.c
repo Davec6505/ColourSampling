@@ -10,7 +10,7 @@ const code char *comc[13]={
    "T",
    "G"
 };
-const code char *com[22]={
+const code char *com[21]={
    "CONFIG"       //0
    ,"SENDC"       //1
    ,"SENDR"       //2
@@ -31,7 +31,6 @@ const code char *com[22]={
    ,"START"       //17
    ,"CANCEL"      //18
    ,"READA_HUE"   //19
-   ,"READA_PWM"   //20
    ,"ERROR"
 };
 
@@ -150,12 +149,6 @@ char *str,err,i;
         case READA_HUE :
             str = ReadHUE();
             break;
-        case READA_PWM :
-            PWM_Start(2);
-            Delay_ms(500);
-            SetLedPWM();
-            PWM_Stop(2);
-            break;
         default:
             str = "No data requested!\r\n";
            break;
@@ -174,7 +167,7 @@ ret:
 /*********************************************************************
 * Clear the string within the 2D matrix
 *********************************************************************/
-void clr_str_arrays(char str[size][str_size]){
+void clr_str_arrays(char str[20][64]){
 int i,j;
     for(i = 0;i < 20;i++){
        for(j = 0;j<64;j++){
@@ -193,7 +186,7 @@ char* setstr(char conf[250]){
          if(conf[i] == '\0')
              break;
       }
-      conf[i] = 0;
+      conf[i+1] = 0;
 
       return conf;
 }
@@ -294,16 +287,16 @@ int i=0;
            temp = strchr(str,a);
            strcpy(str,temp+1);
         }else{
-           strncpy(temp,str,strlen(temp)+1);
+           strcpy(temp,str);
         }
         for(i=0;i<strlen(temp)+1;i++){
-            if(*(temp+i)==b)
+            if(temp[i]==b)
                break;
             *(temp+i) = *(str+i);
         }
         *(temp+i) = 0;
 
-        Free(temp,100*sizeof(char*));//??
+         Free(temp,100);
         return temp;
 }
 
@@ -326,25 +319,17 @@ char txtR[15];
 char str[64];
 unsigned int cct;
 int err;
-
-       PWM_Start(2);
-       Delay_ms(500);
       // FltData = (float*)Malloc(3);
        //0 = get raw data 1 = get scaled data
        TCS3472_getRawData(RawData);
-       
        if(data_src)
-         GetScaledValues(RawData,FltData);
+         GetScaledValues(RawData,&FltData);
 
-
-       if(!data_src ){
-          strcpy(str,"C || R | G | B | = || ");
+       strcpy(str,"C || R | G | B | = || ");
+       if(!data_src )
           sprintf(txtR,"%u",RawData[0]); //C
-          
-       }else{
-          strcpy(str,"|| R | G | B | = || ");
+       else
           sprintf(txtR,"%3.2f",FltData[0]); //R
-       }
        strcat(str,txtR);
        strcat(str," || ");
 
@@ -363,19 +348,17 @@ int err;
        strcat(str," | ");
 
        if(!data_src ) {
-         sprintf(txtR,"%u",RawData[3]);
-         strcat(str,txtR);
-         strcat(str," || ");
+          sprintf(txtR,"%u",RawData[3]);  //ERR
+          strcat(str,txtR);
+          strcat(str," || ");
+      //cct = TCS3472_CalcColTemp_dn40(RawData,it);
          err = TCS3472_C2RGB_Error(RawData);
-         sprintf(txtR,"%5d",err); //ERR
+         sprintf(txtR,"%5d",err);
          strcat(str,txtR);
-         strcat(str," || \r\n");
-       }else
-          strcat(str,"\r\n");
-
+       }
+       strcat(str," ||\r\n");
       // Free(FltData,sizeof(FltData));
-      PWM_Stop(2);
-      return str;
+        return &str;
 }
 
 /********************************************************************
@@ -385,10 +368,6 @@ char* Read_Send_OneColour(int colr){
 unsigned int col;
 char txtR[10];
 char str[64];
-
-     memset(str,0,strlen(str));
-     PWM_Start(2);
-     Delay_ms(500);
      switch(colr){
         case READR:
            col = TCS3472_Read16(TCS3472_RDATAL);
@@ -435,8 +414,7 @@ char str[64];
            strcat(str," ||\r\n");
            break;
      }
-     PWM_Stop(2);
-     return str;
+     return &str;
 }
 
 /*********************************************************************
@@ -445,31 +423,20 @@ char str[64];
 char* ReadHUE(){
 char str[64];
 char txtF[15];
-char txtG[15];
-char txtH[15];
-float HUE,LUMENANCE,SATURATION;
+float HUE;
 
-        PWM_Start(2);
-        Delay_ms(500);
         memset(str,0,64);
         
         TCS3472_getRawData(RawData);
         GetScaledValues(RawData,&FltData);
-        TCS3472_CalcHSL(&FltData);
+        HUE = TCS3472_CalcHue(&FltData);
+        sprintf(txtF,"%3.2f",HUE); //HUE
         
-        sprintf(txtF,"%3.2f",FltData[4]); //HUE
-        sprintf(txtG,"%3.2f",FltData[5]); //SAT
-        sprintf(txtH,"%3.2f",FltData[6]); //LUM
-        
-       strcpy(str,"HUE, SAT, LUM  || ");
+       strcpy(str,"HUE = || ");
        strcat(str,txtF);
-       strcat(str," | ");
-       strcat(str,txtG);
-       strcat(str," | ");
-       strcat(str,txtH);
-       strcat(str," ||\r\n ");
-       PWM_Stop(2);
-       return str;
+       strcat(str," ||\r\n");
+       
+       return &str;
 }
 
 
@@ -512,7 +479,7 @@ unsigned long Val;
        strcat(str,txtR);
        strcat(str," ||\r\n ");
 
-        return str;
+        return &str;
 }
 
 /*********************************************************************
@@ -524,13 +491,10 @@ unsigned long pos;
 int i,err;
 char txtR[15];
 char str[64];
-         pos =  FLASH_Settings_PAddr; //P?
+         pos =  FLASH_Settings_PAddr;
         for(i=1;i<128;i++)
            val[i] = 0x00000000;
-           
-        PWM_Start(2);
-        Delay_ms(500);
-        memset(str,0,64);
+
         //0 = get the values for thresholds from the sensor
          if(!data_src)
              TCS3472_getRawData(RawData);
@@ -576,7 +540,7 @@ char str[64];
              err = NVMWriteWord(pos,val[4]);
         }
 
-       PWM_Stop(2);
+
        //  err = NVMWriteRow(FLASH_Settings_PAddr,val);
        
        sprintf(txtR,"%x",err);

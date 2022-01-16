@@ -3,8 +3,6 @@ ADDIU	SP, SP, -4
 SW	RA, 0(SP)
 JAL	_InitTimer1+0
 NOP	
-JAL	_InitTimer4_5+0
-NOP	
 L_end_InitTimers:
 LW	RA, 0(SP)
 ADDIU	SP, SP, 4
@@ -23,12 +21,6 @@ _SX
 LUI	R2, BitMask(T1IP2_bit+0)
 ORI	R2, R2, BitMask(T1IP2_bit+0)
 _SX	
-LUI	R2, BitMask(T1IS0_bit+0)
-ORI	R2, R2, BitMask(T1IS0_bit+0)
-_SX	
-LUI	R2, BitMask(T1IS1_bit+0)
-ORI	R2, R2, BitMask(T1IS1_bit+0)
-_SX	
 LUI	R2, BitMask(T1IF_bit+0)
 ORI	R2, R2, BitMask(T1IF_bit+0)
 _SX	
@@ -42,41 +34,35 @@ L_end_InitTimer1:
 JR	RA
 NOP	
 ; end of _InitTimer1
-_InitTimer4_5:
+_InitTimer2_3:
 ORI	R2, R0, 32776
-SW	R2, Offset(T4CON+0)(GP)
-SW	R0, Offset(T5CON+0)(GP)
-SW	R0, Offset(TMR4+0)(GP)
-SW	R0, Offset(TMR5+0)(GP)
-LUI	R2, BitMask(T5IP0_bit+0)
-ORI	R2, R2, BitMask(T5IP0_bit+0)
+SW	R2, Offset(T2CON+0)(GP)
+SW	R0, Offset(T3CON+0)(GP)
+SW	R0, Offset(TMR2+0)(GP)
+SW	R0, Offset(TMR3+0)(GP)
+LUI	R2, BitMask(T3IP0_bit+0)
+ORI	R2, R2, BitMask(T3IP0_bit+0)
 _SX	
-LUI	R2, BitMask(T5IP1_bit+0)
-ORI	R2, R2, BitMask(T5IP1_bit+0)
+LUI	R2, BitMask(T3IP1_bit+0)
+ORI	R2, R2, BitMask(T3IP1_bit+0)
 _SX	
-LUI	R2, BitMask(T5IP2_bit+0)
-ORI	R2, R2, BitMask(T5IP2_bit+0)
+LUI	R2, BitMask(T3IP2_bit+0)
+ORI	R2, R2, BitMask(T3IP2_bit+0)
 _SX	
-LUI	R2, BitMask(T5IS0_bit+0)
-ORI	R2, R2, BitMask(T5IS0_bit+0)
+LUI	R2, BitMask(T3IF_bit+0)
+ORI	R2, R2, BitMask(T3IF_bit+0)
 _SX	
-LUI	R2, BitMask(T5IS1_bit+0)
-ORI	R2, R2, BitMask(T5IS1_bit+0)
+LUI	R2, BitMask(T3IE_bit+0)
+ORI	R2, R2, BitMask(T3IE_bit+0)
 _SX	
-LUI	R2, BitMask(T5IF_bit+0)
-ORI	R2, R2, BitMask(T5IF_bit+0)
-_SX	
-LUI	R2, BitMask(T5IE_bit+0)
-ORI	R2, R2, BitMask(T5IE_bit+0)
-_SX	
-ORI	R2, R0, 33792
-SW	R2, Offset(PR4+0)(GP)
-ORI	R2, R0, 6103
-SW	R2, Offset(PR5+0)(GP)
-L_end_InitTimer4_5:
+ORI	R2, R0, 46080
+SW	R2, Offset(PR2+0)(GP)
+ORI	R2, R0, 1220
+SW	R2, Offset(PR3+0)(GP)
+L_end_InitTimer2_3:
 JR	RA
 NOP	
-; end of _InitTimer4_5
+; end of _InitTimer2_3
 _Get_Time:
 ADDIU	SP, SP, -16
 SW	RA, 0(SP)

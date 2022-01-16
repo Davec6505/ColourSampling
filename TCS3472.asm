@@ -14,22 +14,22 @@ LBU	R27, 8(SP)
 SB	R2, 11(SP)
 ANDI	R3, R2, 255
 ANDI	R2, R27, 255
-BNE	R3, R2, L__TCS3472_Init93
+BNE	R3, R2, L__TCS3472_Init76
 NOP	
 J	L_TCS3472_Init0
 NOP	
-L__TCS3472_Init93:
+L__TCS3472_Init76:
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_Init
 NOP	
 L_TCS3472_Init0:
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_Init94
+BEQ	R2, R0, L__TCS3472_Init77
 NOP	
 J	L_TCS3472_Init1
 NOP	
-L__TCS3472_Init94:
+L__TCS3472_Init77:
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 ORI	R2, R2, 1
 SB	R2, Offset(_TCS3472_Bits+0)(GP)
@@ -257,11 +257,11 @@ SW	R25, 4(SP)
 SW	R26, 8(SP)
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_SetIntergration_Time103
+BEQ	R2, R0, L__TCS3472_SetIntergration_Time86
 NOP	
 J	L_TCS3472_SetIntergration_Time4
 NOP	
-L__TCS3472_SetIntergration_Time103:
+L__TCS3472_SetIntergration_Time86:
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_SetIntergration_Time
 NOP	
@@ -286,11 +286,11 @@ SW	R25, 4(SP)
 SW	R26, 8(SP)
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_SetGain105
+BEQ	R2, R0, L__TCS3472_SetGain88
 NOP	
 J	L_TCS3472_SetGain5
 NOP	
-L__TCS3472_SetGain105:
+L__TCS3472_SetGain88:
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_SetGain
 NOP	
@@ -373,30 +373,30 @@ SW	RA, 0(SP)
 SW	R25, 4(SP)
 SW	R26, 8(SP)
 ANDI	R2, R25, 65535
-BEQ	R2, R0, L__TCS3472_CalcColTemp109
+BEQ	R2, R0, L__TCS3472_CalcColTemp92
 NOP	
-J	L__TCS3472_CalcColTemp66
+J	L__TCS3472_CalcColTemp58
 NOP	
-L__TCS3472_CalcColTemp109:
+L__TCS3472_CalcColTemp92:
 ANDI	R2, R26, 65535
-BEQ	R2, R0, L__TCS3472_CalcColTemp110
+BEQ	R2, R0, L__TCS3472_CalcColTemp93
 NOP	
-J	L__TCS3472_CalcColTemp65
+J	L__TCS3472_CalcColTemp57
 NOP	
-L__TCS3472_CalcColTemp110:
+L__TCS3472_CalcColTemp93:
 ANDI	R2, R27, 65535
-BEQ	R2, R0, L__TCS3472_CalcColTemp111
+BEQ	R2, R0, L__TCS3472_CalcColTemp94
 NOP	
-J	L__TCS3472_CalcColTemp64
+J	L__TCS3472_CalcColTemp56
 NOP	
-L__TCS3472_CalcColTemp111:
-L__TCS3472_CalcColTemp63:
+L__TCS3472_CalcColTemp94:
+L__TCS3472_CalcColTemp55:
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_CalcColTemp
 NOP	
-L__TCS3472_CalcColTemp66:
-L__TCS3472_CalcColTemp65:
-L__TCS3472_CalcColTemp64:
+L__TCS3472_CalcColTemp58:
+L__TCS3472_CalcColTemp57:
+L__TCS3472_CalcColTemp56:
 ANDI	R4, R25, 65535
 JAL	__Unsigned16IntToFloat+0
 NOP	
@@ -588,11 +588,11 @@ NOP
 _TCS3472_CalcColTemp_dn40:
 LHU	R2, 0(R25)
 ANDI	R2, R2, 65535
-BEQ	R2, R0, L__TCS3472_CalcColTemp_dn40113
+BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4096
 NOP	
 J	L_TCS3472_CalcColTemp_dn409
 NOP	
-L__TCS3472_CalcColTemp_dn40113:
+L__TCS3472_CalcColTemp_dn4096:
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_CalcColTemp_dn40
 NOP	
@@ -602,11 +602,11 @@ ORI	R2, R0, 256
 SUBU	R2, R2, R3
 SEH	R2, R2
 SLTI	R2, R2, 64
-BEQ	R2, R0, L__TCS3472_CalcColTemp_dn40114
+BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4097
 NOP	
 J	L_TCS3472_CalcColTemp_dn4010
 NOP	
-L__TCS3472_CalcColTemp_dn40114:
+L__TCS3472_CalcColTemp_dn4097:
 ; sat start address is: 16 (R4)
 ORI	R4, R0, 65535
 ; sat end address is: 16 (R4)
@@ -628,11 +628,11 @@ ORI	R2, R0, 256
 SUBU	R2, R2, R3
 SEH	R2, R2
 SLTI	R2, R2, 64
-BNE	R2, R0, L__TCS3472_CalcColTemp_dn40115
+BNE	R2, R0, L__TCS3472_CalcColTemp_dn4098
 NOP	
-J	L__TCS3472_CalcColTemp_dn4067
+J	L__TCS3472_CalcColTemp_dn4059
 NOP	
-L__TCS3472_CalcColTemp_dn40115:
+L__TCS3472_CalcColTemp_dn4098:
 ANDI	R2, R4, 65535
 SRL	R2, R2, 2
 SUBU	R2, R4, R2
@@ -640,7 +640,7 @@ ANDI	R4, R2, 65535
 ; sat end address is: 16 (R4)
 J	L_TCS3472_CalcColTemp_dn4012
 NOP	
-L__TCS3472_CalcColTemp_dn4067:
+L__TCS3472_CalcColTemp_dn4059:
 L_TCS3472_CalcColTemp_dn4012:
 ; sat start address is: 16 (R4)
 LHU	R2, 0(R25)
@@ -648,11 +648,11 @@ ANDI	R3, R2, 65535
 ANDI	R2, R4, 65535
 ; sat end address is: 16 (R4)
 SLTU	R2, R3, R2
-BEQ	R2, R0, L__TCS3472_CalcColTemp_dn40116
+BEQ	R2, R0, L__TCS3472_CalcColTemp_dn4099
 NOP	
 J	L_TCS3472_CalcColTemp_dn4013
 NOP	
-L__TCS3472_CalcColTemp_dn40116:
+L__TCS3472_CalcColTemp_dn4099:
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_CalcColTemp_dn40
 NOP	
@@ -669,11 +669,11 @@ LHU	R2, 0(R25)
 ANDI	R3, R3, 65535
 ANDI	R2, R2, 65535
 SLTU	R2, R2, R3
-BNE	R2, R0, L__TCS3472_CalcColTemp_dn40117
+BNE	R2, R0, L__TCS3472_CalcColTemp_dn40100
 NOP	
 J	L_TCS3472_CalcColTemp_dn4014
 NOP	
-L__TCS3472_CalcColTemp_dn40117:
+L__TCS3472_CalcColTemp_dn40100:
 ADDIU	R2, R25, 2
 LHU	R3, 0(R2)
 ADDIU	R2, R25, 4
@@ -709,11 +709,11 @@ SUBU	R2, R2, R5
 ; b2 start address is: 20 (R5)
 ANDI	R5, R2, 65535
 ANDI	R2, R3, 65535
-BEQ	R2, R0, L__TCS3472_CalcColTemp_dn40118
+BEQ	R2, R0, L__TCS3472_CalcColTemp_dn40101
 NOP	
 J	L_TCS3472_CalcColTemp_dn4016
 NOP	
-L__TCS3472_CalcColTemp_dn40118:
+L__TCS3472_CalcColTemp_dn40101:
 ; r2 end address is: 16 (R4)
 ; b2 end address is: 20 (R5)
 MOVZ	R2, R0, R0
@@ -748,11 +748,11 @@ SW	R25, 4(SP)
 SW	R26, 8(SP)
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_SetInterrupt121
+BEQ	R2, R0, L__TCS3472_SetInterrupt104
 NOP	
 J	L_TCS3472_SetInterrupt17
 NOP	
-L__TCS3472_SetInterrupt121:
+L__TCS3472_SetInterrupt104:
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_SetInterrupt
 NOP	
@@ -784,11 +784,11 @@ SW	RA, 0(SP)
 SW	R25, 4(SP)
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_ClearInterrupt123
+BEQ	R2, R0, L__TCS3472_ClearInterrupt106
 NOP	
 J	L_TCS3472_ClearInterrupt20
 NOP	
-L__TCS3472_ClearInterrupt123:
+L__TCS3472_ClearInterrupt106:
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_ClearInterrupt
 NOP	
@@ -811,11 +811,11 @@ SW	R25, 4(SP)
 SW	R26, 8(SP)
 LBU	R2, Offset(_TCS3472_Bits+0)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__TCS3472_SetInterrupt_Limits125
+BEQ	R2, R0, L__TCS3472_SetInterrupt_Limits108
 NOP	
 J	L_TCS3472_SetInterrupt_Limits21
 NOP	
-L__TCS3472_SetInterrupt_Limits125:
+L__TCS3472_SetInterrupt_Limits108:
 MOVZ	R2, R0, R0
 J	L_end_TCS3472_SetInterrupt_Limits
 NOP	
@@ -872,23 +872,23 @@ SUBU	R2, R3, R2
 ANDI	R3, R2, 65535
 SEH	R2, R2
 SLTI	R2, R2, -32600
-BEQ	R2, R0, L__TCS3472_C2RGB_Error127
+BEQ	R2, R0, L__TCS3472_C2RGB_Error110
 NOP	
-J	L__TCS3472_C2RGB_Error70
+J	L__TCS3472_C2RGB_Error62
 NOP	
-L__TCS3472_C2RGB_Error127:
+L__TCS3472_C2RGB_Error110:
 SEH	R2, R3
 SLTI	R2, R2, 32601
-BNE	R2, R0, L__TCS3472_C2RGB_Error128
+BNE	R2, R0, L__TCS3472_C2RGB_Error111
 NOP	
-J	L__TCS3472_C2RGB_Error69
+J	L__TCS3472_C2RGB_Error61
 NOP	
-L__TCS3472_C2RGB_Error128:
+L__TCS3472_C2RGB_Error111:
 J	L_TCS3472_C2RGB_Error24
 NOP	
 ; err end address is: 12 (R3)
-L__TCS3472_C2RGB_Error70:
-L__TCS3472_C2RGB_Error69:
+L__TCS3472_C2RGB_Error62:
+L__TCS3472_C2RGB_Error61:
 ORI	R2, R0, 32870
 J	L_end_TCS3472_C2RGB_Error
 NOP	
@@ -904,124 +904,84 @@ _GetScaledValues:
 ADDIU	SP, SP, -12
 SW	RA, 0(SP)
 SW	R25, 4(SP)
-LHU	R2, 0(R25)
-ANDI	R2, R2, 65535
-BEQ	R2, R0, L__GetScaledValues130
+LH	R2, 0(R25)
+SEH	R4, R2
+JAL	__SignedIntegralToFloat+0
 NOP	
-J	L__GetScaledValues75
-NOP	
-L__GetScaledValues130:
-ADDIU	R2, R25, 2
-LHU	R2, 0(R2)
-ANDI	R2, R2, 65535
-BEQ	R2, R0, L__GetScaledValues131
-NOP	
-J	L__GetScaledValues74
-NOP	
-L__GetScaledValues131:
-ADDIU	R2, R25, 4
-LHU	R2, 0(R2)
-ANDI	R2, R2, 65535
-BEQ	R2, R0, L__GetScaledValues132
-NOP	
-J	L__GetScaledValues73
-NOP	
-L__GetScaledValues132:
-ADDIU	R2, R25, 6
-LHU	R2, 0(R2)
-ANDI	R2, R2, 65535
-BEQ	R2, R0, L__GetScaledValues133
-NOP	
-J	L__GetScaledValues72
-NOP	
-L__GetScaledValues133:
-L__GetScaledValues71:
-J	L_end_GetScaledValues
-NOP	
-L__GetScaledValues75:
-L__GetScaledValues74:
-L__GetScaledValues73:
-L__GetScaledValues72:
-LHU	R2, 0(R25)
-ANDI	R4, R2, 65535
-JAL	__Unsigned16IntToFloat+0
-NOP	
-SW	R25, 8(SP)
-MOVZ	R25, R2, R0
-JAL	_fabs+0
-NOP	
-LW	R25, 8(SP)
 ; c start address is: 64 (R16)
 MOVZ	R16, R2, R0
 ADDIU	R2, R25, 2
-LHU	R2, 0(R2)
-ANDI	R4, R2, 65535
-JAL	__Unsigned16IntToFloat+0
+LH	R2, 0(R2)
+SEH	R4, R2
+JAL	__SignedIntegralToFloat+0
 NOP	
-SW	R25, 8(SP)
-MOVZ	R25, R2, R0
-JAL	_fabs+0
-NOP	
-LW	R25, 8(SP)
-; r start address is: 56 (R14)
-MOVZ	R14, R2, R0
+; r start address is: 36 (R9)
+MOVZ	R9, R2, R0
 ADDIU	R2, R25, 4
-LHU	R2, 0(R2)
-ANDI	R4, R2, 65535
-JAL	__Unsigned16IntToFloat+0
+LH	R2, 0(R2)
+SEH	R4, R2
+JAL	__SignedIntegralToFloat+0
 NOP	
-SW	R25, 8(SP)
-MOVZ	R25, R2, R0
-JAL	_fabs+0
-NOP	
-LW	R25, 8(SP)
-; g start address is: 72 (R18)
-MOVZ	R18, R2, R0
-ADDIU	R2, R25, 6
-LHU	R2, 0(R2)
-ANDI	R4, R2, 65535
-JAL	__Unsigned16IntToFloat+0
-NOP	
-MOVZ	R25, R2, R0
-JAL	_fabs+0
-NOP	
-; b start address is: 68 (R17)
+; g start address is: 68 (R17)
 MOVZ	R17, R2, R0
+ADDIU	R2, R25, 6
+LH	R2, 0(R2)
+SEH	R4, R2
+JAL	__SignedIntegralToFloat+0
+NOP	
+; b start address is: 72 (R18)
+MOVZ	R18, R2, R0
 MOVZ	R6, R16, R0
-MOVZ	R4, R14, R0
+MOVZ	R4, R9, R0
 JAL	__Div_FP+0
 NOP	
-; r end address is: 56 (R14)
-LUI	R4, 17280
+; r end address is: 36 (R9)
+LUI	R4, 17279
 ORI	R4, R4, 0
 MOVZ	R6, R2, R0
 JAL	__Mul_FP+0
 NOP	
-SW	R2, 0(R26)
-MOVZ	R6, R16, R0
-MOVZ	R4, R18, R0
-JAL	__Div_FP+0
+MOVZ	R3, R26, R0
+SW	R3, 8(SP)
+MOVZ	R25, R2, R0
+JAL	_fabs+0
 NOP	
-; g end address is: 72 (R18)
-LUI	R4, 17280
-ORI	R4, R4, 0
-MOVZ	R6, R2, R0
-JAL	__Mul_FP+0
-NOP	
-ADDIU	R3, R26, 4
+LW	R3, 8(SP)
 SW	R2, 0(R3)
 MOVZ	R6, R16, R0
 MOVZ	R4, R17, R0
 JAL	__Div_FP+0
 NOP	
+; g end address is: 68 (R17)
+LUI	R4, 17279
+ORI	R4, R4, 0
+MOVZ	R6, R2, R0
+JAL	__Mul_FP+0
+NOP	
+ADDIU	R3, R26, 4
+SW	R3, 8(SP)
+MOVZ	R25, R2, R0
+JAL	_fabs+0
+NOP	
+LW	R3, 8(SP)
+SW	R2, 0(R3)
+MOVZ	R6, R16, R0
+MOVZ	R4, R18, R0
+JAL	__Div_FP+0
+NOP	
 ; c end address is: 64 (R16)
-; b end address is: 68 (R17)
-LUI	R4, 17280
+; b end address is: 72 (R18)
+LUI	R4, 17279
 ORI	R4, R4, 0
 MOVZ	R6, R2, R0
 JAL	__Mul_FP+0
 NOP	
 ADDIU	R3, R26, 8
+SW	R3, 8(SP)
+MOVZ	R25, R2, R0
+JAL	_fabs+0
+NOP	
+LW	R3, 8(SP)
 SW	R2, 0(R3)
 L_end_GetScaledValues:
 LW	R25, 4(SP)
@@ -1030,58 +990,20 @@ ADDIU	SP, SP, 12
 JR	RA
 NOP	
 ; end of _GetScaledValues
-_TCS3472_CalcHSL:
-ADDIU	SP, SP, -24
+_TCS3472_CalcHue:
+ADDIU	SP, SP, -20
 SW	RA, 0(SP)
-LW	R6, 0(R25)
-MOVZ	R4, R0, R0
-JAL	__Compare_FP+0
-NOP	
-SLTIU	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHSL137
-NOP	
-J	L__TCS3472_CalcHSL84
-NOP	
-L__TCS3472_CalcHSL137:
-ADDIU	R2, R25, 4
-LW	R6, 0(R2)
-MOVZ	R4, R0, R0
-JAL	__Compare_FP+0
-NOP	
-SLTIU	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHSL140
-NOP	
-J	L__TCS3472_CalcHSL83
-NOP	
-L__TCS3472_CalcHSL140:
-ADDIU	R2, R25, 8
-LW	R6, 0(R2)
-MOVZ	R4, R0, R0
-JAL	__Compare_FP+0
-NOP	
-SLTIU	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHSL143
-NOP	
-J	L__TCS3472_CalcHSL82
-NOP	
-L__TCS3472_CalcHSL143:
-L__TCS3472_CalcHSL81:
-J	L_end_TCS3472_CalcHSL
-NOP	
-L__TCS3472_CalcHSL84:
-L__TCS3472_CalcHSL83:
-L__TCS3472_CalcHSL82:
 LW	R2, 0(R25)
-; rR start address is: 68 (R17)
-MOVZ	R17, R2, R0
+; rR start address is: 64 (R16)
+MOVZ	R16, R2, R0
 ADDIU	R2, R25, 4
 LW	R2, 0(R2)
-; gG start address is: 72 (R18)
-MOVZ	R18, R2, R0
+; gG start address is: 68 (R17)
+MOVZ	R17, R2, R0
 ADDIU	R2, R25, 8
 LW	R2, 0(R2)
-; bB start address is: 76 (R19)
-MOVZ	R19, R2, R0
+; bB start address is: 72 (R18)
+MOVZ	R18, R2, R0
 JAL	_max_+0
 NOP	
 ; maxF start address is: 44 (R11)
@@ -1095,94 +1017,96 @@ MOVZ	R6, R2, R0
 JAL	__Compare_FP+0
 NOP	
 SLTIU	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHSL146
+BNE	R2, R0, L__TCS3472_CalcHue116
 NOP	
-J	L_TCS3472_CalcHSL32
+J	L_TCS3472_CalcHue26
 NOP	
-L__TCS3472_CalcHSL146:
-; ?FLOC___TCS3472_CalcHSL?T244 start address is: 8 (R2)
+L__TCS3472_CalcHue116:
+; ?FLOC___TCS3472_CalcHue?T211 start address is: 8 (R2)
 LUI	R2, 16256
 ORI	R2, R2, 0
-; ?FLOC___TCS3472_CalcHSL?T244 end address is: 8 (R2)
-J	L_TCS3472_CalcHSL33
+; ?FLOC___TCS3472_CalcHue?T211 end address is: 8 (R2)
+J	L_TCS3472_CalcHue27
 NOP	
-L_TCS3472_CalcHSL32:
-; ?FLOC___TCS3472_CalcHSL?T244 start address is: 8 (R2)
+L_TCS3472_CalcHue26:
+; ?FLOC___TCS3472_CalcHue?T211 start address is: 8 (R2)
 MOVZ	R2, R0, R0
-; ?FLOC___TCS3472_CalcHSL?T244 end address is: 8 (R2)
-L_TCS3472_CalcHSL33:
-; ?FLOC___TCS3472_CalcHSL?T244 start address is: 8 (R2)
+; ?FLOC___TCS3472_CalcHue?T211 end address is: 8 (R2)
+L_TCS3472_CalcHue27:
+; ?FLOC___TCS3472_CalcHue?T211 start address is: 8 (R2)
 MOVZ	R4, R11, R0
 MOVZ	R6, R2, R0
 JAL	__Add_FP+0
 NOP	
 ; maxF end address is: 44 (R11)
-; ?FLOC___TCS3472_CalcHSL?T244 end address is: 8 (R2)
-; maxF start address is: 64 (R16)
-MOVZ	R16, R2, R0
+; ?FLOC___TCS3472_CalcHue?T211 end address is: 8 (R2)
+; maxF start address is: 76 (R19)
+MOVZ	R19, R2, R0
+MOVZ	R6, R17, R0
+MOVZ	R4, R16, R0
+JAL	__Compare_FP+0
+NOP	
+SLTI	R2, R2, 0
+XORI	R2, R2, 1
+BNE	R2, R0, L__TCS3472_CalcHue119
+NOP	
+J	L__TCS3472_CalcHue69
+NOP	
+L__TCS3472_CalcHue119:
 MOVZ	R6, R18, R0
-MOVZ	R4, R17, R0
+MOVZ	R4, R16, R0
 JAL	__Compare_FP+0
 NOP	
 SLTI	R2, R2, 0
 XORI	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHSL149
+BNE	R2, R0, L__TCS3472_CalcHue122
 NOP	
-J	L__TCS3472_CalcHSL86
+J	L__TCS3472_CalcHue68
 NOP	
-L__TCS3472_CalcHSL149:
-MOVZ	R6, R19, R0
+L__TCS3472_CalcHue122:
+; rR end address is: 64 (R16)
+L__TCS3472_CalcHue67:
 MOVZ	R4, R17, R0
-JAL	__Compare_FP+0
-NOP	
-SLTI	R2, R2, 0
-XORI	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHSL152
-NOP	
-J	L__TCS3472_CalcHSL85
-NOP	
-L__TCS3472_CalcHSL152:
-; rR end address is: 68 (R17)
-L__TCS3472_CalcHSL80:
-MOVZ	R4, R18, R0
-MOVZ	R6, R19, R0
+MOVZ	R6, R18, R0
 JAL	__Compare_FP+0
 NOP	
 SLTIU	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHSL155
+BNE	R2, R0, L__TCS3472_CalcHue125
 NOP	
-J	L_TCS3472_CalcHSL37
+J	L_TCS3472_CalcHue31
 NOP	
-L__TCS3472_CalcHSL155:
-; ?FLOC___TCS3472_CalcHSL?T250 start address is: 8 (R2)
+L__TCS3472_CalcHue125:
+; ?FLOC___TCS3472_CalcHue?T217 start address is: 8 (R2)
 LUI	R2, 16256
 ORI	R2, R2, 0
-; ?FLOC___TCS3472_CalcHSL?T250 end address is: 8 (R2)
-J	L_TCS3472_CalcHSL38
+; ?FLOC___TCS3472_CalcHue?T217 end address is: 8 (R2)
+J	L_TCS3472_CalcHue32
 NOP	
-L_TCS3472_CalcHSL37:
-; ?FLOC___TCS3472_CalcHSL?T250 start address is: 8 (R2)
+L_TCS3472_CalcHue31:
+; ?FLOC___TCS3472_CalcHue?T217 start address is: 8 (R2)
 MOVZ	R2, R0, R0
-; ?FLOC___TCS3472_CalcHSL?T250 end address is: 8 (R2)
-L_TCS3472_CalcHSL38:
-; ?FLOC___TCS3472_CalcHSL?T250 start address is: 8 (R2)
-MOVZ	R4, R18, R0
+; ?FLOC___TCS3472_CalcHue?T217 end address is: 8 (R2)
+L_TCS3472_CalcHue32:
+; ?FLOC___TCS3472_CalcHue?T217 start address is: 8 (R2)
+MOVZ	R4, R17, R0
 MOVZ	R6, R2, R0
 JAL	__Add_FP+0
 NOP	
-; gG end address is: 72 (R18)
-; ?FLOC___TCS3472_CalcHSL?T250 end address is: 8 (R2)
-MOVZ	R6, R19, R0
+; gG end address is: 68 (R17)
+; ?FLOC___TCS3472_CalcHue?T217 end address is: 8 (R2)
+MOVZ	R6, R18, R0
 MOVZ	R4, R2, R0
 JAL	__Sub_FP+0
 NOP	
-; bB end address is: 76 (R19)
-SW	R2, 20(SP)
+; bB end address is: 72 (R18)
+SW	R2, 16(SP)
 MOVZ	R6, R3, R0
-MOVZ	R4, R16, R0
+MOVZ	R4, R19, R0
 JAL	__Sub_FP+0
 NOP	
-LW	R4, 20(SP)
+; minF end address is: 12 (R3)
+; maxF end address is: 76 (R19)
+LW	R4, 16(SP)
 MOVZ	R6, R2, R0
 JAL	__Div_FP+0
 NOP	
@@ -1191,77 +1115,81 @@ ORI	R4, R4, 0
 MOVZ	R6, R2, R0
 JAL	__Mul_FP+0
 NOP	
-SW	R2, 16(SP)
-J	L_TCS3472_CalcHSL39
+SW	R2, 12(SP)
+J	L_TCS3472_CalcHue33
 NOP	
-L__TCS3472_CalcHSL86:
-; bB start address is: 76 (R19)
-; gG start address is: 72 (R18)
-; rR start address is: 68 (R17)
-L__TCS3472_CalcHSL85:
-MOVZ	R6, R17, R0
-MOVZ	R4, R18, R0
-JAL	__Compare_FP+0
-NOP	
-SLTI	R2, R2, 0
-XORI	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHSL158
-NOP	
-J	L__TCS3472_CalcHSL88
-NOP	
-L__TCS3472_CalcHSL158:
-MOVZ	R6, R19, R0
-MOVZ	R4, R18, R0
-JAL	__Compare_FP+0
-NOP	
-SLTI	R2, R2, 0
-XORI	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHSL161
-NOP	
-J	L__TCS3472_CalcHSL87
-NOP	
-L__TCS3472_CalcHSL161:
-; gG end address is: 72 (R18)
-L__TCS3472_CalcHSL79:
+L__TCS3472_CalcHue69:
+; maxF start address is: 76 (R19)
+; minF start address is: 12 (R3)
+; bB start address is: 72 (R18)
+; gG start address is: 68 (R17)
+; rR start address is: 64 (R16)
+L__TCS3472_CalcHue68:
+MOVZ	R6, R16, R0
 MOVZ	R4, R17, R0
-MOVZ	R6, R19, R0
+JAL	__Compare_FP+0
+NOP	
+SLTI	R2, R2, 0
+XORI	R2, R2, 1
+BNE	R2, R0, L__TCS3472_CalcHue128
+NOP	
+J	L__TCS3472_CalcHue71
+NOP	
+L__TCS3472_CalcHue128:
+MOVZ	R6, R18, R0
+MOVZ	R4, R17, R0
+JAL	__Compare_FP+0
+NOP	
+SLTI	R2, R2, 0
+XORI	R2, R2, 1
+BNE	R2, R0, L__TCS3472_CalcHue131
+NOP	
+J	L__TCS3472_CalcHue70
+NOP	
+L__TCS3472_CalcHue131:
+; gG end address is: 68 (R17)
+L__TCS3472_CalcHue66:
+MOVZ	R4, R16, R0
+MOVZ	R6, R18, R0
 JAL	__Compare_FP+0
 NOP	
 SLTIU	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHSL164
+BNE	R2, R0, L__TCS3472_CalcHue134
 NOP	
-J	L_TCS3472_CalcHSL43
+J	L_TCS3472_CalcHue37
 NOP	
-L__TCS3472_CalcHSL164:
-; ?FLOC___TCS3472_CalcHSL?T260 start address is: 8 (R2)
+L__TCS3472_CalcHue134:
+; ?FLOC___TCS3472_CalcHue?T227 start address is: 8 (R2)
 LUI	R2, 16256
 ORI	R2, R2, 0
-; ?FLOC___TCS3472_CalcHSL?T260 end address is: 8 (R2)
-J	L_TCS3472_CalcHSL44
+; ?FLOC___TCS3472_CalcHue?T227 end address is: 8 (R2)
+J	L_TCS3472_CalcHue38
 NOP	
-L_TCS3472_CalcHSL43:
-; ?FLOC___TCS3472_CalcHSL?T260 start address is: 8 (R2)
+L_TCS3472_CalcHue37:
+; ?FLOC___TCS3472_CalcHue?T227 start address is: 8 (R2)
 MOVZ	R2, R0, R0
-; ?FLOC___TCS3472_CalcHSL?T260 end address is: 8 (R2)
-L_TCS3472_CalcHSL44:
-; ?FLOC___TCS3472_CalcHSL?T260 start address is: 8 (R2)
-MOVZ	R4, R19, R0
+; ?FLOC___TCS3472_CalcHue?T227 end address is: 8 (R2)
+L_TCS3472_CalcHue38:
+; ?FLOC___TCS3472_CalcHue?T227 start address is: 8 (R2)
+MOVZ	R4, R18, R0
 MOVZ	R6, R2, R0
 JAL	__Add_FP+0
 NOP	
-; bB end address is: 76 (R19)
-; ?FLOC___TCS3472_CalcHSL?T260 end address is: 8 (R2)
-MOVZ	R6, R17, R0
+; bB end address is: 72 (R18)
+; ?FLOC___TCS3472_CalcHue?T227 end address is: 8 (R2)
+MOVZ	R6, R16, R0
 MOVZ	R4, R2, R0
 JAL	__Sub_FP+0
 NOP	
-; rR end address is: 68 (R17)
-SW	R2, 20(SP)
+; rR end address is: 64 (R16)
+SW	R2, 16(SP)
 MOVZ	R6, R3, R0
-MOVZ	R4, R16, R0
+MOVZ	R4, R19, R0
 JAL	__Sub_FP+0
 NOP	
-LW	R4, 20(SP)
+; minF end address is: 12 (R3)
+; maxF end address is: 76 (R19)
+LW	R4, 16(SP)
 MOVZ	R6, R2, R0
 JAL	__Div_FP+0
 NOP	
@@ -1275,77 +1203,81 @@ ORI	R4, R4, 0
 MOVZ	R6, R2, R0
 JAL	__Mul_FP+0
 NOP	
-SW	R2, 16(SP)
-J	L_TCS3472_CalcHSL45
+SW	R2, 12(SP)
+J	L_TCS3472_CalcHue39
 NOP	
-L__TCS3472_CalcHSL88:
-; bB start address is: 76 (R19)
-; gG start address is: 72 (R18)
-; rR start address is: 68 (R17)
-L__TCS3472_CalcHSL87:
+L__TCS3472_CalcHue71:
+; maxF start address is: 76 (R19)
+; minF start address is: 12 (R3)
+; bB start address is: 72 (R18)
+; gG start address is: 68 (R17)
+; rR start address is: 64 (R16)
+L__TCS3472_CalcHue70:
+MOVZ	R6, R16, R0
+MOVZ	R4, R18, R0
+JAL	__Compare_FP+0
+NOP	
+SLTI	R2, R2, 0
+XORI	R2, R2, 1
+BNE	R2, R0, L__TCS3472_CalcHue137
+NOP	
+J	L__TCS3472_CalcHue73
+NOP	
+L__TCS3472_CalcHue137:
 MOVZ	R6, R17, R0
-MOVZ	R4, R19, R0
+MOVZ	R4, R18, R0
 JAL	__Compare_FP+0
 NOP	
 SLTI	R2, R2, 0
 XORI	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHSL167
+BNE	R2, R0, L__TCS3472_CalcHue140
 NOP	
-J	L__TCS3472_CalcHSL90
+J	L__TCS3472_CalcHue72
 NOP	
-L__TCS3472_CalcHSL167:
+L__TCS3472_CalcHue140:
+L__TCS3472_CalcHue65:
+MOVZ	R4, R16, R0
 MOVZ	R6, R18, R0
-MOVZ	R4, R19, R0
-JAL	__Compare_FP+0
-NOP	
-SLTI	R2, R2, 0
-XORI	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHSL170
-NOP	
-J	L__TCS3472_CalcHSL89
-NOP	
-L__TCS3472_CalcHSL170:
-L__TCS3472_CalcHSL78:
-MOVZ	R4, R17, R0
-MOVZ	R6, R19, R0
 JAL	__Compare_FP+0
 NOP	
 SLTIU	R2, R2, 1
-; bB end address is: 76 (R19)
-BNE	R2, R0, L__TCS3472_CalcHSL173
+; bB end address is: 72 (R18)
+BNE	R2, R0, L__TCS3472_CalcHue143
 NOP	
-J	L_TCS3472_CalcHSL49
+J	L_TCS3472_CalcHue43
 NOP	
-L__TCS3472_CalcHSL173:
-; ?FLOC___TCS3472_CalcHSL?T271 start address is: 8 (R2)
+L__TCS3472_CalcHue143:
+; ?FLOC___TCS3472_CalcHue?T238 start address is: 8 (R2)
 LUI	R2, 16256
 ORI	R2, R2, 0
-; ?FLOC___TCS3472_CalcHSL?T271 end address is: 8 (R2)
-J	L_TCS3472_CalcHSL50
+; ?FLOC___TCS3472_CalcHue?T238 end address is: 8 (R2)
+J	L_TCS3472_CalcHue44
 NOP	
-L_TCS3472_CalcHSL49:
-; ?FLOC___TCS3472_CalcHSL?T271 start address is: 8 (R2)
+L_TCS3472_CalcHue43:
+; ?FLOC___TCS3472_CalcHue?T238 start address is: 8 (R2)
 MOVZ	R2, R0, R0
-; ?FLOC___TCS3472_CalcHSL?T271 end address is: 8 (R2)
-L_TCS3472_CalcHSL50:
-; ?FLOC___TCS3472_CalcHSL?T271 start address is: 8 (R2)
-MOVZ	R4, R17, R0
+; ?FLOC___TCS3472_CalcHue?T238 end address is: 8 (R2)
+L_TCS3472_CalcHue44:
+; ?FLOC___TCS3472_CalcHue?T238 start address is: 8 (R2)
+MOVZ	R4, R16, R0
 MOVZ	R6, R2, R0
 JAL	__Add_FP+0
 NOP	
-; rR end address is: 68 (R17)
-; ?FLOC___TCS3472_CalcHSL?T271 end address is: 8 (R2)
-MOVZ	R6, R18, R0
+; rR end address is: 64 (R16)
+; ?FLOC___TCS3472_CalcHue?T238 end address is: 8 (R2)
+MOVZ	R6, R17, R0
 MOVZ	R4, R2, R0
 JAL	__Sub_FP+0
 NOP	
-; gG end address is: 72 (R18)
-SW	R2, 20(SP)
+; gG end address is: 68 (R17)
+SW	R2, 16(SP)
 MOVZ	R6, R3, R0
-MOVZ	R4, R16, R0
+MOVZ	R4, R19, R0
 JAL	__Sub_FP+0
 NOP	
-LW	R4, 20(SP)
+; minF end address is: 12 (R3)
+; maxF end address is: 76 (R19)
+LW	R4, 16(SP)
 MOVZ	R6, R2, R0
 JAL	__Div_FP+0
 NOP	
@@ -1359,159 +1291,44 @@ ORI	R4, R4, 0
 MOVZ	R6, R2, R0
 JAL	__Mul_FP+0
 NOP	
-SW	R2, 16(SP)
-L__TCS3472_CalcHSL90:
-L__TCS3472_CalcHSL89:
-L_TCS3472_CalcHSL45:
-L_TCS3472_CalcHSL39:
-LW	R6, 16(SP)
+SW	R2, 12(SP)
+L__TCS3472_CalcHue73:
+L__TCS3472_CalcHue72:
+L_TCS3472_CalcHue39:
+L_TCS3472_CalcHue33:
+LW	R6, 12(SP)
 MOVZ	R4, R0, R0
 JAL	__Compare_FP+0
 NOP	
 SLT	R2, R0, R2
-BNE	R2, R0, L__TCS3472_CalcHSL176
+BNE	R2, R0, L__TCS3472_CalcHue146
 NOP	
-J	L_TCS3472_CalcHSL51
+J	L_TCS3472_CalcHue45
 NOP	
-L__TCS3472_CalcHSL176:
-; ?FLOC___TCS3472_CalcHSL?T279 start address is: 8 (R2)
+L__TCS3472_CalcHue146:
+; ?FLOC___TCS3472_CalcHue?T246 start address is: 8 (R2)
 LUI	R2, 17332
 ORI	R2, R2, 0
-; ?FLOC___TCS3472_CalcHSL?T279 end address is: 8 (R2)
-J	L_TCS3472_CalcHSL52
+; ?FLOC___TCS3472_CalcHue?T246 end address is: 8 (R2)
+J	L_TCS3472_CalcHue46
 NOP	
-L_TCS3472_CalcHSL51:
-; ?FLOC___TCS3472_CalcHSL?T279 start address is: 8 (R2)
+L_TCS3472_CalcHue45:
+; ?FLOC___TCS3472_CalcHue?T246 start address is: 8 (R2)
 MOVZ	R2, R0, R0
-; ?FLOC___TCS3472_CalcHSL?T279 end address is: 8 (R2)
-L_TCS3472_CalcHSL52:
-; ?FLOC___TCS3472_CalcHSL?T279 start address is: 8 (R2)
-LW	R4, 16(SP)
+; ?FLOC___TCS3472_CalcHue?T246 end address is: 8 (R2)
+L_TCS3472_CalcHue46:
+; ?FLOC___TCS3472_CalcHue?T246 start address is: 8 (R2)
+LW	R4, 12(SP)
 MOVZ	R6, R2, R0
 JAL	__Add_FP+0
 NOP	
-; ?FLOC___TCS3472_CalcHSL?T279 end address is: 8 (R2)
-SW	R2, 16(SP)
-MOVZ	R4, R16, R0
-MOVZ	R6, R3, R0
-JAL	__Add_FP+0
-NOP	
-LUI	R6, 17407
-ORI	R6, R6, 0
-MOVZ	R4, R2, R0
-JAL	__Div_FP+0
-NOP	
-LUI	R6, 16384
-ORI	R6, R6, 0
-MOVZ	R4, R2, R0
-JAL	__Div_FP+0
-NOP	
-; L start address is: 68 (R17)
-MOVZ	R17, R2, R0
-LUI	R4, 16128
-ORI	R4, R4, 0
-MOVZ	R6, R2, R0
-JAL	__Compare_FP+0
-NOP	
-SLTI	R2, R2, 0
-XORI	R2, R2, 1
-BNE	R2, R0, L__TCS3472_CalcHSL179
-NOP	
-J	L_TCS3472_CalcHSL53
-NOP	
-L__TCS3472_CalcHSL179:
-MOVZ	R6, R3, R0
-MOVZ	R4, R16, R0
-JAL	__Sub_FP+0
-NOP	
-SW	R2, 20(SP)
-MOVZ	R4, R16, R0
-MOVZ	R6, R3, R0
-JAL	__Add_FP+0
-NOP	
-; minF end address is: 12 (R3)
-; maxF end address is: 64 (R16)
-LW	R4, 20(SP)
-MOVZ	R6, R2, R0
-JAL	__Div_FP+0
-NOP	
-; S start address is: 12 (R3)
-MOVZ	R3, R2, R0
-; S end address is: 12 (R3)
-J	L_TCS3472_CalcHSL54
-NOP	
-L_TCS3472_CalcHSL53:
-; maxF start address is: 64 (R16)
-; minF start address is: 12 (R3)
-MOVZ	R6, R3, R0
-MOVZ	R4, R16, R0
-JAL	__Sub_FP+0
-NOP	
-SW	R2, 20(SP)
-LUI	R4, 16384
-ORI	R4, R4, 0
-MOVZ	R6, R16, R0
-JAL	__Sub_FP+0
-NOP	
-; maxF end address is: 64 (R16)
-MOVZ	R6, R3, R0
-MOVZ	R4, R2, R0
-JAL	__Sub_FP+0
-NOP	
-; minF end address is: 12 (R3)
-LW	R4, 20(SP)
-MOVZ	R6, R2, R0
-JAL	__Div_FP+0
-NOP	
-; S start address is: 12 (R3)
-MOVZ	R3, R2, R0
-; S end address is: 12 (R3)
-L_TCS3472_CalcHSL54:
-; S start address is: 12 (R3)
-SW	R25, 4(SP)
-; L end address is: 68 (R17)
-MOVZ	R25, R17, R0
-JAL	_fabs+0
-NOP	
-LUI	R4, 17096
-ORI	R4, R4, 0
-MOVZ	R6, R2, R0
-JAL	__Mul_FP+0
-NOP	
-LUI	R4, 16672
-ORI	R4, R4, 0
-MOVZ	R6, R2, R0
-JAL	__Add_FP+0
-NOP	
-; L start address is: 52 (R13)
-MOVZ	R13, R2, R0
-; S end address is: 12 (R3)
-MOVZ	R25, R3, R0
-JAL	_fabs+0
-NOP	
-LW	R25, 4(SP)
-LUI	R4, 17096
-ORI	R4, R4, 0
-MOVZ	R6, R2, R0
-JAL	__Mul_FP+0
-NOP	
-; S start address is: 16 (R4)
-MOVZ	R4, R2, R0
-ADDIU	R3, R25, 16
-LW	R2, 16(SP)
-SW	R2, 0(R3)
-ADDIU	R2, R25, 20
-SW	R4, 0(R2)
-; S end address is: 16 (R4)
-ADDIU	R2, R25, 24
-SW	R13, 0(R2)
-; L end address is: 52 (R13)
-L_end_TCS3472_CalcHSL:
+; ?FLOC___TCS3472_CalcHue?T246 end address is: 8 (R2)
+L_end_TCS3472_CalcHue:
 LW	RA, 0(SP)
-ADDIU	SP, SP, 24
+ADDIU	SP, SP, 20
 JR	RA
 NOP	
-; end of _TCS3472_CalcHSL
+; end of _TCS3472_CalcHue
 _max_:
 ADDIU	SP, SP, -4
 SW	RA, 0(SP)
@@ -1522,16 +1339,16 @@ MOVZ	R10, R2, R0
 ORI	R3, R0, 1
 ; temp1 end address is: 40 (R10)
 ; i end address is: 12 (R3)
-L_max_55:
+L_max_47:
 ; i start address is: 12 (R3)
 ; temp1 start address is: 40 (R10)
 SEH	R2, R3
 SLTI	R2, R2, 3
-BNE	R2, R0, L__max_181
+BNE	R2, R0, L__max_148
 NOP	
-J	L_max_56
+J	L_max_48
 NOP	
-L__max_181:
+L__max_148:
 SEH	R2, R3
 SLL	R2, R2, 2
 ADDU	R2, R25, R2
@@ -1540,11 +1357,11 @@ MOVZ	R6, R10, R0
 JAL	__Compare_FP+0
 NOP	
 SLT	R2, R0, R2
-BNE	R2, R0, L__max_184
+BNE	R2, R0, L__max_151
 NOP	
-J	L__max_76
+J	L__max_63
 NOP	
-L__max_184:
+L__max_151:
 ; temp1 end address is: 40 (R10)
 SEH	R2, R3
 SLL	R2, R2, 2
@@ -1554,17 +1371,17 @@ LW	R2, 0(R2)
 MOVZ	R4, R2, R0
 ; temp1 end address is: 16 (R4)
 MOVZ	R10, R4, R0
-J	L_max_58
+J	L_max_50
 NOP	
-L__max_76:
-L_max_58:
+L__max_63:
+L_max_50:
 ; temp1 start address is: 40 (R10)
 ADDIU	R2, R3, 1
 SEH	R3, R2
 ; i end address is: 12 (R3)
-J	L_max_55
+J	L_max_47
 NOP	
-L_max_56:
+L_max_48:
 MOVZ	R2, R10, R0
 ; temp1 end address is: 40 (R10)
 L_end_max_:
@@ -1583,16 +1400,16 @@ MOVZ	R10, R2, R0
 ORI	R3, R0, 1
 ; temp1 end address is: 40 (R10)
 ; i end address is: 12 (R3)
-L_min_59:
+L_min_51:
 ; i start address is: 12 (R3)
 ; temp1 start address is: 40 (R10)
 SEH	R2, R3
 SLTI	R2, R2, 3
-BNE	R2, R0, L__min_186
+BNE	R2, R0, L__min_153
 NOP	
-J	L_min_60
+J	L_min_52
 NOP	
-L__min_186:
+L__min_153:
 SEH	R2, R3
 SLL	R2, R2, 2
 ADDU	R2, R25, R2
@@ -1601,11 +1418,11 @@ MOVZ	R6, R10, R0
 JAL	__Compare_FP+0
 NOP	
 SLTI	R2, R2, 0
-BNE	R2, R0, L__min_189
+BNE	R2, R0, L__min_156
 NOP	
-J	L__min_77
+J	L__min_64
 NOP	
-L__min_189:
+L__min_156:
 ; temp1 end address is: 40 (R10)
 SEH	R2, R3
 SLL	R2, R2, 2
@@ -1615,17 +1432,17 @@ LW	R2, 0(R2)
 MOVZ	R4, R2, R0
 ; temp1 end address is: 16 (R4)
 MOVZ	R10, R4, R0
-J	L_min_62
+J	L_min_54
 NOP	
-L__min_77:
-L_min_62:
+L__min_64:
+L_min_54:
 ; temp1 start address is: 40 (R10)
 ADDIU	R2, R3, 1
 SEH	R3, R2
 ; i end address is: 12 (R3)
-J	L_min_59
+J	L_min_51
 NOP	
-L_min_60:
+L_min_52:
 MOVZ	R2, R10, R0
 ; temp1 end address is: 40 (R10)
 L_end_min_:

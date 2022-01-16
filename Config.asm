@@ -24,7 +24,6 @@ SW	R2, Offset(TRISE+0)(GP)
 SW	R0, Offset(TRISF+0)(GP)
 ORI	R2, R0, 512
 SW	R2, Offset(TRISG+0)(GP)
-SW	R0, Offset(LATD+0)(GP)
 LUI	R2, BitMask(USBIE_bit+0)
 ORI	R2, R2, BitMask(USBIE_bit+0)
 _SX	
@@ -80,38 +79,6 @@ ADDIU	R24, R24, -1
 BNE	R24, R0, L_ConfigPic2
 NOP	
 JAL	_InitUart2+0
-NOP	
-ORI	R2, R0, 2000
-SH	R2, Offset(_current_duty1+0)(GP)
-ORI	R2, R0, 20000
-SH	R2, Offset(_current_duty2+0)(GP)
-ORI	R28, R0, 3
-MOVZ	R27, R0, R0
-ORI	R26, R0, 1
-ORI	R25, R0, 5000
-JAL	_PWM_Init+0
-NOP	
-SH	R2, Offset(_pwm_period1+0)(GP)
-ORI	R28, R0, 3
-MOVZ	R27, R0, R0
-ORI	R26, R0, 2
-ORI	R25, R0, 5000
-JAL	_PWM_Init+0
-NOP	
-SH	R2, Offset(_pwm_period2+0)(GP)
-ORI	R26, R0, 1
-LHU	R25, Offset(_current_duty1+0)(GP)
-JAL	_PWM_Set_Duty+0
-NOP	
-ORI	R26, R0, 2
-LHU	R25, Offset(_current_duty2+0)(GP)
-JAL	_PWM_Set_Duty+0
-NOP	
-ORI	R25, R0, 1
-JAL	_PWM_Stop+0
-NOP	
-ORI	R25, R0, 2
-JAL	_PWM_Stop+0
 NOP	
 JAL	_MM_Init+0
 NOP	
@@ -193,80 +160,8 @@ ADDIU	SP, SP, 8
 JR	RA
 NOP	
 ; end of _InitUart2
-_SetLedPWM:
-ADDIU	SP, SP, -12
-SW	RA, 0(SP)
-SW	R25, 4(SP)
-SW	R26, 8(SP)
-LUI	R25, hi_addr(_RawData+0)
-ORI	R25, R25, lo_addr(_RawData+0)
-JAL	_TCS3472_getRawData+0
-NOP	
-LUI	R25, hi_addr(_RawData+0)
-ORI	R25, R25, lo_addr(_RawData+0)
-JAL	_TCS3472_C2RGB_Error+0
-NOP	
-; err start address is: 12 (R3)
-SEH	R3, R2
-; err end address is: 12 (R3)
-J	L__SetLedPWM13
-NOP	
-L__SetLedPWM14:
-L__SetLedPWM13:
-; err start address is: 12 (R3)
-; err end address is: 12 (R3)
-J	L__SetLedPWM12
-NOP	
-L__SetLedPWM15:
-L__SetLedPWM12:
-; err start address is: 12 (R3)
-LHU	R2, Offset(_current_duty2+0)(GP)
-ADDU	R2, R2, R3
-; err end address is: 12 (R3)
-SH	R2, Offset(_current_duty2+0)(GP)
-ORI	R26, R0, 2
-ANDI	R25, R2, 65535
-JAL	_PWM_Set_Duty+0
-NOP	
-LUI	R24, 203
-ORI	R24, R24, 29524
-L_SetLedPWM7:
-ADDIU	R24, R24, -1
-BNE	R24, R0, L_SetLedPWM7
-NOP	
-NOP	
-NOP	
-LUI	R25, hi_addr(_RawData+0)
-ORI	R25, R25, lo_addr(_RawData+0)
-JAL	_TCS3472_getRawData+0
-NOP	
-LUI	R25, hi_addr(_RawData+0)
-ORI	R25, R25, lo_addr(_RawData+0)
-JAL	_TCS3472_C2RGB_Error+0
-NOP	
-; err start address is: 12 (R3)
-SEH	R3, R2
-SEH	R2, R2
-SLTI	R2, R2, -50
-BEQ	R2, R0, L__SetLedPWM20
-NOP	
-J	L__SetLedPWM14
-NOP	
-L__SetLedPWM20:
-SEH	R2, R3
-SLTI	R2, R2, 51
-BNE	R2, R0, L__SetLedPWM21
-NOP	
-J	L__SetLedPWM15
-NOP	
-L__SetLedPWM21:
-; err end address is: 12 (R3)
-L__SetLedPWM11:
-L_end_SetLedPWM:
-LW	R26, 8(SP)
-LW	R25, 4(SP)
-LW	RA, 0(SP)
-ADDIU	SP, SP, 12
+_InitVars:
+L_end_InitVars:
 JR	RA
 NOP	
-; end of _SetLedPWM
+; end of _InitVars

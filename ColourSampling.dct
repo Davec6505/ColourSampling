@@ -8554,8 +8554,6 @@ ctis0_bit
 ctis1
 ctis1_bit
 cts
-current_duty1
-current_duty2
 cvr
 cvr
 cvr
@@ -12560,10 +12558,11 @@ initial_str
 initisr
 initstring
 inittimer1
-inittimer4_5
+inittimer2_3
 inittimers
 inituart1
 inituart2
+initvars
 int0ep
 int0ep
 int0ep
@@ -17997,8 +17996,6 @@ ptwren_bit
 pwd
 pwm_init
 pwm_init_advanced
-pwm_period1
-pwm_period2
 pwm_set_duty
 pwm_sigstrength
 pwm_start
@@ -18952,7 +18949,6 @@ sesvdif
 sesvdif
 sesvdif_bit
 setcolourthresholds
-setledpwm
 setstr
 setupiot
 sf
@@ -20475,7 +20471,7 @@ tcs3472_c2rgb_error
 tcs3472_calc_lux
 tcs3472_calccoltemp
 tcs3472_calccoltemp_dn40
-tcs3472_calchsl
+tcs3472_calchue
 tcs3472_clearinterrupt
 tcs3472_disable
 tcs3472_enable
@@ -20568,7 +20564,7 @@ tgate_t5con_bit
 threshold
 time_to_log
 timer1interrupt
-timer4_5interrupt
+timer2_3interrupt
 tmr0
 tmr1
 tmr10
@@ -21758,18 +21754,15 @@ txta
 txtb
 txtb_scl
 txtc
-txterr
 txtg
 txtg_scl
 txth
 txthue
 txtlen
-txtlum
 txtm
 txtr
 txtr_scl
 txts
-txtsat
 u1addr
 u1addrbits
 u1addrclr

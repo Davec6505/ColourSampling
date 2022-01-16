@@ -30,9 +30,6 @@ char cel_num[20];
 char num,last_rec_inc;
 unsigned short i;
 unsigned int cell_ok,str_num,deg;
-static long last_millis_sigstr = 0;
-static long millis_sigstr_sp = 0;
-long res_millis_sigstr = 0;
 int resA=0, resB=0, diff = 0;
 #ifdef MainDebug
 char txtR[6],txtH[6],txtT[6],txtI[6];
@@ -50,9 +47,9 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
    device_Id = TCS3472_1_5;          //TCS347_11_15;
    i = 0;
    i = TCS3472_Init(it,G,device_Id);
-  // sprintf(txtR,"%2x",i);
-  // strcat(writebuff,txtR);
-  // while(!HID_Write(&writebuff,64));
+   sprintf(txtR,"%2x",i);
+   strcat(writebuff,txtR);
+   while(!HID_Write(&writebuff,64));
 
  // RD = GR = BL = 1;
 
@@ -113,56 +110,33 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
 #endif
    T0_SP.one_per_Xmin = 0;
    resA = resB = 0;
-
-   
-   PWM_Start(2);
-   Delay_ms(500);
-   SetLedPWM();
-   PWM_Stop(2);
-   
-   
-   //check for signal strength on START tmr2-3
-   // SignalStrength();
-   last_millis_sigstr = TMR0.millis;
-   millis_sigstr_sp = 5000;
-   
-   //WDT enable at 131.072s  || 1:131072
-   WDTCONSET = 0x8000; //Enable WDT
 /***************************************************
 * main loop forever!!
 ***************************************************/
    while(1){
-      WDTCONSET = 0x01; // service the WDT
-      
-      ///////////////////////////////////////////////
+   int signal;
+     ///////////////////////////////////////////////
      //Get input from USB to set up thresholds
      num = HID_Read();
      if(num != 0){
         DoStrings(num);
      }
-
-     ///////////////////////////////////////////////
-     //test millis for time to check sig strength
-     res_millis_sigstr = TMR0.millis - last_millis_sigstr;
-      if(res_millis_sigstr >= millis_sigstr_sp){
-         millis_sigstr_sp   = 600000;
-         last_millis_sigstr = TMR0.millis;
-         res_millis_sigstr  = 0;
-         SignalStrength();
-      }
-      
+     
      //Update Thingspeak
      if(SimVars.init_inc >= 5){
        if(T0_SP.one_per_Xmin){
-         PWM_Start(2);
-         Delay_ms(500);
-        // SetLedPWM();
          Update_Test();
          T0_SP.sec = T0_SP.min = T0_SP.hr = 0; //start timming again
          T0_SP.one_per_Xmin = 0;
-         PWM_Stop(2);
        }
      }
+     
+     //test for incoming SMS using difference in ring ptr
+     if(!T0_SP.one_per_sec){
+       diff = TestRingPointers();
+       if(diff > 1){
+         last_rec_inc = SimVars.init_inc;
+         SimVars.init_inc = 3;
 #ifdef MainDebug
          sprintf(txtI,"%d",resB);
          sprintf(txtR,"%d",diff);
@@ -175,13 +149,6 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
                                 " *Reply from GetSmsTxt():= %s\r\n"
                                 ,txtT,txtH,txtR,txtI);
 #endif
-     //test for incoming SMS using difference in ring ptr
-     if(!T0_SP.one_per_sec){
-       diff = TestRingPointers();
-       if(diff > 1){
-
-         last_rec_inc = SimVars.init_inc;
-         SimVars.init_inc = 3;
          GetSMSText();
          Delay_ms(500);
          if(SimVars.init_inc != 5)
@@ -200,11 +167,12 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
 #ifdef MainColDebug
         TCS3472_getRawData(RawData);
         GetScaledValues(RawData,&FltData);
-        TCS3472_CalcHSL(&FltData);
+        FltData[3] = TCS3472_CalcHue(&FltData);
         SendData(RawData,FltData);
 #endif
 #ifdef MainSigStrengthDebug
-        SignalStrength();
+        signal = SignalStrength();
+        PWM_SigStrength(signal);
 #endif
      }
    }

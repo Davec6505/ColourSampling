@@ -4,8 +4,7 @@ sbit RD at LATB0_bit;
 sbit GR at LATG13_bit;
 sbit BL at LATD4_bit;
 
-unsigned int current_duty1,current_duty2;
-unsigned int pwm_period1, pwm_period2;
+
 
 void ConfigPic(){
 
@@ -21,7 +20,7 @@ void ConfigPic(){
   TRISF = 0X0000;
   TRISG = 0X0200;
   
-  LATD = 0;
+
  
 
   USBIE_bit = 0;
@@ -37,17 +36,6 @@ void ConfigPic(){
    Delay_ms(100);
    InitUart2();
    //ADC1_Init();
-   
-   //Initialize PWMs and set duty cycle
-   current_duty1  = 2000;                        // initial value for current_duty
-   current_duty2 = 20000;                        // initial value for current_duty1
-   pwm_period1 = PWM_Init(5000 , 1, 0, 3);//pwm frk,pwm pin 1-latd0,pre-scal,tmr2
-   pwm_period2 = PWM_Init(5000 , 2, 0, 3); //pwm frk,pwm pin 1-latd1,pre-scal,tmr5
-   PWM_Set_Duty(current_duty1,  1);            // Set current duty for PWM1
-   PWM_Set_Duty(current_duty2, 2);            // Set current duty for PWM2
-   PWM_Stop(1);
-   PWM_Stop(2);
-   
    
    MM_Init();
 
@@ -78,16 +66,6 @@ void InitUart2(){
      U2RXIF_bit = 0;
 }
 
-void SetLedPWM(){
-int err;
-     TCS3472_getRawData(RawData);
-     err = TCS3472_C2RGB_Error(RawData);
-    do{
-      current_duty2 += err;
-      PWM_Set_Duty(current_duty2, 2);
-      Delay_ms(500);
-      TCS3472_getRawData(RawData);
-      err = TCS3472_C2RGB_Error(RawData);
-    }while(err < -50 || err > 50);
+void InitVars(){
 
 }

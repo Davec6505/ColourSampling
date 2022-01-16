@@ -101,7 +101,7 @@ extern TCS3472_Error device_Error;
 
 
 extern unsigned int RawData[4];
-extern float FltData[8];
+extern float FltData[4];
 extern unsigned int CCT;
 
 
@@ -126,7 +126,7 @@ unsigned short TCS3472_SetInterrupt_Limits(unsigned int Lo,unsigned int Hi);
 void SetColourThresholds(uint16_t C,uint16_t R,uint16_t G,uint16_t B);
 int TCS3472_C2RGB_Error(unsigned int* RGBC);
 void GetScaledValues(int* CRGB,float rgb[3]);
-void TCS3472_CalcHSL(float* RGBC);
+float TCS3472_CalcHue(float* RGBC);
 float max_(float *rgb);
 float min_(float *rgb);
 #line 1 "c:/users/git/coloursampling/_timers.h"
@@ -162,7 +162,6 @@ typedef unsigned long clock_t;
 typedef unsigned long time_t;
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/git/coloursampling/string.h"
-#line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
@@ -180,7 +179,7 @@ unsigned long ReadFlashWord();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/git/coloursampling/sim800.h"
-#line 20 "c:/users/git/coloursampling/string.h"
+#line 19 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 
 enum ControlColorIO{
@@ -204,7 +203,6 @@ WRITE_RAW,
 START,
 CANCEL,
 READA_HUE,
-READA_PWM,
 ERROR
 };
 
@@ -377,7 +375,7 @@ extern Timer_Setpoint T0_SP;
 
 void InitTimers();
 void InitTimer1();
-void InitTimer4_5();
+void InitTimer2_3();
 void Get_Time();
 void Day_Month(int hr,int day,int mnth);
 void I2C2_TimeoutCallback(char errorCode);
@@ -392,8 +390,7 @@ extern sfr sbit RD;
 extern sfr sbit GR;
 extern sfr sbit BL;
 
-extern unsigned int current_duty1, current_duty2;
-extern unsigned int pwm_period1, pwm_period2;
+
 
 
 
@@ -403,10 +400,10 @@ extern unsigned int pwm_period1, pwm_period2;
 void ConfigPic();
 void InitUart1();
 void InitUart2();
+void InitVars();
 void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
-void SetLedPWM();
 #line 4 "C:/Users/Git/ColourSampling/ColourSampling.c"
 int (*Update_Test)();
 
@@ -437,9 +434,6 @@ char cel_num[20];
 char num,last_rec_inc;
 unsigned short i;
 unsigned int cell_ok,str_num,deg;
-static long last_millis_sigstr = 0;
-static long millis_sigstr_sp = 0;
-long res_millis_sigstr = 0;
 int resA=0, resB=0, diff = 0;
 
 char txtR[6],txtH[6],txtT[6],txtI[6];
@@ -457,9 +451,9 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  device_Id = TCS3472_1_5;
  i = 0;
  i = TCS3472_Init(it,G,device_Id);
-
-
-
+ sprintf(txtR,"%2x",i);
+ strcat(writebuff,txtR);
+ while(!HID_Write(&writebuff,64));
 
 
 
@@ -471,7 +465,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  T0_SP.sec = 0;
  T0_SP.min = 0;
  T0_SP.hr = 0;
-#line 73 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 70 "C:/Users/Git/ColourSampling/ColourSampling.c"
  strcpy(cel_num,GetValuesFromFlash());
  str_num = strncmp(cel_num,sub_txt,4);
 
@@ -495,7 +489,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  SimVars.init_inc = 3;
  cell_ok = 1;
  }
-#line 100 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 97 "C:/Users/Git/ColourSampling/ColourSampling.c"
  if(cell_ok == 1){
  Read_Thresholds();
  Delay_ms(3000);
@@ -512,25 +506,9 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
 
  T0_SP.one_per_Xmin = 0;
  resA = resB = 0;
-
-
- PWM_Start(2);
- Delay_ms(500);
- SetLedPWM();
- PWM_Stop(2);
-
-
-
-
- last_millis_sigstr = TMR0.millis;
- millis_sigstr_sp = 5000;
-
-
- WDTCONSET = 0x8000;
-#line 134 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 116 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
- WDTCONSET = 0x01;
-
+ int signal;
 
 
  num = HID_Read();
@@ -539,27 +517,20 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  }
 
 
-
- res_millis_sigstr = TMR0.millis - last_millis_sigstr;
- if(res_millis_sigstr >= millis_sigstr_sp){
- millis_sigstr_sp = 600000;
- last_millis_sigstr = TMR0.millis;
- res_millis_sigstr = 0;
- SignalStrength();
- }
-
-
  if(SimVars.init_inc >= 5){
  if(T0_SP.one_per_Xmin){
- PWM_Start(2);
- Delay_ms(500);
-
  Update_Test();
  T0_SP.sec = T0_SP.min = T0_SP.hr = 0;
  T0_SP.one_per_Xmin = 0;
- PWM_Stop(2);
  }
  }
+
+
+ if(!T0_SP.one_per_sec){
+ diff = TestRingPointers();
+ if(diff > 1){
+ last_rec_inc = SimVars.init_inc;
+ SimVars.init_inc = 3;
 
  sprintf(txtI,"%d",resB);
  sprintf(txtR,"%d",diff);
@@ -572,13 +543,6 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  " *Reply from GetSmsTxt():= %s\r\n"
  ,txtT,txtH,txtR,txtI);
 
-
- if(!T0_SP.one_per_sec){
- diff = TestRingPointers();
- if(diff > 1){
-
- last_rec_inc = SimVars.init_inc;
- SimVars.init_inc = 3;
  GetSMSText();
  Delay_ms(500);
  if(SimVars.init_inc != 5)
@@ -591,15 +555,10 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  if(!RG9_bit)
  NVMErasePage(FLASH_Settings_PAddr);
  if(!RE4_bit){
+#line 174 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ signal = SignalStrength();
+ PWM_SigStrength(signal);
 
- GetValuesFromFlash();
-
-
- TCS3472_getRawData(RawData);
- GetScaledValues(RawData,&FltData);
- TCS3472_CalcHSL(&FltData);
- SendData(RawData,FltData);
-#line 209 "C:/Users/Git/ColourSampling/ColourSampling.c"
  }
  }
 }

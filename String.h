@@ -3,7 +3,6 @@
 
 /////////////////////////////////////////////////
 //includes
-#include "Config.h"
 #include "Flash_R_W.h"
 #include <stdint.h>
 #include "TCS3472.h"
@@ -40,8 +39,7 @@ WRITE_RAW,          //16
 START,              //17
 CANCEL,             //18
 READA_HUE,          //19
-READA_PWM,          //20
-ERROR               //21
+ERROR               //20
 };
 
 struct Constants{

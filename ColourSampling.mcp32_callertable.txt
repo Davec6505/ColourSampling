@@ -27,16 +27,9 @@ main
 			UART2_Init
 				Get_Fosc_kHz
 				UART_Calc_BRG
-		PWM_Init
-			Get_Fosc_kHz
-			PWM_Init_Advanced
-				Pwm_Calc_Period
-		PWM_Set_Duty
-		PWM_Stop
 		MM_Init
 		InitTimers
 			InitTimer1
-			InitTimer4_5
 		InitISR
 		InitGSM3
 			memset
@@ -68,30 +61,96 @@ main
 			TCS3472_Write8
 		TCS3472_Enable
 			TCS3472_Write8
+	sprintf
+		_doprntf
+			isdigit
+			_Compare_FP
+			scale
+				_Mul_FP
+			_Mul_FP
+			_Div_FP
+			_FloatToUnsignedIntegral
+			_Unsigned32IntToFloat
+				_SignedIntegralToFloat
+				_UnsignedIntegralToFloat
+			_Sub_FP
+				_Add_FP
+			_Add_FP
+			fround
+				_Mul_FP
+			_FloatToSignedIntegral
+	strcat
+	HID_Write
+		Gen_Write
+			USB_Handle_Busy
+			USB_Transfer_Packet
+			USB_Polling_Proc
+				USB_Device_Service
+					USB_Configure
+					USB_Wake_From_Suspend
+						USB_CB_Handler
+							USB_CB_Init_EP
+								USB_Enable_Endpoint
+									USB_Configure_Endpoint
+								USB_Transfer_Packet
+							USB_CB_Check_Other_Req
+								USB_Check_HID_Request
+									USB_EP0_Send_ROM
+									USB_EP0_Transmit_Options
+									USB_EP0_Send_RAM
+					USB_Clear_Interrupt
+					USB_Device_Init
+					USB_Suspend
+						USB_CB_Handler
+					USB_CB_Handler
+					USB_Stall_Handler
+					USB_Ctrl_EPService
+						USB_CtrlTrf_Setup_Handler
+							USB_Check_Std_Request
+								USB_Get_Dsc_Handler
+								USB_Set_Cfg_Handler
+									USB_Disable_Non_Zero_Endpoints
+									USB_memset
+									USB_CB_Handler
+								USB_Get_Status_Handler
+								USB_Std_Feature_Req_Handler
+									USB_CB_Handler
+								USB_CB_Handler
+							USB_CB_Handler
+							USB_CtrlEP_Service_Complete
+								USBCtrlEPAllowDataStage
+									USB_CtrlTrf_Tx_Service
+								USBCtrlEPAllowStatusStage
+						USB_CtrlTrf_Out_Handler
+							USB_CtrlTrf_Rx_Service
+								USBCtrlEPAllowStatusStage
+								I2C2_Stop
+								Get_Time
+									sprintf
+									UART1_Write_Text
+										UART1_Write
+									UART1_Write
+								RcvSimTxt
+									UART2_Data_Ready
+								I2C1_Stop
+									I2C1_Wait_For_Idle
+										I2C1_Is_Idle
+										PrintHandler
+										I2C2_TimeoutCallback
+									PrintHandler
+									I2C2_TimeoutCallback
+						USB_CtrlTrf_In_Handler
+							USB_CtrlTrf_Tx_Service
+							I2C2_Stop
+							Get_Time
+							RcvSimTxt
+							I2C1_Stop
 	UART1_Write_Text
-		UART1_Write
 	UART1_Write
 	strcpy
 	GetValuesFromFlash
 		GetStrLengths
 			sprintf
-				_doprntf
-					isdigit
-					_Compare_FP
-					scale
-						_Mul_FP
-					_Mul_FP
-					_Div_FP
-					_FloatToUnsignedIntegral
-					_Unsigned32IntToFloat
-						_SignedIntegralToFloat
-						_UnsignedIntegralToFloat
-					_Sub_FP
-						_Add_FP
-					_Add_FP
-					fround
-						_Mul_FP
-					_FloatToSignedIntegral
 			PrintOut
 				_doprntout
 					isdigit
@@ -113,7 +172,6 @@ main
 		strncpy
 		PrintOut
 	strncmp
-	sprintf
 	PrintOut
 	SetupIOT
 		PrintOut
@@ -180,7 +238,6 @@ main
 	SendSMS
 		__CC2DW
 		Malloc
-		memset
 		strcpy
 		AT_Initial
 			__CC2DW
@@ -199,7 +256,6 @@ main
 		strlen
 		strncpy
 		Read_Send_AllColour
-			PWM_Start
 			TCS3472_getRawData
 				TCS3472_Read16
 					I2C2_Start
@@ -211,98 +267,37 @@ main
 					I2C2_Read
 					I2C2_Stop
 			GetScaledValues
-				_Unsigned16IntToFloat
-					_SignedIntegralToFloat
-					_UnsignedIntegralToFloat
-				fabs
-					_Compare_FP
+				_SignedIntegralToFloat
 				_Div_FP
 				_Mul_FP
+				fabs
+					_Compare_FP
 			strcpy
 			sprintf
 			strcat
 			TCS3472_C2RGB_Error
-			PWM_Stop
 			__CC2DW
 		ReadHUE
-			PWM_Start
 			memset
 			TCS3472_getRawData
 			GetScaledValues
-			TCS3472_CalcHSL
-				_Compare_FP
+			TCS3472_CalcHue
 				max_
 					_Compare_FP
 				min_
 					_Compare_FP
+				_Compare_FP
 				_Add_FP
 				_Sub_FP
 				_Div_FP
 				_Mul_FP
-				fabs
 			sprintf
 			strcpy
 			strcat
-			PWM_Stop
-			__CC2DW
-		Read_Send_OneColour
-			memset
-			strlen
-			PWM_Start
-			TCS3472_Read16
-			strcpy
-			sprintf
-			strcat
-			TCS3472_getRawData
-			TCS3472_CalcColTemp
-				_Unsigned16IntToFloat
-				_Mul_FP
-				_Add_FP
-				_Div_FP
-				_Sub_FP
-				pow
-					_Compare_FP
-					_FloatToSignedIntegral
-					_SignedIntegralToFloat
-					log
-						_Compare_FP
-						frexp
-						_Mul_FP
-						_Sub_FP
-						eval_poly
-							_Mul_FP
-							_Add_FP
-						_SignedIntegralToFloat
-						_Add_FP
-					_Mul_FP
-					exp
-						_Compare_FP
-						_Mul_FP
-						floor
-							_Compare_FP
-							_FloatToSignedIntegral
-							_SignedIntegralToFloat
-							_Sub_FP
-						_FloatToSignedIntegral
-						_SignedIntegralToFloat
-						_Sub_FP
-						eval_poly
-						ldexp
-							_Compare_FP
-						_Div_FP
-				_FloatToUnsignedIntegral
-			TCS3472_CalcColTemp_dn40
-			PWM_Stop
 			__CC2DW
 		Free
 	WaitForResponse
 	Read_Thresholds
-	PWM_Start
-	SetLedPWM
-		TCS3472_getRawData
-		TCS3472_C2RGB_Error
-		PWM_Set_Duty
-	PWM_Stop
 	HID_Read
 		Gen_Read
 			USB_Handle_Busy
@@ -343,108 +338,65 @@ main
 			__CC2DW
 		Read_Send_AllColour
 		Read_Send_OneColour
+			TCS3472_Read16
+			strcpy
+			sprintf
+			strcat
+			TCS3472_getRawData
+			TCS3472_CalcColTemp
+				_Unsigned16IntToFloat
+					_SignedIntegralToFloat
+					_UnsignedIntegralToFloat
+				_Mul_FP
+				_Add_FP
+				_Div_FP
+				_Sub_FP
+				pow
+					_Compare_FP
+					_FloatToSignedIntegral
+					_SignedIntegralToFloat
+					log
+						_Compare_FP
+						frexp
+						_Mul_FP
+						_Sub_FP
+						eval_poly
+							_Mul_FP
+							_Add_FP
+						_SignedIntegralToFloat
+						_Add_FP
+					_Mul_FP
+					exp
+						_Compare_FP
+						_Mul_FP
+						floor
+							_Compare_FP
+							_FloatToSignedIntegral
+							_SignedIntegralToFloat
+							_Sub_FP
+						_FloatToSignedIntegral
+						_SignedIntegralToFloat
+						_Sub_FP
+						eval_poly
+						ldexp
+							_Compare_FP
+						_Div_FP
+				_FloatToUnsignedIntegral
+			TCS3472_CalcColTemp_dn40
+			__CC2DW
 		Read_Thresholds
 		Write_Thresholds
-			PWM_Start
-			memset
 			TCS3472_getRawData
 			atol
 				isdigit
 			NVMWriteWord
-			PWM_Stop
 			sprintf
 			strcpy
 			strcat
 		ReadHUE
-		PWM_Start
-		SetLedPWM
-		PWM_Stop
 		strlen
 		strncat
 		HID_Write
-			Gen_Write
-				USB_Handle_Busy
-				USB_Transfer_Packet
-				USB_Polling_Proc
-					USB_Device_Service
-						USB_Configure
-						USB_Wake_From_Suspend
-							USB_CB_Handler
-								USB_CB_Init_EP
-									USB_Enable_Endpoint
-										USB_Configure_Endpoint
-									USB_Transfer_Packet
-								USB_CB_Check_Other_Req
-									USB_Check_HID_Request
-										USB_EP0_Send_ROM
-										USB_EP0_Transmit_Options
-										USB_EP0_Send_RAM
-						USB_Clear_Interrupt
-						USB_Device_Init
-						USB_Suspend
-							USB_CB_Handler
-						USB_CB_Handler
-						USB_Stall_Handler
-						USB_Ctrl_EPService
-							USB_CtrlTrf_Setup_Handler
-								USB_Check_Std_Request
-									USB_Get_Dsc_Handler
-									USB_Set_Cfg_Handler
-										USB_Disable_Non_Zero_Endpoints
-										USB_memset
-										USB_CB_Handler
-									USB_Get_Status_Handler
-									USB_Std_Feature_Req_Handler
-										USB_CB_Handler
-									USB_CB_Handler
-								USB_CB_Handler
-								USB_CtrlEP_Service_Complete
-									USBCtrlEPAllowDataStage
-										USB_CtrlTrf_Tx_Service
-									USBCtrlEPAllowStatusStage
-							USB_CtrlTrf_Out_Handler
-								USB_CtrlTrf_Rx_Service
-									USBCtrlEPAllowStatusStage
-									I2C2_Stop
-									Get_Time
-										sprintf
-										UART1_Write_Text
-										UART1_Write
-									RcvSimTxt
-										UART2_Data_Ready
-									I2C1_Stop
-										I2C1_Wait_For_Idle
-											I2C1_Is_Idle
-											PrintHandler
-											I2C2_TimeoutCallback
-										PrintHandler
-										I2C2_TimeoutCallback
-							USB_CtrlTrf_In_Handler
-								USB_CtrlTrf_Tx_Service
-								I2C2_Stop
-								Get_Time
-								RcvSimTxt
-								I2C1_Stop
-	SignalStrength
-		clr_str_arrays
-		UART2_Write_Text
-		UART2_Write
-		WaitForResponse
-		RingToTempBuf
-		PrintOut
-		strsplit
-		strncpy
-		RemoveChars
-			Malloc
-			strchr
-			strcpy
-			strlen
-			strncpy
-			Free
-		isdigit
-		atoi
-		sprintf
-		PWM_SigStrength
 	TestRingPointers
 	GetSMSText
 		UART1_Write_Text
@@ -468,6 +420,11 @@ main
 			strchr
 			strcpy
 			RemoveChars
+				Malloc
+				strchr
+				strcpy
+				strlen
+				Free
 			memset
 			strncpy
 			RemoveWhiteSpace
@@ -475,7 +432,6 @@ main
 			StrChecker
 			strncmp
 			SendSMS
-			SetLedPWM
 			TestRecievedSMS
 				sprintf
 				PrintOut
@@ -491,16 +447,25 @@ main
 		RemoveSMSText
 		__CC2DW
 	NVMErasePage
-	TCS3472_getRawData
-	GetScaledValues
-	TCS3472_CalcHSL
-	SendData
+	SignalStrength
+		UART2_Write_Text
+		UART2_Write
+		WaitForResponse
+		RingToTempBuf
+		PrintOut
+		strsplit
+		strncpy
+		RemoveChars
+		isdigit
+		atoi
+		sprintf
+	PWM_SigStrength
 	__CC2DW
 	__FillZeros
 	Test_Update_ThingSpeak
 		TCS3472_getRawData
 		GetScaledValues
-		TCS3472_CalcHSL
+		TCS3472_CalcHue
 		SendData
 PC_Uart1
 	UART1_Data_Ready
@@ -509,7 +474,7 @@ Sim800_Uart2
 	Get_Time
 	RcvSimTxt
 	I2C1_Stop
-Timer4_5Interrupt
+Timer2_3Interrupt
 USB1Interrupt
 	USB_Interrupt_Proc
 		USB_Device_Service

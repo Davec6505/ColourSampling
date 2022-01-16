@@ -11,11 +11,11 @@ L_NVMRead0:
 ; ptr end address is: 16 (R4)
 ANDI	R2, R5, 65535
 SLTIU	R2, R2, 512
-BNE	R2, R0, L__NVMRead13
+BNE	R2, R0, L__NVMRead11
 NOP	
 J	L_NVMRead1
 NOP	
-L__NVMRead13:
+L__NVMRead11:
 ; ptr end address is: 16 (R4)
 ; ptr start address is: 16 (R4)
 ADDIU	R3, SP, 0
@@ -200,14 +200,6 @@ ANDI	R3, R30, 65535
 ANDI	R2, R25, 16391
 ANDI	R2, R2, 65535
 SW	R2, Offset(NVMCON+0)(GP)
-LUI	R24, 20
-ORI	R24, R24, 22612
-L_NVMUnlock3:
-ADDIU	R24, R24, -1
-BNE	R24, R0, L_NVMUnlock3
-NOP	
-NOP	
-NOP	
 LUI	R2, 43673
 ORI	R2, R2, 26197
 SW	R2, Offset(NVMKEY+0)(GP)
@@ -217,31 +209,31 @@ SW	R2, Offset(NVMKEY+0)(GP)
 ORI	R2, R0, 32768
 SW	R2, Offset(NVMCONSET+0)(GP)
 ; status end address is: 12 (R3)
-L_NVMUnlock5:
+L_NVMUnlock3:
 ; status start address is: 12 (R3)
 LW	R2, Offset(NVMCON+0)(GP)
 ANDI	R2, R2, 32768
-BNE	R2, R0, L__NVMUnlock19
+BNE	R2, R0, L__NVMUnlock17
 NOP	
-J	L_NVMUnlock6
+J	L_NVMUnlock4
 NOP	
-L__NVMUnlock19:
-J	L_NVMUnlock5
+L__NVMUnlock17:
+J	L_NVMUnlock3
 NOP	
-L_NVMUnlock6:
+L_NVMUnlock4:
 ANDI	R2, R3, 1
 ; status end address is: 12 (R3)
-BNE	R2, R0, L__NVMUnlock21
+BNE	R2, R0, L__NVMUnlock19
 NOP	
-J	L_NVMUnlock7
+J	L_NVMUnlock5
 NOP	
-L__NVMUnlock21:
+L__NVMUnlock19:
 EI	R30
-J	L_NVMUnlock8
+J	L_NVMUnlock6
 NOP	
-L_NVMUnlock7:
+L_NVMUnlock5:
 DI	R30
-L_NVMUnlock8:
+L_NVMUnlock6:
 ORI	R2, R0, 16384
 SW	R2, Offset(NVMCONCLR+0)(GP)
 LW	R2, Offset(NVMCON+0)(GP)
@@ -259,15 +251,15 @@ LWL	R5, Offset(_FLASH_Settings_VAddr+3)(GP)
 MOVZ	R4, R0, R0
 ; ptr end address is: 20 (R5)
 ; i end address is: 16 (R4)
-L_ReadFlashWord9:
+L_ReadFlashWord7:
 ; i start address is: 16 (R4)
 ; ptr start address is: 20 (R5)
 SLTIU	R2, R4, 512
-BNE	R2, R0, L__ReadFlashWord23
+BNE	R2, R0, L__ReadFlashWord21
 NOP	
-J	L_ReadFlashWord10
+J	L_ReadFlashWord8
 NOP	
-L__ReadFlashWord23:
+L__ReadFlashWord21:
 ADDIU	R2, SP, 0
 ADDU	R3, R2, R4
 LBU	R2, 0(R5)
@@ -278,9 +270,9 @@ ADDIU	R2, R4, 1
 MOVZ	R4, R2, R0
 ; ptr end address is: 20 (R5)
 ; i end address is: 16 (R4)
-J	L_ReadFlashWord9
+J	L_ReadFlashWord7
 NOP	
-L_ReadFlashWord10:
+L_ReadFlashWord8:
 ADDIU	R4, SP, 0
 ADDIU	R2, R4, 3
 LBU	R2, 0(R2)
