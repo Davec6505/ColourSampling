@@ -384,6 +384,22 @@ void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 1 "c:/users/git/coloursampling/string.h"
+#line 1 "c:/users/git/coloursampling/thermister.h"
+
+
+
+
+extern sfr sbit T0;
+extern sfr sbit T0_Dir;
+
+
+
+
+
+
+
+void setup_Thermister();
+void getTemp(float * t);
 #line 22 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
@@ -466,6 +482,7 @@ void ConfigPic(){
  InitISR();
  InitGSM3();
  PwrUpGSM3();
+ setup_Thermister();
 }
 
 void InitUart1(){

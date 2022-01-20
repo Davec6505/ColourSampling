@@ -129,6 +129,8 @@ JAL	_InitGSM3+0
 NOP	
 JAL	_PwrUpGSM3+0
 NOP	
+JAL	_setup_Thermister+0
+NOP	
 L_end_ConfigPic:
 LW	R28, 16(SP)
 LW	R27, 12(SP)

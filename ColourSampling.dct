@@ -12,6 +12,10 @@ __flash_write_block
 __flash_write_latch
 __fzins
 __genexcept
+_adc_external_ref
+_adc_internal_ref
+_adc_vrefh_external_vrefl_internal
+_adc_vrefh_internal_vrefl_external
 _add_dp
 _add_fp
 _appi
@@ -431,6 +435,11 @@ ad1pcfginv
 ad1pcfginvbits
 ad1pcfgset
 ad1pcfgsetbits
+adc_get_sample_ptr
+adc1_get_sample
+adc1_init
+adc1_init_advanced
+adc1_read
 adc1buf0
 adc1buf00
 adc1buf00_bit
@@ -11143,6 +11152,7 @@ getapi_key_sms
 getscaledvalues
 getsmstext
 getstrlengths
+gettemp
 getvaluesfromflash
 gp
 gr
@@ -18954,6 +18964,7 @@ sesvdif_bit
 setcolourthresholds
 setledpwm
 setstr
+setup_thermister
 setupiot
 sf
 shorttohex
@@ -19913,6 +19924,8 @@ syskeyset
 syskeysetbits
 systemlock
 systemunlock
+t0
+t0_dir
 t0_sp
 t1con
 t1conbits

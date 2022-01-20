@@ -1,4 +1,4 @@
-0	1	mikroCPIC32.exe -MSF -DBG -pP32MX460F512L -HEAP 6000 -RA -LHF -C -Y -DL -SSA -EBASE 0x9FC01000 -INTDEF MV_SRS7_IS32 -O11110004 -fo80 -N"C:\Users\Git\ColourSampling\ColourSampling.mcp32" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Uses\" -SP"C:\Users\Git\ColourSampling\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Uses\" -IP"C:\Users\Git\ColourSampling\" "ColourSampling.c" "Config.c" "ISR.c" "TCS3472.c" "_Timers.c" "USBdsc.c" "ColorMatch.c" "String.c" "Flash_R_W.c" "Sim800.c" "__Lib_CP0.emcl" "__Lib_Math.emcl" "__Lib_MathDouble.emcl" "__Lib_System.emcl" "__Lib_SoftResetDma.emcl" "__Lib_Delays.emcl" "__Lib_CType.emcl" "__Lib_CString.emcl" "__Lib_CStdlib.emcl" "__Lib_CMath.emcl" "__Lib_MemManager.emcl" "__Lib_Conversions.emcl" "__Lib_Sprintf.emcl" "__Lib_PrintOut.emcl" "__Lib_Button.emcl" "__Lib_FLASH.emcl" "__Lib_I2C_12.emcl" "__Lib_PWM.emcl" "__Lib_UART_12.emcl" "__Lib_USB.emcl"	 
+0	1	mikroCPIC32.exe -MSF -DBG -pP32MX460F512L -HEAP 6000 -RA -LHF -C -Y -DL -SSA -EBASE 0x9FC01000 -INTDEF MV_SRS7_IS32 -O11110004 -fo80 -N"C:\Users\Git\ColourSampling\ColourSampling.mcp32" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Uses\" -SP"C:\Users\Git\ColourSampling\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Uses\" -IP"C:\Users\Git\ColourSampling\" "ColourSampling.c" "Config.c" "ISR.c" "TCS3472.c" "_Timers.c" "USBdsc.c" "ColorMatch.c" "String.c" "Flash_R_W.c" "Sim800.c" "Thermister.c" "__Lib_CP0.emcl" "__Lib_Math.emcl" "__Lib_MathDouble.emcl" "__Lib_System.emcl" "__Lib_SoftResetDma.emcl" "__Lib_Delays.emcl" "__Lib_CType.emcl" "__Lib_CString.emcl" "__Lib_CStdlib.emcl" "__Lib_CMath.emcl" "__Lib_MemManager.emcl" "__Lib_Conversions.emcl" "__Lib_Sprintf.emcl" "__Lib_PrintOut.emcl" "__Lib_Button.emcl" "__Lib_ADC.emcl" "__Lib_FLASH.emcl" "__Lib_I2C_12.emcl" "__Lib_PWM.emcl" "__Lib_UART_12.emcl" "__Lib_USB.emcl"	 
 diagnostics: 0	122	Compilation Started	P32MX460F512L.c
 diagnostics: 15369	123	Compiled Successfully	P32MX460F512L.c
 diagnostics: 0	122	Compilation Started	__Lib_Delays.c
@@ -9,14 +9,15 @@ warning: 155	1506	Implicit conversion of pointer to int	__Lib_MemManager.c
 warning: 174	1508	Implicit conversion of int to ptr	__Lib_MemManager.c
 diagnostics: 297	123	Compiled Successfully	__Lib_MemManager.c
 diagnostics: 0	122	Compilation Started	stdint.h
-warning: 189	1508	Implicit conversion of int to ptr	ColourSampling.c
+warning: 220	1508	Implicit conversion of int to ptr	ColourSampling.c
 hint: 32	1163	Variable 'deg' has been declared, but not used	ColourSampling.c
-diagnostics: 205	123	Compiled Successfully	ColourSampling.c
+diagnostics: 236	123	Compiled Successfully	ColourSampling.c
 hint: 31	1164	Variable 'i' has been eliminated by optimizer	ColourSampling.c
-hint: 35	1164	Variable 'res_millis_sigstr' has been eliminated by optimizer	ColourSampling.c
-hint: 36	1164	Variable 'resA' has been eliminated by optimizer	ColourSampling.c
+hint: 40	1164	Variable 'millis_thermister' has been eliminated by optimizer	ColourSampling.c
+hint: 36	1164	Variable 'res_millis_sigstr' has been eliminated by optimizer	ColourSampling.c
+hint: 42	1164	Variable 'resA' has been eliminated by optimizer	ColourSampling.c
 diagnostics: 0	122	Compilation Started	stdint.h
-diagnostics: 93	123	Compiled Successfully	Config.c
+diagnostics: 94	123	Compiled Successfully	Config.c
 diagnostics: 0	122	Compilation Started	stdint.h
 hint: 0	1004	interrupt handler (USB1Interrupt at 0x002D)	ISR.c
 hint: 0	1004	interrupt handler (Timer1Interrupt at 0x0004)	ISR.c
@@ -125,13 +126,17 @@ hint: 784	1164	Variable 'is_digit' has been eliminated by optimizer	Sim800.c
 hint: 812	1164	Variable 'text' has been eliminated by optimizer	Sim800.c
 hint: 943	1164	Variable 't' has been eliminated by optimizer	Sim800.c
 hint: 1285	1164	Variable 'newMillis' has been eliminated by optimizer	Sim800.c
-diagnostics: 0	127	All files Compiled in 1062 ms	 
+diagnostics: 0	122	Compilation Started	thermister.h
+diagnostics: 83	123	Compiled Successfully	Thermister.c
+hint: 50	1164	Variable 'steinhart' has been eliminated by optimizer	Thermister.c
+hint: 52	1164	Variable 'ave' has been eliminated by optimizer	Thermister.c
+diagnostics: 0	127	All files Compiled in 1156 ms	 
 hint: 0	1144	Used RX: 32 (100%)   Free RX: 0 (0%)	Used RX: 32 (100%)   Free RX: 0 (0%)
-hint: 0	1144	Static RAM (bytes): 4899   Dynamic RAM (bytes): 21863	Static RAM (bytes): 4899   Dynamic RAM (bytes): 21863
+hint: 0	1144	Static RAM (bytes): 4911   Dynamic RAM (bytes): 21853	Static RAM (bytes): 4911   Dynamic RAM (bytes): 21853
 hint: 0	1144	HEAP RAM (bytes): 6000	HEAP RAM (bytes): 6000
-hint: 0	1144	Used ROM (bytes): 77122 (15%)  Free ROM (bytes): 447166 (85%)	Used ROM (bytes): 77122 (15%)  Free ROM (bytes): 447166 (85%)
+hint: 0	1144	Used ROM (bytes): 78185 (15%)  Free ROM (bytes): 446103 (85%)	Used ROM (bytes): 78185 (15%)  Free ROM (bytes): 446103 (85%)
 hint: 0	1144	Used BOOTROM (bytes): 1912 (16%)  Free BOOTROM (bytes): 10361 (84%)	Used BOOTROM (bytes): 1912 (16%)  Free BOOTROM (bytes): 10361 (84%)
 diagnostics: 0	125	Project Linked Successfully	ColourSampling.mcp32
-diagnostics: 0	128	Linked in 250 ms	 
-diagnostics: 0	129	Project 'ColourSampling.mcp32' completed: 1859 ms	 
-diagnostics: 0	103	Finished successfully: 16 Jan 2022, 22:28:24	ColourSampling.mcp32
+diagnostics: 0	128	Linked in 234 ms	 
+diagnostics: 0	129	Project 'ColourSampling.mcp32' completed: 1890 ms	 
+diagnostics: 0	103	Finished successfully: 20 Jan 2022, 23:52:27	ColourSampling.mcp32

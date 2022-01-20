@@ -384,6 +384,22 @@ void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 1 "c:/users/git/coloursampling/string.h"
+#line 1 "c:/users/git/coloursampling/thermister.h"
+
+
+
+
+extern sfr sbit T0;
+extern sfr sbit T0_Dir;
+
+
+
+
+
+
+
+void setup_Thermister();
+void getTemp(float * t);
 #line 22 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
@@ -437,12 +453,18 @@ char cel_num[20];
 char num,last_rec_inc;
 unsigned short i;
 unsigned int cell_ok,str_num,deg;
+
 static long last_millis_sigstr = 0;
 static long millis_sigstr_sp = 0;
 long res_millis_sigstr = 0;
+
+static long last_millis_thermister = 0;
+static long millis_thermister_sp = 0;
+static long millis_thermister = 0;
+float temp[4];
 int resA=0, resB=0, diff = 0;
 
-char txtR[6],txtH[6],txtT[6],txtI[6];
+char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
 
 
 
@@ -471,7 +493,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  T0_SP.sec = 0;
  T0_SP.min = 0;
  T0_SP.hr = 0;
-#line 73 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 79 "C:/Users/Git/ColourSampling/ColourSampling.c"
  strcpy(cel_num,GetValuesFromFlash());
  str_num = strncmp(cel_num,sub_txt,4);
 
@@ -495,7 +517,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  SimVars.init_inc = 3;
  cell_ok = 1;
  }
-#line 100 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 106 "C:/Users/Git/ColourSampling/ColourSampling.c"
  if(cell_ok == 1){
  Read_Thresholds();
  Delay_ms(3000);
@@ -521,8 +543,30 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  Delay_ms(500);
  SetLedPWM();
  PWM_Stop(2);
-#line 128 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 134 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
+
+
+
+ millis_thermister = TMR0.millis - last_millis_thermister;
+ if(millis_thermister > millis_thermister_sp){
+ millis_thermister_sp = 999;
+ last_millis_thermister = TMR0.millis;
+ millis_thermister = 0;
+ getTemp(temp);
+#line 148 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ sprintf(txtK,"%3.2f",temp[0]);
+ sprintf(txtC,"%3.2f",temp[1]);
+ sprintf(txtF,"%3.2f",temp[2]);
+ sprintf(txtRaw,"%3.2f",temp[3]);
+ PrintOut(PrintHandler, "\r\n"
+ " *Kelvin:=      %s\r\n"
+ " *deg. C:=      %s\r\n"
+ " *deg. F:=      %s\r\n"
+ " *ADC:=         %s\r\n"
+ ,txtK,txtC,txtF,txtRaw);
+
+ }
 
 
 
@@ -587,7 +631,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
  if(!RE4_bit){
 
  GetValuesFromFlash();
-#line 203 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 234 "C:/Users/Git/ColourSampling/ColourSampling.c"
  }
  }
 }

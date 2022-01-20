@@ -30,12 +30,18 @@ char cel_num[20];
 char num,last_rec_inc;
 unsigned short i;
 unsigned int cell_ok,str_num,deg;
+
 static long last_millis_sigstr = 0;
 static long millis_sigstr_sp = 0;
 long res_millis_sigstr = 0;
+
+static long last_millis_thermister = 0;
+static long millis_thermister_sp = 0;
+static long millis_thermister = 0;
+float temp[4];
 int resA=0, resB=0, diff = 0;
 #ifdef MainDebug
-char txtR[6],txtH[6],txtT[6],txtI[6];
+char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
 #endif
 
 
@@ -126,6 +132,31 @@ char txtR[6],txtH[6],txtT[6],txtI[6];
 * main loop forever!!
 ***************************************************/
    while(1){
+   
+     ///////////////////////////////////////////////
+     //test millis for time to check thermister
+     millis_thermister = TMR0.millis - last_millis_thermister;
+      if(millis_thermister > millis_thermister_sp){
+         millis_thermister_sp   = 999;
+         last_millis_thermister = TMR0.millis;
+         millis_thermister  = 0;
+         getTemp(temp);
+#ifdef ThermisterDebug
+ /*  Serial.print(temp[0]); Serial.print(" Kelvin      ");
+  Serial.print(temp[1]); Serial.print(" deg. C      ");
+  Serial.print(temp[2]); Serial.print(" deg. F      ");  */
+         sprintf(txtK,"%3.2f",temp[0]);
+         sprintf(txtC,"%3.2f",temp[1]);
+         sprintf(txtF,"%3.2f",temp[2]);
+         sprintf(txtRaw,"%3.2f",temp[3]);
+         PrintOut(PrintHandler, "\r\n"
+                                " *Kelvin:=      %s\r\n"
+                                " *deg. C:=      %s\r\n"
+                                " *deg. F:=      %s\r\n"
+                                " *ADC:=         %s\r\n"
+                                ,txtK,txtC,txtF,txtRaw);
+#endif
+      }
 
      ///////////////////////////////////////////////
      //test millis for time to check sig strength

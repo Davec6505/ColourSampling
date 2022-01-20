@@ -48,7 +48,7 @@ void ConfigPic(){
    PWM_Stop(1);
    PWM_Stop(2);
    
-   
+
    MM_Init();
 
 
@@ -58,6 +58,7 @@ void ConfigPic(){
   InitISR();
   InitGSM3();
   PwrUpGSM3();
+   setup_Thermister();
 }
 
 void InitUart1(){

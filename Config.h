@@ -8,14 +8,14 @@
 #include "Sim800.h"
 #include "built_in.h"
 #include "String.h"
-
+#include "Thermister.h"
 //////////////////////////////////////////
 //defines
 #define MainDebug
 #define MainFlashDebug
 //#define MainColDebug
 //#define MainSigStrengthDebug
-
+#define ThermisterDebug
 
 //////////////////////////////////////////
 //constants and vars

@@ -41,6 +41,8 @@ main
 		InitGSM3
 			memset
 		PwrUpGSM3
+		setup_Thermister
+			ADC1_Init
 	TCS3472_Init
 		TCS3472_Read8
 			I2C2_Start
@@ -253,6 +255,23 @@ main
 		TCS3472_C2RGB_Error
 		PWM_Set_Duty
 	PWM_Stop
+	getTemp
+		ADC1_Get_Sample
+		_SignedIntegralToFloat
+		_Div_FP
+		_Sub_FP
+		log
+			_Compare_FP
+			frexp
+			_Mul_FP
+			_Sub_FP
+			eval_poly
+				_Mul_FP
+				_Add_FP
+			_SignedIntegralToFloat
+			_Add_FP
+		_Add_FP
+		_Mul_FP
 	SignalStrength
 		clr_str_arrays
 		UART2_Write_Text
@@ -330,15 +349,6 @@ main
 					_FloatToSignedIntegral
 					_SignedIntegralToFloat
 					log
-						_Compare_FP
-						frexp
-						_Mul_FP
-						_Sub_FP
-						eval_poly
-							_Mul_FP
-							_Add_FP
-						_SignedIntegralToFloat
-						_Add_FP
 					_Mul_FP
 					exp
 						_Compare_FP

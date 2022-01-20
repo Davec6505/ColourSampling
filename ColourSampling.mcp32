@@ -6,7 +6,7 @@ Value=0
 [BUILD_TYPE]
 Value=0
 [ACTIVE_TAB]
-Value=Config.h
+Value=ColourSampling.c
 [USE_EEPROM]
 Value=0
 [USE_HEAP]
@@ -26,7 +26,8 @@ File6=ColorMatch.c
 File7=String.c
 File8=Flash_R_W.c
 File9=Sim800.c
-Count=10
+File10=Thermister.c
+Count=11
 [BINARIES]
 Count=0
 [IMAGES]
@@ -34,18 +35,11 @@ Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
 File0=ColourSampling.c
-File1=Sim800.c
-File2=Sim800.h
-File3=ISR.c
-File4=_Timers.c
-File5=_Timers.h
-File6=TCS3472.c
-File7=TCS3472.h
-File8=String.c
-File9=String.h
-File10=Config.h
-File11=Config.c
-Count=12
+File1=Thermister.c
+File2=Thermister.h
+File3=Config.c
+File4=Config.h
+Count=5
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -64,7 +58,8 @@ File3=ColorMatch.h
 File4=String.h
 File5=Flash_R_W.h
 File6=Sim800.h
-Count=7
+File7=Thermister.h
+Count=8
 [PLDS]
 Count=0
 [Useses]
@@ -83,7 +78,8 @@ File11=FLASH
 File12=Button
 File13=PrintOut
 File14=PWM
-Count=15
+File15=ADC
+Count=16
 [INTERRUPT_DEFS]
 EBASE=9FC01000
 VECTOR_SPACEING=32
@@ -92,5 +88,5 @@ USE_SRS=7
 [EXPANDED_NODES]
 0=ColourSampling.mcp32
 1=Sources
-12=Header Files
+13=Header Files
 Count=3
