@@ -255,43 +255,6 @@ main
 		TCS3472_C2RGB_Error
 		PWM_Set_Duty
 	PWM_Stop
-	getTemp
-		ADC1_Get_Sample
-		_SignedIntegralToFloat
-		_Div_FP
-		_Sub_FP
-		log
-			_Compare_FP
-			frexp
-			_Mul_FP
-			_Sub_FP
-			eval_poly
-				_Mul_FP
-				_Add_FP
-			_SignedIntegralToFloat
-			_Add_FP
-		_Add_FP
-		_Mul_FP
-	SignalStrength
-		clr_str_arrays
-		UART2_Write_Text
-		UART2_Write
-		WaitForResponse
-		RingToTempBuf
-		PrintOut
-		strsplit
-		strncpy
-		RemoveChars
-			Malloc
-			strchr
-			strcpy
-			strlen
-			strncpy
-			Free
-		isdigit
-		atoi
-		sprintf
-		PWM_SigStrength
 	HID_Read
 		Gen_Read
 			USB_Handle_Busy
@@ -349,6 +312,15 @@ main
 					_FloatToSignedIntegral
 					_SignedIntegralToFloat
 					log
+						_Compare_FP
+						frexp
+						_Mul_FP
+						_Sub_FP
+						eval_poly
+							_Mul_FP
+							_Add_FP
+						_SignedIntegralToFloat
+						_Add_FP
 					_Mul_FP
 					exp
 						_Compare_FP
@@ -448,6 +420,35 @@ main
 								Get_Time
 								RcvSimTxt
 								I2C1_Stop
+	Adc_Average
+		ADC1_Get_Sample
+	getTemp
+		_SignedIntegralToFloat
+		_Div_FP
+		_Sub_FP
+		log
+		_Add_FP
+		_Mul_FP
+	SignalStrength
+		clr_str_arrays
+		UART2_Write_Text
+		UART2_Write
+		WaitForResponse
+		RingToTempBuf
+		PrintOut
+		strsplit
+		strncpy
+		RemoveChars
+			Malloc
+			strchr
+			strcpy
+			strlen
+			strncpy
+			Free
+		isdigit
+		atoi
+		sprintf
+		PWM_SigStrength
 	TestRingPointers
 	GetSMSText
 		UART1_Write_Text

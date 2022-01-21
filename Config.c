@@ -36,8 +36,7 @@ void ConfigPic(){
    InitUart1();
    Delay_ms(100);
    InitUart2();
-   //ADC1_Init();
-   
+
    //Initialize PWMs and set duty cycle
    current_duty1  = 2000;                        // initial value for current_duty
    current_duty2 = 10000;                        // initial value for current_duty1
@@ -58,7 +57,7 @@ void ConfigPic(){
   InitISR();
   InitGSM3();
   PwrUpGSM3();
-   setup_Thermister();
+  setup_Thermister(5);
 }
 
 void InitUart1(){

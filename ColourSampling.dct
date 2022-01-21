@@ -435,6 +435,7 @@ ad1pcfginv
 ad1pcfginvbits
 ad1pcfgset
 ad1pcfgsetbits
+adc_average
 adc_get_sample_ptr
 adc1_get_sample
 adc1_init

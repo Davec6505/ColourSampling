@@ -38,6 +38,7 @@ long res_millis_sigstr = 0;
 static long last_millis_thermister = 0;
 static long millis_thermister_sp = 0;
 static long millis_thermister = 0;
+static int ave_adc = 0;
 float temp[4];
 int resA=0, resB=0, diff = 0;
 #ifdef MainDebug
@@ -132,34 +133,44 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
 * main loop forever!!
 ***************************************************/
    while(1){
-   
-     ///////////////////////////////////////////////
+   int sample_test = 0;
+
+     ////////////////////////////////////////////////
+     //Get input from USB to set up thresholds
+     num = HID_Read();
+     if(num != 0){
+        DoStrings(num);
+     }
+     
+     
+     ////////////////////////////////////////////////
      //test millis for time to check thermister
      millis_thermister = TMR0.millis - last_millis_thermister;
       if(millis_thermister > millis_thermister_sp){
          millis_thermister_sp   = 999;
          last_millis_thermister = TMR0.millis;
          millis_thermister  = 0;
-         getTemp(temp);
+         sample_test = Adc_Average(&ave_adc);
+         if(sample_test < 0){
+           getTemp(temp,ave_adc);
+           ave_adc = 0;
 #ifdef ThermisterDebug
- /*  Serial.print(temp[0]); Serial.print(" Kelvin      ");
-  Serial.print(temp[1]); Serial.print(" deg. C      ");
-  Serial.print(temp[2]); Serial.print(" deg. F      ");  */
-         sprintf(txtK,"%3.2f",temp[0]);
-         sprintf(txtC,"%3.2f",temp[1]);
-         sprintf(txtF,"%3.2f",temp[2]);
-         sprintf(txtRaw,"%3.2f",temp[3]);
-         PrintOut(PrintHandler, "\r\n"
-                                " *Kelvin:=      %s\r\n"
-                                " *deg. C:=      %s\r\n"
-                                " *deg. F:=      %s\r\n"
-                                " *ADC:=         %s\r\n"
-                                ,txtK,txtC,txtF,txtRaw);
+           sprintf(txtK,"%3.2f",temp[0]);
+           sprintf(txtC,"%3.2f",temp[1]);
+           sprintf(txtF,"%3.2f",temp[2]);
+           sprintf(txtRaw,"%3.2f",temp[3]);
+           PrintOut(PrintHandler, "\r\n"
+                                  " *Kelvin:=      %s\r\n"
+                                  " *deg. C:=      %s\r\n"
+                                  " *deg. F:=      %s\r\n"
+                                  " *ADC:=         %s\r\n"
+                                  ,txtK,txtC,txtF,txtRaw);
 #endif
+         }
       }
 
-     ///////////////////////////////////////////////
-     //test millis for time to check sig strength
+     //////////////////////////////////////////////////
+     //test millis for time to check signal strength
      res_millis_sigstr = TMR0.millis - last_millis_sigstr;
       if(res_millis_sigstr >= millis_sigstr_sp){
          millis_sigstr_sp   = 600000;
@@ -168,14 +179,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
          SignalStrength();
       }
 
-     
-     ///////////////////////////////////////////////
-     //Get input from USB to set up thresholds
-     num = HID_Read();
-     if(num != 0){
-        DoStrings(num);
-     }
-     
+     //////////////////////////////////////////////////
      //Update Thingspeak
      if(SimVars.init_inc >= 5){
        if(T0_SP.one_per_Xmin){
@@ -189,6 +193,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
        }
      }
      
+     ////////////////////////////////////////////////////
      //test for incoming SMS using difference in ring ptr
      if(!T0_SP.one_per_sec){
        diff = TestRingPointers();
@@ -215,9 +220,13 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
 
      }
 
-
+     ///////////////////////////////////////////////////////////
+     //reset flash
      if(!RG9_bit)
         NVMErasePage(FLASH_Settings_PAddr);//SendSMS(100);
+        
+    ////////////////////////////////////////////////////////////
+    //use onboard switch to debug
      if(!RE4_bit){
 #ifdef MainFlashDebug
         GetValuesFromFlash();

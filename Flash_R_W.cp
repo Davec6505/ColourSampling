@@ -296,17 +296,13 @@ void I2C2_TimeoutCallback(char errorCode);
 
 
 
+
 extern sfr sbit T0;
 extern sfr sbit T0_Dir;
-
-
-
-
-
-
-
-void setup_Thermister();
-void getTemp(float * t);
+#line 19 "c:/users/git/coloursampling/thermister.h"
+void setup_Thermister(int count);
+int Adc_Average(int* adc);
+void getTemp(float * t,int adc_ave);
 #line 22 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;

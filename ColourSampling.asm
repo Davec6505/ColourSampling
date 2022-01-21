@@ -88,11 +88,11 @@ JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 16
 LHU	R2, 22(SP)
-BNE	R2, R0, L__main29
+BNE	R2, R0, L__main30
 NOP	
 J	L_main2
 NOP	
-L__main29:
+L__main30:
 JAL	_SetupIOT+0
 NOP	
 SB	R2, Offset(_SimVars+1)(GP)
@@ -104,11 +104,11 @@ JAL	_GetAPI_Key_SMS+0
 NOP	
 SB	R2, Offset(_SimVars+1)(GP)
 ANDI	R2, R2, 255
-BNE	R2, R0, L__main31
+BNE	R2, R0, L__main32
 NOP	
 J	L_main3
 NOP	
-L__main31:
+L__main32:
 ORI	R26, R0, 1
 LBU	R25, Offset(_SimVars+1)(GP)
 JAL	_SendSMS+0
@@ -140,11 +140,11 @@ L_main5:
 ANDI	R3, R2, 65535
 ; cell_ok end address is: 8 (R2)
 ORI	R2, R0, 1
-BEQ	R3, R2, L__main32
+BEQ	R3, R2, L__main33
 NOP	
 J	L_main6
 NOP	
-L__main32:
+L__main33:
 JAL	_Read_Thresholds+0
 NOP	
 LUI	R24, 1220
@@ -209,24 +209,52 @@ ORI	R25, R0, 2
 JAL	_PWM_Stop+0
 NOP	
 L_main11:
+JAL	_HID_Read+0
+NOP	
+; num start address is: 12 (R3)
+ANDI	R3, R2, 255
+ANDI	R2, R2, 255
+BNE	R2, R0, L__main35
+NOP	
+J	L_main13
+NOP	
+L__main35:
+ANDI	R25, R3, 255
+; num end address is: 12 (R3)
+JAL	_DoStrings+0
+NOP	
+L_main13:
 LW	R3, Offset(main_last_millis_thermister_L0+0)(GP)
 LW	R2, Offset(_TMR0+0)(GP)
 SUBU	R3, R2, R3
 LW	R2, Offset(main_millis_thermister_sp_L0+0)(GP)
 SLT	R2, R2, R3
-BNE	R2, R0, L__main33
+BNE	R2, R0, L__main36
 NOP	
-J	L_main13
+J	L_main14
 NOP	
-L__main33:
+L__main36:
 ORI	R2, R0, 999
 SW	R2, Offset(main_millis_thermister_sp_L0+0)(GP)
 LW	R2, Offset(_TMR0+0)(GP)
 SW	R2, Offset(main_last_millis_thermister_L0+0)(GP)
+LUI	R25, hi_addr(main_ave_adc_L0+0)
+ORI	R25, R25, lo_addr(main_ave_adc_L0+0)
+JAL	_Adc_Average+0
+NOP	
+SEH	R2, R2
+SLTI	R2, R2, 0
+BNE	R2, R0, L__main37
+NOP	
+J	L_main15
+NOP	
+L__main37:
 ADDIU	R2, SP, 24
+LH	R26, Offset(main_ave_adc_L0+0)(GP)
 MOVZ	R25, R2, R0
 JAL	_getTemp+0
 NOP	
+SH	R0, Offset(main_ave_adc_L0+0)(GP)
 ADDIU	R2, SP, 24
 LW	R2, 0(R2)
 ADDIU	R3, SP, 64
@@ -296,17 +324,18 @@ SW	R2, 0(SP)
 JAL	_PrintOut+0
 NOP	
 ADDIU	SP, SP, 24
-L_main13:
+L_main15:
+L_main14:
 LW	R3, Offset(main_last_millis_sigstr_L0+0)(GP)
 LW	R2, Offset(_TMR0+0)(GP)
 SUBU	R3, R2, R3
 LW	R2, Offset(main_millis_sigstr_sp_L0+0)(GP)
 SLT	R2, R3, R2
-BEQ	R2, R0, L__main34
+BEQ	R2, R0, L__main38
 NOP	
-J	L_main14
+J	L_main16
 NOP	
-L__main34:
+L__main38:
 LUI	R2, 9
 ORI	R2, R2, 10176
 SW	R2, Offset(main_millis_sigstr_sp_L0+0)(GP)
@@ -314,44 +343,29 @@ LW	R2, Offset(_TMR0+0)(GP)
 SW	R2, Offset(main_last_millis_sigstr_L0+0)(GP)
 JAL	_SignalStrength+0
 NOP	
-L_main14:
-JAL	_HID_Read+0
-NOP	
-; num start address is: 12 (R3)
-ANDI	R3, R2, 255
-ANDI	R2, R2, 255
-BNE	R2, R0, L__main36
-NOP	
-J	L_main15
-NOP	
-L__main36:
-ANDI	R25, R3, 255
-; num end address is: 12 (R3)
-JAL	_DoStrings+0
-NOP	
-L_main15:
+L_main16:
 LBU	R2, Offset(_SimVars+1)(GP)
 SLTIU	R2, R2, 5
-BEQ	R2, R0, L__main37
-NOP	
-J	L_main16
-NOP	
-L__main37:
-LBU	R2, Offset(_T0_SP+10)(GP)
-EXT	R2, R2, 1, 1
-BNE	R2, R0, L__main39
+BEQ	R2, R0, L__main39
 NOP	
 J	L_main17
 NOP	
 L__main39:
+LBU	R2, Offset(_T0_SP+10)(GP)
+EXT	R2, R2, 1, 1
+BNE	R2, R0, L__main41
+NOP	
+J	L_main18
+NOP	
+L__main41:
 ORI	R25, R0, 2
 JAL	_PWM_Start+0
 NOP	
 LUI	R24, 203
 ORI	R24, R24, 29524
-L_main18:
+L_main19:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_main18
+BNE	R24, R0, L_main19
 NOP	
 NOP	
 NOP	
@@ -367,26 +381,26 @@ SB	R2, Offset(_T0_SP+10)(GP)
 ORI	R25, R0, 2
 JAL	_PWM_Stop+0
 NOP	
+L_main18:
 L_main17:
-L_main16:
 LBU	R2, Offset(_T0_SP+10)(GP)
 EXT	R2, R2, 0, 1
-BEQ	R2, R0, L__main40
+BEQ	R2, R0, L__main42
 NOP	
-J	L_main20
+J	L_main21
 NOP	
-L__main40:
+L__main42:
 JAL	_TestRingPointers+0
 NOP	
 ; diff start address is: 84 (R21)
 SEH	R21, R2
 SEH	R2, R2
 SLTI	R2, R2, 2
-BEQ	R2, R0, L__main41
+BEQ	R2, R0, L__main43
 NOP	
-J	L_main21
+J	L_main22
 NOP	
-L__main41:
+L__main43:
 LBU	R2, Offset(_SimVars+1)(GP)
 SB	R2, 20(SP)
 ORI	R2, R0, 3
@@ -457,45 +471,45 @@ JAL	_GetSMSText+0
 NOP	
 LUI	R24, 203
 ORI	R24, R24, 29524
-L_main22:
+L_main23:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_main22
+BNE	R24, R0, L_main23
 NOP	
 NOP	
 NOP	
 LBU	R3, Offset(_SimVars+1)(GP)
 ORI	R2, R0, 5
-BNE	R3, R2, L__main43
-NOP	
-J	L_main24
-NOP	
-L__main43:
-LBU	R2, 20(SP)
-SB	R2, Offset(_SimVars+1)(GP)
-L_main24:
-L_main21:
-L_main20:
-_LX	
-EXT	R2, R2, BitPos(RG9_bit+0), 1
-BEQ	R2, R0, L__main44
+BNE	R3, R2, L__main45
 NOP	
 J	L_main25
 NOP	
-L__main44:
-LW	R25, Offset(_FLASH_Settings_PAddr+0)(GP)
-JAL	_NVMErasePage+0
-NOP	
+L__main45:
+LBU	R2, 20(SP)
+SB	R2, Offset(_SimVars+1)(GP)
 L_main25:
+L_main22:
+L_main21:
 _LX	
-EXT	R2, R2, BitPos(RE4_bit+0), 1
-BEQ	R2, R0, L__main45
+EXT	R2, R2, BitPos(RG9_bit+0), 1
+BEQ	R2, R0, L__main46
 NOP	
 J	L_main26
 NOP	
-L__main45:
-JAL	_GetValuesFromFlash+0
+L__main46:
+LW	R25, Offset(_FLASH_Settings_PAddr+0)(GP)
+JAL	_NVMErasePage+0
 NOP	
 L_main26:
+_LX	
+EXT	R2, R2, BitPos(RE4_bit+0), 1
+BEQ	R2, R0, L__main47
+NOP	
+J	L_main27
+NOP	
+L__main47:
+JAL	_GetValuesFromFlash+0
+NOP	
+L_main27:
 J	L_main11
 NOP	
 L_end_main:

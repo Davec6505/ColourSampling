@@ -3,6 +3,9 @@ ADDIU	SP, SP, -4
 SW	RA, 0(SP)
 ORI	R2, R0, 32768
 SW	R2, Offset(TRISB+8)(GP)
+SH	R25, Offset(Thermister_sample_count+0)(GP)
+ADDIU	R2, R25, 1
+SH	R2, Offset(Thermister_divisor+0)(GP)
 JAL	_ADC1_Init+0
 NOP	
 L_end_setup_Thermister:
@@ -11,60 +14,54 @@ ADDIU	SP, SP, 4
 JR	RA
 NOP	
 ; end of _setup_Thermister
-_getTemp:
-ADDIU	SP, SP, -12
+_Adc_Average:
+ADDIU	SP, SP, -8
 SW	RA, 0(SP)
-; numSamples start address is: 16 (R4)
-ORI	R4, R0, 5
-; adcVal start address is: 64 (R16)
-MOVZ	R16, R0, R0
-; i start address is: 20 (R5)
-MOVZ	R5, R0, R0
-; numSamples end address is: 16 (R4)
-; i end address is: 20 (R5)
-; adcVal end address is: 64 (R16)
-L_getTemp0:
-; i start address is: 20 (R5)
-; adcVal start address is: 64 (R16)
-; numSamples start address is: 16 (R4)
-SEH	R3, R5
-SEH	R2, R4
-SLT	R2, R3, R2
-BNE	R2, R0, L__getTemp7
+LHU	R3, Offset(Thermister_sample_count+0)(GP)
+LH	R2, Offset(Adc_Average_count_L0+0)(GP)
+SLTU	R2, R3, R2
+BNE	R2, R0, L__Adc_Average4
 NOP	
-J	L_getTemp1
+J	L_Adc_Average0
 NOP	
-L__getTemp7:
+L__Adc_Average4:
+LH	R2, 0(R25)
+SEH	R3, R2
+LHU	R2, Offset(Thermister_divisor+0)(GP)
+DIVU	R3, R2
+MFLO	R2
+SH	R2, 0(R25)
+SH	R0, Offset(Adc_Average_count_L0+0)(GP)
+ORI	R2, R0, 65535
+J	L_end_Adc_Average
+NOP	
+L_Adc_Average0:
 SW	R25, 4(SP)
 ORI	R25, R0, 15
 JAL	_ADC1_Get_Sample+0
 NOP	
 LW	R25, 4(SP)
-ADDU	R2, R16, R2
-SEH	R16, R2
-LUI	R24, 40
-ORI	R24, R24, 45226
-L_getTemp3:
-ADDIU	R24, R24, -1
-BNE	R24, R0, L_getTemp3
+LH	R3, 0(R25)
+ADDU	R2, R3, R2
+SH	R2, 0(R25)
+LH	R2, Offset(Adc_Average_count_L0+0)(GP)
+ADDIU	R2, R2, 1
+SH	R2, Offset(Adc_Average_count_L0+0)(GP)
+ORI	R2, R0, 1
+L_end_Adc_Average:
+LW	RA, 0(SP)
+ADDIU	SP, SP, 8
+JR	RA
 NOP	
-ADDIU	R2, R5, 1
-SEH	R5, R2
-; numSamples end address is: 16 (R4)
-; i end address is: 20 (R5)
-J	L_getTemp0
-NOP	
-L_getTemp1:
-SEH	R3, R16
-; adcVal end address is: 64 (R16)
-ORI	R2, R0, 5
-DIV	R3, R2
-MFLO	R2
-; adcVal start address is: 64 (R16)
-SEH	R16, R2
-SEH	R4, R2
+; end of _Adc_Average
+_getTemp:
+ADDIU	SP, SP, -8
+SW	RA, 0(SP)
+SEH	R4, R26
 JAL	__SignedIntegralToFloat+0
 NOP	
+; temp start address is: 64 (R16)
+MOVZ	R16, R2, R0
 LUI	R4, 17535
 ORI	R4, R4, 49152
 MOVZ	R6, R2, R0
@@ -140,16 +137,11 @@ ADDIU	R2, R25, 8
 SW	R4, 0(R2)
 ; F end address is: 16 (R4)
 ADDIU	R2, R25, 12
-SW	R2, 8(SP)
-SEH	R4, R16
-JAL	__SignedIntegralToFloat+0
-NOP	
-; adcVal end address is: 64 (R16)
-LW	R3, 8(SP)
-SW	R2, 0(R3)
+SW	R16, 0(R2)
+; temp end address is: 64 (R16)
 L_end_getTemp:
 LW	RA, 0(SP)
-ADDIU	SP, SP, 12
+ADDIU	SP, SP, 8
 JR	RA
 NOP	
 ; end of _getTemp

@@ -389,17 +389,13 @@ void I2C2_TimeoutCallback(char errorCode);
 
 
 
+
 extern sfr sbit T0;
 extern sfr sbit T0_Dir;
-
-
-
-
-
-
-
-void setup_Thermister();
-void getTemp(float * t);
+#line 19 "c:/users/git/coloursampling/thermister.h"
+void setup_Thermister(int count);
+int Adc_Average(int* adc);
+void getTemp(float * t,int adc_ave);
 #line 22 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
@@ -461,6 +457,7 @@ long res_millis_sigstr = 0;
 static long last_millis_thermister = 0;
 static long millis_thermister_sp = 0;
 static long millis_thermister = 0;
+static int ave_adc = 0;
 float temp[4];
 int resA=0, resB=0, diff = 0;
 
@@ -493,7 +490,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
  T0_SP.sec = 0;
  T0_SP.min = 0;
  T0_SP.hr = 0;
-#line 79 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 80 "C:/Users/Git/ColourSampling/ColourSampling.c"
  strcpy(cel_num,GetValuesFromFlash());
  str_num = strncmp(cel_num,sub_txt,4);
 
@@ -517,7 +514,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
  SimVars.init_inc = 3;
  cell_ok = 1;
  }
-#line 106 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 107 "C:/Users/Git/ColourSampling/ColourSampling.c"
  if(cell_ok == 1){
  Read_Thresholds();
  Delay_ms(3000);
@@ -543,8 +540,17 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
  Delay_ms(500);
  SetLedPWM();
  PWM_Stop(2);
-#line 134 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 135 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
+ int sample_test = 0;
+
+
+
+ num = HID_Read();
+ if(num != 0){
+ DoStrings(num);
+ }
+
 
 
 
@@ -553,8 +559,11 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
  millis_thermister_sp = 999;
  last_millis_thermister = TMR0.millis;
  millis_thermister = 0;
- getTemp(temp);
-#line 148 "C:/Users/Git/ColourSampling/ColourSampling.c"
+ sample_test = Adc_Average(&ave_adc);
+ if(sample_test < 0){
+ getTemp(temp,ave_adc);
+ ave_adc = 0;
+
  sprintf(txtK,"%3.2f",temp[0]);
  sprintf(txtC,"%3.2f",temp[1]);
  sprintf(txtF,"%3.2f",temp[2]);
@@ -566,6 +575,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
  " *ADC:=         %s\r\n"
  ,txtK,txtC,txtF,txtRaw);
 
+ }
  }
 
 
@@ -580,13 +590,6 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
 
 
 
-
- num = HID_Read();
- if(num != 0){
- DoStrings(num);
- }
-
-
  if(SimVars.init_inc >= 5){
  if(T0_SP.one_per_Xmin){
  PWM_Start(2);
@@ -598,6 +601,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
  PWM_Stop(2);
  }
  }
+
 
 
  if(!T0_SP.one_per_sec){
@@ -626,12 +630,16 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
  }
 
 
+
  if(!RG9_bit)
  NVMErasePage(FLASH_Settings_PAddr);
+
+
+
  if(!RE4_bit){
 
  GetValuesFromFlash();
-#line 234 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 243 "C:/Users/Git/ColourSampling/ColourSampling.c"
  }
  }
 }

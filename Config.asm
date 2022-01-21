@@ -129,6 +129,7 @@ JAL	_InitGSM3+0
 NOP	
 JAL	_PwrUpGSM3+0
 NOP	
+ORI	R25, R0, 5
 JAL	_setup_Thermister+0
 NOP	
 L_end_ConfigPic:

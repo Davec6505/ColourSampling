@@ -9,15 +9,16 @@ warning: 155	1506	Implicit conversion of pointer to int	__Lib_MemManager.c
 warning: 174	1508	Implicit conversion of int to ptr	__Lib_MemManager.c
 diagnostics: 297	123	Compiled Successfully	__Lib_MemManager.c
 diagnostics: 0	122	Compilation Started	stdint.h
-warning: 220	1508	Implicit conversion of int to ptr	ColourSampling.c
+warning: 226	1508	Implicit conversion of int to ptr	ColourSampling.c
 hint: 32	1163	Variable 'deg' has been declared, but not used	ColourSampling.c
-diagnostics: 236	123	Compiled Successfully	ColourSampling.c
+diagnostics: 245	123	Compiled Successfully	ColourSampling.c
 hint: 31	1164	Variable 'i' has been eliminated by optimizer	ColourSampling.c
 hint: 40	1164	Variable 'millis_thermister' has been eliminated by optimizer	ColourSampling.c
+hint: 136	1164	Variable 'sample_test' has been eliminated by optimizer	ColourSampling.c
 hint: 36	1164	Variable 'res_millis_sigstr' has been eliminated by optimizer	ColourSampling.c
-hint: 42	1164	Variable 'resA' has been eliminated by optimizer	ColourSampling.c
+hint: 43	1164	Variable 'resA' has been eliminated by optimizer	ColourSampling.c
 diagnostics: 0	122	Compilation Started	stdint.h
-diagnostics: 94	123	Compiled Successfully	Config.c
+diagnostics: 93	123	Compiled Successfully	Config.c
 diagnostics: 0	122	Compilation Started	stdint.h
 hint: 0	1004	interrupt handler (USB1Interrupt at 0x002D)	ISR.c
 hint: 0	1004	interrupt handler (Timer1Interrupt at 0x0004)	ISR.c
@@ -127,16 +128,16 @@ hint: 812	1164	Variable 'text' has been eliminated by optimizer	Sim800.c
 hint: 943	1164	Variable 't' has been eliminated by optimizer	Sim800.c
 hint: 1285	1164	Variable 'newMillis' has been eliminated by optimizer	Sim800.c
 diagnostics: 0	122	Compilation Started	thermister.h
-diagnostics: 83	123	Compiled Successfully	Thermister.c
-hint: 50	1164	Variable 'steinhart' has been eliminated by optimizer	Thermister.c
-hint: 52	1164	Variable 'ave' has been eliminated by optimizer	Thermister.c
-diagnostics: 0	127	All files Compiled in 1156 ms	 
+diagnostics: 81	123	Compiled Successfully	Thermister.c
+hint: 55	1164	Variable 'steinhart' has been eliminated by optimizer	Thermister.c
+hint: 56	1164	Variable 'ave' has been eliminated by optimizer	Thermister.c
+diagnostics: 0	127	All files Compiled in 1140 ms	 
 hint: 0	1144	Used RX: 32 (100%)   Free RX: 0 (0%)	Used RX: 32 (100%)   Free RX: 0 (0%)
-hint: 0	1144	Static RAM (bytes): 4911   Dynamic RAM (bytes): 21853	Static RAM (bytes): 4911   Dynamic RAM (bytes): 21853
+hint: 0	1144	Static RAM (bytes): 4919   Dynamic RAM (bytes): 21845	Static RAM (bytes): 4919   Dynamic RAM (bytes): 21845
 hint: 0	1144	HEAP RAM (bytes): 6000	HEAP RAM (bytes): 6000
-hint: 0	1144	Used ROM (bytes): 78185 (15%)  Free ROM (bytes): 446103 (85%)	Used ROM (bytes): 78185 (15%)  Free ROM (bytes): 446103 (85%)
+hint: 0	1144	Used ROM (bytes): 78345 (15%)  Free ROM (bytes): 445943 (85%)	Used ROM (bytes): 78345 (15%)  Free ROM (bytes): 445943 (85%)
 hint: 0	1144	Used BOOTROM (bytes): 1912 (16%)  Free BOOTROM (bytes): 10361 (84%)	Used BOOTROM (bytes): 1912 (16%)  Free BOOTROM (bytes): 10361 (84%)
 diagnostics: 0	125	Project Linked Successfully	ColourSampling.mcp32
-diagnostics: 0	128	Linked in 234 ms	 
-diagnostics: 0	129	Project 'ColourSampling.mcp32' completed: 1890 ms	 
-diagnostics: 0	103	Finished successfully: 20 Jan 2022, 23:52:27	ColourSampling.mcp32
+diagnostics: 0	128	Linked in 250 ms	 
+diagnostics: 0	129	Project 'ColourSampling.mcp32' completed: 1906 ms	 
+diagnostics: 0	103	Finished successfully: 21 Jan 2022, 22:57:26	ColourSampling.mcp32

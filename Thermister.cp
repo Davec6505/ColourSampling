@@ -4,49 +4,59 @@
 
 
 
+
 extern sfr sbit T0;
 extern sfr sbit T0_Dir;
-
-
-
-
-
-
-
-void setup_Thermister();
-void getTemp(float * t);
+#line 19 "c:/users/git/coloursampling/thermister.h"
+void setup_Thermister(int count);
+int Adc_Average(int* adc);
+void getTemp(float * t,int adc_ave);
 #line 3 "C:/Users/Git/ColourSampling/Thermister.c"
 sbit T0 at PORTB.B15;
 sbit T0_Dir at TRISB.B15;
-#line 26 "C:/Users/Git/ColourSampling/Thermister.c"
-void setup_Thermister()
+#line 20 "C:/Users/Git/ColourSampling/Thermister.c"
+static unsigned int sample_count;
+static unsigned int divisor;
+void setup_Thermister(int count)
 {
  T0_Dir = 1;
-
+ sample_count = count;
+ divisor = sample_count +1;
  ADC1_Init();
 }
 
-void getTemp(float * t){
-#line 45 "C:/Users/Git/ColourSampling/Thermister.c"
+int Adc_Average(int* adc){
+static int count = 0;
+
+ if(count > sample_count){
+ *adc /= divisor;
+ count = 0;
+ return -1;
+ }else{
+ *adc += (int)ADC1_Get_Sample(15);
+ count++;
+ }
+ return 1;
+}
+
+void getTemp(float * t,int adc_ave){
+
+
+
+
+
  const float invT0 = 1.00 / 298.15;
  const float invBeta = 1.00 / 4085.00;
  const float seriesR = 4700.00;
  const float adcMax = 1023.00;
 
  float steinhart = 0.00;
- int adcVal;
  float ave = 0.00;
- int i, numSamples = 5;
+ float temp = 0.00;
  float K, C, F;
 
- adcVal = 0;
- for (i = 0; i < numSamples; i++){
- adcVal += (int)ADC1_Get_Sample(15);
-
- Delay_ms(100);
- }
- adcVal = adcVal/5;
- ave = (float)adcVal;
+ ave = (float)adc_ave;
+ temp = ave;
 
  ave = (1023 / ave) - 1;
  ave = seriesR / ave;
@@ -64,6 +74,6 @@ void getTemp(float * t){
 
 
 
- t[0] = K; t[1] = C; t[2] = F; t[3] = (float)adcVal;
+ t[0] = K; t[1] = C; t[2] = F; t[3] = temp;
  return;
 }

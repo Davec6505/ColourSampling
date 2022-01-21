@@ -389,17 +389,13 @@ void I2C2_TimeoutCallback(char errorCode);
 
 
 
+
 extern sfr sbit T0;
 extern sfr sbit T0_Dir;
-
-
-
-
-
-
-
-void setup_Thermister();
-void getTemp(float * t);
+#line 19 "c:/users/git/coloursampling/thermister.h"
+void setup_Thermister(int count);
+int Adc_Average(int* adc);
+void getTemp(float * t,int adc_ave);
 #line 22 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
@@ -462,7 +458,6 @@ void ConfigPic(){
  InitUart2();
 
 
-
  current_duty1 = 2000;
  current_duty2 = 10000;
  pwm_period1 = PWM_Init(5000 , 1, 0, 3);
@@ -482,7 +477,7 @@ void ConfigPic(){
  InitISR();
  InitGSM3();
  PwrUpGSM3();
- setup_Thermister();
+ setup_Thermister(5);
 }
 
 void InitUart1(){
