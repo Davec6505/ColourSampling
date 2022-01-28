@@ -199,19 +199,23 @@ void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 1 "c:/users/git/coloursampling/string.h"
-#line 1 "c:/users/git/coloursampling/thermister.h"
+#line 1 "c:/users/git/coloursampling/lm35.h"
 
 
 
 
 
-extern sfr sbit T0;
-extern sfr sbit T0_Dir;
-#line 19 "c:/users/git/coloursampling/thermister.h"
-void setup_Thermister(int count);
-int Adc_Average(int* adc);
-void getTemp(float * t,int adc_ave);
-#line 22 "c:/users/git/coloursampling/config.h"
+
+
+
+extern sfr sbit LM35_Pin;
+extern sfr sbit LM35_Pin_Dir;
+#line 27 "c:/users/git/coloursampling/lm35.h"
+void setup_LM35(int count);
+int LM35_Adc_Average(int* adc,int adc_pin);
+int LM35_Adc_Single(int adc,int adc_pin);
+void getLM35Temp(float * t,int adc_ave);
+#line 23 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
@@ -251,6 +255,7 @@ unsigned long ReadFlashWord();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/git/coloursampling/sim800.h"
+#line 1 "c:/users/git/coloursampling/lm35.h"
 #line 20 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 
@@ -413,8 +418,8 @@ char GetSMSText();
 char ReadMSG(int msg_num);
 void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
-int Test_Update_ThingSpeak();
-void SendData(unsigned int* rgbc,float* rgbh);
+int Test_Update_ThingSpeak(float degC);
+void SendData(unsigned int* rgbc,float* rgbh,float degC);
 char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
 int SignalStrength();
@@ -467,6 +472,7 @@ char txtB_Scl[15];
 char txtHUE[15];
 char txtLUM[15];
 char txtSAT[15];
+char txtDegC[15];
 char txtLen[6];
 
 Sim800Vars SimVars = {
@@ -477,7 +483,7 @@ Sim800Vars SimVars = {
 
 struct RingBuffer RB;
 struct Sim800Flash SF;
-#line 107 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 108 "C:/Users/Git/ColourSampling/Sim800.c"
 void InitGSM3(){
  SimVars.initial_str = 0;
  SimVars.init_inc = 0;
@@ -492,7 +498,7 @@ void InitGSM3(){
  memset(SF.APN,0,sizeof(SF.APN));
  memset(SF.PWD,0,sizeof(SF.PWD));
 }
-#line 125 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 126 "C:/Users/Git/ColourSampling/Sim800.c"
 void PwrUpGSM3(){
  RST = 0;
  PWR = 0;
@@ -506,7 +512,7 @@ void PwrUpGSM3(){
  LATE3_bit = 0;
  Delay_ms(5000);
 }
-#line 142 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 143 "C:/Users/Git/ColourSampling/Sim800.c"
 void WriteToFlashTemp(){
 unsigned long pos;
 static int i,j;
@@ -551,7 +557,7 @@ static int i,j;
  ,a,b);
 
 }
-#line 190 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 191 "C:/Users/Git/ColourSampling/Sim800.c"
 char* GetValuesFromFlash(){
 unsigned long i,j;
 char *ptr;
@@ -583,7 +589,7 @@ char *ptr;
 
  return SF.SimCelNum;
 }
-#line 225 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 226 "C:/Users/Git/ColourSampling/Sim800.c"
 void GetStrLengths(){
 
  SL.l1 = sizeof(SF.SimCelNum)-1;
@@ -619,7 +625,7 @@ void GetStrLengths(){
  ,a,b,c,d,e,f);
 
 }
-#line 264 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 265 "C:/Users/Git/ColourSampling/Sim800.c"
 void RcvSimTxt(){
 char txt;
  while(UART2_Data_Ready()) {
@@ -647,7 +653,7 @@ char txt;
  }
  RB.rcv_txt_fin = 1;
 }
-#line 295 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 296 "C:/Users/Git/ColourSampling/Sim800.c"
 int TestRingPointers(){
 int diff;
  if(RB.tail > RB.head){
@@ -658,7 +664,7 @@ int diff;
  }
  return diff;
 }
-#line 309 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 310 "C:/Users/Git/ColourSampling/Sim800.c"
 void WaitForResponse(short dly){
 unsigned long lastMillis,newMillis;
  lastMillis = TMR0.millis;
@@ -686,7 +692,7 @@ unsigned long lastMillis,newMillis;
  }while(!RB.rcv_txt_fin);
  LATE3_bit = 0;
 }
-#line 340 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 341 "C:/Users/Git/ColourSampling/Sim800.c"
 void RingToTempBuf(){
 int i;
  i=0;
@@ -698,7 +704,7 @@ int i;
  RB.tail = RB.head;
 
  SimTestTxt[i] = RB.buff[RB.tail];
-#line 355 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 356 "C:/Users/Git/ColourSampling/Sim800.c"
  i++;
  RB.tail++;
  if(RB.tail > 999)
@@ -708,11 +714,11 @@ int i;
 
  RB.last_tail = RB.tail;
 }
-#line 369 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 370 "C:/Users/Git/ColourSampling/Sim800.c"
 char SetupIOT(){
 int res,i,num_strs;
 char *str_rcv;
-#line 376 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 377 "C:/Users/Git/ColourSampling/Sim800.c"
  res = -1;
 
  PrintOut(PrintHandler, "\r\n"
@@ -789,7 +795,7 @@ wait:
 
  return 1;
 }
-#line 458 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 459 "C:/Users/Git/ColourSampling/Sim800.c"
 char WaitForSetupSMS(unsigned int Indx){
 int i,res,num_strs;
 
@@ -923,7 +929,7 @@ int i,res,num_strs;
  else
  return res;
 }
-#line 596 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 597 "C:/Users/Git/ColourSampling/Sim800.c"
 void AT_Initial(){
 
 
@@ -936,7 +942,7 @@ void AT_Initial(){
  Delay_ms(1000);
  RingToTempBuf();
 }
-#line 612 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 613 "C:/Users/Git/ColourSampling/Sim800.c"
 char GetAPI_Key_SMS(){
 int i;
 
@@ -966,7 +972,7 @@ char response;
 
  return response;
 }
-#line 645 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 646 "C:/Users/Git/ColourSampling/Sim800.c"
 char SendSMS(char sms_type,char cellNum){
 static short onecA;
 int res;
@@ -1069,7 +1075,7 @@ char *str_;
  Free(str_,100*sizeof(char*));
 
 }
-#line 751 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 752 "C:/Users/Git/ColourSampling/Sim800.c"
 char GetSMSText(){
 int num_strs,res,err;
  UART1_Write_Text("=================\r\n");
@@ -1124,7 +1130,7 @@ int num_strs,res,err;
 
  return -1;
 }
-#line 810 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 811 "C:/Users/Git/ColourSampling/Sim800.c"
 char ReadMSG(int msg_num){
 int i,num_strs,res;
 char *text;
@@ -1253,7 +1259,7 @@ next:
  }
  return 0;
 }
-#line 942 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 943 "C:/Users/Git/ColourSampling/Sim800.c"
 void TestRecievedSMS(int res){
 char *t,B[64],txtDig[9];
 
@@ -1328,7 +1334,7 @@ char *t,B[64],txtDig[9];
  }
 
 }
-#line 1021 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 1022 "C:/Users/Git/ColourSampling/Sim800.c"
 int RemoveSMSText(int sms_cnt){
 
 
@@ -1353,17 +1359,17 @@ int RemoveSMSText(int sms_cnt){
 
  return sms_cnt;
 }
-#line 1050 "C:/Users/Git/ColourSampling/Sim800.c"
-int Test_Update_ThingSpeak(){
+#line 1051 "C:/Users/Git/ColourSampling/Sim800.c"
+int Test_Update_ThingSpeak(float degC){
 
  TCS3472_getRawData(RawData);
  GetScaledValues(RawData,FltData);
  TCS3472_CalcHSL(FltData);
- SendData(RawData,FltData);
+ SendData(RawData,FltData,degC);
  return 2;
 }
-#line 1062 "C:/Users/Git/ColourSampling/Sim800.c"
-void SendData(unsigned int* rgbc,float* rgbh){
+#line 1063 "C:/Users/Git/ColourSampling/Sim800.c"
+void SendData(unsigned int* rgbc,float* rgbh,float degC){
 int len;
 char _str_[200];
 
@@ -1379,26 +1385,27 @@ char _str_[200];
  sprintf(txtHUE ,"%3.2f",rgbh[4]);
  sprintf(txtSAT ,"%3.2f",rgbh[5]);
  sprintf(txtLUM ,"%3.2f",rgbh[6]);
+ sprintf(txtDegC,"%3.2f",degC);
 
  strncpy(_str_,str_api,46);
  strncat(_str_,SF.WriteAPIKey,strlen(SF.WriteAPIKey));
- strncat(_str_,field1,strlen(field1));
- strncat(_str_,txtC,strlen(txtC));
- strncat(_str_,field2,strlen(field2));
- strncat(_str_,txtR,strlen(txtR));
- strncat(_str_,field3,strlen(field3));
- strncat(_str_,txtG,strlen(txtG));
- strncat(_str_,field4,strlen(field4));
- strncat(_str_,txtB,strlen(txtB));
 
- strncat(_str_,field5,strlen(field5));
+ strncat(_str_,field1,strlen(field1));
+ strncat(_str_,txtR_Scl,strlen(txtR_Scl));
+ strncat(_str_,field2,strlen(field2));
+ strncat(_str_,txtG_Scl,strlen(txtG_Scl));
+ strncat(_str_,field3,strlen(field3));
+ strncat(_str_,txtB_Scl,strlen(txtB_Scl));
+ strncat(_str_,field4,strlen(field4));
  strncat(_str_,txtHUE,strlen(txtHUE));
+ strncat(_str_,field5,strlen(field5));
+ strncat(_str_,txtSAT,strlen(txtSAT));
  strncat(_str_,field6,strlen(field6));
  strncat(_str_,txtLUM,strlen(txtLUM));
  strncat(_str_,field7,strlen(field7));
- strncat(_str_,txtSAT,strlen(txtSAT));
+ strncat(_str_,txtC,strlen(txtC));
  strncat(_str_,field8,strlen(field8));
- strncat(_str_,txtHUE,strlen(txtHUE));
+ strncat(_str_,txtDegC,strlen(txtDegC));
 
 
  PrintOut(PrintHandler, "String for ThingSpeak: \r\n"
@@ -1488,7 +1495,7 @@ char _str_[200];
 
 
 }
-#line 1191 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 1193 "C:/Users/Git/ColourSampling/Sim800.c"
 int SignalStrength(){
 int i,num_strs,res,is_digit;
 char *text;
@@ -1549,7 +1556,7 @@ char *text;
  PWM_SigStrength(SimVars.rssi);
  return SimVars.rssi;
 }
-#line 1255 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 1257 "C:/Users/Git/ColourSampling/Sim800.c"
 void PWM_SigStrength(int sigstrength){
  T2CONCLR = 0x8008;
  if(sigstrength < 6){
@@ -1573,7 +1580,7 @@ void PWM_SigStrength(int sigstrength){
  T4IF_bit = 0;
  T5IE_bit = 1;
 }
-#line 1284 "C:/Users/Git/ColourSampling/Sim800.c"
+#line 1286 "C:/Users/Git/ColourSampling/Sim800.c"
 void TestForOK(char c){
 unsigned long lastMillis,newMillis;
  WaitForResponse(1);

@@ -296,6 +296,16 @@ _SX
 J	L_DoStrings3
 NOP	
 L_DoStrings32:
+ORI	R26, R0, 15
+LH	R25, Offset(_ave_adc+0)(GP)
+JAL	_LM35_Adc_Single+0
+NOP	
+LH	R26, Offset(_ave_adc+0)(GP)
+LUI	R25, hi_addr(_temp_+0)
+ORI	R25, R25, lo_addr(_temp_+0)
+JAL	_getLM35Temp+0
+NOP	
+LW	R27, Offset(_temp_+4)(GP)
 LUI	R26, hi_addr(_FltData+0)
 ORI	R26, R26, lo_addr(_FltData+0)
 LUI	R25, hi_addr(_RawData+0)

@@ -8,7 +8,8 @@
 #include "Sim800.h"
 #include "built_in.h"
 #include "String.h"
-#include "Thermister.h"
+//#include "Thermister.h"
+#include "LM35.h"
 //////////////////////////////////////////
 //defines
 #define MainDebug

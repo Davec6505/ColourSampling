@@ -238,9 +238,10 @@ ORI	R2, R0, 999
 SW	R2, Offset(main_millis_thermister_sp_L0+0)(GP)
 LW	R2, Offset(_TMR0+0)(GP)
 SW	R2, Offset(main_last_millis_thermister_L0+0)(GP)
+ORI	R26, R0, 15
 LUI	R25, hi_addr(main_ave_adc_L0+0)
 ORI	R25, R25, lo_addr(main_ave_adc_L0+0)
-JAL	_Adc_Average+0
+JAL	_LM35_Adc_Average+0
 NOP	
 SEH	R2, R2
 SLTI	R2, R2, 0
@@ -252,7 +253,7 @@ L__main37:
 ADDIU	R2, SP, 24
 LH	R26, Offset(main_ave_adc_L0+0)(GP)
 MOVZ	R25, R2, R0
-JAL	_getTemp+0
+JAL	_getLM35Temp+0
 NOP	
 SH	R0, Offset(main_ave_adc_L0+0)(GP)
 ADDIU	R2, SP, 24
@@ -369,6 +370,9 @@ BNE	R24, R0, L_main19
 NOP	
 NOP	
 NOP	
+ADDIU	R2, SP, 24
+ADDIU	R2, R2, 4
+LW	R25, 0(R2)
 LW	R30, Offset(_Update_Test+0)(GP)
 JALR	RA, R30
 NOP	

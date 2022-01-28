@@ -10,10 +10,11 @@ extern sfr sbit T0_Dir;
 #line 19 "c:/users/git/coloursampling/thermister.h"
 void setup_Thermister(int count);
 int Adc_Average(int* adc);
+int Adc_Single(int adc);
 void getTemp(float * t,int adc_ave);
 #line 3 "C:/Users/Git/ColourSampling/Thermister.c"
-sbit T0 at PORTB.B15;
-sbit T0_Dir at TRISB.B15;
+sbit T0 at PORTB.B14;
+sbit T0_Dir at TRISB.B14;
 #line 20 "C:/Users/Git/ColourSampling/Thermister.c"
 static unsigned int sample_count;
 static unsigned int divisor;
@@ -39,6 +40,14 @@ static int count = 0;
  return 1;
 }
 
+int Adc_Single(int adc){
+int temp_ = 0;
+
+ temp_ = (int)ADC1_Get_Sample(15);
+
+ return temp_;
+}
+
 void getTemp(float * t,int adc_ave){
 
 
@@ -58,8 +67,13 @@ void getTemp(float * t,int adc_ave){
  ave = (float)adc_ave;
  temp = ave;
 
- ave = (1023 / ave) - 1;
- ave = seriesR / ave;
+
+
+
+
+ temp = ave;
+ ave = 1023 * seriesR;
+ ave /= (1023 - temp);
 
 
  steinhart = ave /  100000 ;

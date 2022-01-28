@@ -1,7 +1,7 @@
 _setup_Thermister:
 ADDIU	SP, SP, -4
 SW	RA, 0(SP)
-ORI	R2, R0, 32768
+ORI	R2, R0, 16384
 SW	R2, Offset(TRISB+8)(GP)
 SH	R25, Offset(Thermister_sample_count+0)(GP)
 ADDIU	R2, R25, 1
@@ -54,6 +54,20 @@ ADDIU	SP, SP, 8
 JR	RA
 NOP	
 ; end of _Adc_Average
+_Adc_Single:
+ADDIU	SP, SP, -8
+SW	RA, 0(SP)
+SW	R25, 4(SP)
+ORI	R25, R0, 15
+JAL	_ADC1_Get_Sample+0
+NOP	
+L_end_Adc_Single:
+LW	R25, 4(SP)
+LW	RA, 0(SP)
+ADDIU	SP, SP, 8
+JR	RA
+NOP	
+; end of _Adc_Single
 _getTemp:
 ADDIU	SP, SP, -8
 SW	RA, 0(SP)
@@ -65,15 +79,10 @@ MOVZ	R16, R2, R0
 LUI	R4, 17535
 ORI	R4, R4, 49152
 MOVZ	R6, R2, R0
-JAL	__Div_FP+0
-NOP	
-LUI	R6, 16256
-ORI	R6, R6, 0
-MOVZ	R4, R2, R0
 JAL	__Sub_FP+0
 NOP	
-LUI	R4, 17810
-ORI	R4, R4, 57344
+LUI	R4, 19090
+ORI	R4, R4, 47944
 MOVZ	R6, R2, R0
 JAL	__Div_FP+0
 NOP	

@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include "TCS3472.h"
 #include "Sim800.h"
-
+#include "LM35.h"
 //////////////////////////////////////////////////
 //defines
 //#define StrDebug

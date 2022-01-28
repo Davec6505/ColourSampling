@@ -435,7 +435,6 @@ ad1pcfginv
 ad1pcfginvbits
 ad1pcfgset
 ad1pcfgsetbits
-adc_average
 adc_get_sample_ptr
 adc1_get_sample
 adc1_init
@@ -1881,6 +1880,7 @@ attachif
 attachif
 attachif
 attachif_bit
+ave_adc
 b
 b_thresh
 b_thresh
@@ -11150,10 +11150,10 @@ get_it
 get_time
 get_timer_values
 getapi_key_sms
+getlm35temp
 getscaledvalues
 getsmstext
 getstrlengths
-gettemp
 getvaluesfromflash
 gp
 gr
@@ -13626,6 +13626,10 @@ llock
 llock
 llock
 llock_bit
+lm35_adc_average
+lm35_adc_single
+lm35_pin
+lm35_pin_dir
 lmask0
 lmask0_bit
 lmask1
@@ -18965,7 +18969,7 @@ sesvdif_bit
 setcolourthresholds
 setledpwm
 setstr
-setup_thermister
+setup_lm35
 setupiot
 sf
 shorttohex
@@ -19925,8 +19929,6 @@ syskeyset
 syskeysetbits
 systemlock
 systemunlock
-t0
-t0_dir
 t0_sp
 t1con
 t1conbits
@@ -20506,6 +20508,7 @@ tcs3472_setinterrupt_limits
 tcs3472_write
 tcs3472_write8
 temp
+temp_
 test_update_thingspeak
 testflash
 testforok
@@ -21772,6 +21775,7 @@ txta
 txtb
 txtb_scl
 txtc
+txtdegc
 txtg
 txtg_scl
 txth

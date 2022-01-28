@@ -1,7 +1,7 @@
  #include "Thermister.h"
 
-sbit T0 at PORTB.B15; // this is where T0 is fully defined
-sbit T0_Dir at TRISB.B15; // this is where T0 is fully defined
+sbit T0 at PORTB.B14; // this is where T0 is fully defined
+sbit T0_Dir at TRISB.B14; // this is where T0 is fully defined
 //1/T = 1/T0 + 1/B * ln(R/R0)
 
 
@@ -41,6 +41,14 @@ static int count = 0;
   return 1;
 }
 
+int Adc_Single(int adc){
+int temp_ = 0;
+
+   temp_ = (int)ADC1_Get_Sample(15);
+
+  return temp_;
+}
+
 void getTemp(float * t,int adc_ave){
 
     // Converts input from a thermistor voltage divider to a temperature value.
@@ -59,15 +67,20 @@ void getTemp(float * t,int adc_ave){
 
   ave = (float)adc_ave;
   temp = ave;
-  //convert value to resistance
-  ave = (1023 / ave) - 1;
-  ave  = seriesR / ave;
-  
+  //convert value to resistance solve for r1
+#ifdef SolveR1
+  ave = (1023 / ave) - 1;  //0.0365
+  ave  = seriesR / ave;    //128767
+#else
+  temp = ave;
+  ave = 1023 * seriesR;
+  ave /= (1023 - temp);
+#endif
   //calc steinhart
-  steinhart = ave / ThermNominal;
-  steinhart = log(steinhart);
-  steinhart /= BCOEF;
-  steinhart += 1/TEMPNOMINAL;
+  steinhart = ave / ThermNominal;       //1.288
+  steinhart = log(steinhart);           //0.1098
+  steinhart /= BCOEF;                   //2.68e-5
+  steinhart += 1/TEMPNOMINAL;           //298.15     0.0000368
   steinhart = 1/steinhart;
   K = steinhart;
   steinhart -= 273.15;

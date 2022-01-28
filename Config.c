@@ -57,7 +57,7 @@ void ConfigPic(){
   InitISR();
   InitGSM3();
   PwrUpGSM3();
-  setup_Thermister(5);
+  setup_LM35(5);
 }
 
 void InitUart1(){

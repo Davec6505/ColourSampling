@@ -180,6 +180,22 @@ unsigned long ReadFlashWord();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/git/coloursampling/sim800.h"
+#line 1 "c:/users/git/coloursampling/lm35.h"
+
+
+
+
+
+
+
+
+extern sfr sbit LM35_Pin;
+extern sfr sbit LM35_Pin_Dir;
+#line 27 "c:/users/git/coloursampling/lm35.h"
+void setup_LM35(int count);
+int LM35_Adc_Average(int* adc,int adc_pin);
+int LM35_Adc_Single(int adc,int adc_pin);
+void getLM35Temp(float * t,int adc_ave);
 #line 20 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 
@@ -342,8 +358,8 @@ char GetSMSText();
 char ReadMSG(int msg_num);
 void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
-int Test_Update_ThingSpeak();
-void SendData(unsigned int* rgbc,float* rgbh);
+int Test_Update_ThingSpeak(float degC);
+void SendData(unsigned int* rgbc,float* rgbh,float degC);
 char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
 int SignalStrength();
@@ -384,19 +400,8 @@ void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 1 "c:/users/git/coloursampling/string.h"
-#line 1 "c:/users/git/coloursampling/thermister.h"
-
-
-
-
-
-extern sfr sbit T0;
-extern sfr sbit T0_Dir;
-#line 19 "c:/users/git/coloursampling/thermister.h"
-void setup_Thermister(int count);
-int Adc_Average(int* adc);
-void getTemp(float * t,int adc_ave);
-#line 22 "c:/users/git/coloursampling/config.h"
+#line 1 "c:/users/git/coloursampling/lm35.h"
+#line 23 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
@@ -477,7 +482,7 @@ void ConfigPic(){
  InitISR();
  InitGSM3();
  PwrUpGSM3();
- setup_Thermister(5);
+ setup_LM35(5);
 }
 
 void InitUart1(){

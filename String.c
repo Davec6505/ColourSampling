@@ -1,6 +1,10 @@
 #include "String.h"
 
 
+//temp thermister params
+int ave_adc;
+float temp_[4];
+
 
 struct Constants str_vars;
 struct Thresh Threshold;
@@ -106,7 +110,9 @@ char *str,err,i;
              LATE3_bit = 0;
              break;
         case SENDA :
-             SendData(RawData,FltData);
+             LM35_Adc_Single(ave_adc,LM35Pin);
+             getLM35Temp(temp_,ave_adc);
+             SendData(RawData,FltData,temp_[1]);
              break;
         case READA :
              str = Read_Send_AllColour(0);

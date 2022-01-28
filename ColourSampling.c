@@ -1,7 +1,7 @@
 #include "Config.h"
 
 
-int (*Update_Test)();
+int (*Update_Test)(float deg);
 
 PString str_t;
 Timer_Setpoint T0_SP={
@@ -39,7 +39,7 @@ static long last_millis_thermister = 0;
 static long millis_thermister_sp = 0;
 static long millis_thermister = 0;
 static int ave_adc = 0;
-float temp[4];
+float _temp[4];
 int resA=0, resB=0, diff = 0;
 #ifdef MainDebug
 char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
@@ -150,15 +150,15 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
          millis_thermister_sp   = 999;
          last_millis_thermister = TMR0.millis;
          millis_thermister  = 0;
-         sample_test = Adc_Average(&ave_adc);
+         sample_test = LM35_Adc_Average(&ave_adc,LM35Pin);
          if(sample_test < 0){
-           getTemp(temp,ave_adc);
+           getLM35Temp(_temp,ave_adc);
            ave_adc = 0;
 #ifdef ThermisterDebug
-           sprintf(txtK,"%3.2f",temp[0]);
-           sprintf(txtC,"%3.2f",temp[1]);
-           sprintf(txtF,"%3.2f",temp[2]);
-           sprintf(txtRaw,"%3.2f",temp[3]);
+           sprintf(txtK,"%3.2f",_temp[0]);
+           sprintf(txtC,"%3.2f",_temp[1]);
+           sprintf(txtF,"%3.2f",_temp[2]);
+           sprintf(txtRaw,"%3.2f",_temp[3]);
            PrintOut(PrintHandler, "\r\n"
                                   " *Kelvin:=      %s\r\n"
                                   " *deg. C:=      %s\r\n"
@@ -186,7 +186,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
          PWM_Start(2);
          Delay_ms(500);
         // SetLedPWM();
-         Update_Test();
+         Update_Test(_temp[1]);
          T0_SP.sec = T0_SP.min = T0_SP.hr = 0; //start timming again
          T0_SP.one_per_Xmin = 0;
          PWM_Stop(2);

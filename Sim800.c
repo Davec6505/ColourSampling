@@ -90,6 +90,7 @@ char txtB_Scl[15];
 char txtHUE[15];
 char txtLUM[15];
 char txtSAT[15];
+char txtDegC[15];
 char txtLen[6];
 
 Sim800Vars SimVars = {
@@ -1047,19 +1048,19 @@ int RemoveSMSText(int sms_cnt){
 *TCP connection
 *test to update thingspeak at req interval
 ***********************************************************************/
-int Test_Update_ThingSpeak(){
+int Test_Update_ThingSpeak(float degC){
 
        TCS3472_getRawData(RawData);
        GetScaledValues(RawData,FltData);
        TCS3472_CalcHSL(FltData);
-       SendData(RawData,FltData);
+       SendData(RawData,FltData,degC);
        return 2;
 }
 
 /****************************************************
 *Send the data to thingspeak
 ****************************************************/
-void SendData(unsigned int* rgbc,float* rgbh){
+void SendData(unsigned int* rgbc,float* rgbh,float degC){
 int len;
 char _str_[200];
  
@@ -1075,26 +1076,27 @@ char _str_[200];
     sprintf(txtHUE  ,"%3.2f",rgbh[4]);
     sprintf(txtSAT  ,"%3.2f",rgbh[5]);
     sprintf(txtLUM  ,"%3.2f",rgbh[6]);
+    sprintf(txtDegC,"%3.2f",degC);
     //Raw Values
     strncpy(_str_,str_api,46);//strlen(str_api));
     strncat(_str_,SF.WriteAPIKey,strlen(SF.WriteAPIKey));
-    strncat(_str_,field1,strlen(field1));
-    strncat(_str_,txtC,strlen(txtC));
-    strncat(_str_,field2,strlen(field2));
-    strncat(_str_,txtR,strlen(txtR));
-    strncat(_str_,field3,strlen(field3));
-    strncat(_str_,txtG,strlen(txtG));
-    strncat(_str_,field4,strlen(field4));
-    strncat(_str_,txtB,strlen(txtB));
     //scaled and HUE Values
+    strncat(_str_,field1,strlen(field1));
+    strncat(_str_,txtR_Scl,strlen(txtR_Scl));
+    strncat(_str_,field2,strlen(field2));
+    strncat(_str_,txtG_Scl,strlen(txtG_Scl));
+    strncat(_str_,field3,strlen(field3));
+    strncat(_str_,txtB_Scl,strlen(txtB_Scl));
+    strncat(_str_,field4,strlen(field4));
+    strncat(_str_,txtHUE,strlen(txtHUE));
     strncat(_str_,field5,strlen(field5));
-    strncat(_str_,txtHUE,strlen(txtHUE)); //strncat(_str_,txtR_Scl,strlen(txtR_Scl));
+    strncat(_str_,txtSAT,strlen(txtSAT)); //strncat(_str_,txtR_Scl,strlen(txtR_Scl));
     strncat(_str_,field6,strlen(field6));
     strncat(_str_,txtLUM,strlen(txtLUM)); //strncat(_str_,txtG_Scl,strlen(txtG_Scl));
     strncat(_str_,field7,strlen(field7));
-    strncat(_str_,txtSAT,strlen(txtSAT)); //strncat(_str_,txtB_Scl,strlen(txtB_Scl));
+    strncat(_str_,txtC,strlen(txtC)); //strncat(_str_,txtB_Scl,strlen(txtB_Scl));
     strncat(_str_,field8,strlen(field8));
-    strncat(_str_,txtHUE,strlen(txtHUE));
+    strncat(_str_,txtDegC,strlen(txtDegC));
 
 #ifdef ThingDebug
     PrintOut(PrintHandler, "String for ThingSpeak: \r\n"

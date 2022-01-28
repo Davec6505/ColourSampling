@@ -180,6 +180,22 @@ unsigned long ReadFlashWord();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/git/coloursampling/sim800.h"
+#line 1 "c:/users/git/coloursampling/lm35.h"
+
+
+
+
+
+
+
+
+extern sfr sbit LM35_Pin;
+extern sfr sbit LM35_Pin_Dir;
+#line 27 "c:/users/git/coloursampling/lm35.h"
+void setup_LM35(int count);
+int LM35_Adc_Average(int* adc,int adc_pin);
+int LM35_Adc_Single(int adc,int adc_pin);
+void getLM35Temp(float * t,int adc_ave);
 #line 20 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
 
@@ -342,8 +358,8 @@ char GetSMSText();
 char ReadMSG(int msg_num);
 void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
-int Test_Update_ThingSpeak();
-void SendData(unsigned int* rgbc,float* rgbh);
+int Test_Update_ThingSpeak(float degC);
+void SendData(unsigned int* rgbc,float* rgbh,float degC);
 char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
 int SignalStrength();
@@ -384,19 +400,8 @@ void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 1 "c:/users/git/coloursampling/string.h"
-#line 1 "c:/users/git/coloursampling/thermister.h"
-
-
-
-
-
-extern sfr sbit T0;
-extern sfr sbit T0_Dir;
-#line 19 "c:/users/git/coloursampling/thermister.h"
-void setup_Thermister(int count);
-int Adc_Average(int* adc);
-void getTemp(float * t,int adc_ave);
-#line 22 "c:/users/git/coloursampling/config.h"
+#line 1 "c:/users/git/coloursampling/lm35.h"
+#line 23 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
@@ -420,7 +425,7 @@ void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
 void SetLedPWM();
 #line 4 "C:/Users/Git/ColourSampling/ColourSampling.c"
-int (*Update_Test)();
+int (*Update_Test)(float deg);
 
 PString str_t;
 Timer_Setpoint T0_SP={
@@ -458,7 +463,7 @@ static long last_millis_thermister = 0;
 static long millis_thermister_sp = 0;
 static long millis_thermister = 0;
 static int ave_adc = 0;
-float temp[4];
+float _temp[4];
 int resA=0, resB=0, diff = 0;
 
 char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
@@ -559,15 +564,15 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
  millis_thermister_sp = 999;
  last_millis_thermister = TMR0.millis;
  millis_thermister = 0;
- sample_test = Adc_Average(&ave_adc);
+ sample_test = LM35_Adc_Average(&ave_adc, 15 );
  if(sample_test < 0){
- getTemp(temp,ave_adc);
+ getLM35Temp(_temp,ave_adc);
  ave_adc = 0;
 
- sprintf(txtK,"%3.2f",temp[0]);
- sprintf(txtC,"%3.2f",temp[1]);
- sprintf(txtF,"%3.2f",temp[2]);
- sprintf(txtRaw,"%3.2f",temp[3]);
+ sprintf(txtK,"%3.2f",_temp[0]);
+ sprintf(txtC,"%3.2f",_temp[1]);
+ sprintf(txtF,"%3.2f",_temp[2]);
+ sprintf(txtRaw,"%3.2f",_temp[3]);
  PrintOut(PrintHandler, "\r\n"
  " *Kelvin:=      %s\r\n"
  " *deg. C:=      %s\r\n"
@@ -595,7 +600,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
  PWM_Start(2);
  Delay_ms(500);
 
- Update_Test();
+ Update_Test(_temp[1]);
  T0_SP.sec = T0_SP.min = T0_SP.hr = 0;
  T0_SP.one_per_Xmin = 0;
  PWM_Stop(2);

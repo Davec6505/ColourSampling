@@ -41,7 +41,7 @@ main
 		InitGSM3
 			memset
 		PwrUpGSM3
-		setup_Thermister
+		setup_LM35
 			ADC1_Init
 	TCS3472_Init
 		TCS3472_Read8
@@ -274,6 +274,12 @@ main
 		atoi
 		TCS3472_SetIntergration_Time
 		TCS3472_SetGain
+		LM35_Adc_Single
+			ADC1_Get_Sample
+		getLM35Temp
+			_SignedIntegralToFloat
+			_Mul_FP
+			_Add_FP
 		SendData
 			memset
 			sprintf
@@ -420,15 +426,9 @@ main
 								Get_Time
 								RcvSimTxt
 								I2C1_Stop
-	Adc_Average
+	LM35_Adc_Average
 		ADC1_Get_Sample
-	getTemp
-		_SignedIntegralToFloat
-		_Div_FP
-		_Sub_FP
-		log
-		_Add_FP
-		_Mul_FP
+	getLM35Temp
 	SignalStrength
 		clr_str_arrays
 		UART2_Write_Text
