@@ -78,9 +78,6 @@ JR	RA
 NOP	
 ; end of _InitTimer4_5
 _Get_Time:
-ADDIU	SP, SP, -16
-SW	RA, 0(SP)
-SW	R25, 4(SP)
 LW	R2, Offset(_TMR0+0)(GP)
 ADDIU	R2, R2, 1
 SW	R2, Offset(_TMR0+0)(GP)
@@ -112,27 +109,7 @@ SH	R0, Offset(_T0_SP+2)(GP)
 LHU	R2, Offset(_T0_SP+4)(GP)
 ADDIU	R2, R2, 1
 SH	R2, Offset(_T0_SP+4)(GP)
-ADDIU	R3, SP, 8
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_1__Timers+0)
-ORI	R2, R2, lo_addr(?lstr_1__Timers+0)
-SW	R2, 4(SP)
-SW	R3, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-ADDIU	R2, SP, 8
-MOVZ	R25, R2, R0
-JAL	_UART1_Write_Text+0
-NOP	
-ORI	R25, R0, 13
-JAL	_UART1_Write+0
-NOP	
-ORI	R25, R0, 10
-JAL	_UART1_Write+0
-NOP	
-LHU	R2, Offset(_T0_SP+4)(GP)
+ANDI	R2, R2, 65535
 SLTIU	R2, R2, 60
 BEQ	R2, R0, L__Get_Time35
 NOP	
@@ -211,17 +188,8 @@ SH	R0, Offset(_TMR0+10)(GP)
 L_Get_Time8:
 L_Get_Time7:
 L_Get_Time6:
-_LX	
-EXT	R2, R2, BitPos(LATA10_bit+0), 1
-XORI	R3, R2, 1
-_LX	
-INS	R2, R3, BitPos(LATA10_bit+0), 1
-_SX	
 L_Get_Time5:
 L_end_Get_Time:
-LW	R25, 4(SP)
-LW	RA, 0(SP)
-ADDIU	SP, SP, 16
 JR	RA
 NOP	
 ; end of _Get_Time

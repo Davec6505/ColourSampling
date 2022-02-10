@@ -23,6 +23,7 @@ char writebuff[64];
 char txt[] = "00000";
 char sub_txt[] = "\"+44";
 
+const int temp_pwm_max = 3780;
 
 //program
 void main() {
@@ -41,8 +42,10 @@ static long millis_thermister = 0;
 static int ave_adc = 0;
 float _temp[4];
 int resA=0, resB=0, diff = 0;
+
+
 #ifdef MainDebug
-char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
+char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15],txtPid[15];
 #endif
 
 
@@ -52,7 +55,7 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
 
    Delay_ms(500);
 
-   it = TCS3472_INTEGRATIONTIME_24MS;//TCS3472_INTEGRATIONTIME_2_4MS;
+   it = TCS3472_INTEGRATIONTIME_2_4MS;//TCS3472_INTEGRATIONTIME_2_4MS;
    G  = TCS3472_GAIN_1X;
    device_Id = TCS3472_1_5;          //TCS347_11_15;
    i = 0;
@@ -129,11 +132,14 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
    Delay_ms(500);
    SetLedPWM();
    PWM_Stop(2);
+   PWM_Start(3); //start temp control
 /***************************************************
 * main loop forever!!
 ***************************************************/
    while(1){
+   static char last_start = 0;
    int sample_test = 0;
+   unsigned int pid_out = 0;
 
      ////////////////////////////////////////////////
      //Get input from USB to set up thresholds
@@ -142,7 +148,13 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
         DoStrings(num);
      }
      
-     
+     ////////////////////////////////////////////////
+     //use  START sent from sms to START anything here
+    if(SimVars.start && !last_start){
+        last_start = 1;
+    }else if(!SimVars.start && (last_start > 0)){
+        last_start = 0;
+    }
      ////////////////////////////////////////////////
      //test millis for time to check thermister
      millis_thermister = TMR0.millis - last_millis_thermister;
@@ -154,30 +166,37 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
          if(sample_test < 0){
            getLM35Temp(_temp,ave_adc);
            ave_adc = 0;
+           current_duty3 = temp_pwm_max - PID_Calculate( 35.00, _temp[1]);
+
+           PWM_Set_Duty(current_duty3, 3);
 #ifdef ThermisterDebug
            sprintf(txtK,"%3.2f",_temp[0]);
            sprintf(txtC,"%3.2f",_temp[1]);
            sprintf(txtF,"%3.2f",_temp[2]);
            sprintf(txtRaw,"%3.2f",_temp[3]);
+           sprintf(txtPid,"%d",current_duty3);
            PrintOut(PrintHandler, "\r\n"
                                   " *Kelvin:=      %s\r\n"
                                   " *deg. C:=      %s\r\n"
                                   " *deg. F:=      %s\r\n"
                                   " *ADC:=         %s\r\n"
-                                  ,txtK,txtC,txtF,txtRaw);
+                                  " *PID:=         %s\r\n"
+                                  ,txtK,txtC,txtF,txtRaw,txtPid);
 #endif
          }
+
       }
 
      //////////////////////////////////////////////////
      //test millis for time to check signal strength
      res_millis_sigstr = TMR0.millis - last_millis_sigstr;
-      if(res_millis_sigstr >= millis_sigstr_sp){
+     if(res_millis_sigstr >= millis_sigstr_sp){
          millis_sigstr_sp   = 600000;
          last_millis_sigstr = TMR0.millis;
          res_millis_sigstr  = 0;
-         SignalStrength();
-      }
+         if(STAT)
+           SignalStrength();
+     }
 
      //////////////////////////////////////////////////
      //Update Thingspeak
@@ -222,12 +241,14 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15];
 
      ///////////////////////////////////////////////////////////
      //reset flash
-     if(!RG9_bit)
-        NVMErasePage(FLASH_Settings_PAddr);//SendSMS(100);
+   //  if(!RG9_bit)
+   //    NVMErasePage(FLASH_Settings_PAddr);//SendSMS(100);
         
     ////////////////////////////////////////////////////////////
     //use onboard switch to debug
+
      if(!RE4_bit){
+
 #ifdef MainFlashDebug
         GetValuesFromFlash();
 #endif

@@ -105,7 +105,7 @@ int res,minsPassed;
              }
 
           }
-          LATA10_bit = !LATA10_bit;
+         // LATA10_bit = !LATA10_bit;
        }
 }
 

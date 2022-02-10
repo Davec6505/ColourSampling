@@ -10,13 +10,14 @@
 #include "String.h"
 //#include "Thermister.h"
 #include "LM35.h"
+#include "PID.h"
 //////////////////////////////////////////
 //defines
-#define MainDebug
-#define MainFlashDebug
+//#define MainDebug
+//#define MainFlashDebug
 //#define MainColDebug
 //#define MainSigStrengthDebug
-#define ThermisterDebug
+//#define ThermisterDebug
 
 //////////////////////////////////////////
 //constants and vars
@@ -27,8 +28,8 @@ extern sfr sbit RD;
 extern sfr sbit GR;
 extern sfr sbit BL;
 
-extern unsigned int current_duty1, current_duty2;
-extern unsigned int pwm_period1, pwm_period2;
+extern unsigned int current_duty2, current_duty3;
+extern unsigned int pwm_period2, pwm_period3;
 /////////////////////////////////////////
 //structs unions and enums
 

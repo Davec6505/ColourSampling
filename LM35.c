@@ -49,7 +49,7 @@ void getLM35Temp(float * t,int adc_ave){
   const float AdcMax      = 465.00;         // Max ADC at Max Temp
   const float TempOffset  = 2.00;
 
-  float ratio = 0.3261;   //0.3233
+  float ratio = 0.3261;   //0.3125
   float ave = 0.00;
   float temp = 0.00;
   float K,C,F;

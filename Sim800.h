@@ -11,10 +11,15 @@
 /////////////////////////////////////////////////////
 //sfr's
 extern sfr sbit RTS;
-extern sfr sbit CRS;
+extern sfr sbit RTS_Dir;
+extern sfr sbit CTS;
+extern sfr sbit CTS_Dir;
 extern sfr sbit RST;
+extern sfr sbit RST_Dir;
 extern sfr sbit PWR;
+extern sfr sbit PWR_Dir;
 extern sfr sbit STAT;
+extern sfr sbit STAT_Dir;
 
 //////////////////////////////////////////////////////
 //defines

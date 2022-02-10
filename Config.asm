@@ -1,5 +1,5 @@
 _ConfigPic:
-ADDIU	SP, SP, -20
+ADDIU	SP, SP, -24
 SW	RA, 0(SP)
 SW	R25, 4(SP)
 SW	R26, 8(SP)
@@ -81,36 +81,36 @@ BNE	R24, R0, L_ConfigPic2
 NOP	
 JAL	_InitUart2+0
 NOP	
-ORI	R2, R0, 2000
-SH	R2, Offset(_current_duty1+0)(GP)
-ORI	R2, R0, 10000
+ORI	R2, R0, 5000
 SH	R2, Offset(_current_duty2+0)(GP)
-ORI	R28, R0, 3
-MOVZ	R27, R0, R0
-ORI	R26, R0, 1
-ORI	R25, R0, 5000
-JAL	_PWM_Init+0
-NOP	
-SH	R2, Offset(_pwm_period1+0)(GP)
-ORI	R28, R0, 3
+ORI	R2, R0, 500
+SH	R2, Offset(_current_duty3+0)(GP)
+ORI	R28, R0, 2
 MOVZ	R27, R0, R0
 ORI	R26, R0, 2
 ORI	R25, R0, 5000
 JAL	_PWM_Init+0
 NOP	
 SH	R2, Offset(_pwm_period2+0)(GP)
-ORI	R26, R0, 1
-LHU	R25, Offset(_current_duty1+0)(GP)
-JAL	_PWM_Set_Duty+0
+ORI	R28, R0, 3
+ORI	R27, R0, 4
+ORI	R26, R0, 3
+ORI	R25, R0, 5000
+JAL	_PWM_Init+0
 NOP	
+SH	R2, Offset(_pwm_period3+0)(GP)
 ORI	R26, R0, 2
 LHU	R25, Offset(_current_duty2+0)(GP)
 JAL	_PWM_Set_Duty+0
 NOP	
-ORI	R25, R0, 1
-JAL	_PWM_Stop+0
+ORI	R26, R0, 3
+LHU	R25, Offset(_current_duty3+0)(GP)
+JAL	_PWM_Set_Duty+0
 NOP	
 ORI	R25, R0, 2
+JAL	_PWM_Stop+0
+NOP	
+ORI	R25, R0, 3
 JAL	_PWM_Stop+0
 NOP	
 JAL	_MM_Init+0
@@ -132,13 +132,39 @@ NOP
 ORI	R25, R0, 5
 JAL	_setup_LM35+0
 NOP	
+MOVZ	R28, R0, R0
+LUI	R27, 17146
+ORI	R27, R27, 32768
+LUI	R26, 17224
+ORI	R26, R26, 16384
+LUI	R25, 17026
+ORI	R25, R25, 32768
+ADDIU	SP, SP, -4
+SH	R0, 2(SP)
+ORI	R2, R0, 3780
+SH	R2, 0(SP)
+JAL	_Init_PID+0
+NOP	
+ADDIU	SP, SP, 4
+ORI	R30, R0, 80
+SB	R30, 20(SP)
+ORI	R30, R0, 73
+SB	R30, 21(SP)
+ORI	R30, R0, 68
+SB	R30, 22(SP)
+MOVZ	R30, R0, R0
+SB	R30, 23(SP)
+ADDIU	R2, SP, 20
+MOVZ	R25, R2, R0
+JAL	_PID_Control+0
+NOP	
 L_end_ConfigPic:
 LW	R28, 16(SP)
 LW	R27, 12(SP)
 LW	R26, 8(SP)
 LW	R25, 4(SP)
 LW	RA, 0(SP)
-ADDIU	SP, SP, 20
+ADDIU	SP, SP, 24
 JR	RA
 NOP	
 ; end of _ConfigPic

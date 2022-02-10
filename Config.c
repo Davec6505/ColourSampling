@@ -4,8 +4,8 @@ sbit RD at LATB0_bit;
 sbit GR at LATG13_bit;
 sbit BL at LATD4_bit;
 
-unsigned int current_duty1,current_duty2;
-unsigned int pwm_period1, pwm_period2;
+unsigned int current_duty2,current_duty3;
+unsigned int pwm_period2, pwm_period3;
 
 void ConfigPic(){
 
@@ -19,13 +19,13 @@ void ConfigPic(){
   TRISD = 0X0000;
   TRISE = 0X0210;
   TRISF = 0X0000;
-  TRISG = 0X0200;
+   TRISG = 0X0200;
   
-  LATD = 0;
+   LATD = 0;
  
 
-  USBIE_bit = 0;
-  IPC11bits.USBIP = 7;
+   USBIE_bit = 0;
+   IPC11bits.USBIP = 7;
    HID_Enable(&readbuff,&writebuff);
 
    I2C2_Init_Advanced(80000,100000);//INIT I2C AT 100KHZ
@@ -38,14 +38,14 @@ void ConfigPic(){
    InitUart2();
 
    //Initialize PWMs and set duty cycle
-   current_duty1  = 2000;                        // initial value for current_duty
-   current_duty2 = 10000;                        // initial value for current_duty1
-   pwm_period1 = PWM_Init(5000 , 1, 0, 3);//pwm frk,pwm pin 1-latd0,pre-scal,tmr2
-   pwm_period2 = PWM_Init(5000 , 2, 0, 3); //pwm frk,pwm pin 1-latd1,pre-scal,tmr5
-   PWM_Set_Duty(current_duty1,  1);            // Set current duty for PWM1
-   PWM_Set_Duty(current_duty2, 2);            // Set current duty for PWM2
-   PWM_Stop(1);
+   current_duty2  = 5000;                     // initial value for current_duty
+   current_duty3  = 500;                     // initial value for current_duty1
+   pwm_period2 = PWM_Init(5000 , 2, 0, 2);    //pwm frk,pwm pin 1-latd0,pre-scal,tmr2
+   pwm_period3 = PWM_Init(5000 , 3, 4, 3);    //pwm frk,pwm pin 1-latd1,pre-scal,tmr5
+   PWM_Set_Duty(current_duty2,  2);           // Set current duty for PWM1
+   PWM_Set_Duty(current_duty3, 3);            // Set current duty for PWM2
    PWM_Stop(2);
+   PWM_Stop(3);
    
 
    MM_Init();
@@ -58,6 +58,8 @@ void ConfigPic(){
   InitGSM3();
   PwrUpGSM3();
   setup_LM35(5);
+  Init_PID(65.25, 200.25, 125.25, 0, 3780,0);
+  PID_Control("PID");
 }
 
 void InitUart1(){

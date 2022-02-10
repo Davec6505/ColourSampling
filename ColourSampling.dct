@@ -1880,7 +1880,8 @@ attachif
 attachif
 attachif
 attachif_bit
-ave_adc
+ave_adc_
+aveadc_
 b
 b_thresh
 b_thresh
@@ -7498,6 +7499,7 @@ com
 comc
 configdescriptor1
 configpic
+control
 cos
 cosc
 cosc
@@ -8564,8 +8566,8 @@ ctis0_bit
 ctis1
 ctis1_bit
 cts
-current_duty1
 current_duty2
+current_duty3
 cvr
 cvr
 cvr
@@ -10806,6 +10808,7 @@ eptxen_u1ep6_bit
 eptxen_u1ep7_bit
 eptxen_u1ep8_bit
 eptxen_u1ep9_bit
+err
 evpol
 evpol
 evpol
@@ -12566,6 +12569,7 @@ incm1
 incm1
 incm1_bit
 init_inc
+init_pid
 initgsm3
 initial_str
 initisr
@@ -17178,6 +17182,21 @@ pid
 pid
 pid
 pid
+pid_
+pid_calculate
+pid_control
+pid_diffvalue
+pid_err
+pid_first_time
+pid_integrated
+pid_kd
+pid_ki
+pid_kp
+pid_maxoutput
+pid_minoutput
+pid_offset
+pid_prev_input
+pid_prev_integrated
 pid0
 pid0
 pid0
@@ -18012,8 +18031,8 @@ ptwren_bit
 pwd
 pwm_init
 pwm_init_advanced
-pwm_period1
 pwm_period2
+pwm_period3
 pwm_set_duty
 pwm_sigstrength
 pwm_start
@@ -18504,7 +18523,9 @@ removesmstext
 removewhitespace
 report
 reset
+reset_pid
 restoreinterrupts
+result
 resume
 resume
 resume
@@ -20509,6 +20530,7 @@ tcs3472_write
 tcs3472_write8
 temp
 temp_
+temp_pwm_max
 test_update_thingspeak
 testflash
 testforok
@@ -21771,6 +21793,7 @@ twip
 twip
 twip_bit
 txt
+txt_
 txta
 txtb
 txtb_scl

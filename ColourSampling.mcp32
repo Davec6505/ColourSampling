@@ -6,7 +6,7 @@ Value=0
 [BUILD_TYPE]
 Value=0
 [ACTIVE_TAB]
-Value=LM35.h
+Value=Config.h
 [USE_EEPROM]
 Value=0
 [USE_HEAP]
@@ -27,7 +27,8 @@ File7=String.c
 File8=Flash_R_W.c
 File9=Sim800.c
 File10=LM35.c
-Count=11
+File11=PID.c
+Count=12
 [BINARIES]
 Count=0
 [IMAGES]
@@ -35,16 +36,8 @@ Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
 File0=ColourSampling.c
-File1=Config.c
-File2=Config.h
-File3=Sim800.c
-File4=Sim800.h
-File5=String.c
-File6=String.h
-File7=TCS3472.c
-File8=LM35.c
-File9=LM35.h
-Count=10
+File1=Config.h
+Count=2
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -64,7 +57,8 @@ File4=String.h
 File5=Flash_R_W.h
 File6=Sim800.h
 File7=LM35.h
-Count=8
+File8=PID.h
+Count=9
 [PLDS]
 Count=0
 [Useses]
@@ -93,5 +87,5 @@ USE_SRS=7
 [EXPANDED_NODES]
 0=ColourSampling.mcp32
 1=Sources
-13=Header Files
+14=Header Files
 Count=3

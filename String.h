@@ -14,7 +14,7 @@
 //#define StrDebug
 
 #define enum_num ((ERROR - CONFIG)+1)
-#define size 20
+#define size 21
 #define str_size 64
 //structs and enums
 extern char string[size][str_size];
@@ -40,7 +40,7 @@ WRITE_RAW,          //16
 START,              //17
 CANCEL,             //18
 READA_HUE,          //19
-READA_PWM,          //20
+READA_DEG,          //20
 ERROR               //21
 };
 

@@ -182,7 +182,51 @@ void setup_LM35(int count);
 int LM35_Adc_Average(int* adc,int adc_pin);
 int LM35_Adc_Single(int adc,int adc_pin);
 void getLM35Temp(float * t,int adc_ave);
-#line 23 "c:/users/git/coloursampling/config.h"
+#line 1 "c:/users/git/coloursampling/pid.h"
+#line 29 "c:/users/git/coloursampling/pid.h"
+typedef struct{
+ char control;
+ float PID_Kp, PID_Ki, PID_Kd;
+ float PID_Err;
+ float PID_Integrated;
+ float PID_DiffValue;
+ float PID_Prev_Integrated;
+ float PID_Prev_Input;
+ float PID_MinOutput, PID_MaxOutput;
+ float Err;
+ int PID_OffSet;
+ int Result;
+ unsigned short PID_First_Time:1;
+}_PID;
+
+extern _PID PID_;
+
+
+
+
+
+
+
+char PID_Control(char *PID);
+
+
+
+
+void Init_PID(float Kp, float Ki, float Kd, int MinOutput, int MaxOutput,int Offset);
+
+
+
+
+
+
+
+
+
+void Reset_PID();
+
+
+int PID_Calculate(float Sp, float Pv);
+#line 24 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
@@ -190,8 +234,8 @@ extern sfr sbit RD;
 extern sfr sbit GR;
 extern sfr sbit BL;
 
-extern unsigned int current_duty1, current_duty2;
-extern unsigned int pwm_period1, pwm_period2;
+extern unsigned int current_duty2, current_duty3;
+extern unsigned int pwm_period2, pwm_period3;
 
 
 
@@ -224,7 +268,7 @@ unsigned long ReadFlashWord();
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/git/coloursampling/lm35.h"
 #line 20 "c:/users/git/coloursampling/string.h"
-extern char string[ 20 ][ 64 ];
+extern char string[ 21 ][ 64 ];
 
 enum ControlColorIO{
 CONFIG,
@@ -247,7 +291,7 @@ WRITE_RAW,
 START,
 CANCEL,
 READA_HUE,
-READA_PWM,
+READA_DEG,
 ERROR
 };
 
@@ -259,7 +303,7 @@ struct Constants{
 typedef struct pstrings_t{
  char* str;
  char c;
- char string[ 20 ][ 64 ];
+ char string[ 21 ][ 64 ];
  int (*StrSplitFp)(char* str,char c);
 }PString;
 
@@ -304,11 +348,16 @@ void PrintHandler(char c);
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 13 "c:/users/git/coloursampling/sim800.h"
 extern sfr sbit RTS;
-extern sfr sbit CRS;
+extern sfr sbit RTS_Dir;
+extern sfr sbit CTS;
+extern sfr sbit CTS_Dir;
 extern sfr sbit RST;
+extern sfr sbit RST_Dir;
 extern sfr sbit PWR;
+extern sfr sbit PWR_Dir;
 extern sfr sbit STAT;
-#line 29 "c:/users/git/coloursampling/sim800.h"
+extern sfr sbit STAT_Dir;
+#line 34 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -491,12 +540,7 @@ int res,minsPassed;
  if(T0_SP.sec > 59){
  T0_SP.sec = 0;
  T0_SP.min++;
-
- sprintf(txt,"%u",T0_SP.min);
- UART1_Write_Text(txt);
- UART1_Write(0x0d);
- UART1_Write(0x0a);
-
+#line 76 "C:/Users/Git/ColourSampling/_Timers.c"
  if(T0_SP.min > 59){
  T0_SP.min = 0;
  T0_SP.hr++;
@@ -529,7 +573,7 @@ int res,minsPassed;
  }
 
  }
- LATA10_bit = !LATA10_bit;
+
  }
 }
 #line 115 "C:/Users/Git/ColourSampling/_Timers.c"

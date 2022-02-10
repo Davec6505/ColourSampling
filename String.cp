@@ -167,11 +167,16 @@ typedef unsigned long time_t;
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 13 "c:/users/git/coloursampling/sim800.h"
 extern sfr sbit RTS;
-extern sfr sbit CRS;
+extern sfr sbit RTS_Dir;
+extern sfr sbit CTS;
+extern sfr sbit CTS_Dir;
 extern sfr sbit RST;
+extern sfr sbit RST_Dir;
 extern sfr sbit PWR;
+extern sfr sbit PWR_Dir;
 extern sfr sbit STAT;
-#line 29 "c:/users/git/coloursampling/sim800.h"
+extern sfr sbit STAT_Dir;
+#line 34 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -306,7 +311,51 @@ void setup_LM35(int count);
 int LM35_Adc_Average(int* adc,int adc_pin);
 int LM35_Adc_Single(int adc,int adc_pin);
 void getLM35Temp(float * t,int adc_ave);
-#line 23 "c:/users/git/coloursampling/config.h"
+#line 1 "c:/users/git/coloursampling/pid.h"
+#line 29 "c:/users/git/coloursampling/pid.h"
+typedef struct{
+ char control;
+ float PID_Kp, PID_Ki, PID_Kd;
+ float PID_Err;
+ float PID_Integrated;
+ float PID_DiffValue;
+ float PID_Prev_Integrated;
+ float PID_Prev_Input;
+ float PID_MinOutput, PID_MaxOutput;
+ float Err;
+ int PID_OffSet;
+ int Result;
+ unsigned short PID_First_Time:1;
+}_PID;
+
+extern _PID PID_;
+
+
+
+
+
+
+
+char PID_Control(char *PID);
+
+
+
+
+void Init_PID(float Kp, float Ki, float Kd, int MinOutput, int MaxOutput,int Offset);
+
+
+
+
+
+
+
+
+
+void Reset_PID();
+
+
+int PID_Calculate(float Sp, float Pv);
+#line 24 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
@@ -314,8 +363,8 @@ extern sfr sbit RD;
 extern sfr sbit GR;
 extern sfr sbit BL;
 
-extern unsigned int current_duty1, current_duty2;
-extern unsigned int pwm_period1, pwm_period2;
+extern unsigned int current_duty2, current_duty3;
+extern unsigned int pwm_period2, pwm_period3;
 
 
 
@@ -348,7 +397,7 @@ unsigned long ReadFlashWord();
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/git/coloursampling/lm35.h"
 #line 20 "c:/users/git/coloursampling/string.h"
-extern char string[ 20 ][ 64 ];
+extern char string[ 21 ][ 64 ];
 
 enum ControlColorIO{
 CONFIG,
@@ -371,7 +420,7 @@ WRITE_RAW,
 START,
 CANCEL,
 READA_HUE,
-READA_PWM,
+READA_DEG,
 ERROR
 };
 
@@ -383,7 +432,7 @@ struct Constants{
 typedef struct pstrings_t{
  char* str;
  char c;
- char string[ 20 ][ 64 ];
+ char string[ 21 ][ 64 ];
  int (*StrSplitFp)(char* str,char c);
 }PString;
 
@@ -425,18 +474,19 @@ char* TestFlash();
 char* RemoveChars(char* str,char a,char b);
 void PrintHandler(char c);
 #line 5 "C:/Users/Git/ColourSampling/String.c"
-int ave_adc;
+int ave_adc_;
 float temp_[4];
-
+char txt_[15];
 
 struct Constants str_vars;
 struct Thresh Threshold;
-char string[ 20 ][ 64 ];
+char string[ 21 ][ 64 ];
 
 const code char *comc[13]={
  "T",
  "G"
 };
+
 const code char *com[22]={
  "CONFIG"
  ,"SENDC"
@@ -458,10 +508,9 @@ const code char *com[22]={
  ,"START"
  ,"CANCEL"
  ,"READA_HUE"
- ,"READA_PWM"
+ ,"READA_DEG"
  ,"ERROR"
 };
-
 
 PString InitString(char cmp){
  PString str_t;
@@ -530,9 +579,6 @@ char *str,err,i;
  LATE3_bit = 0;
  break;
  case SENDA :
- LM35_Adc_Single(ave_adc, 15 );
- getLM35Temp(temp_,ave_adc);
- SendData(RawData,FltData,temp_[1]);
  break;
  case READA :
  str = Read_Send_AllColour(0);
@@ -576,11 +622,14 @@ char *str,err,i;
  case READA_HUE :
  str = ReadHUE();
  break;
- case READA_PWM :
- PWM_Start(2);
- Delay_ms(500);
- SetLedPWM();
- PWM_Stop(2);
+ case READA_DEG :
+ LM35_Adc_Average(&ave_adc_, 15 );
+ getLM35Temp(temp_,ave_adc_);
+ ave_adc_ = 0;
+ sprintf(txt_,"%3.2f",temp_[1]);
+ str = txt_;
+
+
  break;
  default:
  str = "No data requested!\r\n";
@@ -593,11 +642,12 @@ char *str,err,i;
  while(!HID_Write(&writebuff,64));
 
 
+
 ret:
  return 0;
 }
-#line 183 "C:/Users/Git/ColourSampling/String.c"
-void clr_str_arrays(char str[ 20 ][ 64 ]){
+#line 184 "C:/Users/Git/ColourSampling/String.c"
+void clr_str_arrays(char str[ 21 ][ 64 ]){
 int i,j;
  for(i = 0;i < 20;i++){
  for(j = 0;j<64;j++){
@@ -606,7 +656,7 @@ int i,j;
 
  }
 }
-#line 196 "C:/Users/Git/ColourSampling/String.c"
+#line 197 "C:/Users/Git/ColourSampling/String.c"
 char* setstr(char conf[250]){
  int i;
  for(i=0;i < strlen(conf);i++){
@@ -617,7 +667,7 @@ char* setstr(char conf[250]){
 
  return conf;
 }
-#line 210 "C:/Users/Git/ColourSampling/String.c"
+#line 211 "C:/Users/Git/ColourSampling/String.c"
 int strsplit(char str[250], char c){
 int i,ii,kk,err,lasti;
  ii=kk=err=lasti=0;
@@ -639,7 +689,7 @@ int i,ii,kk,err,lasti;
  }
  return kk;
 }
-#line 235 "C:/Users/Git/ColourSampling/String.c"
+#line 236 "C:/Users/Git/ColourSampling/String.c"
 char* findnumber(char* str){
 char* temp;
 int i,j;
@@ -655,7 +705,7 @@ int i,j;
  Free(temp,sizeof(temp));
  return temp;
 }
-#line 255 "C:/Users/Git/ColourSampling/String.c"
+#line 256 "C:/Users/Git/ColourSampling/String.c"
 int StrChecker(char *str){
 static int enum_val;
 static bit once;
@@ -666,7 +716,7 @@ int i,length;
  }
  length = strlen(str);
  if(length < 5){
- return 20;
+ return 21;
  }
  for(i = 0;i < enum_val;i++){
  if(strncmp(str,com[i],length)==0)
@@ -674,7 +724,7 @@ int i,length;
  }
  return i;
 }
-#line 277 "C:/Users/Git/ColourSampling/String.c"
+#line 278 "C:/Users/Git/ColourSampling/String.c"
 char* RemoveWhiteSpace(char* str){
 char* temp;
 int i,j;
@@ -687,7 +737,7 @@ j=0;
  }
  return temp;
 }
-#line 293 "C:/Users/Git/ColourSampling/String.c"
+#line 294 "C:/Users/Git/ColourSampling/String.c"
 char* RemoveChars(char* str,char a,char b){
 char *temp;
 int i=0;
@@ -710,7 +760,7 @@ int i=0;
  Free(temp,100*sizeof(char*));
  return temp;
 }
-#line 319 "C:/Users/Git/ColourSampling/String.c"
+#line 320 "C:/Users/Git/ColourSampling/String.c"
 void WriteData(char *_data){
 
 
@@ -718,7 +768,7 @@ void WriteData(char *_data){
  strncpy(writebuff,_data,strlen(_data));
  HID_Write(&writebuff,64);
 }
-#line 330 "C:/Users/Git/ColourSampling/String.c"
+#line 331 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_AllColour(short data_src){
 char txtR[15];
 char str[64];
@@ -776,7 +826,7 @@ int err;
  PWM_Stop(2);
  return &str;
 }
-#line 391 "C:/Users/Git/ColourSampling/String.c"
+#line 392 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Send_OneColour(int colr){
 unsigned int col;
 char txtR[10];
@@ -833,7 +883,7 @@ char str[64];
  PWM_Stop(2);
  return &str;
 }
-#line 451 "C:/Users/Git/ColourSampling/String.c"
+#line 452 "C:/Users/Git/ColourSampling/String.c"
 char* ReadHUE(){
 char str[64];
 char txtF[15];
@@ -872,7 +922,7 @@ int Get_It(){
 int Get_Gain(){
  return 0;
 }
-#line 493 "C:/Users/Git/ColourSampling/String.c"
+#line 494 "C:/Users/Git/ColourSampling/String.c"
 char* Read_Thresholds(){
 char txtR[25];
 char str[64];
@@ -903,7 +953,7 @@ unsigned long Val;
 
  return &str;
 }
-#line 527 "C:/Users/Git/ColourSampling/String.c"
+#line 528 "C:/Users/Git/ColourSampling/String.c"
 char* Write_Thresholds(short data_src){
 unsigned long val[128];
 unsigned long pos;
@@ -967,7 +1017,7 @@ char str[64];
  strcat(str," \r\n ");
  return str;
 }
-#line 594 "C:/Users/Git/ColourSampling/String.c"
+#line 595 "C:/Users/Git/ColourSampling/String.c"
 void testStrings(char* writebuff){
  if(strlen(string[0])!=0){
  strncat(writebuff,string[0],strlen(string[0]));
@@ -1029,7 +1079,7 @@ unsigned int res,i;
 
  return &str;
 }
-#line 661 "C:/Users/Git/ColourSampling/String.c"
+#line 662 "C:/Users/Git/ColourSampling/String.c"
 void PrintHandler(char c){
 
  UART1_Write(c);

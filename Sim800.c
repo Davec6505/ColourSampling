@@ -42,10 +42,15 @@ struct sim_lengths SL ={
 *
 *****************************************************/
 sbit RTS at LATB1_bit;
+//sbit RTS_Dir at TRISB1_bit;
 sbit CTS at  RE9_bit;
+//sbit CTS_Dir at  TRISE9_bit;
 sbit RST at LATB2_bit;
-sbit PWR at LATG7_bit;     //LATD0_bit;
+//sbit RST_Dir at TRISB2_bit;
+sbit PWR at  LATD0_bit; // LATG7_bit; //
+//sbit PWR_Dir at  TRISD0_bit;
 sbit STAT at RB4_bit;      //Status input
+//sbit STAT_Dir at TRISB4_bit;
 
 #ifdef SimConfDebug
  char a[6], b[6], c[6], d[6], e[6], f[6];
@@ -106,6 +111,7 @@ struct Sim800Flash SF;
 *initialize the variables
 *************************************************/
 void InitGSM3(){
+
    SimVars.initial_str = 0;
    SimVars.init_inc    = 0;
    *SimTestTxt = "Hello World this is a test";
@@ -125,16 +131,18 @@ void InitGSM3(){
 *******************************************************/
 void PwrUpGSM3(){
  RST = 0;
- PWR = 0;
- Delay_ms(1000);
  PWR = 1;
+ Delay_ms(1000);
+ PWR = 0;
 
  while(STAT){
     LATE3_bit = !LATE3_bit;
      Delay_ms(100);
  }
+ LATA10_bit = STAT;
  LATE3_bit = 0;
  Delay_ms(5000);
+
 }
 
 /*************************************************
@@ -643,10 +651,13 @@ char response;
 /**********************************************************************
 * Send SMS
 ***********************************************************************/
+ int aveadc_;
 char SendSMS(char sms_type,char cellNum){
 static short onecA;
+float temp_[4];
 int res;
 char b[64];
+char txt_[15];
 char tempCellNum[20];
 char *str_;
 
@@ -732,6 +743,15 @@ char *str_;
              str_ = ReadHUE();
              strncpy(b,str_,strlen(str_));
              UART2_Write_Text(b);
+             break;
+      case 17: //read scaled values
+             LM35_Adc_Average(&aveadc_,LM35Pin);
+             getLM35Temp(temp_,aveadc_);
+             aveadc_ = 0;
+             sprintf(txt_,"%3.2f",temp_[1]);
+             str_ = txt_;
+             strcat(txt_,"*C");
+             UART2_Write_Text(txt_);
              break;
       default:
              UART2_Write_Text("Error Power cycle the device!");
@@ -864,10 +884,13 @@ char *text;
                            " *string[4]  %s\r\n"
                            " *string[5]  %s\r\n"
                            " *string[6]  %s\r\n"
+                           " *string[7]  %s\r\n"
+                           " *string[8]  %s\r\n"
                            ,sms,string[0],string[1]
                            ,string[2],string[3]
                            ,string[4],string[5]
-                           ,string[6]);
+                           ,string[6],string[7]
+                           ,string[8]);
 #endif
         if(string[6] != NULL){
           strcpy(string[6],RemoveWhiteSpace(string[6]));
@@ -927,8 +950,11 @@ char *text;
              }
           }else if(res == 19){   //HUE
               goto next;
+          }else if(res == 20){   //DEG
+             //  SendSMS(17,0);  //not a recognized command
+              goto next;
           }else{
-             SendSMS(12,0);
+            SendSMS(12,0);
              return 12;
           }
 next:
@@ -1006,11 +1032,11 @@ char *t,B[64],txtDig[9];
     case 19:
            SendSMS(16,0);
            break;
-       case 20:
-           SendSMS(12,0);
+    case 20:
+           SendSMS(17,0);
            break;
-      default:
-            break;
+    default:
+           break;
     }
 
 }

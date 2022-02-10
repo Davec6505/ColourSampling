@@ -2,9 +2,9 @@
 
 
 //temp thermister params
-int ave_adc;
+int ave_adc_;
 float temp_[4];
-
+char txt_[15];
 
 struct Constants str_vars;
 struct Thresh Threshold;
@@ -14,6 +14,7 @@ const code char *comc[13]={
    "T",
    "G"
 };
+
 const code char *com[22]={
    "CONFIG"       //0
    ,"SENDC"       //1
@@ -35,10 +36,9 @@ const code char *com[22]={
    ,"START"       //17
    ,"CANCEL"      //18
    ,"READA_HUE"   //19
-   ,"READA_PWM"   //20
+   ,"READA_DEG"   //20
    ,"ERROR"
 };
-
 
 PString InitString(char cmp){
     PString str_t;
@@ -110,9 +110,6 @@ char *str,err,i;
              LATE3_bit = 0;
              break;
         case SENDA :
-             LM35_Adc_Single(ave_adc,LM35Pin);
-             getLM35Temp(temp_,ave_adc);
-             SendData(RawData,FltData,temp_[1]);
              break;
         case READA :
              str = Read_Send_AllColour(0);
@@ -156,11 +153,14 @@ char *str,err,i;
         case READA_HUE :
             str = ReadHUE();
             break;
-        case READA_PWM :
-            PWM_Start(2);
-            Delay_ms(500);
-            SetLedPWM();
-            PWM_Stop(2);
+        case READA_DEG :
+             LM35_Adc_Average(&ave_adc_,LM35Pin);
+             getLM35Temp(temp_,ave_adc_);
+             ave_adc_ = 0;
+             sprintf(txt_,"%3.2f",temp_[1]);
+             str = txt_;
+             //strcpy(str,txt_);
+             //SendData(RawData,FltData,temp_[1]);
             break;
         default:
             str = "No data requested!\r\n";
@@ -172,6 +172,7 @@ char *str,err,i;
       strncat(writebuff,str,strlen(str));
       while(!HID_Write(&writebuff,64));
 #endif
+
       //free(str);
 ret:
    return 0;
@@ -262,7 +263,7 @@ int i,length;
     }
     length = strlen(str);
     if(length < 5){
-       return 20;
+       return 21;
     }
     for(i = 0;i < enum_val;i++){
          if(strncmp(str,com[i],length)==0)
