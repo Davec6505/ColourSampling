@@ -126,6 +126,26 @@ void InitGSM3(){
    memset(SF.PWD,0,sizeof(SF.PWD));
 }
 
+
+/*******************************************************
+*Power down GSM800 if it has power on it
+*******************************************************/
+void PwrDownGSM3(){
+ RST = 0;
+ PWR = 1;
+ Delay_ms(2000);
+ PWR = 0;
+
+ while(STAT){
+    LATE3_bit = !LATE3_bit;
+     Delay_ms(100);
+ }
+ LATA10_bit = STAT;
+ LATE3_bit = 0;
+ Delay_ms(5000);
+
+}
+
 /*******************************************************
 *keep trying until power up
 *******************************************************/
@@ -135,7 +155,7 @@ void PwrUpGSM3(){
  Delay_ms(1000);
  PWR = 0;
 
- while(STAT){
+ while(!STAT){
     LATE3_bit = !LATE3_bit;
      Delay_ms(100);
  }
@@ -595,7 +615,7 @@ int i,res,num_strs;
    else if ((res == 0)&&(Indx == 0))
        return 2;
    else
-       return res;
+       return -1;//res;
 }
 
 

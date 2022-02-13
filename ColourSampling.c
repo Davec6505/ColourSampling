@@ -23,119 +23,131 @@ char writebuff[64];
 char txt[] = "00000";
 char sub_txt[] = "\"+44";
 
+//minimum out put of contol is max value pwm can attain
 const int temp_pwm_max = 3780;
 
-//program
+/******************************************************
+*main program START
+******************************************************/
 void main() {
+//non static fields
 char cel_num[20];
 char num,last_rec_inc;
 unsigned short i;
 unsigned int cell_ok,str_num,deg;
-
-static long last_millis_sigstr = 0;
-static long millis_sigstr_sp = 0;
+float _temp[4];
+int resA=0, resB=0, diff = 0;
 long res_millis_sigstr = 0;
 
+//static fields
+static int ave_adc = 0;
+static long last_millis_sigstr = 0;
+static long millis_sigstr_sp = 0;
 static long last_millis_thermister = 0;
 static long millis_thermister_sp = 0;
 static long millis_thermister = 0;
-static int ave_adc = 0;
-float _temp[4];
-int resA=0, resB=0, diff = 0;
 
 
 #ifdef MainDebug
-char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15],txtPid[15];
+char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15],txtPid[15];
 #endif
 
-
+   //funct ptr  setup;
    Update_Test = Test_Update_ThingSpeak;
-
+   
+   //Execution of code starts here
    ConfigPic();
 
    Delay_ms(500);
 
-   it = TCS3472_INTEGRATIONTIME_2_4MS;//TCS3472_INTEGRATIONTIME_2_4MS;
+   //setup Color sampling properties
+   it = TCS3472_INTEGRATIONTIME_24MS;//TCS3472_INTEGRATIONTIME_2_4MS;
    G  = TCS3472_GAIN_1X;
    device_Id = TCS3472_1_5;          //TCS347_11_15;
    i = 0;
    i = TCS3472_Init(it,G,device_Id);
-  // sprintf(txtR,"%2x",i);
-  // strcat(writebuff,txtR);
-  // while(!HID_Write(&writebuff,64));
-
- // RD = GR = BL = 1;
-
-#ifdef MainDebug
-  UART1_Write_Text("Start");
-  UART1_Write(13);
-  UART1_Write(10);
-#endif
-  T0_SP.sec = 0;
-  T0_SP.min = 0;
-  T0_SP.hr  = 0;
+   
+/**************************************************
+*Setup timer values
+**************************************************/
+   T0_SP.sec = 0;
+   T0_SP.min = 0;
+   T0_SP.hr  = 0;
                
                
 /*************************************************
 *check if simcard is registered and setup the sim
-*for logging
+*for logging to thingspeak, and get the saved
+*values from flash memory,check the 1st 4 char's
+*for differences this will show if no sim is reg
 *************************************************/
-    strcpy(cel_num,GetValuesFromFlash());
-    str_num = strncmp(cel_num,sub_txt,4);
- #ifdef MainDebug
-    sprintf(txtR,"%u",str_num);
-    PrintOut(PrintHandler, "\r\n"
-                           " *Cell number:   %s\r\n"
-                           " *Result of cmp: %s\r\n"
-                           ,cel_num,txtR);
- #endif
-   if(str_num != 0){
+   strcpy(cel_num,GetValuesFromFlash());
+   str_num = strncmp(cel_num,sub_txt,4);
+   
+#ifdef MainDebug  //display saved values
+   sprintf(txtR,"%u",str_num);
+   PrintOut(PrintHandler, "\r\n"
+                          " *Cell number:   %s\r\n"
+                          " *Result of cmp: %s\r\n"
+                          ,cel_num,txtR);
+#endif
+/***************************************************************
+*if the sim shows up as not registered with this device, the
+*setup phase will be entered and the device will wait for a
+*simple test msg to be sent from a cell phone to this sim's
+*number, once it recieves a sms, the device will ask for
+*thingspeak details and will save this sms to primary cell flash
+***************************************************************/
+  if(str_num != 0){   //value will be 0 if
      SimVars.init_inc = SetupIOT();           //ret 1
      SimVars.init_inc = WaitForSetupSMS(0);   //ret 2
      SimVars.init_inc = GetAPI_Key_SMS();     //ret 3
      if(SimVars.init_inc != 0)
-       SendSMS(SimVars.init_inc,1);
+       SendSMS(SimVars.init_inc,1);  //Device not setup
      else
-       SendSMS(SimVars.init_inc,1);
+       SendSMS(SimVars.init_inc,1); //Device setup
      cell_ok = 0;
    }else{
      WaitForResponse(3);
      SimVars.init_inc = 3;
      cell_ok = 1;
    }
-/**************************************************************
-*main => loop forever and call all functions*
-*keep main free from code
-**************************************************************/
+   
    if(cell_ok == 1){ //only if primary cell num has been saved
        Read_Thresholds();
        Delay_ms(3000);
-       SendSMS(4,1);
+       SendSMS(4,1); //"Device powered up" =>msg is sent
        SimVars.init_inc = 3;
    }
    
 #ifdef MainDebug
-         sprintf(txtR,"%d",SimVars.init_inc);
+         sprintf(txtInit,"%d",SimVars.init_inc);
          PrintOut(PrintHandler, "\r\n"
                                 " *Run      \r\n"
                                 " *Initial Incrament:= %s\r\n"
-                                ,txtR);
+                                ,txtInit);
 #endif
+
    T0_SP.one_per_Xmin = 0;
    resA = resB = 0;
-   //check for signal strength on START tmr2-3
-  // SignalStrength();
    last_millis_sigstr = TMR0.millis;
    millis_sigstr_sp = 5000;
    
+/***************************************************************
+*rest the led for error Threshold to get accurate readings
+*from the colour chip
+***************************************************************/
    PWM_Start(2);
    Delay_ms(500);
    SetLedPWM();
    PWM_Stop(2);
    PWM_Start(3); //start temp control
-/***************************************************
-* main loop forever!!
-***************************************************/
+   
+   
+/**************************************************************
+*main => loop forever and call all functions*
+*keep main free from code
+**************************************************************/
    while(1){
    static char last_start = 0;
    int sample_test = 0;
@@ -255,8 +267,8 @@ char txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15],txtPi
 #ifdef MainColDebug
         TCS3472_getRawData(RawData);
         GetScaledValues(RawData,&FltData);
-        FltData[3] = TCS3472_CalcHue(&FltData);
-        SendData(RawData,FltData);
+        TCS3472_CalcHSL(&FltData);
+        SendData(RawData,FltData,_temp[1]);
 #endif
 #ifdef MainSigStrengthDebug
         SignalStrength();

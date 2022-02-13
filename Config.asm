@@ -127,6 +127,8 @@ JAL	_InitISR+0
 NOP	
 JAL	_InitGSM3+0
 NOP	
+JAL	_PwrDownGSM3+0
+NOP	
 JAL	_PwrUpGSM3+0
 NOP	
 ORI	R25, R0, 5
@@ -223,10 +225,11 @@ JR	RA
 NOP	
 ; end of _InitUart2
 _SetLedPWM:
-ADDIU	SP, SP, -12
+ADDIU	SP, SP, -16
 SW	RA, 0(SP)
 SW	R25, 4(SP)
 SW	R26, 8(SP)
+SH	R0, 14(SP)
 LUI	R25, hi_addr(_RawData+0)
 ORI	R25, R25, lo_addr(_RawData+0)
 JAL	_TCS3472_getRawData+0
@@ -235,23 +238,40 @@ LUI	R25, hi_addr(_RawData+0)
 ORI	R25, R25, lo_addr(_RawData+0)
 JAL	_TCS3472_C2RGB_Error+0
 NOP	
-; err start address is: 12 (R3)
-SEH	R3, R2
-; err end address is: 12 (R3)
-J	L__SetLedPWM13
-NOP	
+SH	R2, 12(SP)
 L__SetLedPWM14:
 L__SetLedPWM13:
-; err start address is: 12 (R3)
-; err end address is: 12 (R3)
-J	L__SetLedPWM12
+LH	R2, 12(SP)
+ADDIU	SP, SP, -12
+SH	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_2_Config+0)
+ORI	R2, R2, lo_addr(?lstr_2_Config+0)
+SW	R2, 4(SP)
+LUI	R2, hi_addr(_txtLed+0)
+ORI	R2, R2, lo_addr(_txtLed+0)
+SW	R2, 0(SP)
+JAL	_sprintf+0
 NOP	
-L__SetLedPWM15:
-L__SetLedPWM12:
-; err start address is: 12 (R3)
+ADDIU	SP, SP, 12
+LUI	R2, hi_addr(_txtLed+0)
+ORI	R2, R2, lo_addr(_txtLed+0)
+ADDIU	SP, SP, -12
+SW	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_3_Config+0)
+ORI	R2, R2, lo_addr(?lstr_3_Config+0)
+SW	R2, 4(SP)
+LUI	R2, hi_addr(_PrintHandler+0)
+ORI	R2, R2, lo_addr(_PrintHandler+0)
+SW	R2, 0(SP)
+JAL	_PrintOut+0
+NOP	
+ADDIU	SP, SP, 12
+LH	R3, 12(SP)
+ORI	R2, R0, 2
+DIV	R3, R2
+MFLO	R3
 LHU	R2, Offset(_current_duty2+0)(GP)
 ADDU	R2, R2, R3
-; err end address is: 12 (R3)
 SH	R2, Offset(_current_duty2+0)(GP)
 ORI	R26, R0, 2
 ANDI	R25, R2, 65535
@@ -273,29 +293,41 @@ LUI	R25, hi_addr(_RawData+0)
 ORI	R25, R25, lo_addr(_RawData+0)
 JAL	_TCS3472_C2RGB_Error+0
 NOP	
-; err start address is: 12 (R3)
-SEH	R3, R2
+SH	R2, 12(SP)
+LH	R2, 14(SP)
+ADDIU	R2, R2, 1
+SH	R2, 14(SP)
 SEH	R2, R2
+SLTI	R2, R2, 101
+BEQ	R2, R0, L__SetLedPWM19
+NOP	
+J	L_SetLedPWM9
+NOP	
+L__SetLedPWM19:
+J	L_SetLedPWM5
+NOP	
+L_SetLedPWM9:
+LH	R2, 12(SP)
 SLTI	R2, R2, -50
 BEQ	R2, R0, L__SetLedPWM20
 NOP	
 J	L__SetLedPWM14
 NOP	
 L__SetLedPWM20:
-SEH	R2, R3
+LH	R2, 12(SP)
 SLTI	R2, R2, 51
 BNE	R2, R0, L__SetLedPWM21
 NOP	
-J	L__SetLedPWM15
+J	L__SetLedPWM13
 NOP	
 L__SetLedPWM21:
-; err end address is: 12 (R3)
-L__SetLedPWM11:
+L__SetLedPWM12:
+L_SetLedPWM5:
 L_end_SetLedPWM:
 LW	R26, 8(SP)
 LW	R25, 4(SP)
 LW	RA, 0(SP)
-ADDIU	SP, SP, 12
+ADDIU	SP, SP, 16
 JR	RA
 NOP	
 ; end of _SetLedPWM

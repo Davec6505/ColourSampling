@@ -23,7 +23,7 @@ extern sfr sbit STAT_Dir;
 
 //////////////////////////////////////////////////////
 //defines
-//#define SimDebug
+#define SimDebug
 #define SimConfDebug
 #define SMSDebug
 #define ThingDebug
@@ -40,7 +40,7 @@ extern char rcvPcTxt[150];
 //structs and enuum
 typedef struct{
  char  initial_str;
- char  init_inc;
+ int  init_inc;
  char  start: 1;
  int rssi;  //signal strength quality in dBm
  int ber;   //bit rate error report in %
@@ -99,6 +99,7 @@ void WaitForResponse(short dly);
 void RingToTempBuf();
 void Load_Head_Tail_Pointers();
 void RcvSimTxt();
+void PwrDownGSM3();
 void PwrUpGSM3();
 char SetupIOT();
 char WaitForSetupSMS(unsigned int Indx);

@@ -226,7 +226,7 @@ void Reset_PID();
 
 
 int PID_Calculate(float Sp, float Pv);
-#line 24 "c:/users/git/coloursampling/config.h"
+#line 25 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
@@ -367,7 +367,7 @@ extern char rcvPcTxt[150];
 
 typedef struct{
  char initial_str;
- char init_inc;
+ int init_inc;
  char start: 1;
  int rssi;
  int ber;
@@ -426,6 +426,7 @@ void WaitForResponse(short dly);
 void RingToTempBuf();
 void Load_Head_Tail_Pointers();
 void RcvSimTxt();
+void PwrDownGSM3();
 void PwrUpGSM3();
 char SetupIOT();
 char WaitForSetupSMS(unsigned int Indx);

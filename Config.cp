@@ -296,7 +296,7 @@ extern char rcvPcTxt[150];
 
 typedef struct{
  char initial_str;
- char init_inc;
+ int init_inc;
  char start: 1;
  int rssi;
  int ber;
@@ -355,6 +355,7 @@ void WaitForResponse(short dly);
 void RingToTempBuf();
 void Load_Head_Tail_Pointers();
 void RcvSimTxt();
+void PwrDownGSM3();
 void PwrUpGSM3();
 char SetupIOT();
 char WaitForSetupSMS(unsigned int Indx);
@@ -450,7 +451,7 @@ void Reset_PID();
 
 
 int PID_Calculate(float Sp, float Pv);
-#line 24 "c:/users/git/coloursampling/config.h"
+#line 25 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
@@ -480,6 +481,11 @@ sbit BL at LATD4_bit;
 
 unsigned int current_duty2,current_duty3;
 unsigned int pwm_period2, pwm_period3;
+
+
+char txtLed[15];
+
+
 
 void ConfigPic(){
 
@@ -530,6 +536,7 @@ void ConfigPic(){
  InitTimers();
  InitISR();
  InitGSM3();
+ PwrDownGSM3();
  PwrUpGSM3();
  setup_LM35(5);
  Init_PID(65.25, 200.25, 125.25, 0, 3780,0);
@@ -555,15 +562,27 @@ void InitUart2(){
 }
 
 void SetLedPWM(){
-int err;
+int err,error_counter;
+
+ error_counter = 0;
  TCS3472_getRawData(RawData);
  err = TCS3472_C2RGB_Error(RawData);
+
  do{
- current_duty2 += err;
+
+ sprintf(txtLed,"%d",err);
+ PrintOut(PrintHandler, "\r\n"
+ " *err:=   %s\r\n"
+ ,txtLed);
+
+ current_duty2 += err/2;
  PWM_Set_Duty(current_duty2, 2);
  Delay_ms(500);
  TCS3472_getRawData(RawData);
  err = TCS3472_C2RGB_Error(RawData);
+ error_counter++;
+ if(error_counter > 100)
+ break;
  }while(err < -50 || err > 50);
 
 }

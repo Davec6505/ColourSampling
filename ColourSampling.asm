@@ -1,5 +1,5 @@
 _main:
-ADDIU	SP, SP, -40
+ADDIU	SP, SP, -148
 LUI	R2, hi_addr(_Test_Update_ThingSpeak+0)
 ORI	R2, R2, lo_addr(_Test_Update_ThingSpeak+0)
 SW	R2, Offset(_Update_Test+0)(GP)
@@ -13,14 +13,14 @@ BNE	R24, R0, L_main0
 NOP	
 NOP	
 NOP	
-ORI	R2, R0, 255
+ORI	R2, R0, 246
 SB	R2, Offset(_it+0)(GP)
 SB	R0, Offset(_G+0)(GP)
 ORI	R2, R0, 68
 SB	R2, Offset(_device_Id+0)(GP)
 ORI	R27, R0, 68
 MOVZ	R26, R0, R0
-ORI	R25, R0, 255
+ORI	R25, R0, 246
 JAL	_TCS3472_Init+0
 NOP	
 SH	R0, Offset(_T0_SP+2)(GP)
@@ -40,7 +40,32 @@ ORI	R26, R26, lo_addr(_sub_txt+0)
 MOVZ	R25, R2, R0
 JAL	_strncmp+0
 NOP	
-ANDI	R2, R2, 65535
+SH	R2, 22(SP)
+ADDIU	R3, SP, 46
+ADDIU	SP, SP, -12
+SH	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_1_ColourSampling+0)
+ORI	R2, R2, lo_addr(?lstr_1_ColourSampling+0)
+SW	R2, 4(SP)
+SW	R3, 0(SP)
+JAL	_sprintf+0
+NOP	
+ADDIU	SP, SP, 12
+ADDIU	R3, SP, 46
+ADDIU	R2, SP, 0
+ADDIU	SP, SP, -16
+SW	R3, 12(SP)
+SW	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_2_ColourSampling+0)
+ORI	R2, R2, lo_addr(?lstr_2_ColourSampling+0)
+SW	R2, 4(SP)
+LUI	R2, hi_addr(_PrintHandler+0)
+ORI	R2, R2, lo_addr(_PrintHandler+0)
+SW	R2, 0(SP)
+JAL	_PrintOut+0
+NOP	
+ADDIU	SP, SP, 16
+LHU	R2, 22(SP)
 BNE	R2, R0, L__main43
 NOP	
 J	L_main2
@@ -48,29 +73,32 @@ NOP
 L__main43:
 JAL	_SetupIOT+0
 NOP	
-SB	R2, Offset(_SimVars+1)(GP)
+ANDI	R2, R2, 255
+SH	R2, Offset(_SimVars+2)(GP)
 MOVZ	R25, R0, R0
 JAL	_WaitForSetupSMS+0
 NOP	
-SB	R2, Offset(_SimVars+1)(GP)
+ANDI	R2, R2, 255
+SH	R2, Offset(_SimVars+2)(GP)
 JAL	_GetAPI_Key_SMS+0
 NOP	
-SB	R2, Offset(_SimVars+1)(GP)
 ANDI	R2, R2, 255
+SH	R2, Offset(_SimVars+2)(GP)
+LH	R2, Offset(_SimVars+2)(GP)
 BNE	R2, R0, L__main45
 NOP	
 J	L_main3
 NOP	
 L__main45:
 ORI	R26, R0, 1
-LBU	R25, Offset(_SimVars+1)(GP)
+LH	R25, Offset(_SimVars+2)(GP)
 JAL	_SendSMS+0
 NOP	
 J	L_main4
 NOP	
 L_main3:
 ORI	R26, R0, 1
-LBU	R25, Offset(_SimVars+1)(GP)
+LH	R25, Offset(_SimVars+2)(GP)
 JAL	_SendSMS+0
 NOP	
 L_main4:
@@ -84,7 +112,7 @@ ORI	R25, R0, 3
 JAL	_WaitForResponse+0
 NOP	
 ORI	R2, R0, 3
-SB	R2, Offset(_SimVars+1)(GP)
+SH	R2, Offset(_SimVars+2)(GP)
 ; cell_ok start address is: 8 (R2)
 ORI	R2, R0, 1
 ; cell_ok end address is: 8 (R2)
@@ -112,11 +140,35 @@ ORI	R25, R0, 4
 JAL	_SendSMS+0
 NOP	
 ORI	R2, R0, 3
-SB	R2, Offset(_SimVars+1)(GP)
+SH	R2, Offset(_SimVars+2)(GP)
 L_main6:
+ADDIU	R3, SP, 40
+LH	R2, Offset(_SimVars+2)(GP)
+ADDIU	SP, SP, -12
+SH	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_3_ColourSampling+0)
+ORI	R2, R2, lo_addr(?lstr_3_ColourSampling+0)
+SW	R2, 4(SP)
+SW	R3, 0(SP)
+JAL	_sprintf+0
+NOP	
+ADDIU	SP, SP, 12
+ADDIU	R2, SP, 40
+ADDIU	SP, SP, -12
+SW	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_4_ColourSampling+0)
+ORI	R2, R2, lo_addr(?lstr_4_ColourSampling+0)
+SW	R2, 4(SP)
+LUI	R2, hi_addr(_PrintHandler+0)
+ORI	R2, R2, lo_addr(_PrintHandler+0)
+SW	R2, 0(SP)
+JAL	_PrintOut+0
+NOP	
+ADDIU	SP, SP, 12
 LBU	R2, Offset(_T0_SP+10)(GP)
 INS	R2, R0, 1, 1
 SB	R2, Offset(_T0_SP+10)(GP)
+SH	R0, 146(SP)
 LW	R2, Offset(_TMR0+0)(GP)
 SW	R2, Offset(main_last_millis_sigstr_L0+0)(GP)
 ORI	R2, R0, 5000
@@ -156,7 +208,7 @@ ANDI	R25, R3, 255
 JAL	_DoStrings+0
 NOP	
 L_main13:
-LBU	R2, Offset(_SimVars+2)(GP)
+LBU	R2, Offset(_SimVars+4)(GP)
 EXT	R2, R2, 0, 1
 BNE	R2, R0, L__main50
 NOP	
@@ -176,7 +228,7 @@ J	L_main17
 NOP	
 L__main38:
 L__main37:
-LBU	R2, Offset(_SimVars+2)(GP)
+LBU	R2, Offset(_SimVars+4)(GP)
 EXT	R2, R2, 0, 1
 BEQ	R2, R0, L__main52
 NOP	
@@ -241,6 +293,88 @@ ORI	R26, R0, 3
 ANDI	R25, R2, 65535
 JAL	_PWM_Set_Duty+0
 NOP	
+ADDIU	R2, SP, 24
+LW	R2, 0(R2)
+ADDIU	R3, SP, 70
+ADDIU	SP, SP, -12
+SW	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_5_ColourSampling+0)
+ORI	R2, R2, lo_addr(?lstr_5_ColourSampling+0)
+SW	R2, 4(SP)
+SW	R3, 0(SP)
+JAL	_sprintf+0
+NOP	
+ADDIU	SP, SP, 12
+ADDIU	R2, SP, 24
+ADDIU	R2, R2, 4
+LW	R2, 0(R2)
+ADDIU	R3, SP, 85
+ADDIU	SP, SP, -12
+SW	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_6_ColourSampling+0)
+ORI	R2, R2, lo_addr(?lstr_6_ColourSampling+0)
+SW	R2, 4(SP)
+SW	R3, 0(SP)
+JAL	_sprintf+0
+NOP	
+ADDIU	SP, SP, 12
+ADDIU	R2, SP, 24
+ADDIU	R2, R2, 8
+LW	R2, 0(R2)
+ADDIU	R3, SP, 100
+ADDIU	SP, SP, -12
+SW	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_7_ColourSampling+0)
+ORI	R2, R2, lo_addr(?lstr_7_ColourSampling+0)
+SW	R2, 4(SP)
+SW	R3, 0(SP)
+JAL	_sprintf+0
+NOP	
+ADDIU	SP, SP, 12
+ADDIU	R2, SP, 24
+ADDIU	R2, R2, 12
+LW	R2, 0(R2)
+ADDIU	R3, SP, 115
+ADDIU	SP, SP, -12
+SW	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_8_ColourSampling+0)
+ORI	R2, R2, lo_addr(?lstr_8_ColourSampling+0)
+SW	R2, 4(SP)
+SW	R3, 0(SP)
+JAL	_sprintf+0
+NOP	
+ADDIU	SP, SP, 12
+ADDIU	R3, SP, 130
+LHU	R2, Offset(_current_duty3+0)(GP)
+ADDIU	SP, SP, -12
+SH	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_9_ColourSampling+0)
+ORI	R2, R2, lo_addr(?lstr_9_ColourSampling+0)
+SW	R2, 4(SP)
+SW	R3, 0(SP)
+JAL	_sprintf+0
+NOP	
+ADDIU	SP, SP, 12
+ADDIU	R6, SP, 130
+ADDIU	R5, SP, 115
+ADDIU	R4, SP, 100
+ADDIU	R3, SP, 85
+ADDIU	R2, SP, 70
+ADDIU	SP, SP, -28
+SW	R6, 24(SP)
+SW	R5, 20(SP)
+SW	R4, 16(SP)
+SW	R3, 12(SP)
+SW	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_10_ColourSampling+0)
+ORI	R2, R2, lo_addr(?lstr_10_ColourSampling+0)
+SW	R2, 4(SP)
+LUI	R2, hi_addr(_PrintHandler+0)
+ORI	R2, R2, lo_addr(_PrintHandler+0)
+SW	R2, 0(SP)
+JAL	_PrintOut+0
+NOP	
+ADDIU	SP, SP, 28
 L_main22:
 L_main21:
 LW	R3, Offset(main_last_millis_sigstr_L0+0)(GP)
@@ -269,8 +403,8 @@ JAL	_SignalStrength+0
 NOP	
 L_main24:
 L_main23:
-LBU	R2, Offset(_SimVars+1)(GP)
-SLTIU	R2, R2, 5
+LH	R2, Offset(_SimVars+2)(GP)
+SLTI	R2, R2, 5
 BEQ	R2, R0, L__main59
 NOP	
 J	L_main25
@@ -320,6 +454,8 @@ NOP
 L__main62:
 JAL	_TestRingPointers+0
 NOP	
+; diff start address is: 84 (R21)
+SEH	R21, R2
 SEH	R2, R2
 SLTI	R2, R2, 2
 BEQ	R2, R0, L__main63
@@ -327,10 +463,72 @@ NOP
 J	L_main30
 NOP	
 L__main63:
-LBU	R2, Offset(_SimVars+1)(GP)
+LH	R2, Offset(_SimVars+2)(GP)
 SB	R2, 20(SP)
 ORI	R2, R0, 3
-SB	R2, Offset(_SimVars+1)(GP)
+SH	R2, Offset(_SimVars+2)(GP)
+ADDIU	R3, SP, 64
+LH	R2, 146(SP)
+ADDIU	SP, SP, -12
+SH	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_11_ColourSampling+0)
+ORI	R2, R2, lo_addr(?lstr_11_ColourSampling+0)
+SW	R2, 4(SP)
+SW	R3, 0(SP)
+JAL	_sprintf+0
+NOP	
+ADDIU	SP, SP, 12
+ADDIU	R3, SP, 46
+ADDIU	SP, SP, -12
+SH	R21, 8(SP)
+; diff end address is: 84 (R21)
+LUI	R2, hi_addr(?lstr_12_ColourSampling+0)
+ORI	R2, R2, lo_addr(?lstr_12_ColourSampling+0)
+SW	R2, 4(SP)
+SW	R3, 0(SP)
+JAL	_sprintf+0
+NOP	
+ADDIU	SP, SP, 12
+ADDIU	R3, SP, 58
+LHU	R2, Offset(_RB+1004)(GP)
+ADDIU	SP, SP, -12
+SH	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_13_ColourSampling+0)
+ORI	R2, R2, lo_addr(?lstr_13_ColourSampling+0)
+SW	R2, 4(SP)
+SW	R3, 0(SP)
+JAL	_sprintf+0
+NOP	
+ADDIU	SP, SP, 12
+ADDIU	R3, SP, 52
+LHU	R2, Offset(_RB+1002)(GP)
+ADDIU	SP, SP, -12
+SH	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_14_ColourSampling+0)
+ORI	R2, R2, lo_addr(?lstr_14_ColourSampling+0)
+SW	R2, 4(SP)
+SW	R3, 0(SP)
+JAL	_sprintf+0
+NOP	
+ADDIU	SP, SP, 12
+ADDIU	R5, SP, 64
+ADDIU	R4, SP, 46
+ADDIU	R3, SP, 52
+ADDIU	R2, SP, 58
+ADDIU	SP, SP, -24
+SW	R5, 20(SP)
+SW	R4, 16(SP)
+SW	R3, 12(SP)
+SW	R2, 8(SP)
+LUI	R2, hi_addr(?lstr_15_ColourSampling+0)
+ORI	R2, R2, lo_addr(?lstr_15_ColourSampling+0)
+SW	R2, 4(SP)
+LUI	R2, hi_addr(_PrintHandler+0)
+ORI	R2, R2, lo_addr(_PrintHandler+0)
+SW	R2, 0(SP)
+JAL	_PrintOut+0
+NOP	
+ADDIU	SP, SP, 24
 JAL	_GetSMSText+0
 NOP	
 LUI	R24, 203
@@ -341,7 +539,7 @@ BNE	R24, R0, L_main31
 NOP	
 NOP	
 NOP	
-LBU	R3, Offset(_SimVars+1)(GP)
+LH	R3, Offset(_SimVars+2)(GP)
 ORI	R2, R0, 5
 BNE	R3, R2, L__main65
 NOP	
@@ -349,7 +547,7 @@ J	L_main33
 NOP	
 L__main65:
 LBU	R2, 20(SP)
-SB	R2, Offset(_SimVars+1)(GP)
+SH	R2, Offset(_SimVars+2)(GP)
 L_main33:
 L_main30:
 L_main29:

@@ -18038,6 +18038,7 @@ pwm_sigstrength
 pwm_start
 pwm_stop
 pwr
+pwrdowngsm3
 pwrupgsm3
 r_thresh
 r_thresh
@@ -21803,6 +21804,7 @@ txtg
 txtg_scl
 txth
 txthue
+txtled
 txtlen
 txtlum
 txtm

@@ -13,11 +13,12 @@
 #include "PID.h"
 //////////////////////////////////////////
 //defines
-//#define MainDebug
+#define MainDebug
+#define LedDeBug
 //#define MainFlashDebug
 //#define MainColDebug
 //#define MainSigStrengthDebug
-//#define ThermisterDebug
+#define ThermisterDebug
 
 //////////////////////////////////////////
 //constants and vars
