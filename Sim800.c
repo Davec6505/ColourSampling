@@ -1223,7 +1223,7 @@ char _str_[200];
     UART2_Write(0x0A);
     UART2_Write(0x1A);
     TestForOK(1);
-    Delay_ms(50);
+    Delay_ms(150);
     UART2_Write_Text("AT+CIPSHUT");
     UART2_Write(0x0D);
     UART2_Write(0x0A);

@@ -274,5 +274,16 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
         SignalStrength();
 #endif
      }
+     
+     ///////////////////////////////////////////////////////////
+     //Reset the mcu if a watchdog time out occurs
+     if (RCON & 0x0010) {
+     // execute Watchdog Time-out Reset handler ...
+        Reset();
+     }
+     
+     ///////////////////////////////////////////////////////////
+     //Service the whatchdog timer
+     WDTCLR_bit = 1;
    }
 }

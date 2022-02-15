@@ -14,7 +14,7 @@
 //////////////////////////////////////////
 //defines
 #define MainDebug
-#define LedDeBug
+//#define LedDeBug
 //#define MainFlashDebug
 //#define MainColDebug
 //#define MainSigStrengthDebug
@@ -38,6 +38,7 @@ extern unsigned int pwm_period2, pwm_period3;
 /////////////////////////////////////////
 //function prototypes
 void ConfigPic();
+void FSCM_SetUP();
 void InitUart1();
 void InitUart2();
 void InitISR();

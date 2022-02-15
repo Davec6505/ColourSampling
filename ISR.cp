@@ -286,7 +286,7 @@ extern sfr sbit PWR;
 extern sfr sbit PWR_Dir;
 extern sfr sbit STAT;
 extern sfr sbit STAT_Dir;
-#line 34 "c:/users/git/coloursampling/sim800.h"
+#line 36 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -468,6 +468,7 @@ extern unsigned int pwm_period2, pwm_period3;
 
 
 void ConfigPic();
+void FSCM_SetUP();
 void InitUart1();
 void InitUart2();
 void InitISR();
@@ -521,4 +522,12 @@ void Sim800_Uart2() iv IVT_UART_2 ilevel 6 ics ICS_AUTO {
  U2RXIF_bit = 0;
  Sim800Text();
 
+}
+
+void FSCM() iv IVT_FAIL_SAFE_MONITOR ilevel 1 ics ICS_AUTO {
+
+
+ IFS1CLR = 1 << 4;
+ PrintOut(PrintHandler, "\r\n"
+ " *Clock Switched over\r\n");
 }

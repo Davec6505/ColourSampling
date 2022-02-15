@@ -25,6 +25,8 @@ SW	R0, Offset(TRISF+0)(GP)
 ORI	R2, R0, 512
 SW	R2, Offset(TRISG+0)(GP)
 SW	R0, Offset(LATD+0)(GP)
+JAL	_FSCM_SetUP+0
+NOP	
 LUI	R2, BitMask(USBIE_bit+0)
 ORI	R2, R2, BitMask(USBIE_bit+0)
 _SX	
@@ -170,6 +172,32 @@ ADDIU	SP, SP, 24
 JR	RA
 NOP	
 ; end of _ConfigPic
+_FSCM_SetUP:
+LW	R2, Offset(OSCCON+0)(GP)
+ANDI	R2, R2, 8
+BNE	R2, R0, L__FSCM_SetUP22
+NOP	
+J	L_FSCM_SetUP4
+NOP	
+L__FSCM_SetUP22:
+J	L_FSCM_SetUP5
+NOP	
+L_FSCM_SetUP4:
+ORI	R2, R0, 7936
+SW	R2, Offset(IPC8CLR+0)(GP)
+ORI	R2, R0, 1024
+SW	R2, Offset(IPC8SET+0)(GP)
+ORI	R2, R0, 256
+SW	R2, Offset(IPC8SET+0)(GP)
+ORI	R2, R0, 16384
+SW	R2, Offset(IFS1CLR+0)(GP)
+ORI	R2, R0, 16384
+SW	R2, Offset(IEC1SET+0)(GP)
+L_FSCM_SetUP5:
+L_end_FSCM_SetUP:
+JR	RA
+NOP	
+; end of _FSCM_SetUP
 _InitUart1:
 ADDIU	SP, SP, -8
 SW	RA, 0(SP)
@@ -229,7 +257,7 @@ ADDIU	SP, SP, -16
 SW	RA, 0(SP)
 SW	R25, 4(SP)
 SW	R26, 8(SP)
-SH	R0, 14(SP)
+SH	R0, 12(SP)
 LUI	R25, hi_addr(_RawData+0)
 ORI	R25, R25, lo_addr(_RawData+0)
 JAL	_TCS3472_getRawData+0
@@ -238,35 +266,26 @@ LUI	R25, hi_addr(_RawData+0)
 ORI	R25, R25, lo_addr(_RawData+0)
 JAL	_TCS3472_C2RGB_Error+0
 NOP	
-SH	R2, 12(SP)
-L__SetLedPWM14:
-L__SetLedPWM13:
-LH	R2, 12(SP)
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_2_Config+0)
-ORI	R2, R2, lo_addr(?lstr_2_Config+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtLed+0)
-ORI	R2, R2, lo_addr(_txtLed+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
+; err start address is: 12 (R3)
+SEH	R3, R2
+; err end address is: 12 (R3)
+SEH	R2, R3
+J	L__SetLedPWM16
 NOP	
-ADDIU	SP, SP, 12
-LUI	R2, hi_addr(_txtLed+0)
-ORI	R2, R2, lo_addr(_txtLed+0)
-ADDIU	SP, SP, -12
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_3_Config+0)
-ORI	R2, R2, lo_addr(?lstr_3_Config+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
+L__SetLedPWM17:
+SEH	R2, R4
+L__SetLedPWM16:
+; err start address is: 8 (R2)
+; err end address is: 8 (R2)
+J	L__SetLedPWM15
 NOP	
-ADDIU	SP, SP, 12
-LH	R3, 12(SP)
+L__SetLedPWM18:
+SEH	R2, R4
+L__SetLedPWM15:
+; err start address is: 16 (R4)
+; err start address is: 8 (R2)
+SEH	R3, R2
+; err end address is: 8 (R2)
 ORI	R2, R0, 2
 DIV	R3, R2
 MFLO	R3
@@ -279,9 +298,9 @@ JAL	_PWM_Set_Duty+0
 NOP	
 LUI	R24, 203
 ORI	R24, R24, 29524
-L_SetLedPWM7:
+L_SetLedPWM9:
 ADDIU	R24, R24, -1
-BNE	R24, R0, L_SetLedPWM7
+BNE	R24, R0, L_SetLedPWM9
 NOP	
 NOP	
 NOP	
@@ -293,36 +312,41 @@ LUI	R25, hi_addr(_RawData+0)
 ORI	R25, R25, lo_addr(_RawData+0)
 JAL	_TCS3472_C2RGB_Error+0
 NOP	
-SH	R2, 12(SP)
-LH	R2, 14(SP)
+; err start address is: 16 (R4)
+SEH	R4, R2
+; err end address is: 16 (R4)
+LH	R2, 12(SP)
 ADDIU	R2, R2, 1
-SH	R2, 14(SP)
+SH	R2, 12(SP)
 SEH	R2, R2
 SLTI	R2, R2, 101
-BEQ	R2, R0, L__SetLedPWM19
+BEQ	R2, R0, L__SetLedPWM26
 NOP	
-J	L_SetLedPWM9
+J	L_SetLedPWM11
 NOP	
-L__SetLedPWM19:
-J	L_SetLedPWM5
+L__SetLedPWM26:
+; err end address is: 16 (R4)
+J	L_SetLedPWM7
 NOP	
-L_SetLedPWM9:
-LH	R2, 12(SP)
+L_SetLedPWM11:
+; err start address is: 16 (R4)
+SEH	R2, R4
 SLTI	R2, R2, -50
-BEQ	R2, R0, L__SetLedPWM20
+BEQ	R2, R0, L__SetLedPWM27
 NOP	
-J	L__SetLedPWM14
+J	L__SetLedPWM17
 NOP	
-L__SetLedPWM20:
-LH	R2, 12(SP)
+L__SetLedPWM27:
+SEH	R2, R4
 SLTI	R2, R2, 51
-BNE	R2, R0, L__SetLedPWM21
+BNE	R2, R0, L__SetLedPWM28
 NOP	
-J	L__SetLedPWM13
+J	L__SetLedPWM18
 NOP	
-L__SetLedPWM21:
-L__SetLedPWM12:
-L_SetLedPWM5:
+L__SetLedPWM28:
+; err end address is: 16 (R4)
+L__SetLedPWM14:
+L_SetLedPWM7:
 L_end_SetLedPWM:
 LW	R26, 8(SP)
 LW	R25, 4(SP)

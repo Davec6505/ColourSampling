@@ -44,7 +44,8 @@ File5=Config.c
 File6=String.c
 File7=String.h
 File8=TCS3472.h
-Count=9
+File9=ISR.c
+Count=10
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]

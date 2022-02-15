@@ -11,7 +11,7 @@
 #include "LM35.h"
 //////////////////////////////////////////////////
 //defines
-#define StrDebug
+//#define StrDebug
 
 #define enum_num ((ERROR - CONFIG)+1)
 #define size 21

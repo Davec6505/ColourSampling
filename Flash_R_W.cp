@@ -177,7 +177,7 @@ extern sfr sbit PWR;
 extern sfr sbit PWR_Dir;
 extern sfr sbit STAT;
 extern sfr sbit STAT_Dir;
-#line 34 "c:/users/git/coloursampling/sim800.h"
+#line 36 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -374,6 +374,7 @@ extern unsigned int pwm_period2, pwm_period3;
 
 
 void ConfigPic();
+void FSCM_SetUP();
 void InitUart1();
 void InitUart2();
 void InitISR();

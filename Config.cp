@@ -286,7 +286,7 @@ extern sfr sbit PWR;
 extern sfr sbit PWR_Dir;
 extern sfr sbit STAT;
 extern sfr sbit STAT_Dir;
-#line 34 "c:/users/git/coloursampling/sim800.h"
+#line 36 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -468,6 +468,7 @@ extern unsigned int pwm_period2, pwm_period3;
 
 
 void ConfigPic();
+void FSCM_SetUP();
 void InitUart1();
 void InitUart2();
 void InitISR();
@@ -481,12 +482,7 @@ sbit BL at LATD4_bit;
 
 unsigned int current_duty2,current_duty3;
 unsigned int pwm_period2, pwm_period3;
-
-
-char txtLed[15];
-
-
-
+#line 15 "C:/Users/Git/ColourSampling/Config.c"
 void ConfigPic(){
 
  CHECON = 30;
@@ -503,7 +499,7 @@ void ConfigPic(){
 
  LATD = 0;
 
-
+ FSCM_SetUP();
  USBIE_bit = 0;
  IPC11bits.USBIP = 7;
  HID_Enable(&readbuff,&writebuff);
@@ -526,10 +522,7 @@ void ConfigPic(){
  PWM_Set_Duty(current_duty3, 3);
  PWM_Stop(2);
  PWM_Stop(3);
-
-
  MM_Init();
-
 
  LATA10_bit = 0;
  LATE3_bit = 0;
@@ -541,6 +534,20 @@ void ConfigPic(){
  setup_LM35(5);
  Init_PID(65.25, 200.25, 125.25, 0, 3780,0);
  PID_Control("PID");
+}
+
+void FSCM_SetUP(){
+ if (OSCCON & 0x0008){
+
+ }
+ else{
+ IPC8CLR = 0x1F << 8;
+ IPC8SET = 1 << 10;
+ IPC8SET = 1 << 8;
+ IFS1CLR = 1 << 14;
+ IEC1SET = 1 << 14;
+ }
+
 }
 
 void InitUart1(){
@@ -569,12 +576,7 @@ int err,error_counter;
  err = TCS3472_C2RGB_Error(RawData);
 
  do{
-
- sprintf(txtLed,"%d",err);
- PrintOut(PrintHandler, "\r\n"
- " *err:=   %s\r\n"
- ,txtLed);
-
+#line 114 "C:/Users/Git/ColourSampling/Config.c"
  current_duty2 += err/2;
  PWM_Set_Duty(current_duty2, 2);
  Delay_ms(500);

@@ -176,7 +176,7 @@ extern sfr sbit PWR;
 extern sfr sbit PWR_Dir;
 extern sfr sbit STAT;
 extern sfr sbit STAT_Dir;
-#line 34 "c:/users/git/coloursampling/sim800.h"
+#line 36 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -373,6 +373,7 @@ extern unsigned int pwm_period2, pwm_period3;
 
 
 void ConfigPic();
+void FSCM_SetUP();
 void InitUart1();
 void InitUart2();
 void InitISR();
@@ -539,13 +540,111 @@ char *str,err,i;
  memset(writebuff,0,64);
 
 
- sprintf(txtR,"%u",res1);
- strcat(writebuff,txtR);
- strcat(writebuff,":");
- testStrings(&writebuff);
- strcat(writebuff,"\r\n");
+
+
+
+
+
+
+
+ switch(res1){
+ case CONFIG :
+ if(!strcmp(string[2],comc[0])){
+ if(string[3] != 0){
+ Int_Time = atoi(string[3]);
+ for(i=0;i<Int_Time;i++){
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(100);
+ }
+ }
+ err = TCS3472_SetIntergration_Time(Int_Time);
+ if(err > 0)
+ for(i=0;i<err;i++){
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(500);
+ }
+ }else if(!strcmp(string[2],comc[1])){
+ if(string[3] != 0){
+ Gain = atoi(string[3]);
+ for(i=0;i<Gain;i++){
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(100);
+ }
+ }
+ err = TCS3472_SetGain(Gain);
+ if(err > 0)
+ for(i=0;i<err;i++){
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(500);
+ }
+ }
+ LATE3_bit = 0;
+ break;
+ case SENDA :
+ break;
+ case READA :
+ str = Read_Send_AllColour(0);
+ break;
+ case READR :
+ str = Read_Send_OneColour(READR);
+ break;
+ case READG :
+ str = Read_Send_OneColour(READG);
+ break;
+ case READB :
+ str = Read_Send_OneColour(READB);
+ break;
+ case READC :
+ str = Read_Send_OneColour(READC);
+ break;
+ case READT :
+ str = Read_Send_OneColour(READT);
+ break;
+ case READT_DN40 :
+ str = Read_Send_OneColour(READT_DN40);
+ break;
+ case READA_SCL :
+ str = Read_Send_AllColour(1);
+ break;
+ case READA_THV :
+ str = Read_Thresholds();
+ break;
+ case WRITE_MAN :
+ str = Write_Thresholds(1);
+ break;
+ case WRITE_RAW :
+ str = Write_Thresholds(0);
+ break;
+ case START :
+ SimVars.init_inc = 5;
+ break;
+ case CANCEL :
+ SimVars.init_inc = 3;
+ break;
+ case READA_HUE :
+ str = ReadHUE();
+ break;
+ case READA_DEG :
+ LM35_Adc_Average(&ave_adc_, 15 );
+ getLM35Temp(temp_,ave_adc_);
+ ave_adc_ = 0;
+ sprintf(txt_,"%3.2f",temp_[1]);
+ str = txt_;
+
+
+ break;
+ default:
+ str = "No data requested!\r\n";
+ break;
+ }
+
+
+
+ strncat(writebuff,str,strlen(str));
  while(!HID_Write(&writebuff,64));
-#line 177 "C:/Users/Git/ColourSampling/String.c"
+
+
+
 ret:
  return 0;
 }

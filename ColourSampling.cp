@@ -286,7 +286,7 @@ extern sfr sbit PWR;
 extern sfr sbit PWR_Dir;
 extern sfr sbit STAT;
 extern sfr sbit STAT_Dir;
-#line 34 "c:/users/git/coloursampling/sim800.h"
+#line 36 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -468,6 +468,7 @@ extern unsigned int pwm_period2, pwm_period3;
 
 
 void ConfigPic();
+void FSCM_SetUP();
 void InitUart1();
 void InitUart2();
 void InitISR();
@@ -707,5 +708,16 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
  if(!RE4_bit){
 #line 276 "C:/Users/Git/ColourSampling/ColourSampling.c"
  }
+
+
+
+ if (RCON & 0x0010) {
+
+ Reset();
+ }
+
+
+
+ WDTCLR_bit = 1;
  }
 }

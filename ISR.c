@@ -48,3 +48,12 @@ void Sim800_Uart2() iv IVT_UART_2 ilevel 6 ics ICS_AUTO {
     Sim800Text();
     
 }
+
+void FSCM() iv IVT_FAIL_SAFE_MONITOR ilevel 1 ics ICS_AUTO {
+ // interrupt handler
+// insert user code here
+   IFS1CLR = 1 << 4; // clear the CMP2 interrupt flag
+     PrintOut(PrintHandler, "\r\n"
+                            " *Clock Switched over\r\n");
+}
+

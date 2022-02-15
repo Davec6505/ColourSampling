@@ -258,3 +258,44 @@ LW	R30, 12(SP)
 ADDIU	SP, SP, 16
 ERET	
 ; end of _Sim800_Uart2
+_FSCM:
+ADDIU	SP, SP, -16
+SW	R30, 12(SP)
+MFC0	R30, 12, 2
+SW	R30, 8(SP)
+MFC0	R30, 14, 0
+SW	R30, 4(SP)
+MFC0	R30, 12, 0
+SW	R30, 0(SP)
+INS	R30, R0, 1, 15
+ORI	R30, R0, 1024
+MTC0	R30, 12, 0
+ADDIU	SP, SP, -4
+SW	RA, 0(SP)
+ORI	R2, R0, 16
+SW	R2, Offset(IFS1CLR+0)(GP)
+LUI	R2, hi_addr(?lstr_1_ISR+0)
+ORI	R2, R2, lo_addr(?lstr_1_ISR+0)
+ADDIU	SP, SP, -8
+SW	R2, 4(SP)
+LUI	R2, hi_addr(_PrintHandler+0)
+ORI	R2, R2, lo_addr(_PrintHandler+0)
+SW	R2, 0(SP)
+JAL	_PrintOut+0
+NOP	
+ADDIU	SP, SP, 8
+L_end_FSCM:
+LW	RA, 0(SP)
+ADDIU	SP, SP, 4
+DI	
+EHB	
+LW	R30, 4(SP)
+MTC0	R30, 14, 0
+LW	R30, 0(SP)
+MTC0	R30, 12, 0
+LW	R30, 8(SP)
+MTC0	R30, 12, 2
+LW	R30, 12(SP)
+ADDIU	SP, SP, 16
+ERET	
+; end of _FSCM

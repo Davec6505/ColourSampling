@@ -277,7 +277,6 @@ LW	R25, Offset(_FLASH_Settings_PAddr+0)(GP)
 JAL	_NVMErasePage+0
 NOP	
 LW	R3, 16(SP)
-SH	R2, Offset(WriteToFlashTemp_j_L0+0)(GP)
 SEH	R2, R2
 BEQ	R2, R0, L__WriteToFlashTemp320
 NOP	
@@ -310,7 +309,6 @@ MOVZ	R25, R4, R0
 JAL	_NVMWriteWord+0
 NOP	
 LW	R4, 16(SP)
-SH	R2, Offset(WriteToFlashTemp_j_L0+0)(GP)
 ADDIU	R2, R4, 4
 MOVZ	R4, R2, R0
 LH	R2, Offset(WriteToFlashTemp_i_L0+0)(GP)
@@ -321,46 +319,6 @@ J	L_WriteToFlashTemp20
 NOP	
 L_WriteToFlashTemp21:
 L_WriteToFlashTemp19:
-LH	R2, Offset(WriteToFlashTemp_i_L0+0)(GP)
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_2_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_2_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_a+0)
-ORI	R2, R2, lo_addr(_a+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LH	R2, Offset(WriteToFlashTemp_j_L0+0)(GP)
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_3_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_3_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_b+0)
-ORI	R2, R2, lo_addr(_b+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LUI	R2, hi_addr(_b+0)
-ORI	R2, R2, lo_addr(_b+0)
-ADDIU	SP, SP, -16
-SW	R2, 12(SP)
-LUI	R2, hi_addr(_a+0)
-ORI	R2, R2, lo_addr(_a+0)
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_4_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_4_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 16
 L_end_WriteToFlashTemp:
 LW	R27, 12(SP)
 LW	R26, 8(SP)
@@ -404,15 +362,6 @@ ADDU	R3, R2, R5
 ADDU	R2, R4, R5
 LBU	R2, 0(R2)
 SB	R2, 0(R3)
-LUI	R2, hi_addr(_buff+0)
-ORI	R2, R2, lo_addr(_buff+0)
-ADDU	R2, R2, R5
-LBU	R25, 0(R2)
-JAL	_UART1_Write+0
-NOP	
-ORI	R25, R0, 58
-JAL	_UART1_Write+0
-NOP	
 ADDIU	R2, R5, 1
 MOVZ	R5, R2, R0
 ; ptr end address is: 16 (R4)
@@ -467,31 +416,6 @@ LUI	R25, hi_addr(_SF+118)
 ORI	R25, R25, lo_addr(_SF+118)
 JAL	_strncpy+0
 NOP	
-LUI	R2, hi_addr(_SF+118)
-ORI	R2, R2, lo_addr(_SF+118)
-ADDIU	SP, SP, -28
-SW	R2, 24(SP)
-LUI	R2, hi_addr(_SF+98)
-ORI	R2, R2, lo_addr(_SF+98)
-SW	R2, 20(SP)
-LUI	R2, hi_addr(_SF+78)
-ORI	R2, R2, lo_addr(_SF+78)
-SW	R2, 16(SP)
-LUI	R2, hi_addr(_SF+58)
-ORI	R2, R2, lo_addr(_SF+58)
-SW	R2, 12(SP)
-LUI	R2, hi_addr(_SF+18)
-ORI	R2, R2, lo_addr(_SF+18)
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_5_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_5_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 28
 LUI	R2, hi_addr(_SF+18)
 ORI	R2, R2, lo_addr(_SF+18)
 L_end_GetValuesFromFlash:
@@ -504,8 +428,6 @@ JR	RA
 NOP	
 ; end of _GetValuesFromFlash
 _GetStrLengths:
-ADDIU	SP, SP, -4
-SW	RA, 0(SP)
 ORI	R2, R0, 19
 SH	R2, Offset(_SL+0)(GP)
 ORI	R2, R0, 19
@@ -530,109 +452,7 @@ ORI	R2, R0, 1
 SH	R2, Offset(_SL+16)(GP)
 ORI	R2, R0, 96
 SH	R2, Offset(_SL+14)(GP)
-ORI	R2, R0, 19
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_6_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_6_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_a+0)
-ORI	R2, R2, lo_addr(_a+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LH	R2, Offset(_SL+2)(GP)
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_7_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_7_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_b+0)
-ORI	R2, R2, lo_addr(_b+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LH	R2, Offset(_SL+4)(GP)
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_8_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_8_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_c+0)
-ORI	R2, R2, lo_addr(_c+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LH	R2, Offset(_SL+6)(GP)
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_9_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_9_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_d+0)
-ORI	R2, R2, lo_addr(_d+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LH	R2, Offset(_SL+8)(GP)
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_10_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_10_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_e+0)
-ORI	R2, R2, lo_addr(_e+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LH	R2, Offset(_SL+14)(GP)
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_11_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_11_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_f+0)
-ORI	R2, R2, lo_addr(_f+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LUI	R2, hi_addr(_f+0)
-ORI	R2, R2, lo_addr(_f+0)
-ADDIU	SP, SP, -32
-SW	R2, 28(SP)
-LUI	R2, hi_addr(_e+0)
-ORI	R2, R2, lo_addr(_e+0)
-SW	R2, 24(SP)
-LUI	R2, hi_addr(_d+0)
-ORI	R2, R2, lo_addr(_d+0)
-SW	R2, 20(SP)
-LUI	R2, hi_addr(_c+0)
-ORI	R2, R2, lo_addr(_c+0)
-SW	R2, 16(SP)
-LUI	R2, hi_addr(_b+0)
-ORI	R2, R2, lo_addr(_b+0)
-SW	R2, 12(SP)
-LUI	R2, hi_addr(_a+0)
-ORI	R2, R2, lo_addr(_a+0)
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_12_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_12_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 32
 L_end_GetStrLengths:
-LW	RA, 0(SP)
-ADDIU	SP, SP, 4
 JR	RA
 NOP	
 ; end of _GetStrLengths
@@ -997,16 +817,6 @@ ADDIU	SP, SP, -24
 SW	RA, 0(SP)
 SW	R25, 4(SP)
 SW	R26, 8(SP)
-LUI	R2, hi_addr(?lstr_14_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_14_Sim800+0)
-ADDIU	SP, SP, -8
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 8
 ORI	R25, R0, 3
 JAL	_WaitForResponse+0
 NOP	
@@ -1018,24 +828,11 @@ BNE	R24, R0, L_SetupIOT63
 NOP	
 JAL	_RingToTempBuf+0
 NOP	
-LUI	R2, hi_addr(_SimTestTxt+0)
-ORI	R2, R2, lo_addr(_SimTestTxt+0)
-ADDIU	SP, SP, -12
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_15_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_15_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 12
 ___SetupIOT_wait:
 ADDIU	R23, SP, 12
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr16_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr16_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr3_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr3_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 12
@@ -1061,19 +858,6 @@ NOP
 NOP	
 JAL	_RingToTempBuf+0
 NOP	
-LUI	R2, hi_addr(_SimTestTxt+0)
-ORI	R2, R2, lo_addr(_SimTestTxt+0)
-ADDIU	SP, SP, -12
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_17_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_17_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 12
 LHU	R3, Offset(_RB+1006)(GP)
 LHU	R2, Offset(_RB+1002)(GP)
 SLTU	R2, R3, R2
@@ -1087,45 +871,6 @@ LUI	R25, hi_addr(_SimTestTxt+0)
 ORI	R25, R25, lo_addr(_SimTestTxt+0)
 JAL	_strsplit+0
 NOP	
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_18_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_18_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtA+0)
-ORI	R2, R2, lo_addr(_txtA+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LUI	R2, hi_addr(_string+256)
-ORI	R2, R2, lo_addr(_string+256)
-ADDIU	SP, SP, -32
-SW	R2, 28(SP)
-LUI	R2, hi_addr(_string+192)
-ORI	R2, R2, lo_addr(_string+192)
-SW	R2, 24(SP)
-LUI	R2, hi_addr(_string+128)
-ORI	R2, R2, lo_addr(_string+128)
-SW	R2, 20(SP)
-LUI	R2, hi_addr(_string+64)
-ORI	R2, R2, lo_addr(_string+64)
-SW	R2, 16(SP)
-LUI	R2, hi_addr(_string+0)
-ORI	R2, R2, lo_addr(_string+0)
-SW	R2, 12(SP)
-LUI	R2, hi_addr(_txtA+0)
-ORI	R2, R2, lo_addr(_txtA+0)
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_19_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_19_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 32
 LUI	R25, hi_addr(_string+64)
 ORI	R25, R25, lo_addr(_string+64)
 JAL	_findnumber+0
@@ -1133,8 +878,6 @@ NOP
 MOVZ	R25, R2, R0
 JAL	_atoi+0
 NOP	
-; res start address is: 16 (R4)
-SEH	R4, R2
 SEH	R3, R2
 ORI	R2, R0, 1
 BEQ	R3, R2, L__SetupIOT354
@@ -1142,44 +885,9 @@ NOP
 J	L_SetupIOT68
 NOP	
 L__SetupIOT354:
-ADDIU	SP, SP, -12
-SH	R4, 8(SP)
-; res end address is: 16 (R4)
-LUI	R2, hi_addr(?lstr_20_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_20_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtA+0)
-ORI	R2, R2, lo_addr(_txtA+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LUI	R2, hi_addr(_txtA+0)
-ORI	R2, R2, lo_addr(_txtA+0)
-ADDIU	SP, SP, -12
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_21_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_21_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 12
 J	L_SetupIOT69
 NOP	
 L_SetupIOT68:
-LUI	R2, hi_addr(?lstr_22_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_22_Sim800+0)
-ADDIU	SP, SP, -8
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 8
 LUI	R24, 203
 ORI	R24, R24, 29524
 L_SetupIOT70:
@@ -1192,16 +900,6 @@ J	___SetupIOT_wait
 NOP	
 L_SetupIOT69:
 L_SetupIOT67:
-LUI	R2, hi_addr(?lstr_23_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_23_Sim800+0)
-ADDIU	SP, SP, -8
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 8
 ORI	R2, R0, 1
 L_end_SetupIOT:
 LW	R26, 8(SP)
@@ -1218,8 +916,8 @@ SW	R26, 4(SP)
 SW	R27, 8(SP)
 ADDIU	R23, SP, 16
 ADDIU	R22, R23, 10
-LUI	R24, hi_addr(?ICS?lstr24_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr24_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr4_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr4_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 16
@@ -1264,62 +962,6 @@ LUI	R25, hi_addr(_SimTestTxt+0)
 ORI	R25, R25, lo_addr(_SimTestTxt+0)
 JAL	_strsplit+0
 NOP	
-; num_strs start address is: 84 (R21)
-SEH	R21, R2
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_25_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_25_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtA+0)
-ORI	R2, R2, lo_addr(_txtA+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-; num_strs end address is: 84 (R21)
-ADDIU	SP, SP, -12
-SH	R21, 8(SP)
-LUI	R2, hi_addr(?lstr_26_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_26_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtA+0)
-ORI	R2, R2, lo_addr(_txtA+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LUI	R2, hi_addr(_string+320)
-ORI	R2, R2, lo_addr(_string+320)
-ADDIU	SP, SP, -36
-SW	R2, 32(SP)
-LUI	R2, hi_addr(_string+256)
-ORI	R2, R2, lo_addr(_string+256)
-SW	R2, 28(SP)
-LUI	R2, hi_addr(_string+192)
-ORI	R2, R2, lo_addr(_string+192)
-SW	R2, 24(SP)
-LUI	R2, hi_addr(_string+128)
-ORI	R2, R2, lo_addr(_string+128)
-SW	R2, 20(SP)
-LUI	R2, hi_addr(_string+64)
-ORI	R2, R2, lo_addr(_string+64)
-SW	R2, 16(SP)
-LUI	R2, hi_addr(_string+0)
-ORI	R2, R2, lo_addr(_string+0)
-SW	R2, 12(SP)
-LUI	R2, hi_addr(_txtA+0)
-ORI	R2, R2, lo_addr(_txtA+0)
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_27_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_27_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 36
 LUI	R25, hi_addr(_string+64)
 ORI	R25, R25, lo_addr(_string+64)
 JAL	_atoi+0
@@ -1327,8 +969,8 @@ NOP
 SH	R2, 14(SP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_28_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_28_Sim800+0)
+LUI	R2, hi_addr(?lstr_5_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_5_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
@@ -1336,23 +978,10 @@ SW	R2, 0(SP)
 JAL	_sprintf+0
 NOP	
 ADDIU	SP, SP, 12
-LUI	R2, hi_addr(_sms+0)
-ORI	R2, R2, lo_addr(_sms+0)
-ADDIU	SP, SP, -12
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_29_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_29_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 12
 ADDIU	R23, SP, 26
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr30_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr30_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr6_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr6_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 26
@@ -1387,57 +1016,6 @@ LUI	R25, hi_addr(_SimTestTxt+0)
 ORI	R25, R25, lo_addr(_SimTestTxt+0)
 JAL	_strsplit+0
 NOP	
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_31_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_31_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtA+0)
-ORI	R2, R2, lo_addr(_txtA+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LUI	R2, hi_addr(_string+512)
-ORI	R2, R2, lo_addr(_string+512)
-ADDIU	SP, SP, -48
-SW	R2, 44(SP)
-LUI	R2, hi_addr(_string+448)
-ORI	R2, R2, lo_addr(_string+448)
-SW	R2, 40(SP)
-LUI	R2, hi_addr(_string+384)
-ORI	R2, R2, lo_addr(_string+384)
-SW	R2, 36(SP)
-LUI	R2, hi_addr(_string+320)
-ORI	R2, R2, lo_addr(_string+320)
-SW	R2, 32(SP)
-LUI	R2, hi_addr(_string+256)
-ORI	R2, R2, lo_addr(_string+256)
-SW	R2, 28(SP)
-LUI	R2, hi_addr(_string+192)
-ORI	R2, R2, lo_addr(_string+192)
-SW	R2, 24(SP)
-LUI	R2, hi_addr(_string+128)
-ORI	R2, R2, lo_addr(_string+128)
-SW	R2, 20(SP)
-LUI	R2, hi_addr(_string+64)
-ORI	R2, R2, lo_addr(_string+64)
-SW	R2, 16(SP)
-LUI	R2, hi_addr(_string+0)
-ORI	R2, R2, lo_addr(_string+0)
-SW	R2, 12(SP)
-LUI	R2, hi_addr(_txtA+0)
-ORI	R2, R2, lo_addr(_txtA+0)
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_32_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_32_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 48
 LHU	R25, 12(SP)
 ANDI	R2, R25, 65535
 BEQ	R2, R0, L__WaitForSetupSMS356
@@ -1477,25 +1055,6 @@ LUI	R25, hi_addr(_SF+9)
 ORI	R25, R25, lo_addr(_SF+9)
 JAL	_strncpy+0
 NOP	
-LUI	R2, hi_addr(_SF+9)
-ORI	R2, R2, lo_addr(_SF+9)
-ADDIU	SP, SP, -20
-SW	R2, 16(SP)
-LUI	R2, hi_addr(_SF+0)
-ORI	R2, R2, lo_addr(_SF+0)
-SW	R2, 12(SP)
-LUI	R2, hi_addr(_SF+18)
-ORI	R2, R2, lo_addr(_SF+18)
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_33_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_33_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 20
 LHU	R25, 12(SP)
 J	L_WaitForSetupSMS79
 NOP	
@@ -1556,28 +1115,6 @@ LUI	R25, hi_addr(_SF+118)
 ORI	R25, R25, lo_addr(_SF+118)
 JAL	_strncpy+0
 NOP	
-LUI	R2, hi_addr(_SF+118)
-ORI	R2, R2, lo_addr(_SF+118)
-ADDIU	SP, SP, -24
-SW	R2, 20(SP)
-LUI	R2, hi_addr(_SF+98)
-ORI	R2, R2, lo_addr(_SF+98)
-SW	R2, 16(SP)
-LUI	R2, hi_addr(_SF+78)
-ORI	R2, R2, lo_addr(_SF+78)
-SW	R2, 12(SP)
-LUI	R2, hi_addr(_SF+58)
-ORI	R2, R2, lo_addr(_SF+58)
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_34_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_34_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 24
 LHU	R25, 12(SP)
 L_WaitForSetupSMS80:
 L_WaitForSetupSMS79:
@@ -1607,36 +1144,9 @@ LUI	R25, hi_addr(_SimTestTxt+0)
 ORI	R25, R25, lo_addr(_SimTestTxt+0)
 JAL	_strcmp+0
 NOP	
-SH	R2, 14(SP)
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_36_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_36_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtA+0)
-ORI	R2, R2, lo_addr(_txtA+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LUI	R2, hi_addr(_txtA+0)
-ORI	R2, R2, lo_addr(_txtA+0)
-ADDIU	SP, SP, -16
-SW	R2, 12(SP)
-LUI	R2, hi_addr(_SimTestTxt+0)
-ORI	R2, R2, lo_addr(_SimTestTxt+0)
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_37_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_37_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 16
 LHU	R25, 12(SP)
-LH	R2, 14(SP)
+SH	R2, 14(SP)
+SEH	R2, R2
 BEQ	R2, R0, L__WaitForSetupSMS358
 NOP	
 J	L__WaitForSetupSMS280
@@ -1690,8 +1200,8 @@ SW	RA, 0(SP)
 SW	R25, 4(SP)
 ADDIU	R23, SP, 8
 ADDIU	R22, R23, 20
-LUI	R24, hi_addr(?ICS?lstr38_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr38_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr8_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr8_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 8
@@ -1728,8 +1238,8 @@ SW	RA, 0(SP)
 SW	R25, 4(SP)
 ADDIU	R23, SP, 8
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr39_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr39_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr9_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr9_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 8
@@ -1759,23 +1269,10 @@ BNE	R24, R0, L_GetAPI_Key_SMS93
 NOP	
 NOP	
 NOP	
-LUI	R2, hi_addr(_SimTestTxt+0)
-ORI	R2, R2, lo_addr(_SimTestTxt+0)
-ADDIU	SP, SP, -12
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_40_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_40_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 12
 ADDIU	R23, SP, 17
 ADDIU	R22, R23, 63
-LUI	R24, hi_addr(?ICS?lstr41_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr41_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr10_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr10_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 17
@@ -1852,8 +1349,8 @@ NOP
 L_SendSMS97:
 ADDIU	R23, SP, 135
 ADDIU	R22, R23, 10
-LUI	R24, hi_addr(?ICS?lstr42_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr42_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr11_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr11_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 135
@@ -1875,8 +1372,8 @@ BNE	R24, R0, L_SendSMS98
 NOP	
 ADDIU	R23, SP, 145
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr43_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr43_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr12_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr12_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 145
@@ -1907,8 +1404,8 @@ NOP
 L_SendSMS104:
 ADDIU	R23, SP, 154
 ADDIU	R22, R23, 43
-LUI	R24, hi_addr(?ICS?lstr44_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr44_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr13_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr13_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 154
@@ -1921,8 +1418,8 @@ NOP
 L_SendSMS105:
 ADDIU	R23, SP, 197
 ADDIU	R22, R23, 14
-LUI	R24, hi_addr(?ICS?lstr45_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr45_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr14_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr14_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 197
@@ -1935,8 +1432,8 @@ NOP
 L_SendSMS106:
 ADDIU	R23, SP, 211
 ADDIU	R22, R23, 14
-LUI	R24, hi_addr(?ICS?lstr46_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr46_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr15_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr15_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 211
@@ -1949,8 +1446,8 @@ NOP
 L_SendSMS107:
 ADDIU	R23, SP, 225
 ADDIU	R22, R23, 16
-LUI	R24, hi_addr(?ICS?lstr47_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr47_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr16_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr16_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 225
@@ -1963,8 +1460,8 @@ NOP
 L_SendSMS108:
 ADDIU	R23, SP, 241
 ADDIU	R22, R23, 19
-LUI	R24, hi_addr(?ICS?lstr48_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr48_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr17_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr17_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 241
@@ -1977,8 +1474,8 @@ NOP
 L_SendSMS109:
 ADDIU	R23, SP, 260
 ADDIU	R22, R23, 18
-LUI	R24, hi_addr(?ICS?lstr49_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr49_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr18_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr18_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 260
@@ -2060,8 +1557,8 @@ NOP
 L_SendSMS113:
 ADDIU	R23, SP, 278
 ADDIU	R22, R23, 14
-LUI	R24, hi_addr(?ICS?lstr50_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr50_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr19_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr19_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 278
@@ -2074,8 +1571,8 @@ NOP
 L_SendSMS114:
 ADDIU	R23, SP, 292
 ADDIU	R22, R23, 14
-LUI	R24, hi_addr(?ICS?lstr51_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr51_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr20_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr20_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 292
@@ -2088,8 +1585,8 @@ NOP
 L_SendSMS115:
 ADDIU	R23, SP, 306
 ADDIU	R22, R23, 65
-LUI	R24, hi_addr(?ICS?lstr52_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr52_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr21_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr21_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 306
@@ -2102,8 +1599,8 @@ NOP
 L_SendSMS116:
 ADDIU	R23, SP, 371
 ADDIU	R22, R23, 26
-LUI	R24, hi_addr(?ICS?lstr53_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr53_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr22_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr22_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 371
@@ -2116,8 +1613,8 @@ NOP
 L_SendSMS117:
 ADDIU	R23, SP, 397
 ADDIU	R22, R23, 49
-LUI	R24, hi_addr(?ICS?lstr54_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr54_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr23_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr23_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 397
@@ -2134,8 +1631,8 @@ NOP
 L_SendSMS118:
 ADDIU	R23, SP, 446
 ADDIU	R22, R23, 30
-LUI	R24, hi_addr(?ICS?lstr55_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr55_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr24_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr24_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 446
@@ -2152,8 +1649,8 @@ NOP
 L_SendSMS119:
 ADDIU	R23, SP, 476
 ADDIU	R22, R23, 27
-LUI	R24, hi_addr(?ICS?lstr56_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr56_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr25_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr25_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 476
@@ -2204,8 +1701,8 @@ LW	R2, 0(R2)
 ADDIU	R3, SP, 100
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_57_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_57_Sim800+0)
+LUI	R2, hi_addr(?lstr_26_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_26_Sim800+0)
 SW	R2, 4(SP)
 SW	R3, 0(SP)
 JAL	_sprintf+0
@@ -2235,8 +1732,8 @@ NOP
 L_SendSMS122:
 ADDIU	R23, SP, 506
 ADDIU	R22, R23, 30
-LUI	R24, hi_addr(?ICS?lstr59_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr59_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr28_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr28_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 506
@@ -2416,8 +1913,8 @@ SW	R26, 8(SP)
 SW	R27, 12(SP)
 ADDIU	R23, SP, 20
 ADDIU	R22, R23, 20
-LUI	R24, hi_addr(?ICS?lstr60_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr60_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr29_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr29_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 20
@@ -2444,8 +1941,8 @@ SH	R2, 18(SP)
 ADDIU	SP, SP, -12
 SH	R5, 8(SP)
 ; num_strs end address is: 20 (R5)
-LUI	R2, hi_addr(?lstr_61_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_61_Sim800+0)
+LUI	R2, hi_addr(?lstr_30_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_30_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtA+0)
 ORI	R2, R2, lo_addr(_txtA+0)
@@ -2456,8 +1953,8 @@ ADDIU	SP, SP, 12
 LH	R2, 18(SP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_62_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_62_Sim800+0)
+LUI	R2, hi_addr(?lstr_31_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_31_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtB+0)
 ORI	R2, R2, lo_addr(_txtB+0)
@@ -2499,8 +1996,8 @@ SW	R2, 12(SP)
 LUI	R2, hi_addr(_txtA+0)
 ORI	R2, R2, lo_addr(_txtA+0)
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_63_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_63_Sim800+0)
+LUI	R2, hi_addr(?lstr_32_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_32_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
@@ -2531,8 +2028,8 @@ NOP
 SH	R2, 16(SP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_64_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_64_Sim800+0)
+LUI	R2, hi_addr(?lstr_33_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_33_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
@@ -2544,8 +2041,8 @@ LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_65_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_65_Sim800+0)
+LUI	R2, hi_addr(?lstr_34_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_34_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
@@ -2590,8 +2087,8 @@ SW	R26, 8(SP)
 SW	R27, 12(SP)
 ADDIU	SP, SP, -12
 SH	R25, 8(SP)
-LUI	R2, hi_addr(?lstr_66_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_66_Sim800+0)
+LUI	R2, hi_addr(?lstr_35_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_35_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
@@ -2609,8 +2106,8 @@ LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_67_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_67_Sim800+0)
+LUI	R2, hi_addr(?lstr_36_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_36_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
@@ -2620,8 +2117,8 @@ NOP
 ADDIU	SP, SP, 12
 ADDIU	R23, SP, 20
 ADDIU	R22, R23, 10
-LUI	R24, hi_addr(?ICS?lstr68_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr68_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr37_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr37_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 20
@@ -2647,8 +2144,8 @@ BNE	R24, R0, L_ReadMSG130
 NOP	
 ADDIU	R23, SP, 30
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr69_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr69_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr38_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr38_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 30
@@ -2676,8 +2173,8 @@ L_ReadMSG132:
 ADDIU	R24, R24, -1
 BNE	R24, R0, L_ReadMSG132
 NOP	
-LUI	R2, hi_addr(?lstr_70_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_70_Sim800+0)
+LUI	R2, hi_addr(?lstr_39_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_39_Sim800+0)
 ADDIU	SP, SP, -8
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_PrintHandler+0)
@@ -2779,8 +2276,8 @@ SH	R25, 16(SP)
 ; num_strs end address is: 12 (R3)
 ADDIU	SP, SP, -12
 SH	R3, 8(SP)
-LUI	R2, hi_addr(?lstr_71_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_71_Sim800+0)
+LUI	R2, hi_addr(?lstr_40_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_40_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
@@ -2819,8 +2316,8 @@ SW	R2, 12(SP)
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_72_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_72_Sim800+0)
+LUI	R2, hi_addr(?lstr_41_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_41_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
@@ -3090,8 +2587,8 @@ SW	R2, 12(SP)
 LUI	R2, hi_addr(_SF+38)
 ORI	R2, R2, lo_addr(_SF+38)
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_73_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_73_Sim800+0)
+LUI	R2, hi_addr(?lstr_42_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_42_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
@@ -3194,8 +2691,8 @@ ADDIU	R3, SP, 14
 SH	R25, 12(SP)
 ADDIU	SP, SP, -12
 SH	R25, 8(SP)
-LUI	R2, hi_addr(?lstr_74_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_74_Sim800+0)
+LUI	R2, hi_addr(?lstr_43_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_43_Sim800+0)
 SW	R2, 4(SP)
 SW	R3, 0(SP)
 JAL	_sprintf+0
@@ -3204,8 +2701,8 @@ ADDIU	SP, SP, 12
 ADDIU	R2, SP, 14
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_75_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_75_Sim800+0)
+LUI	R2, hi_addr(?lstr_44_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_44_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
@@ -3307,8 +2804,8 @@ JAL	_Write_Thresholds+0
 NOP	
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_76_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_76_Sim800+0)
+LUI	R2, hi_addr(?lstr_45_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_45_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
@@ -3469,8 +2966,8 @@ SW	RA, 0(SP)
 SH	R25, 4(SP)
 ADDIU	SP, SP, -12
 SH	R25, 8(SP)
-LUI	R2, hi_addr(?lstr_77_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_77_Sim800+0)
+LUI	R2, hi_addr(?lstr_46_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_46_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
@@ -3482,8 +2979,8 @@ LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_78_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_78_Sim800+0)
+LUI	R2, hi_addr(?lstr_47_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_47_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
@@ -3496,8 +2993,8 @@ L_RemoveSMSText194:
 SH	R25, 4(SP)
 ADDIU	SP, SP, -12
 SH	R25, 8(SP)
-LUI	R2, hi_addr(?lstr_79_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_79_Sim800+0)
+LUI	R2, hi_addr(?lstr_48_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_48_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_sms+0)
 ORI	R2, R2, lo_addr(_sms+0)
@@ -3507,8 +3004,8 @@ NOP
 ADDIU	SP, SP, 12
 ADDIU	R23, SP, 6
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr80_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr80_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr49_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr49_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 6
@@ -3615,8 +3112,8 @@ SW	R26, 16(SP)
 SW	R25, 20(SP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_81_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_81_Sim800+0)
+LUI	R2, hi_addr(?lstr_50_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_50_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtC+0)
 ORI	R2, R2, lo_addr(_txtC+0)
@@ -3630,8 +3127,8 @@ LHU	R2, 0(R2)
 SW	R25, 20(SP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_82_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_82_Sim800+0)
+LUI	R2, hi_addr(?lstr_51_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_51_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtR+0)
 ORI	R2, R2, lo_addr(_txtR+0)
@@ -3645,8 +3142,8 @@ LHU	R2, 0(R2)
 SW	R25, 20(SP)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_83_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_83_Sim800+0)
+LUI	R2, hi_addr(?lstr_52_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_52_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtG+0)
 ORI	R2, R2, lo_addr(_txtG+0)
@@ -3659,8 +3156,8 @@ ADDIU	R2, R25, 6
 LHU	R2, 0(R2)
 ADDIU	SP, SP, -12
 SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_84_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_84_Sim800+0)
+LUI	R2, hi_addr(?lstr_53_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_53_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtB+0)
 ORI	R2, R2, lo_addr(_txtB+0)
@@ -3673,8 +3170,8 @@ LW	R2, 0(R26)
 SW	R26, 16(SP)
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_85_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_85_Sim800+0)
+LUI	R2, hi_addr(?lstr_54_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_54_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtR_Scl+0)
 ORI	R2, R2, lo_addr(_txtR_Scl+0)
@@ -3688,8 +3185,8 @@ LW	R2, 0(R2)
 SW	R26, 16(SP)
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_86_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_86_Sim800+0)
+LUI	R2, hi_addr(?lstr_55_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_55_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtG_Scl+0)
 ORI	R2, R2, lo_addr(_txtG_Scl+0)
@@ -3703,8 +3200,8 @@ LW	R2, 0(R2)
 SW	R26, 16(SP)
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_87_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_87_Sim800+0)
+LUI	R2, hi_addr(?lstr_56_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_56_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtB_Scl+0)
 ORI	R2, R2, lo_addr(_txtB_Scl+0)
@@ -3718,8 +3215,8 @@ LW	R2, 0(R2)
 SW	R26, 16(SP)
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_88_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_88_Sim800+0)
+LUI	R2, hi_addr(?lstr_57_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_57_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtHUE+0)
 ORI	R2, R2, lo_addr(_txtHUE+0)
@@ -3733,8 +3230,8 @@ LW	R2, 0(R2)
 SW	R26, 16(SP)
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_89_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_89_Sim800+0)
+LUI	R2, hi_addr(?lstr_58_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_58_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtSAT+0)
 ORI	R2, R2, lo_addr(_txtSAT+0)
@@ -3747,8 +3244,8 @@ ADDIU	R2, R26, 24
 LW	R2, 0(R2)
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_90_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_90_Sim800+0)
+LUI	R2, hi_addr(?lstr_59_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_59_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtLUM+0)
 ORI	R2, R2, lo_addr(_txtLUM+0)
@@ -3758,8 +3255,8 @@ NOP
 ADDIU	SP, SP, 12
 ADDIU	SP, SP, -12
 SW	R27, 8(SP)
-LUI	R2, hi_addr(?lstr_91_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_91_Sim800+0)
+LUI	R2, hi_addr(?lstr_60_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_60_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_txtDegC+0)
 ORI	R2, R2, lo_addr(_txtDegC+0)
@@ -3964,8 +3461,8 @@ NOP
 ADDIU	R2, SP, 28
 ADDIU	SP, SP, -12
 SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_92_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_92_Sim800+0)
+LUI	R2, hi_addr(?lstr_61_Sim800+0)
+ORI	R2, R2, lo_addr(?lstr_61_Sim800+0)
 SW	R2, 4(SP)
 LUI	R2, hi_addr(_PrintHandler+0)
 ORI	R2, R2, lo_addr(_PrintHandler+0)
@@ -3975,8 +3472,8 @@ NOP
 ADDIU	SP, SP, 12
 ADDIU	R23, SP, 228
 ADDIU	R22, R23, 11
-LUI	R24, hi_addr(?ICS?lstr93_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr93_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr62_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr62_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 228
@@ -4002,8 +3499,8 @@ NOP
 NOP	
 ADDIU	R23, SP, 239
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr94_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr94_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr63_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr63_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 239
@@ -4028,8 +3525,8 @@ NOP
 NOP	
 ADDIU	R23, SP, 248
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr95_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr95_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr64_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr64_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 248
@@ -4054,8 +3551,8 @@ NOP
 NOP	
 ADDIU	R23, SP, 257
 ADDIU	R22, R23, 10
-LUI	R24, hi_addr(?ICS?lstr96_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr96_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr65_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr65_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 257
@@ -4080,8 +3577,8 @@ NOP
 NOP	
 ADDIU	R23, SP, 267
 ADDIU	R22, R23, 11
-LUI	R24, hi_addr(?ICS?lstr97_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr97_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr66_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr66_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 267
@@ -4106,8 +3603,8 @@ NOP
 NOP	
 ADDIU	R23, SP, 278
 ADDIU	R22, R23, 13
-LUI	R24, hi_addr(?ICS?lstr98_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr98_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr67_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr67_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 278
@@ -4132,8 +3629,8 @@ NOP
 NOP	
 ADDIU	R23, SP, 291
 ADDIU	R22, R23, 12
-LUI	R24, hi_addr(?ICS?lstr99_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr99_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr68_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr68_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 291
@@ -4158,8 +3655,8 @@ NOP
 NOP	
 ADDIU	R23, SP, 303
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr100_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr100_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr69_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr69_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 303
@@ -4172,8 +3669,8 @@ JAL	_UART2_Write_Text+0
 NOP	
 ADDIU	R23, SP, 312
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr101_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr101_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr70_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr70_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 312
@@ -4202,8 +3699,8 @@ NOP
 NOP	
 ADDIU	R23, SP, 321
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr102_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr102_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr71_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr71_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 321
@@ -4228,8 +3725,8 @@ NOP
 NOP	
 ADDIU	R23, SP, 330
 ADDIU	R22, R23, 9
-LUI	R24, hi_addr(?ICS?lstr103_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr103_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr72_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr72_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 330
@@ -4250,8 +3747,8 @@ BNE	R24, R0, L_SendData217
 NOP	
 ADDIU	R23, SP, 339
 ADDIU	R22, R23, 13
-LUI	R24, hi_addr(?ICS?lstr104_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr104_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr73_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr73_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 339
@@ -4276,8 +3773,8 @@ NOP
 NOP	
 ADDIU	R23, SP, 352
 ADDIU	R22, R23, 42
-LUI	R24, hi_addr(?ICS?lstr105_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr105_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr74_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr74_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 352
@@ -4301,8 +3798,8 @@ BNE	R24, R0, L_SendData221
 NOP	
 ADDIU	R23, SP, 394
 ADDIU	R22, R23, 11
-LUI	R24, hi_addr(?ICS?lstr106_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr106_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr75_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr75_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 394
@@ -4343,18 +3840,17 @@ NOP
 ORI	R25, R0, 1
 JAL	_TestForOK+0
 NOP	
-LUI	R24, 20
-ORI	R24, R24, 22612
+LUI	R24, 61
+ORI	R24, R24, 2303
 L_SendData225:
 ADDIU	R24, R24, -1
 BNE	R24, R0, L_SendData225
 NOP	
 NOP	
-NOP	
 ADDIU	R23, SP, 405
 ADDIU	R22, R23, 11
-LUI	R24, hi_addr(?ICS?lstr107_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr107_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr76_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr76_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 405
@@ -4388,7 +3884,7 @@ JR	RA
 NOP	
 ; end of _SendData
 _SignalStrength:
-ADDIU	SP, SP, -28
+ADDIU	SP, SP, -24
 SW	RA, 0(SP)
 SW	R25, 4(SP)
 SW	R26, 8(SP)
@@ -4398,20 +3894,20 @@ ORI	R25, R25, lo_addr(_string+0)
 JAL	_clr_str_arrays+0
 NOP	
 ORI	R30, R0, 65
-SB	R30, 18(SP)
+SB	R30, 16(SP)
 ORI	R30, R0, 84
-SB	R30, 19(SP)
+SB	R30, 17(SP)
 ORI	R30, R0, 43
-SB	R30, 20(SP)
+SB	R30, 18(SP)
 ORI	R30, R0, 67
-SB	R30, 21(SP)
+SB	R30, 19(SP)
 ORI	R30, R0, 83
-SB	R30, 22(SP)
+SB	R30, 20(SP)
 ORI	R30, R0, 81
-SB	R30, 23(SP)
+SB	R30, 21(SP)
 MOVZ	R30, R0, R0
-SB	R30, 24(SP)
-ADDIU	R2, SP, 18
+SB	R30, 22(SP)
+ADDIU	R2, SP, 16
 MOVZ	R25, R2, R0
 JAL	_UART2_Write_Text+0
 NOP	
@@ -4432,24 +3928,11 @@ L_SignalStrength229:
 ADDIU	R24, R24, -1
 BNE	R24, R0, L_SignalStrength229
 NOP	
-LUI	R2, hi_addr(?lstr_109_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_109_Sim800+0)
-ADDIU	SP, SP, -8
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 8
 ORI	R26, R0, 44
 LUI	R25, hi_addr(_SimTestTxt+0)
 ORI	R25, R25, lo_addr(_SimTestTxt+0)
 JAL	_strsplit+0
 NOP	
-; num_strs start address is: 12 (R3)
-SEH	R3, R2
-SH	R3, 16(SP)
 MOVZ	R27, R0, R0
 ORI	R26, R0, 58
 LUI	R25, hi_addr(_string+0)
@@ -4462,15 +3945,11 @@ LUI	R25, hi_addr(_string+0)
 ORI	R25, R25, lo_addr(_string+0)
 JAL	_strncpy+0
 NOP	
-LH	R3, 16(SP)
 ; i start address is: 16 (R4)
 MOVZ	R4, R0, R0
-; num_strs end address is: 12 (R3)
 ; i end address is: 16 (R4)
-SEH	R7, R3
 L_SignalStrength231:
 ; i start address is: 16 (R4)
-; num_strs start address is: 28 (R7)
 SEH	R2, R4
 SLTI	R2, R2, 10
 BNE	R2, R0, L__SignalStrength469
@@ -4509,8 +3988,6 @@ L_SignalStrength232:
 LBU	R25, Offset(_string+1)(GP)
 JAL	_isdigit+0
 NOP	
-; is_digit start address is: 84 (R21)
-ANDI	R21, R2, 65535
 BNE	R2, R0, L__SignalStrength472
 NOP	
 J	L_SignalStrength235
@@ -4526,82 +4003,6 @@ NOP
 L_SignalStrength235:
 SH	R0, Offset(_SimVars+6)(GP)
 L_SignalStrength236:
-ADDIU	SP, SP, -12
-SH	R7, 8(SP)
-; num_strs end address is: 28 (R7)
-LUI	R2, hi_addr(?lstr_110_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_110_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_sms+0)
-ORI	R2, R2, lo_addr(_sms+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-ADDIU	SP, SP, -12
-SH	R21, 8(SP)
-; is_digit end address is: 84 (R21)
-LUI	R2, hi_addr(?lstr_111_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_111_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtA+0)
-ORI	R2, R2, lo_addr(_txtA+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LH	R2, Offset(_SimVars+6)(GP)
-ADDIU	SP, SP, -12
-SH	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_112_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_112_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_txtS+0)
-ORI	R2, R2, lo_addr(_txtS+0)
-SW	R2, 0(SP)
-JAL	_sprintf+0
-NOP	
-ADDIU	SP, SP, 12
-LUI	R2, hi_addr(_txtS+0)
-ORI	R2, R2, lo_addr(_txtS+0)
-ADDIU	SP, SP, -48
-SW	R2, 44(SP)
-LUI	R2, hi_addr(_txtA+0)
-ORI	R2, R2, lo_addr(_txtA+0)
-SW	R2, 40(SP)
-LUI	R2, hi_addr(_string+384)
-ORI	R2, R2, lo_addr(_string+384)
-SW	R2, 36(SP)
-LUI	R2, hi_addr(_string+320)
-ORI	R2, R2, lo_addr(_string+320)
-SW	R2, 32(SP)
-LUI	R2, hi_addr(_string+256)
-ORI	R2, R2, lo_addr(_string+256)
-SW	R2, 28(SP)
-LUI	R2, hi_addr(_string+192)
-ORI	R2, R2, lo_addr(_string+192)
-SW	R2, 24(SP)
-LUI	R2, hi_addr(_string+128)
-ORI	R2, R2, lo_addr(_string+128)
-SW	R2, 20(SP)
-LUI	R2, hi_addr(_string+64)
-ORI	R2, R2, lo_addr(_string+64)
-SW	R2, 16(SP)
-LUI	R2, hi_addr(_string+0)
-ORI	R2, R2, lo_addr(_string+0)
-SW	R2, 12(SP)
-LUI	R2, hi_addr(_sms+0)
-ORI	R2, R2, lo_addr(_sms+0)
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_113_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_113_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 48
 LH	R25, Offset(_SimVars+6)(GP)
 JAL	_PWM_SigStrength+0
 NOP	
@@ -4611,7 +4012,7 @@ LW	R27, 12(SP)
 LW	R26, 8(SP)
 LW	R25, 4(SP)
 LW	RA, 0(SP)
-ADDIU	SP, SP, 28
+ADDIU	SP, SP, 24
 JR	RA
 NOP	
 ; end of _SignalStrength
@@ -4788,21 +4189,6 @@ BNE	R24, R0, L_TestForOK259
 NOP	
 JAL	_RingToTempBuf+0
 NOP	
-LUI	R2, hi_addr(_SimTestTxt+0)
-ORI	R2, R2, lo_addr(_SimTestTxt+0)
-SB	R25, 8(SP)
-ADDIU	SP, SP, -12
-SW	R2, 8(SP)
-LUI	R2, hi_addr(?lstr_114_Sim800+0)
-ORI	R2, R2, lo_addr(?lstr_114_Sim800+0)
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
-NOP	
-ADDIU	SP, SP, 12
-LBU	R25, 8(SP)
 ; lastMillis start address is: 16 (R4)
 LW	R4, Offset(_TMR0+0)(GP)
 ANDI	R2, R25, 255
@@ -4874,8 +4260,8 @@ L_TestForOK267:
 ; lastMillis end address is: 20 (R5)
 ADDIU	R23, SP, 12
 ADDIU	R22, R23, 8
-LUI	R24, hi_addr(?ICS?lstr116_Sim800+0)
-ORI	R24, R24, lo_addr(?ICS?lstr116_Sim800+0)
+LUI	R24, hi_addr(?ICS?lstr79_Sim800+0)
+ORI	R24, R24, lo_addr(?ICS?lstr79_Sim800+0)
 JAL	___CC2DW+0
 NOP	
 ADDIU	R2, SP, 12

@@ -24,37 +24,34 @@ void ConfigPic(){
   TRISD = 0X0000;
   TRISE = 0X0210;
   TRISF = 0X0000;
-   TRISG = 0X0200;
+  TRISG = 0X0200;
   
-   LATD = 0;
+  LATD = 0;
  
+  FSCM_SetUP();
+  USBIE_bit = 0;
+  IPC11bits.USBIP = 7;
+  HID_Enable(&readbuff,&writebuff);
 
-   USBIE_bit = 0;
-   IPC11bits.USBIP = 7;
-   HID_Enable(&readbuff,&writebuff);
-
-   I2C2_Init_Advanced(80000,100000);//INIT I2C AT 100KHZ
-   I2C_Set_Active(&I2C2_Start, &I2C2_Restart, &I2C2_Read, &I2C2_Write,
+  I2C2_Init_Advanced(80000,100000);//INIT I2C AT 100KHZ
+  I2C_Set_Active(&I2C2_Start, &I2C2_Restart, &I2C2_Read, &I2C2_Write,
                   &I2C2_Stop,&I2C2_Is_Idle); // Sets the I2C2 module active
-   I2C2_SetTimeoutCallback(1000, I2C2_TimeoutCallback);
-   Delay_ms(100);
-   InitUart1();
-   Delay_ms(100);
-   InitUart2();
+  I2C2_SetTimeoutCallback(1000, I2C2_TimeoutCallback);
+  Delay_ms(100);
+  InitUart1();
+  Delay_ms(100);
+  InitUart2();
 
    //Initialize PWMs and set duty cycle
-   current_duty2  = 5000;                     // initial value for current_duty
-   current_duty3  = 500;                     // initial value for current_duty1
-   pwm_period2 = PWM_Init(5000 , 2, 0, 2);    //pwm frk,pwm pin 1-latd0,pre-scal,tmr2
-   pwm_period3 = PWM_Init(5000 , 3, 4, 3);    //pwm frk,pwm pin 1-latd1,pre-scal,tmr5
-   PWM_Set_Duty(current_duty2,  2);           // Set current duty for PWM1
-   PWM_Set_Duty(current_duty3, 3);            // Set current duty for PWM2
-   PWM_Stop(2);
-   PWM_Stop(3);
-   
-
-   MM_Init();
-
+  current_duty2  = 5000;                     // initial value for current_duty
+  current_duty3  = 500;                     // initial value for current_duty1
+  pwm_period2 = PWM_Init(5000 , 2, 0, 2);    //pwm frk,pwm pin 1-latd0,pre-scal,tmr2
+  pwm_period3 = PWM_Init(5000 , 3, 4, 3);    //pwm frk,pwm pin 1-latd1,pre-scal,tmr5
+  PWM_Set_Duty(current_duty2,  2);           // Set current duty for PWM1
+  PWM_Set_Duty(current_duty3, 3);            // Set current duty for PWM2
+  PWM_Stop(2);
+  PWM_Stop(3);
+  MM_Init();
 
   LATA10_bit = 0;
   LATE3_bit = 0;
@@ -66,6 +63,20 @@ void ConfigPic(){
   setup_LM35(5);
   Init_PID(65.25, 200.25, 125.25, 0, 3780,0);
   PID_Control("PID");
+}
+
+void FSCM_SetUP(){
+  if (OSCCON & 0x0008){ // check for a FSCM during start-up
+  // user handler for a FSCM event occurred during start-up
+  }
+  else{ // normal start-up
+    IPC8CLR = 0x1F << 8; // clear the FSCM priority bits
+    IPC8SET = 1 << 10; // set the FSCM interrupt priority
+    IPC8SET = 1 << 8; // set the FSCM interrupt subpriority
+    IFS1CLR = 1 << 14; // clear the FSCM interrupt bit
+    IEC1SET = 1 << 14; // enable the FSCM interrupt
+  }
+
 }
 
 void InitUart1(){

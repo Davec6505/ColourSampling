@@ -1,5 +1,6 @@
 main
 	ConfigPic
+		FSCM_SetUP
 		HID_Enable
 			GetMaxStrignDscIndex
 				GetMaxIndexInDevDsc
@@ -78,49 +79,45 @@ main
 	strcpy
 	GetValuesFromFlash
 		GetStrLengths
-			sprintf
-				_doprntf
-					isdigit
-					_Compare_FP
-					scale
-						_Mul_FP
-					_Mul_FP
-					_Div_FP
-					_FloatToUnsignedIntegral
-					_Unsigned32IntToFloat
-						_SignedIntegralToFloat
-						_UnsignedIntegralToFloat
-					_Sub_FP
-						_Add_FP
-					_Add_FP
-					fround
-						_Mul_FP
-					_FloatToSignedIntegral
-			PrintOut
-				_doprntout
-					isdigit
-					_Compare_FP
-					scale
-						_Mul_FP
-					_Mul_FP
-					_Div_FP
-					_FloatToUnsignedIntegral
-					_Unsigned32IntToFloat
-					_Sub_FP
-					_Add_FP
-					fround
-						_Mul_FP
-					_FloatToSignedIntegral
-					PrintHandler
-					I2C2_TimeoutCallback
-		UART1_Write
 		strncpy
-		PrintOut
 	strncmp
 	sprintf
+		_doprntf
+			isdigit
+			_Compare_FP
+			scale
+				_Mul_FP
+			_Mul_FP
+			_Div_FP
+			_FloatToUnsignedIntegral
+			_Unsigned32IntToFloat
+				_SignedIntegralToFloat
+				_UnsignedIntegralToFloat
+			_Sub_FP
+				_Add_FP
+			_Add_FP
+			fround
+				_Mul_FP
+			_FloatToSignedIntegral
 	PrintOut
+		_doprntout
+			isdigit
+			_Compare_FP
+			scale
+				_Mul_FP
+			_Mul_FP
+			_Div_FP
+			_FloatToUnsignedIntegral
+			_Unsigned32IntToFloat
+			_Sub_FP
+			_Add_FP
+			fround
+				_Mul_FP
+			_FloatToSignedIntegral
+			PrintHandler
+			I2C2_TimeoutCallback
 	SetupIOT
-		PrintOut
+		__CC2DW
 		WaitForResponse
 			UART2_Write_Text
 				UART2_Write
@@ -129,7 +126,6 @@ main
 		UART2_Write_Text
 		UART2_Write
 		strsplit
-		sprintf
 		findnumber
 			strlen
 			Malloc
@@ -141,16 +137,14 @@ main
 				MM_Defragment
 		atoi
 			isdigit
-		__CC2DW
 	WaitForSetupSMS
 		UART2_Write_Text
 		UART2_Write
 		WaitForResponse
 		RingToTempBuf
 		strsplit
-		sprintf
-		PrintOut
 		atoi
+		sprintf
 		strncpy
 		strlen
 		RemoveSMSText
@@ -170,17 +164,14 @@ main
 				NVMUnlock
 			NVMWriteWord
 				NVMUnlock
-			sprintf
-			PrintOut
 		__CC2DW
 	GetAPI_Key_SMS
+		__CC2DW
 		UART2_Write_Text
 		UART2_Write
 		WaitForResponse
 		RingToTempBuf
-		PrintOut
 		WaitForSetupSMS
-		__CC2DW
 	SendSMS
 		Malloc
 		strcpy
@@ -263,8 +254,6 @@ main
 	SetLedPWM
 		TCS3472_getRawData
 		TCS3472_C2RGB_Error
-		sprintf
-		PrintOut
 		PWM_Set_Duty
 	PWM_Stop
 	HID_Read
@@ -281,12 +270,73 @@ main
 			strlen
 			strncmp
 		memset
-		sprintf
-		strcat
-		testStrings
-			strlen
-			strncat
+		strcmp
+		atoi
+		TCS3472_SetIntergration_Time
+		TCS3472_SetGain
+		Read_Send_AllColour
+		Read_Send_OneColour
+			PWM_Start
+			TCS3472_Read16
+			strcpy
+			sprintf
 			strcat
+			TCS3472_getRawData
+			TCS3472_CalcColTemp
+				_Unsigned16IntToFloat
+				_Mul_FP
+				_Add_FP
+				_Div_FP
+				_Sub_FP
+				pow
+					_Compare_FP
+					_FloatToSignedIntegral
+					_SignedIntegralToFloat
+					log
+						_Compare_FP
+						frexp
+						_Mul_FP
+						_Sub_FP
+						eval_poly
+							_Mul_FP
+							_Add_FP
+						_SignedIntegralToFloat
+						_Add_FP
+					_Mul_FP
+					exp
+						_Compare_FP
+						_Mul_FP
+						floor
+							_Compare_FP
+							_FloatToSignedIntegral
+							_SignedIntegralToFloat
+							_Sub_FP
+						_FloatToSignedIntegral
+						_SignedIntegralToFloat
+						_Sub_FP
+						eval_poly
+						ldexp
+							_Compare_FP
+						_Div_FP
+				_FloatToUnsignedIntegral
+			TCS3472_CalcColTemp_dn40
+			PWM_Stop
+			__CC2DW
+		Read_Thresholds
+		Write_Thresholds
+			TCS3472_getRawData
+			atol
+				isdigit
+			NVMWriteWord
+			sprintf
+			strcpy
+			strcat
+		ReadHUE
+		LM35_Adc_Average
+		getLM35Temp
+		sprintf
+		strncat
+		strlen
 		HID_Write
 			Gen_Write
 				USB_Handle_Busy
@@ -365,9 +415,7 @@ main
 		UART2_Write
 		WaitForResponse
 		RingToTempBuf
-		PrintOut
 		strsplit
-		strncpy
 		RemoveChars
 			Malloc
 			strchr
@@ -375,9 +423,9 @@ main
 			strlen
 			strncpy
 			Free
+		strncpy
 		isdigit
 		atoi
-		sprintf
 		PWM_SigStrength
 	TestRingPointers
 	GetSMSText
@@ -420,17 +468,13 @@ main
 				atoi
 				WriteToFlashTemp
 				Write_Thresholds
-					TCS3472_getRawData
-					atol
-						isdigit
-					NVMWriteWord
-					sprintf
-					strcpy
-					strcat
 			__CC2DW
 		SendSMS
 		RemoveSMSText
 		__CC2DW
+	Reset
+		SystemUnlock
+			DmaSuspend
 	__CC2DW
 	__FillZeros
 	Test_Update_ThingSpeak
@@ -447,15 +491,16 @@ main
 			UART2_Write_Text
 			UART2_Write
 			TestForOK
+				__CC2DW
 				WaitForResponse
 				RingToTempBuf
-				PrintOut
 				strstr
 					strlen
 					strncmp
 					strchr
-				__CC2DW
 			__CC2DW
+FSCM
+	PrintOut
 PC_Uart1
 	UART1_Data_Ready
 Sim800_Uart2
@@ -463,7 +508,6 @@ Sim800_Uart2
 	Get_Time
 	RcvSimTxt
 	I2C1_Stop
-Timer4_5Interrupt
 USB1Interrupt
 	USB_Interrupt_Proc
 		USB_Device_Service
@@ -472,3 +516,4 @@ Timer1Interrupt
 	Get_Time
 	RcvSimTxt
 	I2C1_Stop
+Timer4_5Interrupt
