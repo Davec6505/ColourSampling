@@ -47,6 +47,9 @@ static long last_millis_thermister = 0;
 static long millis_thermister_sp = 0;
 static long millis_thermister = 0;
 
+static char last_start = 0;
+int sample_test = 0;
+unsigned int pid_out = 0;
 
 #ifdef MainDebug
 char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15],txtPid[15];
@@ -134,14 +137,14 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
    millis_sigstr_sp = 5000;
    
 /***************************************************************
-*rest the led for error Threshold to get accurate readings
+*reset the led for error Threshold to get accurate readings
 *from the colour chip
 ***************************************************************/
    PWM_Start(2);
    Delay_ms(500);
    SetLedPWM();
    PWM_Stop(2);
-   PWM_Start(3); //start temp control
+ //  PWM_Start(3); //start temp control
    
    
 /**************************************************************
@@ -149,9 +152,6 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
 *keep main free from code
 **************************************************************/
    while(1){
-   static char last_start = 0;
-   int sample_test = 0;
-   unsigned int pid_out = 0;
 
      ////////////////////////////////////////////////
      //Get input from USB to set up thresholds
@@ -164,13 +164,16 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
      //use  START sent from sms to START anything here
     if(SimVars.start && !last_start){
         last_start = 1;
+        PWM_Start(3); //start temp control
     }else if(!SimVars.start && (last_start > 0)){
         last_start = 0;
+        PWM_Stop(3); //stop temp control
     }
+    
      ////////////////////////////////////////////////
      //test millis for time to check thermister
      millis_thermister = TMR0.millis - last_millis_thermister;
-      if(millis_thermister > millis_thermister_sp){
+     if(millis_thermister > millis_thermister_sp){
          millis_thermister_sp   = 999;
          last_millis_thermister = TMR0.millis;
          millis_thermister  = 0;
@@ -178,9 +181,9 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
          if(sample_test < 0){
            getLM35Temp(_temp,ave_adc);
            ave_adc = 0;
-           current_duty3 = temp_pwm_max - PID_Calculate( 35.00, _temp[1]);
-
+           current_duty3 = PID_Calculate( 35.00, _temp[1]);
            PWM_Set_Duty(current_duty3, 3);
+           
 #ifdef ThermisterDebug
            sprintf(txtK,"%3.2f",_temp[0]);
            sprintf(txtC,"%3.2f",_temp[1]);
@@ -194,10 +197,12 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
                                   " *ADC:=         %s\r\n"
                                   " *PID:=         %s\r\n"
                                   ,txtK,txtC,txtF,txtRaw,txtPid);
+#else
+         Delay_ms(10);
 #endif
          }
 
-      }
+     }
 
      //////////////////////////////////////////////////
      //test millis for time to check signal strength
@@ -242,6 +247,8 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
                                 " *Diff in pointers:= %s\r\n"
                                 " *Reply from GetSmsTxt():= %s\r\n"
                                 ,txtT,txtH,txtR,txtI);
+#else
+         Delay_ms(10);
 #endif
          GetSMSText();
          Delay_ms(500);

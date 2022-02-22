@@ -25,11 +25,11 @@ extern sfr sbit STAT_Dir;
 //defines
 
 #define SimDebug
-//#define SimConfDebug
+#define SimConfDebug
 #define SMSDebug
 #define ThingDebug
-//#define SigStrengthDebug
-//#define RingBuffDeBug
+#define SigStrengthDebug
+#define RingBuffDeBug
 
 //////////////////////////////////////////////////////
 //constants and vars

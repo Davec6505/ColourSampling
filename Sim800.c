@@ -791,9 +791,8 @@ char *str_;
 ***********************************************************************/
 char GetSMSText(){
 int num_strs,res,err;
-    UART1_Write_Text("=================\r\n");
-    RingToTempBuf();
 
+    RingToTempBuf();
   //ask sim800 for the sms text
     //str_rcv = setstr(SimTestTxt);
     num_strs = strsplit(SimTestTxt,',');
@@ -819,6 +818,8 @@ int num_strs,res,err;
                            ,string[3],string[4]
                            ,string[5],string[6]
                            ,string[7],string[8]);
+#else
+   Delay_ms(100);
 #endif
 
    if(!err){
@@ -826,19 +827,21 @@ int num_strs,res,err;
        is_digit = isdigit(*string[1]);
        
        if(is_digit == 1){
-         res = atoi(string[1]);
+          res = atoi(string[1]);
 #ifdef SMSDebug
-         sprintf(sms,"%d",res);
-         PrintOut(PrintHandler, "\r\n"
-                               " *no of sms's:= %s\r\n"
-                               ,sms);
+          sprintf(sms,"%d",res);
+          PrintOut(PrintHandler, "\r\n"
+                                 " *no of sms's:= %s\r\n"
+                                 ,sms);
+#else
+       Delay_ms(10);
 #endif
-        ReadMSG(res);
+         ReadMSG(res);
        }else{
          SendSMS(5,0);
          res = 1;
        }
-      return RemoveSMSText(res);
+    return RemoveSMSText(res);
    }
 
    return -1;
@@ -857,6 +860,8 @@ char *text;
      PrintOut(PrintHandler, "\r\n"
                            " *num_sms's:= %s\r\n"
                            ,sms);
+#else
+     Delay_ms(10);
 #endif
 
     UART2_Write_Text("AT+CMGF=1");
@@ -879,6 +884,8 @@ char *text;
 #ifdef SMSDebug
      PrintOut(PrintHandler, "\r\n"
                            "************** \r\n");
+#else
+    Delay_ms(10);
 #endif
      
      for(i = 0;i<strlen(SimTestTxt);i++){
@@ -911,6 +918,8 @@ char *text;
                            ,string[4],string[5]
                            ,string[6],string[7]
                            ,string[8]);
+#else
+     Delay_ms(100);
 #endif
         if(string[6] != NULL){
           strcpy(string[6],RemoveWhiteSpace(string[6]));
@@ -957,6 +966,8 @@ char *text;
                              " *SF.StartCell:=   %s\r\n"
                              " *string[1]:=      %s\r\n"
                              ,SF.StartCell,string[1]);
+ #else
+            Delay_ms(10);
  #endif
                     goto next;   //if cell matches allow to CANCEL
              }else{
@@ -995,6 +1006,8 @@ char *t,B[64],txtDig[9];
      PrintOut(PrintHandler, "\r\n"
                             " *Str check result:= %s\r\n"
                                ,B);
+#else
+     Delay_ms(10);
 #endif
 
     switch(res){
@@ -1320,7 +1333,7 @@ void PWM_SigStrength(int sigstrength){
     TMR4 = 0;
     TMR5 = 0;
     T4CONSET = 0x8008;
-    T4IF_bit      = 0;
+    T5IF_bit      = 0;
     T5IE_bit      = 1;
 }
 

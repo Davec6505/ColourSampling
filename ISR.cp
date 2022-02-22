@@ -528,6 +528,7 @@ void FSCM() iv IVT_FAIL_SAFE_MONITOR ilevel 1 ics ICS_AUTO {
 
 
  IFS1CLR = 1 << 4;
- PrintOut(PrintHandler, "\r\n"
- " *Clock Switched over\r\n");
+
+
+ Reset();
 }

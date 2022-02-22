@@ -189,9 +189,6 @@ NOP
 ORI	R25, R0, 2
 JAL	_PWM_Stop+0
 NOP	
-ORI	R25, R0, 3
-JAL	_PWM_Start+0
-NOP	
 L_main11:
 JAL	_HID_Read+0
 NOP	
@@ -215,7 +212,7 @@ NOP
 J	L__main39
 NOP	
 L__main51:
-LBU	R2, Offset(main_last_start_L1+0)(GP)
+LBU	R2, Offset(main_last_start_L0+0)(GP)
 BEQ	R2, R0, L__main52
 NOP	
 J	L__main38
@@ -223,7 +220,10 @@ NOP
 L__main52:
 L__main37:
 ORI	R2, R0, 1
-SB	R2, Offset(main_last_start_L1+0)(GP)
+SB	R2, Offset(main_last_start_L0+0)(GP)
+ORI	R25, R0, 3
+JAL	_PWM_Start+0
+NOP	
 J	L_main17
 NOP	
 L__main39:
@@ -235,7 +235,7 @@ NOP
 J	L__main41
 NOP	
 L__main53:
-LBU	R2, Offset(main_last_start_L1+0)(GP)
+LBU	R2, Offset(main_last_start_L0+0)(GP)
 SLTIU	R2, R2, 1
 BEQ	R2, R0, L__main54
 NOP	
@@ -243,7 +243,10 @@ J	L__main40
 NOP	
 L__main54:
 L__main36:
-SB	R0, Offset(main_last_start_L1+0)(GP)
+SB	R0, Offset(main_last_start_L0+0)(GP)
+ORI	R25, R0, 3
+JAL	_PWM_Stop+0
+NOP	
 L__main41:
 L__main40:
 L_main17:
@@ -286,8 +289,6 @@ LUI	R25, 16908
 ORI	R25, R25, 0
 JAL	_PID_Calculate+0
 NOP	
-ORI	R3, R0, 3780
-SUBU	R2, R3, R2
 SH	R2, Offset(_current_duty3+0)(GP)
 ORI	R26, R0, 3
 ANDI	R25, R2, 65535
@@ -558,6 +559,33 @@ NOP
 J	L_main34
 NOP	
 L__main67:
+JAL	_GetValuesFromFlash+0
+NOP	
+LUI	R25, hi_addr(_RawData+0)
+ORI	R25, R25, lo_addr(_RawData+0)
+JAL	_TCS3472_getRawData+0
+NOP	
+LUI	R26, hi_addr(_FltData+0)
+ORI	R26, R26, lo_addr(_FltData+0)
+LUI	R25, hi_addr(_RawData+0)
+ORI	R25, R25, lo_addr(_RawData+0)
+JAL	_GetScaledValues+0
+NOP	
+LUI	R25, hi_addr(_FltData+0)
+ORI	R25, R25, lo_addr(_FltData+0)
+JAL	_TCS3472_CalcHSL+0
+NOP	
+ADDIU	R2, SP, 24
+ADDIU	R2, R2, 4
+LW	R27, 0(R2)
+LUI	R26, hi_addr(_FltData+0)
+ORI	R26, R26, lo_addr(_FltData+0)
+LUI	R25, hi_addr(_RawData+0)
+ORI	R25, R25, lo_addr(_RawData+0)
+JAL	_SendData+0
+NOP	
+JAL	_SignalStrength+0
+NOP	
 L_main34:
 LW	R2, Offset(RCON+0)(GP)
 ANDI	R2, R2, 16

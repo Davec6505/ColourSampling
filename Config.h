@@ -14,10 +14,10 @@
 //////////////////////////////////////////
 //defines
 #define MainDebug
-//#define LedDeBug
-//#define MainFlashDebug
-//#define MainColDebug
-//#define MainSigStrengthDebug
+#define LedDeBug
+#define MainFlashDebug
+#define MainColDebug
+#define MainSigStrengthDebug
 #define ThermisterDebug
 
 //////////////////////////////////////////

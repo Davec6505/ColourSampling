@@ -61,7 +61,7 @@ void ConfigPic(){
   PwrDownGSM3();
   PwrUpGSM3();
   setup_LM35(5);
-  Init_PID(65.25, 200.25, 125.25, 0, 3780,0);
+  Init_PID(65.25, 24.00, 1.25, 0, 3780,0); //kp,ki,kd,min,max,offset
   PID_Control("PID");
 }
 
@@ -102,7 +102,7 @@ int err,error_counter;
 
      error_counter = 0;
      TCS3472_getRawData(RawData);
-     err = TCS3472_C2RGB_Error(RawData);
+     err = abs(TCS3472_C2RGB_Error(RawData));
      
     do{
 #ifdef LedDeBug
@@ -111,14 +111,14 @@ int err,error_counter;
                                " *err:=   %s\r\n"
                                ,txtLed);
 #endif
-      current_duty2 += err/2;
+      current_duty2 += err;
       PWM_Set_Duty(current_duty2, 2);
       Delay_ms(500);
       TCS3472_getRawData(RawData);
       err = TCS3472_C2RGB_Error(RawData);
-      error_counter++;
-      if(error_counter > 100)
-          break;
-    }while(err < -50 || err > 50);
+    //  error_counter++;
+    //  if(error_counter > 1000)
+    //      break;
+    }while(err < -150 || err > 150);
 
 }

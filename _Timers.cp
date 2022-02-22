@@ -542,7 +542,12 @@ int res,minsPassed;
  if(T0_SP.sec > 59){
  T0_SP.sec = 0;
  T0_SP.min++;
-#line 76 "C:/Users/Git/ColourSampling/_Timers.c"
+
+ sprintf(txt,"%u",T0_SP.min);
+ UART1_Write_Text(txt);
+ UART1_Write(0x0d);
+ UART1_Write(0x0a);
+
  if(T0_SP.min > 59){
  T0_SP.min = 0;
  T0_SP.hr++;

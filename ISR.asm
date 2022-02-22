@@ -274,16 +274,8 @@ ADDIU	SP, SP, -4
 SW	RA, 0(SP)
 ORI	R2, R0, 16
 SW	R2, Offset(IFS1CLR+0)(GP)
-LUI	R2, hi_addr(?lstr_1_ISR+0)
-ORI	R2, R2, lo_addr(?lstr_1_ISR+0)
-ADDIU	SP, SP, -8
-SW	R2, 4(SP)
-LUI	R2, hi_addr(_PrintHandler+0)
-ORI	R2, R2, lo_addr(_PrintHandler+0)
-SW	R2, 0(SP)
-JAL	_PrintOut+0
+JAL	_Reset+0
 NOP	
-ADDIU	SP, SP, 8
 L_end_FSCM:
 LW	RA, 0(SP)
 ADDIU	SP, SP, 4

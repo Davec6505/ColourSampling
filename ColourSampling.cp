@@ -519,6 +519,9 @@ static long last_millis_thermister = 0;
 static long millis_thermister_sp = 0;
 static long millis_thermister = 0;
 
+static char last_start = 0;
+int sample_test = 0;
+unsigned int pid_out = 0;
 
 
 char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15],txtPid[15];
@@ -538,11 +541,11 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
  device_Id = TCS3472_1_5;
  i = 0;
  i = TCS3472_Init(it,G,device_Id);
-#line 73 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 76 "C:/Users/Git/ColourSampling/ColourSampling.c"
  T0_SP.sec = 0;
  T0_SP.min = 0;
  T0_SP.hr = 0;
-#line 84 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 87 "C:/Users/Git/ColourSampling/ColourSampling.c"
  strcpy(cel_num,GetValuesFromFlash());
  str_num = strncmp(cel_num,sub_txt,4);
 
@@ -552,7 +555,7 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
  " *Cell number:   %s\r\n"
  " *Result of cmp: %s\r\n"
  ,cel_num,txtR);
-#line 101 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 104 "C:/Users/Git/ColourSampling/ColourSampling.c"
  if(str_num != 0){
  SimVars.init_inc = SetupIOT();
  SimVars.init_inc = WaitForSetupSMS(0);
@@ -587,17 +590,13 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
  resA = resB = 0;
  last_millis_sigstr = TMR0.millis;
  millis_sigstr_sp = 5000;
-#line 140 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 143 "C:/Users/Git/ColourSampling/ColourSampling.c"
  PWM_Start(2);
  Delay_ms(500);
  SetLedPWM();
  PWM_Stop(2);
- PWM_Start(3);
-#line 151 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 154 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
- static char last_start = 0;
- int sample_test = 0;
- unsigned int pid_out = 0;
 
 
 
@@ -610,9 +609,12 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
 
  if(SimVars.start && !last_start){
  last_start = 1;
+ PWM_Start(3);
  }else if(!SimVars.start && (last_start > 0)){
  last_start = 0;
+ PWM_Stop(3);
  }
+
 
 
  millis_thermister = TMR0.millis - last_millis_thermister;
@@ -624,9 +626,9 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
  if(sample_test < 0){
  getLM35Temp(_temp,ave_adc);
  ave_adc = 0;
- current_duty3 = temp_pwm_max - PID_Calculate( 35.00, _temp[1]);
-
+ current_duty3 = PID_Calculate( 35.00, _temp[1]);
  PWM_Set_Duty(current_duty3, 3);
+
 
  sprintf(txtK,"%3.2f",_temp[0]);
  sprintf(txtC,"%3.2f",_temp[1]);
@@ -640,7 +642,7 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
  " *ADC:=         %s\r\n"
  " *PID:=         %s\r\n"
  ,txtK,txtC,txtF,txtRaw,txtPid);
-
+#line 203 "C:/Users/Git/ColourSampling/ColourSampling.c"
  }
 
  }
@@ -688,7 +690,7 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
  " *Diff in pointers:= %s\r\n"
  " *Reply from GetSmsTxt():= %s\r\n"
  ,txtT,txtH,txtR,txtI);
-
+#line 253 "C:/Users/Git/ColourSampling/ColourSampling.c"
  GetSMSText();
  Delay_ms(500);
  if(SimVars.init_inc != 5)
@@ -706,7 +708,19 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
 
 
  if(!RE4_bit){
-#line 276 "C:/Users/Git/ColourSampling/ColourSampling.c"
+
+
+ GetValuesFromFlash();
+
+
+ TCS3472_getRawData(RawData);
+ GetScaledValues(RawData,&FltData);
+ TCS3472_CalcHSL(&FltData);
+ SendData(RawData,FltData,_temp[1]);
+
+
+ SignalStrength();
+
  }
 
 

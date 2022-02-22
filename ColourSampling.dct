@@ -303,6 +303,7 @@ _unsigned8inttofloat
 _unsigned8inttolongdouble
 _unsignedlonglongtofloat
 _unsignedlonglongtolongdouble
+a
 a10m
 a10m
 a10m
@@ -1881,6 +1882,7 @@ attachif
 attachif_bit
 ave_adc_
 aveadc_
+b
 b_thresh
 b_thresh
 b0
@@ -2854,6 +2856,7 @@ byto0
 byto0_bit
 byto1
 byto1_bit
+c
 c
 c_thresh
 c_thresh
@@ -8619,6 +8622,7 @@ cvrss
 cvrss
 cvrss
 cvrss_bit
+d
 d_a
 d_a
 d_a
@@ -10333,6 +10337,7 @@ dppulup
 dppulup
 dppulup
 dppulup_bit
+e
 endpoint_number
 endpoint_number
 endpt
@@ -10841,6 +10846,7 @@ extr
 extr
 extr
 extr_bit
+f
 fabs
 fceie
 fceie
@@ -21800,6 +21806,7 @@ txtg
 txtg_scl
 txth
 txthue
+txtled
 txtlen
 txtlum
 txtm

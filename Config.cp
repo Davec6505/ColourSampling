@@ -482,7 +482,12 @@ sbit BL at LATD4_bit;
 
 unsigned int current_duty2,current_duty3;
 unsigned int pwm_period2, pwm_period3;
-#line 15 "C:/Users/Git/ColourSampling/Config.c"
+
+
+char txtLed[15];
+
+
+
 void ConfigPic(){
 
  CHECON = 30;
@@ -532,7 +537,7 @@ void ConfigPic(){
  PwrDownGSM3();
  PwrUpGSM3();
  setup_LM35(5);
- Init_PID(65.25, 200.25, 125.25, 0, 3780,0);
+ Init_PID(65.25, 24.00, 1.25, 0, 3780,0);
  PID_Control("PID");
 }
 
@@ -573,18 +578,23 @@ int err,error_counter;
 
  error_counter = 0;
  TCS3472_getRawData(RawData);
- err = TCS3472_C2RGB_Error(RawData);
+ err = abs(TCS3472_C2RGB_Error(RawData));
 
  do{
-#line 114 "C:/Users/Git/ColourSampling/Config.c"
- current_duty2 += err/2;
+
+ sprintf(txtLed,"%d",err);
+ PrintOut(PrintHandler, "\r\n"
+ " *err:=   %s\r\n"
+ ,txtLed);
+
+ current_duty2 += err;
  PWM_Set_Duty(current_duty2, 2);
  Delay_ms(500);
  TCS3472_getRawData(RawData);
  err = TCS3472_C2RGB_Error(RawData);
- error_counter++;
- if(error_counter > 100)
- break;
- }while(err < -50 || err > 50);
+
+
+
+ }while(err < -150 || err > 150);
 
 }
