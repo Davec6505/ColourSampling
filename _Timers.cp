@@ -226,7 +226,7 @@ void Reset_PID();
 
 
 int PID_Calculate(float Sp, float Pv);
-#line 25 "c:/users/git/coloursampling/config.h"
+#line 27 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
@@ -250,6 +250,7 @@ void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
 void SetLedPWM();
+void ApplicationDebug();
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
@@ -268,7 +269,7 @@ unsigned long ReadFlashWord();
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/git/coloursampling/lm35.h"
-#line 20 "c:/users/git/coloursampling/string.h"
+#line 21 "c:/users/git/coloursampling/string.h"
 extern char string[ 21 ][ 64 ];
 
 enum ControlColorIO{
@@ -358,7 +359,7 @@ extern sfr sbit PWR;
 extern sfr sbit PWR_Dir;
 extern sfr sbit STAT;
 extern sfr sbit STAT_Dir;
-#line 36 "c:/users/git/coloursampling/sim800.h"
+#line 37 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -543,10 +544,12 @@ int res,minsPassed;
  T0_SP.sec = 0;
  T0_SP.min++;
 
- sprintf(txt,"%u",T0_SP.min);
- UART1_Write_Text(txt);
- UART1_Write(0x0d);
- UART1_Write(0x0a);
+
+
+
+
+
+ Delay_ms(10);
 
  if(T0_SP.min > 59){
  T0_SP.min = 0;
@@ -583,14 +586,14 @@ int res,minsPassed;
 
  }
 }
-#line 115 "C:/Users/Git/ColourSampling/_Timers.c"
+#line 117 "C:/Users/Git/ColourSampling/_Timers.c"
 void Day_Month(int hr,int day,int mnth){
 int i;
  for(i=0;i<6;i++){
 
  }
 }
-#line 126 "C:/Users/Git/ColourSampling/_Timers.c"
+#line 128 "C:/Users/Git/ColourSampling/_Timers.c"
 void I2C2_TimeoutCallback(char errorCode) {
 int i;
  if (errorCode == _I2C_TIMEOUT_RD) {

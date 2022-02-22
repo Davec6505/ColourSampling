@@ -110,6 +110,9 @@ int err,error_counter;
         PrintOut(PrintHandler, "\r\n"
                                " *err:=   %s\r\n"
                                ,txtLed);
+ 
+#else
+      Delay_ms(10);
 #endif
       current_duty2 += err;
       PWM_Set_Duty(current_duty2, 2);
@@ -121,4 +124,19 @@ int err,error_counter;
     //      break;
     }while(err < -150 || err > 150);
 
+}
+
+void ApplicationDebug(){
+#ifdef MainFlashDebug
+        GetValuesFromFlash();
+#endif
+#ifdef MainColDebug
+        TCS3472_getRawData(RawData);
+        GetScaledValues(RawData,&FltData);
+        TCS3472_CalcHSL(&FltData);
+        SendData(RawData,FltData,_temp[1]);
+#endif
+#ifdef MainSigStrengthDebug
+        SignalStrength();
+#endif
 }

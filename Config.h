@@ -13,12 +13,14 @@
 #include "PID.h"
 //////////////////////////////////////////
 //defines
-#define MainDebug
-#define LedDeBug
-#define MainFlashDebug
-#define MainColDebug
-#define MainSigStrengthDebug
+/*#define MainDebug
 #define ThermisterDebug
+#define LedDeBug*/
+
+//#define ApplicationDbg
+//#define MainFlashDebug
+//#define MainColDebug
+//#define MainSigStrengthDebug
 
 //////////////////////////////////////////
 //constants and vars
@@ -45,4 +47,5 @@ void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
 void SetLedPWM();
+void ApplicationDebug();
 #endif

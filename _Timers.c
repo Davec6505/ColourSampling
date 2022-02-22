@@ -72,6 +72,8 @@ int res,minsPassed;
              UART1_Write_Text(txt);
              UART1_Write(0x0d);
              UART1_Write(0x0a);
+ #else
+      Delay_ms(10);
 #endif
            if(T0_SP.min > 59){
              T0_SP.min = 0;

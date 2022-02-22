@@ -52,16 +52,13 @@ sbit PWR at  LATD0_bit; // LATG7_bit; //
 sbit STAT at RB4_bit;      //Status input
 //sbit STAT_Dir at TRISB4_bit;
 
-#ifdef SimConfDebug
+#ifdef SMSDebug
  char a[6], b[6], c[6], d[6], e[6], f[6];
 #endif
-
-
 
 /*****************************************************
 *  buffers for flash write char to dbl-word
 *****************************************************/
-
 char buff[512];
 unsigned long temp[128];
 
@@ -402,7 +399,7 @@ char *str_rcv;
 *check to see if network is registered AT+CREG? = 0,[1/5]
 *1= home / 5 = Roaming network wait in a loop until reg
 *******************************************************/
-    res = -1;
+  res = -1;
 #ifdef SimConfDebug
   PrintOut(PrintHandler, "\r\n"
                          " * ATE0\r\n");
@@ -435,7 +432,6 @@ wait:
  // Delay_ms(5000);
 
   if(RB.head > RB.last_head){
-  
      num_strs = strsplit(SimTestTxt,',');
 
 #ifdef SimConfDebug
@@ -451,8 +447,8 @@ wait:
                             ,string[1],string[2]
                             ,string[3],string[4]);
 #endif
-     str_rcv = findnumber(string[1]);
-     res = atoi(str_rcv);  //get the sms rec number
+   str_rcv = findnumber(string[1]);
+   res = atoi(str_rcv);  //get the sms rec number
    if(res == 1){
 #ifdef SimConfDebug
      sprintf(txtA,"%d",res);
@@ -460,7 +456,6 @@ wait:
                             " *Registered with:= %s\r\n"
                            ,txtA);
 #endif
-
    }else{
 #ifdef SimConfDebug
      PrintOut(PrintHandler, "\r\n"
@@ -473,6 +468,8 @@ wait:
 #ifdef SimConfDebug
      PrintOut(PrintHandler, "\r\n"
                             " *Sim Registered\r\n");
+#else
+     Delay_ms(5);
 #endif
 
 
@@ -506,7 +503,6 @@ int i,res,num_strs;
 
 #ifdef SimConfDebug
      sprintf(txtA,"%d",num_strs);
-     sprintf(txtA,"%d",num_strs);
      PrintOut(PrintHandler, "\r\n"
                            " *num_strs:= %s\r\n"
                            " *string[0]  %s\r\n"
@@ -518,15 +514,19 @@ int i,res,num_strs;
                            ,txtA,string[0],string[1],
                            string[2],string[3],
                            string[4],string[5]);
+#else
+     Delay_ms(50);
 #endif
    //get the  number of sms;
     res = atoi(string[1]);
     sprintf(sms,"%d",res);
- #ifdef SimConfDebug
+#ifdef SimConfDebug
     PrintOut(PrintHandler, "\r\n"
                            " *sms no:= %s\r\n"
                            ,sms);
- #endif
+#else
+     Delay_ms(50);
+#endif
   //wait for sms to register phone number
 
     UART2_Write_Text("AT+CMGR=");
@@ -556,6 +556,8 @@ int i,res,num_strs;
                            ,string[4],string[5]
                            ,string[6],string[7]
                            ,string[8]);
+#else
+     Delay_ms(50);
 #endif
 //save cell number to flash buffer
     if(Indx == 0){
@@ -570,6 +572,8 @@ int i,res,num_strs;
                              " * SF.SimDate: %s\r\n"
                              " * SF.SimTime: %s\r\n"
                              ,SF.SimCelNum,SF.SimDate,SF.SimTime);
+#else
+     Delay_ms(50);
 #endif
     }else if(Indx == 1){
       //write API keys to Flash buff first
@@ -592,7 +596,8 @@ int i,res,num_strs;
                                " * SF.PWD:         %s\r\n"
                                ,SF.WriteAPIKey,SF.ReadAPIKey
                                ,SF.APN,SF.PWD);
-
+#else
+     Delay_ms(20);
 #endif
     }
 
@@ -606,6 +611,8 @@ int i,res,num_strs;
                            " * SimTestTxt: %s\r\n"
                            " * OK-0: %s\r\n"
                            ,SimTestTxt,txtA);
+#else
+     Delay_ms(10);
 #endif
 
    if((res == 0)&&(Indx == 1)){
@@ -656,6 +663,8 @@ char response;
     PrintOut(PrintHandler, "\r\n"
                            " * %s\r\n"
                            ,SimTestTxt);
+#else
+     Delay_ms(5);
 #endif
   //one the '>' has been recieved send msg and wait the response
   UART2_Write_Text("Reply with the API Write Key from ThingSpeak starting with a ,");
@@ -798,7 +807,7 @@ int num_strs,res,err;
     num_strs = strsplit(SimTestTxt,',');
     //test if an sms was recieved
     err = strncmp(sms_test,string[0],4);
- #ifdef SMSDebug
+ #ifdef SMSDebugA
     sprintf(txtA,"%d",num_strs);
     sprintf(txtB,"%d",err);
     PrintOut(PrintHandler, "\r\n"
@@ -819,7 +828,7 @@ int num_strs,res,err;
                            ,string[5],string[6]
                            ,string[7],string[8]);
 #else
-   Delay_ms(100);
+   Delay_ms(50);
 #endif
 
    if(!err){
@@ -828,13 +837,13 @@ int num_strs,res,err;
        
        if(is_digit == 1){
           res = atoi(string[1]);
-#ifdef SMSDebug
+#ifdef SMSDebugA
           sprintf(sms,"%d",res);
           PrintOut(PrintHandler, "\r\n"
                                  " *no of sms's:= %s\r\n"
                                  ,sms);
 #else
-       Delay_ms(10);
+       Delay_ms(5);
 #endif
          ReadMSG(res);
        }else{
@@ -856,12 +865,12 @@ int i,num_strs,res;
 char *text;
     sprintf(sms,"%d",msg_num);
     Delay_ms(1000);
-#ifdef SMSDebug
+#ifdef SMSDebugA
      PrintOut(PrintHandler, "\r\n"
                            " *num_sms's:= %s\r\n"
                            ,sms);
 #else
-     Delay_ms(10);
+     Delay_ms(5);
 #endif
 
     UART2_Write_Text("AT+CMGF=1");
@@ -879,9 +888,9 @@ char *text;
 
     WaitForResponse(1);
     RingToTempBuf();
-    Delay_ms(1000);
+    Delay_ms(1500);
 
-#ifdef SMSDebug
+#ifdef SMSDebugA
      PrintOut(PrintHandler, "\r\n"
                            "************** \r\n");
 #else
@@ -900,7 +909,7 @@ char *text;
     strncpy(string[4],string[4],8);
 
 
-#ifdef SMSDebug
+#ifdef SMSDebugA
     sprintf(sms,"%d",num_strs);
     PrintOut(PrintHandler, "\r\n"
                            " *num_strs:= %s\r\n"
@@ -919,7 +928,12 @@ char *text;
                            ,string[6],string[7]
                            ,string[8]);
 #else
-     Delay_ms(100);
+     Delay_ms(500);
+#endif
+#ifdef SMSDebug
+     PrintOut(PrintHandler, "\r\n"
+                           "string[6]    %s\r\n"
+                           ,string[6]);
 #endif
         if(string[6] != NULL){
           strcpy(string[6],RemoveWhiteSpace(string[6]));
@@ -960,14 +974,14 @@ char *text;
                (!strncmp(string[1],SF.StartCell,15)||
                 !strncmp(string[1],SF.SimCelNum,15))){
                     SimVars.start = 0;
- #ifdef SMSDebug
+ #ifdef SMSDebugA
                     PrintOut(PrintHandler,       "\r\n"
                              " *SimVars.start:=  0\r\n"
                              " *SF.StartCell:=   %s\r\n"
                              " *string[1]:=      %s\r\n"
                              ,SF.StartCell,string[1]);
  #else
-            Delay_ms(10);
+            Delay_ms(20);
  #endif
                     goto next;   //if cell matches allow to CANCEL
              }else{
@@ -1000,9 +1014,9 @@ next:
 void TestRecievedSMS(int res){
 char *t,B[64],txtDig[9];
 
-#ifdef SMSDebug
-            // strncat(b,t,strlen(t));
      sprintf(B,"%d",res);
+#ifdef SMSDebugA
+            // strncat(b,t,strlen(t));
      PrintOut(PrintHandler, "\r\n"
                             " *Str check result:= %s\r\n"
                                ,B);
@@ -1045,11 +1059,13 @@ char *t,B[64],txtDig[9];
             }
             WriteToFlashTemp();
             t =  Write_Thresholds(0);
-#ifdef SMSDebug
+#ifdef SMSDebugA
               // strncpy(b,t,strlen(t));
                PrintOut(PrintHandler, "\r\n"
                                " *CRGB:= %s\r\n"
                                ,t);
+#else
+     Delay_ms(5);
 #endif
                 SendSMS(6,0);
            break;
@@ -1079,15 +1095,15 @@ char *t,B[64],txtDig[9];
 * remove sms from sim800
 **********************************************************************/
 int RemoveSMSText(int sms_cnt){
-
-#ifdef SMSDebug
-     sprintf(sms,"%d",sms_cnt);
+    sprintf(sms,"%d",sms_cnt);
+#ifdef SMSDebugA
      PrintOut(PrintHandler, "\r\n"
                            " *num_strs:= %s\r\n"
                            ,sms);
+#else
+     Delay_ms(5);
 #endif
     do{
-      sprintf(sms,"%d",sms_cnt);
       UART2_Write_Text("AT+CMGD=");
       UART2_Write_Text(sms);
       UART2_Write(0x0D);
@@ -1161,6 +1177,8 @@ char _str_[200];
     PrintOut(PrintHandler, "String for ThingSpeak: \r\n"
                            " *    %s\r\n"
                            ,_str_);
+#else
+     Delay_ms(5);
 #endif
     UART2_Write_Text("AT+CIPSHUT");
     UART2_Write(0x0D);
@@ -1263,9 +1281,11 @@ char *text;
     RingToTempBuf();
     Delay_ms(250);
     
- #ifdef SigStrengthDebug
+#ifdef SigStrengthDebug
      PrintOut(PrintHandler, "\r\n"
                            "**Signal Strength** \r\n");
+#else
+     Delay_ms(5);
 #endif
 
 
@@ -1305,6 +1325,8 @@ char *text;
                            ,string[2],string[3]
                            ,string[4],string[5]
                            ,string[6],txtA,txtS);
+#else
+     Delay_ms(50);
 #endif
        PWM_SigStrength(SimVars.rssi);
        return SimVars.rssi;
@@ -1351,6 +1373,8 @@ unsigned long lastMillis,newMillis;
     PrintOut(PrintHandler, "Test for OK:"
                            " *    %s\r\n"
                            ,SimTestTxt);
+#else
+     Delay_ms(5);
 #endif
     lastMillis = TMR0.millis;
     if(c == 0)

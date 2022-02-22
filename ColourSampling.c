@@ -93,6 +93,8 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
                           " *Cell number:   %s\r\n"
                           " *Result of cmp: %s\r\n"
                           ,cel_num,txtR);
+#else
+     Delay_ms(10);
 #endif
 /***************************************************************
 *if the sim shows up as not registered with this device, the
@@ -129,6 +131,8 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
                                 " *Run      \r\n"
                                 " *Initial Incrament:= %s\r\n"
                                 ,txtInit);
+#else
+     Delay_ms(10);
 #endif
 
    T0_SP.one_per_Xmin = 0;
@@ -198,7 +202,7 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
                                   " *PID:=         %s\r\n"
                                   ,txtK,txtC,txtF,txtRaw,txtPid);
 #else
-         Delay_ms(10);
+         Delay_ms(50);
 #endif
          }
 
@@ -248,7 +252,7 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
                                 " *Reply from GetSmsTxt():= %s\r\n"
                                 ,txtT,txtH,txtR,txtI);
 #else
-         Delay_ms(10);
+         Delay_ms(50);
 #endif
          GetSMSText();
          Delay_ms(500);
@@ -264,21 +268,10 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
    //    NVMErasePage(FLASH_Settings_PAddr);//SendSMS(100);
         
     ////////////////////////////////////////////////////////////
-    //use onboard switch to debug
-
+    //use onboard switch to debug various features
      if(!RE4_bit){
-
-#ifdef MainFlashDebug
-        GetValuesFromFlash();
-#endif
-#ifdef MainColDebug
-        TCS3472_getRawData(RawData);
-        GetScaledValues(RawData,&FltData);
-        TCS3472_CalcHSL(&FltData);
-        SendData(RawData,FltData,_temp[1]);
-#endif
-#ifdef MainSigStrengthDebug
-        SignalStrength();
+#ifdef  ApplicationDbg
+       ApplicationDebug();
 #endif
      }
      

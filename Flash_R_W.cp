@@ -177,7 +177,7 @@ extern sfr sbit PWR;
 extern sfr sbit PWR_Dir;
 extern sfr sbit STAT;
 extern sfr sbit STAT_Dir;
-#line 36 "c:/users/git/coloursampling/sim800.h"
+#line 37 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -357,7 +357,7 @@ void Reset_PID();
 
 
 int PID_Calculate(float Sp, float Pv);
-#line 25 "c:/users/git/coloursampling/config.h"
+#line 27 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
@@ -381,12 +381,13 @@ void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
 void SetLedPWM();
+void ApplicationDebug();
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/git/coloursampling/lm35.h"
-#line 20 "c:/users/git/coloursampling/string.h"
+#line 21 "c:/users/git/coloursampling/string.h"
 extern char string[ 21 ][ 64 ];
 
 enum ControlColorIO{

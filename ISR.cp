@@ -196,7 +196,7 @@ void setup_LM35(int count);
 int LM35_Adc_Average(int* adc,int adc_pin);
 int LM35_Adc_Single(int adc,int adc_pin);
 void getLM35Temp(float * t,int adc_ave);
-#line 20 "c:/users/git/coloursampling/string.h"
+#line 21 "c:/users/git/coloursampling/string.h"
 extern char string[ 21 ][ 64 ];
 
 enum ControlColorIO{
@@ -286,7 +286,7 @@ extern sfr sbit PWR;
 extern sfr sbit PWR_Dir;
 extern sfr sbit STAT;
 extern sfr sbit STAT_Dir;
-#line 36 "c:/users/git/coloursampling/sim800.h"
+#line 37 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -451,7 +451,7 @@ void Reset_PID();
 
 
 int PID_Calculate(float Sp, float Pv);
-#line 25 "c:/users/git/coloursampling/config.h"
+#line 27 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
@@ -475,6 +475,7 @@ void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
 void SetLedPWM();
+void ApplicationDebug();
 #line 4 "C:/Users/Git/ColourSampling/ISR.c"
 void (*Get_Timer_Values)();
 void (*Sim800Text)();

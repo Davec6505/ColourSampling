@@ -176,7 +176,7 @@ extern sfr sbit PWR;
 extern sfr sbit PWR_Dir;
 extern sfr sbit STAT;
 extern sfr sbit STAT_Dir;
-#line 36 "c:/users/git/coloursampling/sim800.h"
+#line 37 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -356,7 +356,7 @@ void Reset_PID();
 
 
 int PID_Calculate(float Sp, float Pv);
-#line 25 "c:/users/git/coloursampling/config.h"
+#line 27 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
@@ -380,6 +380,7 @@ void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
 void SetLedPWM();
+void ApplicationDebug();
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
@@ -398,7 +399,7 @@ unsigned long ReadFlashWord();
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/git/coloursampling/lm35.h"
-#line 20 "c:/users/git/coloursampling/string.h"
+#line 21 "c:/users/git/coloursampling/string.h"
 extern char string[ 21 ][ 64 ];
 
 enum ControlColorIO{
@@ -540,13 +541,111 @@ char *str,err,i;
  memset(writebuff,0,64);
 
 
- sprintf(txtR,"%u",res1);
- strcat(writebuff,txtR);
- strcat(writebuff,":");
- testStrings(&writebuff);
- strcat(writebuff,"\r\n");
+
+
+
+
+
+
+
+ switch(res1){
+ case CONFIG :
+ if(!strcmp(string[2],comc[0])){
+ if(string[3] != 0){
+ Int_Time = atoi(string[3]);
+ for(i=0;i<Int_Time;i++){
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(100);
+ }
+ }
+ err = TCS3472_SetIntergration_Time(Int_Time);
+ if(err > 0)
+ for(i=0;i<err;i++){
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(500);
+ }
+ }else if(!strcmp(string[2],comc[1])){
+ if(string[3] != 0){
+ Gain = atoi(string[3]);
+ for(i=0;i<Gain;i++){
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(100);
+ }
+ }
+ err = TCS3472_SetGain(Gain);
+ if(err > 0)
+ for(i=0;i<err;i++){
+ LATE3_bit = !LATE3_bit;
+ Delay_ms(500);
+ }
+ }
+ LATE3_bit = 0;
+ break;
+ case SENDA :
+ break;
+ case READA :
+ str = Read_Send_AllColour(0);
+ break;
+ case READR :
+ str = Read_Send_OneColour(READR);
+ break;
+ case READG :
+ str = Read_Send_OneColour(READG);
+ break;
+ case READB :
+ str = Read_Send_OneColour(READB);
+ break;
+ case READC :
+ str = Read_Send_OneColour(READC);
+ break;
+ case READT :
+ str = Read_Send_OneColour(READT);
+ break;
+ case READT_DN40 :
+ str = Read_Send_OneColour(READT_DN40);
+ break;
+ case READA_SCL :
+ str = Read_Send_AllColour(1);
+ break;
+ case READA_THV :
+ str = Read_Thresholds();
+ break;
+ case WRITE_MAN :
+ str = Write_Thresholds(1);
+ break;
+ case WRITE_RAW :
+ str = Write_Thresholds(0);
+ break;
+ case START :
+ SimVars.init_inc = 5;
+ break;
+ case CANCEL :
+ SimVars.init_inc = 3;
+ break;
+ case READA_HUE :
+ str = ReadHUE();
+ break;
+ case READA_DEG :
+ LM35_Adc_Average(&ave_adc_, 15 );
+ getLM35Temp(temp_,ave_adc_);
+ ave_adc_ = 0;
+ sprintf(txt_,"%3.2f",temp_[1]);
+ str = txt_;
+
+
+ break;
+ default:
+ str = "No data requested!\r\n";
+ break;
+ }
+
+
+
+ strncat(writebuff,str,strlen(str));
  while(!HID_Write(&writebuff,64));
-#line 177 "C:/Users/Git/ColourSampling/String.c"
+
+
+
 ret:
  return 0;
 }
