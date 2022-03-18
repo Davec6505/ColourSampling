@@ -1,6 +1,4 @@
 main
-	__CC2DW
-	__FillZeros
 	ConfigPic
 		FSCM_SetUP
 		HID_Enable
@@ -17,9 +15,9 @@ main
 			SetI2C2Ptrs
 			I2C2_Wait_For_Idle
 				I2C2_Is_Idle
-				I2C2_TimeoutCallback
 				PrintHandler
 					UART1_Write
+				I2C2_TimeoutCallback
 		I2C_Set_Active
 		I2C2_SetTimeoutCallback
 		InitUart1
@@ -55,20 +53,20 @@ main
 		TCS3472_Read8
 			I2C2_Start
 				I2C2_Wait_For_Idle
-				I2C2_TimeoutCallback
 				PrintHandler
+				I2C2_TimeoutCallback
 			I2C2_Write
 				I2C2_Wait_For_Idle
-				I2C2_TimeoutCallback
 				PrintHandler
+				I2C2_TimeoutCallback
 			I2C2_Stop
 				I2C2_Wait_For_Idle
-				I2C2_TimeoutCallback
 				PrintHandler
+				I2C2_TimeoutCallback
 			I2C2_Read
 				I2C2_Wait_For_Idle
-				I2C2_TimeoutCallback
 				PrintHandler
+				I2C2_TimeoutCallback
 		TCS3472_SetIntergration_Time
 			TCS3472_Write8
 				I2C2_Start
@@ -78,11 +76,46 @@ main
 			TCS3472_Write8
 		TCS3472_Enable
 			TCS3472_Write8
+	strcpy
 	GetValuesFromFlash
 		GetStrLengths
 		strncpy
-	strcpy
 	strncmp
+	sprintf
+		_doprntf
+			isdigit
+			_Compare_FP
+			scale
+				_Mul_FP
+			_Mul_FP
+			_Div_FP
+			_FloatToUnsignedIntegral
+			_Unsigned32IntToFloat
+				_SignedIntegralToFloat
+				_UnsignedIntegralToFloat
+			_Sub_FP
+				_Add_FP
+			_Add_FP
+			fround
+				_Mul_FP
+			_FloatToSignedIntegral
+	PrintOut
+		_doprntout
+			isdigit
+			_Compare_FP
+			scale
+				_Mul_FP
+			_Mul_FP
+			_Div_FP
+			_FloatToUnsignedIntegral
+			_Unsigned32IntToFloat
+			_Sub_FP
+			_Add_FP
+			fround
+				_Mul_FP
+			_FloatToSignedIntegral
+			PrintHandler
+			I2C2_TimeoutCallback
 	SetupIOT
 		__CC2DW
 		WaitForResponse
@@ -112,23 +145,6 @@ main
 		strsplit
 		atoi
 		sprintf
-			_doprntf
-				isdigit
-				_Compare_FP
-				scale
-					_Mul_FP
-				_Mul_FP
-				_Div_FP
-				_FloatToUnsignedIntegral
-				_Unsigned32IntToFloat
-					_SignedIntegralToFloat
-					_UnsignedIntegralToFloat
-				_Sub_FP
-					_Add_FP
-				_Add_FP
-				fround
-					_Mul_FP
-				_FloatToSignedIntegral
 		strncpy
 		strlen
 		RemoveSMSText
@@ -182,8 +198,8 @@ main
 					I2C2_Write
 					I2C2_Restart
 						I2C2_Wait_For_Idle
-						I2C2_TimeoutCallback
 						PrintHandler
+						I2C2_TimeoutCallback
 					I2C2_Read
 					I2C2_Stop
 			GetScaledValues
@@ -233,13 +249,6 @@ main
 		__CC2DW
 	WaitForResponse
 	Read_Thresholds
-	PWM_Start
-	SetLedPWM
-		TCS3472_getRawData
-		TCS3472_C2RGB_Error
-		abs
-		PWM_Set_Duty
-	PWM_Stop
 	HID_Read
 		Gen_Read
 			USB_Handle_Busy
@@ -372,10 +381,10 @@ main
 									I2C1_Stop
 										I2C1_Wait_For_Idle
 											I2C1_Is_Idle
-											I2C2_TimeoutCallback
 											PrintHandler
-										I2C2_TimeoutCallback
+											I2C2_TimeoutCallback
 										PrintHandler
+										I2C2_TimeoutCallback
 							USB_CtrlTrf_In_Handler
 								USB_CtrlTrf_Tx_Service
 								I2C2_Stop
@@ -383,6 +392,16 @@ main
 								RcvSimTxt
 								I2C1_Stop
 		__CC2DW
+	Initialize_Led_On
+		PWM_Start
+		SetLedPWM
+			TCS3472_getRawData
+			TCS3472_C2RGB_Error
+			PWM_Set_Duty
+			PrintOut
+		PWM_Stop
+	PWM_Start
+	PWM_Stop
 	LM35_Adc_Average
 	getLM35Temp
 	PID_Calculate
@@ -433,22 +452,6 @@ main
 			memset
 			strncpy
 			PrintOut
-				_doprntout
-					isdigit
-					_Compare_FP
-					scale
-						_Mul_FP
-					_Mul_FP
-					_Div_FP
-					_FloatToUnsignedIntegral
-					_Unsigned32IntToFloat
-					_Sub_FP
-					_Add_FP
-					fround
-						_Mul_FP
-					_FloatToSignedIntegral
-					I2C2_TimeoutCallback
-					PrintHandler
 			RemoveWhiteSpace
 				strlen
 			StrChecker
@@ -469,6 +472,8 @@ main
 	Reset
 		SystemUnlock
 			DmaSuspend
+	__CC2DW
+	__FillZeros
 	Test_Update_ThingSpeak
 		TCS3472_getRawData
 		GetScaledValues

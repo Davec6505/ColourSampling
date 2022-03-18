@@ -13,9 +13,9 @@
 #include "PID.h"
 //////////////////////////////////////////
 //defines
-/*#define MainDebug
+#define MainDebug
 #define ThermisterDebug
-#define LedDeBug*/
+#define LedDeBug
 
 //#define ApplicationDbg
 //#define MainFlashDebug
@@ -46,6 +46,7 @@ void InitUart2();
 void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
+void Initialize_Led_On();
 void SetLedPWM();
 void ApplicationDebug();
 #endif

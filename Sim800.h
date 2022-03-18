@@ -24,7 +24,7 @@ extern sfr sbit STAT_Dir;
 //////////////////////////////////////////////////////
 //defines
 
-//#define SimDebug
+#define SimDebug
 //#define SimConfDebug
 #define SMSDebug
 //#define SMSDebugA

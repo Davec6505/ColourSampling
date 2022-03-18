@@ -144,19 +144,14 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
 *reset the led for error Threshold to get accurate readings
 *from the colour chip
 ***************************************************************/
-   PWM_Start(2);
-   Delay_ms(500);
-   SetLedPWM();
-   PWM_Stop(2);
+ // Initialize_Led_On();
  //  PWM_Start(3); //start temp control
-   
    
 /**************************************************************
 *main => loop forever and call all functions*
 *keep main free from code
 **************************************************************/
    while(1){
-
      ////////////////////////////////////////////////
      //Get input from USB to set up thresholds
      num = HID_Read();
@@ -168,6 +163,7 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
      //use  START sent from sms to START anything here
     if(SimVars.start && !last_start){
         last_start = 1;
+        Initialize_Led_On(); //At START cmd Init LED intensity
         PWM_Start(3); //start temp control
     }else if(!SimVars.start && (last_start > 0)){
         last_start = 0;

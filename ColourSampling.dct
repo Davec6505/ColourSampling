@@ -12575,6 +12575,7 @@ init_inc
 init_pid
 initgsm3
 initial_str
+initialize_led_on
 initisr
 initstring
 inittimer1
@@ -21807,6 +21808,7 @@ txtg
 txtg_scl
 txth
 txthue
+txtled
 txtlen
 txtlum
 txtm

@@ -474,6 +474,7 @@ void InitUart2();
 void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
+void Initialize_Led_On();
 void SetLedPWM();
 void ApplicationDebug();
 #line 3 "C:/Users/Git/ColourSampling/Config.c"
@@ -483,7 +484,12 @@ sbit BL at LATD4_bit;
 
 unsigned int current_duty2,current_duty3;
 unsigned int pwm_period2, pwm_period3;
-#line 15 "C:/Users/Git/ColourSampling/Config.c"
+
+
+char txtLed[15];
+
+
+
 void ConfigPic(){
 
  CHECON = 30;
@@ -569,35 +575,39 @@ void InitUart2(){
  U2RXIF_bit = 0;
 }
 
+void Initialize_Led_On(){
+ PWM_Start(2);
+ Delay_ms(500);
+ SetLedPWM();
+ PWM_Stop(2);
+}
+
 void SetLedPWM(){
-int err,error_counter;
+int err,error_counter,i;
+ for(i=0;i<4;i++)
+ RawData[i] = 0;
 
  error_counter = 0;
  TCS3472_getRawData(RawData);
- err = abs(TCS3472_C2RGB_Error(RawData));
+ err = TCS3472_C2RGB_Error(RawData);
 
  do{
-
-
-
-
-
-
-
- Delay_ms(10);
-
- current_duty2 += err;
+ current_duty2 += (err > 0)? 100:-100;
  PWM_Set_Duty(current_duty2, 2);
  Delay_ms(500);
  TCS3472_getRawData(RawData);
  err = TCS3472_C2RGB_Error(RawData);
-
-
-
+ error_counter++;
+#line 127 "C:/Users/Git/ColourSampling/Config.c"
+ PrintOut(PrintHandler, "\r\n"
+ " *pwm:=   %u\r\n"
+ " *err:=   %d\r\n"
+ ,current_duty2,err);
+#line 135 "C:/Users/Git/ColourSampling/Config.c"
  }while(err < -150 || err > 150);
 
 }
 
 void ApplicationDebug(){
-#line 142 "C:/Users/Git/ColourSampling/Config.c"
+#line 152 "C:/Users/Git/ColourSampling/Config.c"
 }

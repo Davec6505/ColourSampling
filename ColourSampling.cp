@@ -474,6 +474,7 @@ void InitUart2();
 void InitISR();
 void WriteData(char *_data);
 void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
+void Initialize_Led_On();
 void SetLedPWM();
 void ApplicationDebug();
 #line 4 "C:/Users/Git/ColourSampling/ColourSampling.c"
@@ -523,7 +524,12 @@ static long millis_thermister = 0;
 static char last_start = 0;
 int sample_test = 0;
 unsigned int pid_out = 0;
-#line 59 "C:/Users/Git/ColourSampling/ColourSampling.c"
+
+
+char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRaw[15],txtPid[15];
+
+
+
  Update_Test = Test_Update_ThingSpeak;
 
 
@@ -546,13 +552,11 @@ unsigned int pid_out = 0;
  str_num = strncmp(cel_num,sub_txt,4);
 
 
-
-
-
-
-
-
- Delay_ms(10);
+ sprintf(txtR,"%u",str_num);
+ PrintOut(PrintHandler, "\r\n"
+ " *Cell number:   %s\r\n"
+ " *Result of cmp: %s\r\n"
+ ,cel_num,txtR);
 #line 106 "C:/Users/Git/ColourSampling/ColourSampling.c"
  if(str_num != 0){
  SimVars.init_inc = SetupIOT();
@@ -577,27 +581,18 @@ unsigned int pid_out = 0;
  }
 
 
-
-
-
-
-
-
- Delay_ms(10);
-
-
+ sprintf(txtInit,"%d",SimVars.init_inc);
+ PrintOut(PrintHandler, "\r\n"
+ " *Run      \r\n"
+ " *Initial Incrament:= %s\r\n"
+ ,txtInit);
+#line 138 "C:/Users/Git/ColourSampling/ColourSampling.c"
  T0_SP.one_per_Xmin = 0;
  resA = resB = 0;
  last_millis_sigstr = TMR0.millis;
  millis_sigstr_sp = 5000;
-#line 147 "C:/Users/Git/ColourSampling/ColourSampling.c"
- PWM_Start(2);
- Delay_ms(500);
- SetLedPWM();
- PWM_Stop(2);
-#line 158 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 154 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
-
 
 
  num = HID_Read();
@@ -609,6 +604,7 @@ unsigned int pid_out = 0;
 
  if(SimVars.start && !last_start){
  last_start = 1;
+ Initialize_Led_On();
  PWM_Start(3);
  }else if(!SimVars.start && (last_start > 0)){
  last_start = 0;
@@ -628,9 +624,21 @@ unsigned int pid_out = 0;
  ave_adc = 0;
  current_duty3 = PID_Calculate( 35.00, _temp[1]);
  PWM_Set_Duty(current_duty3, 3);
-#line 205 "C:/Users/Git/ColourSampling/ColourSampling.c"
- Delay_ms(50);
 
+
+ sprintf(txtK,"%3.2f",_temp[0]);
+ sprintf(txtC,"%3.2f",_temp[1]);
+ sprintf(txtF,"%3.2f",_temp[2]);
+ sprintf(txtRaw,"%3.2f",_temp[3]);
+ sprintf(txtPid,"%d",current_duty3);
+ PrintOut(PrintHandler, "\r\n"
+ " *Kelvin:=      %s\r\n"
+ " *deg. C:=      %s\r\n"
+ " *deg. F:=      %s\r\n"
+ " *ADC:=         %s\r\n"
+ " *PID:=         %s\r\n"
+ ,txtK,txtC,txtF,txtRaw,txtPid);
+#line 203 "C:/Users/Git/ColourSampling/ColourSampling.c"
  }
 
  }
@@ -667,9 +675,18 @@ unsigned int pid_out = 0;
  if(diff > 1){
  last_rec_inc = SimVars.init_inc;
  SimVars.init_inc = 3;
-#line 255 "C:/Users/Git/ColourSampling/ColourSampling.c"
- Delay_ms(50);
 
+ sprintf(txtI,"%d",resB);
+ sprintf(txtR,"%d",diff);
+ sprintf(txtT,"%d",RB.tail);
+ sprintf(txtH,"%d",RB.head);
+ PrintOut(PrintHandler, "\r\n"
+ " *Tail:= %s\r\n"
+ " *Head:= %s\r\n"
+ " *Diff in pointers:= %s\r\n"
+ " *Reply from GetSmsTxt():= %s\r\n"
+ ,txtT,txtH,txtR,txtI);
+#line 253 "C:/Users/Git/ColourSampling/ColourSampling.c"
  GetSMSText();
  Delay_ms(500);
  if(SimVars.init_inc != 5)
@@ -686,7 +703,7 @@ unsigned int pid_out = 0;
 
 
  if(!RE4_bit){
-#line 276 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 272 "C:/Users/Git/ColourSampling/ColourSampling.c"
  }
 
 

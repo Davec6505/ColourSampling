@@ -97,31 +97,41 @@ void InitUart2(){
      U2RXIF_bit = 0;
 }
 
-void SetLedPWM(){
-int err,error_counter;
+void Initialize_Led_On(){
+   PWM_Start(2);
+   Delay_ms(500);
+   SetLedPWM();
+   PWM_Stop(2);
+}
 
+void SetLedPWM(){
+int err,error_counter,i;
+     for(i=0;i<4;i++)
+        RawData[i] = 0;
+        
      error_counter = 0;
      TCS3472_getRawData(RawData);
-     err = abs(TCS3472_C2RGB_Error(RawData));
+     err = TCS3472_C2RGB_Error(RawData);
      
     do{
-#ifdef LedDeBug
-        sprintf(txtLed,"%d",err);
-        PrintOut(PrintHandler, "\r\n"
-                               " *err:=   %s\r\n"
-                               ,txtLed);
- 
-#else
-      Delay_ms(10);
-#endif
-      current_duty2 += err;
+      current_duty2 += (err > 0)? 100:-100;
       PWM_Set_Duty(current_duty2, 2);
       Delay_ms(500);
       TCS3472_getRawData(RawData);
       err = TCS3472_C2RGB_Error(RawData);
-    //  error_counter++;
-    //  if(error_counter > 1000)
-    //      break;
+      error_counter++;
+     /* if(error_counter > 100)
+          break;  */
+#ifdef LedDeBug
+       // sprintf(txtLed,"%d",err);
+        PrintOut(PrintHandler, "\r\n"
+                               " *pwm:=   %u\r\n"
+                               " *err:=   %d\r\n"
+                               ,current_duty2,err);//txtLed);
+
+#else
+      Delay_ms(10);
+#endif
     }while(err < -150 || err > 150);
 
 }
