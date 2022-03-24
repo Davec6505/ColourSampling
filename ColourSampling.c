@@ -139,14 +139,14 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
    resA = resB = 0;
    last_millis_sigstr = TMR0.millis;
    millis_sigstr_sp = 5000;
-   
+   last_start = 0;
 /***************************************************************
 *reset the led for error Threshold to get accurate readings
 *from the colour chip
 ***************************************************************/
  // Initialize_Led_On();
  //  PWM_Start(3); //start temp control
-   
+
 /**************************************************************
 *main => loop forever and call all functions*
 *keep main free from code
@@ -217,7 +217,7 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
 
      //////////////////////////////////////////////////
      //Update Thingspeak
-     if(SimVars.init_inc >= 5){
+     if(SimVars.init_inc >= 5 && last_start > 0){
        if(T0_SP.one_per_Xmin){
          PWM_Start(2);
          Delay_ms(500);
@@ -260,8 +260,10 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
 
      ///////////////////////////////////////////////////////////
      //reset flash
-   //  if(!RG9_bit)
-   //    NVMErasePage(FLASH_Settings_PAddr);//SendSMS(100);
+#ifdef ResetFlash
+     if(!RG9_bit)
+       NVMErasePage(FLASH_Settings_PAddr);//SendSMS(100);
+#endif
         
     ////////////////////////////////////////////////////////////
     //use onboard switch to debug various features

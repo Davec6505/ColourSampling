@@ -357,7 +357,7 @@ void Reset_PID();
 
 
 int PID_Calculate(float Sp, float Pv);
-#line 27 "c:/users/git/coloursampling/config.h"
+#line 28 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 

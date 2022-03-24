@@ -451,7 +451,7 @@ void Reset_PID();
 
 
 int PID_Calculate(float Sp, float Pv);
-#line 27 "c:/users/git/coloursampling/config.h"
+#line 28 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
@@ -591,6 +591,7 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
  resA = resB = 0;
  last_millis_sigstr = TMR0.millis;
  millis_sigstr_sp = 5000;
+ last_start = 0;
 #line 154 "C:/Users/Git/ColourSampling/ColourSampling.c"
  while(1){
 
@@ -656,7 +657,7 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
 
 
 
- if(SimVars.init_inc >= 5){
+ if(SimVars.init_inc >= 5 && last_start > 0){
  if(T0_SP.one_per_Xmin){
  PWM_Start(2);
  Delay_ms(500);
@@ -698,12 +699,14 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
 
 
 
+ if(!RG9_bit)
+ NVMErasePage(FLASH_Settings_PAddr);
 
 
 
 
  if(!RE4_bit){
-#line 272 "C:/Users/Git/ColourSampling/ColourSampling.c"
+#line 274 "C:/Users/Git/ColourSampling/ColourSampling.c"
  }
 
 

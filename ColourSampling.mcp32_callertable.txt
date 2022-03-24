@@ -149,6 +149,7 @@ main
 		strlen
 		RemoveSMSText
 			sprintf
+			PrintOut
 			UART2_Write_Text
 			UART2_Write
 			WaitForResponse
@@ -398,7 +399,6 @@ main
 			TCS3472_getRawData
 			TCS3472_C2RGB_Error
 			PWM_Set_Duty
-			PrintOut
 		PWM_Stop
 	PWM_Start
 	PWM_Stop
@@ -435,10 +435,13 @@ main
 		RingToTempBuf
 		strsplit
 		strncmp
+		sprintf
+		PrintOut
 		isdigit
 		atoi
 		ReadMSG
 			sprintf
+			PrintOut
 			UART2_Write_Text
 			UART2_Write
 			WaitForResponse
@@ -451,7 +454,6 @@ main
 			RemoveChars
 			memset
 			strncpy
-			PrintOut
 			RemoveWhiteSpace
 				strlen
 			StrChecker
@@ -459,6 +461,7 @@ main
 			SendSMS
 			TestRecievedSMS
 				sprintf
+				PrintOut
 				SendSMS
 				GetValuesFromFlash
 				NVMErasePage
@@ -469,6 +472,7 @@ main
 			__CC2DW
 		SendSMS
 		RemoveSMSText
+	NVMErasePage
 	Reset
 		SystemUnlock
 			DmaSuspend
@@ -484,6 +488,7 @@ main
 			strncpy
 			strncat
 			strlen
+			PrintOut
 			UART2_Write_Text
 			UART2_Write
 			TestForOK

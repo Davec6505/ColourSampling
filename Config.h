@@ -13,9 +13,10 @@
 #include "PID.h"
 //////////////////////////////////////////
 //defines
+#define ResetFlash
 #define MainDebug
 #define ThermisterDebug
-#define LedDeBug
+//#define LedDeBug
 
 //#define ApplicationDbg
 //#define MainFlashDebug

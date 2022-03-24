@@ -135,9 +135,10 @@ void PwrDownGSM3(){
 
  while(STAT){
     LATE3_bit = !LATE3_bit;
+    LATD5_bit = !LATD5_bit;
      Delay_ms(100);
  }
- LATA10_bit = STAT;
+ LATD5_bit = STAT;
  LATE3_bit = 0;
  Delay_ms(5000);
 
@@ -154,6 +155,7 @@ void PwrUpGSM3(){
 
  while(!STAT){
     LATE3_bit = !LATE3_bit;
+    LATD5_bit = !LATD5_bit;
      Delay_ms(100);
  }
  LATA10_bit = STAT;
@@ -339,8 +341,9 @@ unsigned long lastMillis,newMillis;
    RB.last_head     = RB.head;
    do{
      LATE3_bit = !LATE3_bit;
+     LATD5_bit = !LATD5_bit;
      if(dly == 0)
-      Delay_ms(100);
+      Delay_ms(50);
      else if(dly == 1)
       Delay_ms(500);
      else if(dly == 3){
@@ -354,7 +357,7 @@ unsigned long lastMillis,newMillis;
 
       //break if no reply
       newMillis = TMR0.millis - lastMillis;
-      if(newMillis > 59000)
+      if(newMillis > 99000)
            break;
    }while(!RB.rcv_txt_fin);
    LATE3_bit = 0;
@@ -449,7 +452,7 @@ wait:
 #endif
    str_rcv = findnumber(string[1]);
    res = atoi(str_rcv);  //get the sms rec number
-   if(res == 1){
+   if(res == 1 || res == 5){
 #ifdef SimConfDebug
      sprintf(txtA,"%d",res);
      PrintOut(PrintHandler, "\r\n"
@@ -1098,7 +1101,7 @@ int RemoveSMSText(int sms_cnt){
     sprintf(sms,"%d",sms_cnt);
 #ifdef SMSDebugA
      PrintOut(PrintHandler, "\r\n"
-                           " *num_strs:= %s\r\n"
+                           " *delete num_strs:= %s\r\n"
                            ,sms);
 #else
      Delay_ms(5);

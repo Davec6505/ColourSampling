@@ -47,7 +47,7 @@ void ConfigPic(){
   current_duty3  = 500;                     // initial value for current_duty1
   pwm_period2 = PWM_Init(5000 , 2, 0, 2);    //pwm frk,pwm pin 1-latd0,pre-scal,tmr2
   pwm_period3 = PWM_Init(5000 , 3, 4, 3);    //pwm frk,pwm pin 1-latd1,pre-scal,tmr5
-  PWM_Set_Duty(current_duty2,  2);           // Set current duty for PWM1
+  PWM_Set_Duty(current_duty2, 2);           // Set current duty for PWM1
   PWM_Set_Duty(current_duty3, 3);            // Set current duty for PWM2
   PWM_Stop(2);
   PWM_Stop(3);
@@ -120,8 +120,8 @@ int err,error_counter,i;
       TCS3472_getRawData(RawData);
       err = TCS3472_C2RGB_Error(RawData);
       error_counter++;
-     /* if(error_counter > 100)
-          break;  */
+      if(error_counter > 100)
+          break;
 #ifdef LedDeBug
        // sprintf(txtLed,"%d",err);
         PrintOut(PrintHandler, "\r\n"
@@ -135,6 +135,8 @@ int err,error_counter,i;
     }while(err < -150 || err > 150);
 
 }
+
+
 
 void ApplicationDebug(){
 #ifdef MainFlashDebug

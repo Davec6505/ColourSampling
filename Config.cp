@@ -451,7 +451,7 @@ void Reset_PID();
 
 
 int PID_Calculate(float Sp, float Pv);
-#line 27 "c:/users/git/coloursampling/config.h"
+#line 28 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
@@ -484,12 +484,7 @@ sbit BL at LATD4_bit;
 
 unsigned int current_duty2,current_duty3;
 unsigned int pwm_period2, pwm_period3;
-
-
-char txtLed[15];
-
-
-
+#line 15 "C:/Users/Git/ColourSampling/Config.c"
 void ConfigPic(){
 
  CHECON = 30;
@@ -598,16 +593,24 @@ int err,error_counter,i;
  TCS3472_getRawData(RawData);
  err = TCS3472_C2RGB_Error(RawData);
  error_counter++;
-#line 127 "C:/Users/Git/ColourSampling/Config.c"
- PrintOut(PrintHandler, "\r\n"
- " *pwm:=   %u\r\n"
- " *err:=   %d\r\n"
- ,current_duty2,err);
-#line 135 "C:/Users/Git/ColourSampling/Config.c"
+ if(error_counter > 100)
+ break;
+
+
+
+
+
+
+
+
+ Delay_ms(10);
+
  }while(err < -150 || err > 150);
 
 }
 
+
+
 void ApplicationDebug(){
-#line 152 "C:/Users/Git/ColourSampling/Config.c"
+#line 154 "C:/Users/Git/ColourSampling/Config.c"
 }
