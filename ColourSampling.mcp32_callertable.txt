@@ -1,5 +1,6 @@
 main
 	ConfigPic
+		FSCM_SetUP
 		HID_Enable
 			GetMaxStrignDscIndex
 				GetMaxIndexInDevDsc
@@ -33,7 +34,14 @@ main
 		InitISR
 		InitGSM3
 			memset
+		PwrDownGSM3
 		PwrUpGSM3
+		setup_LM35
+			ADC1_Init
+		Init_PID
+			_SignedIntegralToFloat
+		PID_Control
+			strlen
 	TCS3472_Init
 		TCS3472_Read8
 			I2C2_Start
@@ -61,6 +69,7 @@ main
 			TCS3472_Write8
 		TCS3472_Enable
 			TCS3472_Write8
+<<<<<<< HEAD
 	sprintf
 		_doprntf
 			isdigit
@@ -147,6 +156,8 @@ main
 							I2C1_Stop
 	UART1_Write_Text
 	UART1_Write
+=======
+>>>>>>> temp
 	strcpy
 	GetValuesFromFlash
 		GetStrLengths
@@ -236,7 +247,6 @@ main
 		WaitForSetupSMS
 		__CC2DW
 	SendSMS
-		__CC2DW
 		Malloc
 		strcpy
 		AT_Initial
@@ -253,8 +263,8 @@ main
 			sprintf
 			strcat
 			__CC2DW
-		strlen
 		strncpy
+		strlen
 		Read_Send_AllColour
 			TCS3472_getRawData
 				TCS3472_Read16
@@ -295,15 +305,34 @@ main
 			strcpy
 			strcat
 			__CC2DW
+		LM35_Adc_Average
+			ADC1_Get_Sample
+		getLM35Temp
+			_SignedIntegralToFloat
+			_Mul_FP
+			_Add_FP
+		sprintf
+		strcat
 		Free
+		__CC2DW
 	WaitForResponse
 	Read_Thresholds
+<<<<<<< HEAD
+=======
+	Initialize_Led_On
+		PWM_Start
+		SetLedPWM
+			TCS3472_getRawData
+			TCS3472_C2RGB_Error
+			PWM_Set_Duty
+		PWM_Stop
+	RemoveSMSText
+>>>>>>> temp
 	HID_Read
 		Gen_Read
 			USB_Handle_Busy
 			USB_Transfer_Packet
 	DoStrings
-		__CC2DW
 		clr_str_arrays
 		memcpy
 		setstr
@@ -317,25 +346,6 @@ main
 		atoi
 		TCS3472_SetIntergration_Time
 		TCS3472_SetGain
-		SendData
-			memset
-			sprintf
-			strncpy
-			strncat
-			strlen
-			PrintOut
-			UART2_Write_Text
-			UART2_Write
-			TestForOK
-				WaitForResponse
-				RingToTempBuf
-				PrintOut
-				strstr
-					strlen
-					strncmp
-					strchr
-				__CC2DW
-			__CC2DW
 		Read_Send_AllColour
 		Read_Send_OneColour
 			TCS3472_Read16
@@ -394,12 +404,114 @@ main
 			strcpy
 			strcat
 		ReadHUE
+<<<<<<< HEAD
 		strlen
+=======
+		LM35_Adc_Average
+		getLM35Temp
+		sprintf
+>>>>>>> temp
 		strncat
+		strlen
 		HID_Write
+<<<<<<< HEAD
+=======
+			Gen_Write
+				USB_Handle_Busy
+				USB_Transfer_Packet
+				USB_Polling_Proc
+					USB_Device_Service
+						USB_Configure
+						USB_Wake_From_Suspend
+							USB_CB_Handler
+								USB_CB_Init_EP
+									USB_Enable_Endpoint
+										USB_Configure_Endpoint
+									USB_Transfer_Packet
+								USB_CB_Check_Other_Req
+									USB_Check_HID_Request
+										USB_EP0_Send_ROM
+										USB_EP0_Transmit_Options
+										USB_EP0_Send_RAM
+						USB_Clear_Interrupt
+						USB_Device_Init
+						USB_Suspend
+							USB_CB_Handler
+						USB_CB_Handler
+						USB_Stall_Handler
+						USB_Ctrl_EPService
+							USB_CtrlTrf_Setup_Handler
+								USB_Check_Std_Request
+									USB_Get_Dsc_Handler
+									USB_Set_Cfg_Handler
+										USB_Disable_Non_Zero_Endpoints
+										USB_memset
+										USB_CB_Handler
+									USB_Get_Status_Handler
+									USB_Std_Feature_Req_Handler
+										USB_CB_Handler
+									USB_CB_Handler
+								USB_CB_Handler
+								USB_CtrlEP_Service_Complete
+									USBCtrlEPAllowDataStage
+										USB_CtrlTrf_Tx_Service
+									USBCtrlEPAllowStatusStage
+							USB_CtrlTrf_Out_Handler
+								USB_CtrlTrf_Rx_Service
+									USBCtrlEPAllowStatusStage
+									I2C2_Stop
+									Get_Time
+									RcvSimTxt
+										UART2_Data_Ready
+									I2C1_Stop
+										I2C1_Wait_For_Idle
+											I2C1_Is_Idle
+											PrintHandler
+											I2C2_TimeoutCallback
+										PrintHandler
+										I2C2_TimeoutCallback
+							USB_CtrlTrf_In_Handler
+								USB_CtrlTrf_Tx_Service
+								I2C2_Stop
+								Get_Time
+								RcvSimTxt
+								I2C1_Stop
+		__CC2DW
+	PWM_Start
+	PWM_Stop
+	LM35_Adc_Average
+	getLM35Temp
+	PID_Calculate
+		_Sub_FP
+		_Mul_FP
+		_Add_FP
+		_Compare_FP
+		_FloatToSignedIntegral
+		_SignedIntegralToFloat
+	PWM_Set_Duty
+	SignalStrength
+		clr_str_arrays
+		UART2_Write_Text
+		UART2_Write
+		WaitForResponse
+		RingToTempBuf
+		PrintOut
+		strsplit
+		strncpy
+		RemoveChars
+			Malloc
+			strchr
+			strcpy
+			strlen
+			strncpy
+			Free
+		isdigit
+		atoi
+		sprintf
+		PWM_SigStrength
+>>>>>>> temp
 	TestRingPointers
 	GetSMSText
-		UART1_Write_Text
 		RingToTempBuf
 		strsplit
 		strncmp
@@ -445,8 +557,8 @@ main
 			__CC2DW
 		SendSMS
 		RemoveSMSText
-		__CC2DW
 	NVMErasePage
+<<<<<<< HEAD
 	SignalStrength
 		UART2_Write_Text
 		UART2_Write
@@ -460,6 +572,14 @@ main
 		atoi
 		sprintf
 	PWM_SigStrength
+=======
+	ApplicationDebug
+		GetValuesFromFlash
+		SignalStrength
+	Reset
+		SystemUnlock
+			DmaSuspend
+>>>>>>> temp
 	__CC2DW
 	__FillZeros
 	Test_Update_ThingSpeak
@@ -467,6 +587,26 @@ main
 		GetScaledValues
 		TCS3472_CalcHue
 		SendData
+			memset
+			sprintf
+			strncpy
+			strncat
+			strlen
+			PrintOut
+			UART2_Write_Text
+			UART2_Write
+			TestForOK
+				WaitForResponse
+				RingToTempBuf
+				PrintOut
+				strstr
+					strlen
+					strncmp
+					strchr
+				__CC2DW
+			__CC2DW
+FSCM
+	Reset
 PC_Uart1
 	UART1_Data_Ready
 Sim800_Uart2
@@ -474,7 +614,10 @@ Sim800_Uart2
 	Get_Time
 	RcvSimTxt
 	I2C1_Stop
+<<<<<<< HEAD
 Timer2_3Interrupt
+=======
+>>>>>>> temp
 USB1Interrupt
 	USB_Interrupt_Proc
 		USB_Device_Service
@@ -483,3 +626,4 @@ Timer1Interrupt
 	Get_Time
 	RcvSimTxt
 	I2C1_Stop
+Timer4_5Interrupt

@@ -1,6 +1,10 @@
 #include "String.h"
 
 
+//temp thermister params
+int ave_adc_;
+float temp_[4];
+char txt_[15];
 
 struct Constants str_vars;
 struct Thresh Threshold;
@@ -10,7 +14,12 @@ const code char *comc[13]={
    "T",
    "G"
 };
+<<<<<<< HEAD
 const code char *com[21]={
+=======
+
+const code char *com[22]={
+>>>>>>> temp
    "CONFIG"       //0
    ,"SENDC"       //1
    ,"SENDR"       //2
@@ -31,9 +40,12 @@ const code char *com[21]={
    ,"START"       //17
    ,"CANCEL"      //18
    ,"READA_HUE"   //19
+<<<<<<< HEAD
+=======
+   ,"READA_DEG"   //20
+>>>>>>> temp
    ,"ERROR"
 };
-
 
 PString InitString(char cmp){
     PString str_t;
@@ -105,7 +117,6 @@ char *str,err,i;
              LATE3_bit = 0;
              break;
         case SENDA :
-             SendData(RawData,FltData);
              break;
         case READA :
              str = Read_Send_AllColour(0);
@@ -149,6 +160,18 @@ char *str,err,i;
         case READA_HUE :
             str = ReadHUE();
             break;
+<<<<<<< HEAD
+=======
+        case READA_DEG :
+             LM35_Adc_Average(&ave_adc_,LM35Pin);
+             getLM35Temp(temp_,ave_adc_);
+             ave_adc_ = 0;
+             sprintf(txt_,"%3.2f",temp_[1]);
+             str = txt_;
+             //strcpy(str,txt_);
+             //SendData(RawData,FltData,temp_[1]);
+            break;
+>>>>>>> temp
         default:
             str = "No data requested!\r\n";
            break;
@@ -159,6 +182,7 @@ char *str,err,i;
       strncat(writebuff,str,strlen(str));
       while(!HID_Write(&writebuff,64));
 #endif
+
       //free(str);
 ret:
    return 0;
@@ -249,7 +273,7 @@ int i,length;
     }
     length = strlen(str);
     if(length < 5){
-       return 20;
+       return 21;
     }
     for(i = 0;i < enum_val;i++){
          if(strncmp(str,com[i],length)==0)
@@ -588,7 +612,7 @@ char* TestFlash(){
 char txtR[20];
 char str[64];
 unsigned long val[128];
-unsigned long Val;
+unsigned long Val_;
 unsigned int res,i;
  char* tr = "112233";
       // val[0] = atol(tr);//0x1234afaf;
@@ -598,11 +622,11 @@ unsigned int res,i;
       // res = NVMErasePage(FLASH_Settings_PAddr);
       // res = NVMWriteRow(FLASH_Settings_PAddr,val);
       // res = NVMWriteWord(FLASH_Settings_PAddr,val[0]);
-       Val =  ReadFlashWord();
+       Val_ =  ReadFlashWord();
 
 
        strcpy(str,"Val || ");
-       LongWordToHex(Val,txtR);
+       LongWordToHex(Val_,txtR);
       // sprintf(txtR,"%8x",Val);//Threshold.C_thresh);
        strcat(str,txtR);
        strcat(str," || ");

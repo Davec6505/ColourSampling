@@ -1,6 +1,6 @@
 #line 1 "C:/Users/Git/ColourSampling/TCS3472.c"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
+#line 1 "c:/users/git/coloursampling/stdint.h"
 
 
 

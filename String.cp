@@ -1,5 +1,6 @@
 #line 1 "C:/Users/Git/ColourSampling/String.c"
 #line 1 "c:/users/git/coloursampling/string.h"
+<<<<<<< HEAD
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
@@ -15,6 +16,11 @@ unsigned int NVMUnlock(unsigned int nvmop);
 void NVMRead(void* addr,struct Thresh *vals);
 unsigned long ReadFlashWord();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
+=======
+#line 1 "c:/users/git/coloursampling/config.h"
+#line 1 "c:/users/git/coloursampling/tcs3472.h"
+#line 1 "c:/users/git/coloursampling/stdint.h"
+>>>>>>> temp
 
 
 
@@ -147,36 +153,6 @@ float min_(float *rgb);
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/_timers.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/time.h"
-
-
-
-struct tm {
- unsigned long tm_sec;
- unsigned long tm_min;
- unsigned long tm_hour;
- unsigned long tm_mday;
- unsigned long tm_mon;
- unsigned long tm_year;
- unsigned long tm_wday;
- unsigned long tm_yday;
- unsigned long tm_isdst;
-};
-
-
-
-
-
-
-
-
-
- typedef unsigned long size_t;
-
-
-typedef unsigned long clock_t;
-typedef unsigned long time_t;
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 20 "c:/users/git/coloursampling/_timers.h"
 typedef struct{
@@ -214,11 +190,16 @@ void I2C2_TimeoutCallback(char errorCode);
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 13 "c:/users/git/coloursampling/sim800.h"
 extern sfr sbit RTS;
-extern sfr sbit CRS;
+extern sfr sbit RTS_Dir;
+extern sfr sbit CTS;
+extern sfr sbit CTS_Dir;
 extern sfr sbit RST;
+extern sfr sbit RST_Dir;
 extern sfr sbit PWR;
+extern sfr sbit PWR_Dir;
 extern sfr sbit STAT;
-#line 29 "c:/users/git/coloursampling/sim800.h"
+extern sfr sbit STAT_Dir;
+#line 37 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -228,7 +209,7 @@ extern char rcvPcTxt[150];
 
 typedef struct{
  char initial_str;
- char init_inc;
+ int init_inc;
  char start: 1;
  int rssi;
  int ber;
@@ -287,6 +268,7 @@ void WaitForResponse(short dly);
 void RingToTempBuf();
 void Load_Head_Tail_Pointers();
 void RcvSimTxt();
+void PwrDownGSM3();
 void PwrUpGSM3();
 char SetupIOT();
 char WaitForSetupSMS(unsigned int Indx);
@@ -295,14 +277,158 @@ char GetSMSText();
 char ReadMSG(int msg_num);
 void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
-int Test_Update_ThingSpeak();
-void SendData(unsigned int* rgbc,float* rgbh);
+int Test_Update_ThingSpeak(float degC);
+void SendData(unsigned int* rgbc,float* rgbh,float degC);
 char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
 int SignalStrength();
 void PWM_SigStrength(int sigstrength);
+<<<<<<< HEAD
 #line 19 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
+=======
+#line 20 "c:/users/git/coloursampling/_timers.h"
+typedef struct{
+unsigned long millis;
+unsigned int ms;
+unsigned int sec;
+unsigned int min;
+unsigned int hr;
+unsigned int day;
+unsigned int month;
+}Timers;
+
+extern Timers TMR0;
+
+typedef struct{
+unsigned int ms;
+unsigned int sec;
+unsigned int min;
+unsigned int hr;
+unsigned int lastMin;
+unsigned short one_per_sec : 1;
+unsigned short one_per_Xmin : 1;
+}Timer_Setpoint;
+
+extern Timer_Setpoint T0_SP;
+
+
+
+void InitTimers();
+void InitTimer1();
+void InitTimer4_5();
+void Get_Time();
+void Day_Month(int hr,int day,int mnth);
+void I2C2_TimeoutCallback(char errorCode);
+#line 1 "c:/users/git/coloursampling/sim800.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
+#line 1 "c:/users/git/coloursampling/string.h"
+#line 1 "c:/users/git/coloursampling/lm35.h"
+
+
+
+
+
+
+
+
+extern sfr sbit LM35_Pin;
+extern sfr sbit LM35_Pin_Dir;
+#line 27 "c:/users/git/coloursampling/lm35.h"
+void setup_LM35(int count);
+int LM35_Adc_Average(int* adc,int adc_pin);
+int LM35_Adc_Single(int adc,int adc_pin);
+void getLM35Temp(float * t,int adc_ave);
+#line 1 "c:/users/git/coloursampling/pid.h"
+#line 29 "c:/users/git/coloursampling/pid.h"
+typedef struct{
+ char control;
+ float PID_Kp, PID_Ki, PID_Kd;
+ float PID_Err;
+ float PID_Integrated;
+ float PID_DiffValue;
+ float PID_Prev_Integrated;
+ float PID_Prev_Input;
+ float PID_MinOutput, PID_MaxOutput;
+ float Err;
+ int PID_OffSet;
+ int Result;
+ unsigned short PID_First_Time:1;
+}_PID;
+
+extern _PID PID_;
+
+
+
+
+
+
+
+char PID_Control(char *PID);
+
+
+
+
+void Init_PID(float Kp, float Ki, float Kd, int MinOutput, int MaxOutput,int Offset);
+
+
+
+
+
+
+
+
+
+void Reset_PID();
+
+
+int PID_Calculate(float Sp, float Pv);
+#line 29 "c:/users/git/coloursampling/config.h"
+extern unsigned short i;
+extern char kk;
+
+extern sfr sbit RD;
+extern sfr sbit GR;
+extern sfr sbit BL;
+
+extern unsigned int current_duty2, current_duty3;
+extern unsigned int pwm_period2, pwm_period3;
+
+
+
+
+
+
+void ConfigPic();
+void FSCM_SetUP();
+void InitUart1();
+void InitUart2();
+void InitISR();
+void WriteData(char *_data);
+void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
+void Initialize_Led_On();
+void SetLedPWM();
+void ApplicationDebug();
+#line 1 "c:/users/git/coloursampling/flash_r_w.h"
+#line 1 "c:/users/git/coloursampling/string.h"
+#line 20 "c:/users/git/coloursampling/flash_r_w.h"
+extern unsigned long FLASH_Settings_VAddr;
+extern unsigned long FLASH_Settings_PAddr;
+
+
+unsigned int NVMWriteWord (void* address, unsigned long _data);
+unsigned int NVMWriteRow (void* address, void* _data);
+unsigned int NVMErasePage(void* address);
+unsigned int NVMUnlock(unsigned int nvmop);
+void NVMRead(void* addr,struct Thresh *vals);
+unsigned long ReadFlashWord();
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
+#line 1 "c:/users/git/coloursampling/tcs3472.h"
+#line 1 "c:/users/git/coloursampling/sim800.h"
+#line 1 "c:/users/git/coloursampling/lm35.h"
+#line 21 "c:/users/git/coloursampling/string.h"
+extern char string[ 21 ][ 64 ];
+>>>>>>> temp
 
 enum ControlColorIO{
 CONFIG,
@@ -325,6 +451,10 @@ WRITE_RAW,
 START,
 CANCEL,
 READA_HUE,
+<<<<<<< HEAD
+=======
+READA_DEG,
+>>>>>>> temp
 ERROR
 };
 
@@ -336,7 +466,7 @@ struct Constants{
 typedef struct pstrings_t{
  char* str;
  char c;
- char string[ 20 ][ 64 ];
+ char string[ 21 ][ 64 ];
  int (*StrSplitFp)(char* str,char c);
 }PString;
 
@@ -378,15 +508,24 @@ char* TestFlash();
 char* RemoveChars(char* str,char a,char b);
 void PrintHandler(char c);
 #line 5 "C:/Users/Git/ColourSampling/String.c"
+int ave_adc_;
+float temp_[4];
+char txt_[15];
+
 struct Constants str_vars;
 struct Thresh Threshold;
-char string[ 20 ][ 64 ];
+char string[ 21 ][ 64 ];
 
 const code char *comc[13]={
  "T",
  "G"
 };
+<<<<<<< HEAD
 const code char *com[21]={
+=======
+
+const code char *com[22]={
+>>>>>>> temp
  "CONFIG"
  ,"SENDC"
  ,"SENDR"
@@ -407,16 +546,23 @@ const code char *com[21]={
  ,"START"
  ,"CANCEL"
  ,"READA_HUE"
+<<<<<<< HEAD
+=======
+ ,"READA_DEG"
+>>>>>>> temp
  ,"ERROR"
 };
-
 
 PString InitString(char cmp){
  PString str_t;
  str_t.c = cmp;
  str_t.StrSplitFp = strsplit;
 }
+<<<<<<< HEAD
 #line 47 "C:/Users/Git/ColourSampling/String.c"
+=======
+#line 52 "C:/Users/Git/ColourSampling/String.c"
+>>>>>>> temp
 int DoStrings(int num){
 char *str,err,i;
  char *result,conf[64] = "";
@@ -478,7 +624,6 @@ char *str,err,i;
  LATE3_bit = 0;
  break;
  case SENDA :
- SendData(RawData,FltData);
  break;
  case READA :
  str = Read_Send_AllColour(0);
@@ -522,6 +667,18 @@ char *str,err,i;
  case READA_HUE :
  str = ReadHUE();
  break;
+<<<<<<< HEAD
+=======
+ case READA_DEG :
+ LM35_Adc_Average(&ave_adc_, 15 );
+ getLM35Temp(temp_,ave_adc_);
+ ave_adc_ = 0;
+ sprintf(txt_,"%3.2f",temp_[1]);
+ str = txt_;
+
+
+ break;
+>>>>>>> temp
  default:
  str = "No data requested!\r\n";
  break;
@@ -533,11 +690,17 @@ char *str,err,i;
  while(!HID_Write(&writebuff,64));
 
 
+
 ret:
  return 0;
 }
+<<<<<<< HEAD
 #line 170 "C:/Users/Git/ColourSampling/String.c"
 void clr_str_arrays(char str[20][64]){
+=======
+#line 184 "C:/Users/Git/ColourSampling/String.c"
+void clr_str_arrays(char str[ 21 ][ 64 ]){
+>>>>>>> temp
 int i,j;
  for(i = 0;i < 20;i++){
  for(j = 0;j<64;j++){
@@ -546,7 +709,11 @@ int i,j;
 
  }
 }
+<<<<<<< HEAD
 #line 183 "C:/Users/Git/ColourSampling/String.c"
+=======
+#line 197 "C:/Users/Git/ColourSampling/String.c"
+>>>>>>> temp
 char* setstr(char conf[250]){
  int i;
  for(i=0;i < strlen(conf);i++){
@@ -557,7 +724,11 @@ char* setstr(char conf[250]){
 
  return conf;
 }
+<<<<<<< HEAD
 #line 197 "C:/Users/Git/ColourSampling/String.c"
+=======
+#line 211 "C:/Users/Git/ColourSampling/String.c"
+>>>>>>> temp
 int strsplit(char str[250], char c){
 int i,ii,kk,err,lasti;
  ii=kk=err=lasti=0;
@@ -579,7 +750,11 @@ int i,ii,kk,err,lasti;
  }
  return kk;
 }
+<<<<<<< HEAD
 #line 222 "C:/Users/Git/ColourSampling/String.c"
+=======
+#line 236 "C:/Users/Git/ColourSampling/String.c"
+>>>>>>> temp
 char* findnumber(char* str){
 char* temp;
 int i,j;
@@ -595,7 +770,11 @@ int i,j;
  Free(temp,sizeof(temp));
  return temp;
 }
+<<<<<<< HEAD
 #line 242 "C:/Users/Git/ColourSampling/String.c"
+=======
+#line 256 "C:/Users/Git/ColourSampling/String.c"
+>>>>>>> temp
 int StrChecker(char *str){
 static int enum_val;
 static bit once;
@@ -606,7 +785,7 @@ int i,length;
  }
  length = strlen(str);
  if(length < 5){
- return 20;
+ return 21;
  }
  for(i = 0;i < enum_val;i++){
  if(strncmp(str,com[i],length)==0)
@@ -614,7 +793,11 @@ int i,length;
  }
  return i;
 }
+<<<<<<< HEAD
 #line 264 "C:/Users/Git/ColourSampling/String.c"
+=======
+#line 278 "C:/Users/Git/ColourSampling/String.c"
+>>>>>>> temp
 char* RemoveWhiteSpace(char* str){
 char* temp;
 int i,j;
@@ -627,7 +810,11 @@ j=0;
  }
  return temp;
 }
+<<<<<<< HEAD
 #line 280 "C:/Users/Git/ColourSampling/String.c"
+=======
+#line 294 "C:/Users/Git/ColourSampling/String.c"
+>>>>>>> temp
 char* RemoveChars(char* str,char a,char b){
 char *temp;
 int i=0;
@@ -650,7 +837,11 @@ int i=0;
  Free(temp,100);
  return temp;
 }
+<<<<<<< HEAD
 #line 306 "C:/Users/Git/ColourSampling/String.c"
+=======
+#line 320 "C:/Users/Git/ColourSampling/String.c"
+>>>>>>> temp
 void WriteData(char *_data){
 
 
@@ -658,7 +849,11 @@ void WriteData(char *_data){
  strncpy(writebuff,_data,strlen(_data));
  HID_Write(&writebuff,64);
 }
+<<<<<<< HEAD
 #line 317 "C:/Users/Git/ColourSampling/String.c"
+=======
+#line 331 "C:/Users/Git/ColourSampling/String.c"
+>>>>>>> temp
 char* Read_Send_AllColour(short data_src){
 char txtR[15];
 char str[64];
@@ -705,7 +900,11 @@ int err;
 
  return &str;
 }
+<<<<<<< HEAD
 #line 367 "C:/Users/Git/ColourSampling/String.c"
+=======
+#line 392 "C:/Users/Git/ColourSampling/String.c"
+>>>>>>> temp
 char* Read_Send_OneColour(int colr){
 unsigned int col;
 char txtR[10];
@@ -758,7 +957,11 @@ char str[64];
  }
  return &str;
 }
+<<<<<<< HEAD
 #line 423 "C:/Users/Git/ColourSampling/String.c"
+=======
+#line 452 "C:/Users/Git/ColourSampling/String.c"
+>>>>>>> temp
 char* ReadHUE(){
 char str[64];
 char txtF[15];
@@ -786,7 +989,11 @@ int Get_It(){
 int Get_Gain(){
  return 0;
 }
+<<<<<<< HEAD
 #line 454 "C:/Users/Git/ColourSampling/String.c"
+=======
+#line 494 "C:/Users/Git/ColourSampling/String.c"
+>>>>>>> temp
 char* Read_Thresholds(){
 char txtR[25];
 char str[64];
@@ -817,7 +1024,11 @@ unsigned long Val;
 
  return &str;
 }
+<<<<<<< HEAD
 #line 488 "C:/Users/Git/ColourSampling/String.c"
+=======
+#line 528 "C:/Users/Git/ColourSampling/String.c"
+>>>>>>> temp
 char* Write_Thresholds(short data_src){
 unsigned long val[128];
 unsigned long pos;
@@ -868,7 +1079,7 @@ char str[64];
 
  pos += 4;
  if(!data_src){
- if(string[5] !=  ((void *)0) )
+ if(string[5] !=  0 )
  val[4] = atol(string[5]);
  err = NVMWriteWord(pos,val[4]);
  }
@@ -881,7 +1092,11 @@ char str[64];
  strcat(str," \r\n ");
  return str;
 }
+<<<<<<< HEAD
 #line 555 "C:/Users/Git/ColourSampling/String.c"
+=======
+#line 595 "C:/Users/Git/ColourSampling/String.c"
+>>>>>>> temp
 void testStrings(char* writebuff){
  if(strlen(string[0])!=0){
  strncat(writebuff,string[0],strlen(string[0]));
@@ -918,7 +1133,7 @@ char* TestFlash(){
 char txtR[20];
 char str[64];
 unsigned long val[128];
-unsigned long Val;
+unsigned long Val_;
 unsigned int res,i;
  char* tr = "112233";
 
@@ -928,11 +1143,11 @@ unsigned int res,i;
 
 
 
- Val = ReadFlashWord();
+ Val_ = ReadFlashWord();
 
 
  strcpy(str,"Val || ");
- LongWordToHex(Val,txtR);
+ LongWordToHex(Val_,txtR);
 
  strcat(str,txtR);
  strcat(str," || ");
@@ -943,7 +1158,11 @@ unsigned int res,i;
 
  return &str;
 }
+<<<<<<< HEAD
 #line 622 "C:/Users/Git/ColourSampling/String.c"
+=======
+#line 662 "C:/Users/Git/ColourSampling/String.c"
+>>>>>>> temp
 void PrintHandler(char c){
 
  UART1_Write(c);

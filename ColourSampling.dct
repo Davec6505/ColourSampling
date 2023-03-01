@@ -12,6 +12,10 @@ __flash_write_block
 __flash_write_latch
 __fzins
 __genexcept
+_adc_external_ref
+_adc_internal_ref
+_adc_vrefh_external_vrefl_internal
+_adc_vrefh_internal_vrefl_external
 _add_dp
 _add_fp
 _appi
@@ -431,6 +435,11 @@ ad1pcfginv
 ad1pcfginvbits
 ad1pcfgset
 ad1pcfgsetbits
+adc_get_sample_ptr
+adc1_get_sample
+adc1_init
+adc1_init_advanced
+adc1_read
 adc1buf0
 adc1buf00
 adc1buf00_bit
@@ -1828,6 +1837,7 @@ apoov
 apoov
 apoov
 apoov_bit
+applicationdebug
 arpt
 arpt
 arpt
@@ -1871,6 +1881,8 @@ attachif
 attachif
 attachif
 attachif_bit
+ave_adc_
+aveadc_
 b
 b_thresh
 b_thresh
@@ -2005,7 +2017,6 @@ bito
 bito
 bito
 bito_bit
-bl
 blength
 blength
 blength
@@ -2825,7 +2836,6 @@ busy
 busy
 busy
 busy_bit
-button
 bytetohex
 bytetostr
 bytetostrwithzeros
@@ -7488,6 +7498,7 @@ com
 comc
 configdescriptor1
 configpic
+control
 cos
 cosc
 cosc
@@ -8554,6 +8565,11 @@ ctis0_bit
 ctis1
 ctis1_bit
 cts
+<<<<<<< HEAD
+=======
+current_duty2
+current_duty3
+>>>>>>> temp
 cvr
 cvr
 cvr
@@ -10794,6 +10810,7 @@ eptxen_u1ep6_bit
 eptxen_u1ep7_bit
 eptxen_u1ep8_bit
 eptxen_u1ep9_bit
+err
 evpol
 evpol
 evpol
@@ -10927,11 +10944,8 @@ field7
 field8
 filler1
 findnumber
-flash_erase_page
 flash_settings_paddr
 flash_settings_vaddr
-flash_write_row
-flash_write_word
 floattostr
 floor
 fltdata
@@ -11076,6 +11090,8 @@ frz
 frz
 frz
 frz_bit
+fscm
+fscm_setup
 fscmie
 fscmie
 fscmie
@@ -11138,12 +11154,12 @@ get_it
 get_time
 get_timer_values
 getapi_key_sms
+getlm35temp
 getscaledvalues
 getsmstext
 getstrlengths
 getvaluesfromflash
 gp
-gr
 halfsec
 halfsec
 halfsec
@@ -12553,8 +12569,10 @@ incm1
 incm1
 incm1_bit
 init_inc
+init_pid
 initgsm3
 initial_str
+initialize_led_on
 initisr
 initstring
 inittimer1
@@ -13614,6 +13632,10 @@ llock
 llock
 llock
 llock_bit
+lm35_adc_average
+lm35_adc_single
+lm35_pin
+lm35_pin_dir
 lmask0
 lmask0_bit
 lmask1
@@ -17162,6 +17184,21 @@ pid
 pid
 pid
 pid
+pid_
+pid_calculate
+pid_control
+pid_diffvalue
+pid_err
+pid_first_time
+pid_integrated
+pid_kd
+pid_ki
+pid_kp
+pid_maxoutput
+pid_minoutput
+pid_offset
+pid_prev_input
+pid_prev_integrated
 pid0
 pid0
 pid0
@@ -17996,11 +18033,17 @@ ptwren_bit
 pwd
 pwm_init
 pwm_init_advanced
+<<<<<<< HEAD
+=======
+pwm_period2
+pwm_period3
+>>>>>>> temp
 pwm_set_duty
 pwm_sigstrength
 pwm_start
 pwm_stop
 pwr
+pwrdowngsm3
 pwrupgsm3
 r_thresh
 r_thresh
@@ -18300,7 +18343,6 @@ rcv_txt_fin
 rcvpctxt
 rcvsimtxt
 rcvsimtxt
-rd
 rd0
 rd0
 rd0
@@ -18486,7 +18528,9 @@ removesmstext
 removewhitespace
 report
 reset
+reset_pid
 restoreinterrupts
+result
 resume
 resume
 resume
@@ -18950,6 +18994,7 @@ sesvdif
 sesvdif_bit
 setcolourthresholds
 setstr
+setup_lm35
 setupiot
 sf
 shorttohex
@@ -20488,6 +20533,8 @@ tcs3472_setinterrupt_limits
 tcs3472_write
 tcs3472_write8
 temp
+temp_
+temp_pwm_max
 test_update_thingspeak
 testflash
 testforok
@@ -21750,10 +21797,12 @@ twip
 twip
 twip_bit
 txt
+txt_
 txta
 txtb
 txtb_scl
 txtc
+txtdegc
 txtg
 txtg_scl
 txth

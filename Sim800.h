@@ -11,19 +11,27 @@
 /////////////////////////////////////////////////////
 //sfr's
 extern sfr sbit RTS;
-extern sfr sbit CRS;
+extern sfr sbit RTS_Dir;
+extern sfr sbit CTS;
+extern sfr sbit CTS_Dir;
 extern sfr sbit RST;
+extern sfr sbit RST_Dir;
 extern sfr sbit PWR;
+extern sfr sbit PWR_Dir;
 extern sfr sbit STAT;
+extern sfr sbit STAT_Dir;
 
 //////////////////////////////////////////////////////
 //defines
-//#define SimDebug
+
+#define SimDebug
 #define SimConfDebug
 #define SMSDebug
+#define SMSDebugA
 #define ThingDebug
 #define SigStrengthDebug
 //#define RingBuffDeBug
+
 //////////////////////////////////////////////////////
 //constants and vars
 extern char rcvSimTxt[150];
@@ -35,7 +43,7 @@ extern char rcvPcTxt[150];
 //structs and enuum
 typedef struct{
  char  initial_str;
- char  init_inc;
+ int  init_inc;
  char  start: 1;
  int rssi;  //signal strength quality in dBm
  int ber;   //bit rate error report in %
@@ -94,6 +102,7 @@ void WaitForResponse(short dly);
 void RingToTempBuf();
 void Load_Head_Tail_Pointers();
 void RcvSimTxt();
+void PwrDownGSM3();
 void PwrUpGSM3();
 char SetupIOT();
 char WaitForSetupSMS(unsigned int Indx);
@@ -102,8 +111,8 @@ char GetSMSText();
 char ReadMSG(int msg_num);
 void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
-int Test_Update_ThingSpeak();
-void SendData(unsigned int* rgbc,float* rgbh);
+int Test_Update_ThingSpeak(float degC);
+void SendData(unsigned int* rgbc,float* rgbh,float degC);
 char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
 int  SignalStrength();

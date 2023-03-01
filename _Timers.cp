@@ -1,6 +1,10 @@
 #line 1 "C:/Users/Git/ColourSampling/_Timers.c"
 #line 1 "c:/users/git/coloursampling/_timers.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
+#line 1 "c:/users/git/coloursampling/sim800.h"
+#line 1 "c:/users/git/coloursampling/string.h"
+#line 1 "c:/users/git/coloursampling/config.h"
+#line 1 "c:/users/git/coloursampling/tcs3472.h"
+#line 1 "c:/users/git/coloursampling/stdint.h"
 
 
 
@@ -48,6 +52,7 @@ typedef unsigned long int uintptr_t;
 
 typedef signed long long intmax_t;
 typedef unsigned long long uintmax_t;
+<<<<<<< HEAD
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/time.h"
 
 
@@ -96,6 +101,8 @@ unsigned long ReadFlashWord();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
+=======
+>>>>>>> temp
 #line 8 "c:/users/git/coloursampling/tcs3472.h"
 extern sfr TCS3472_Initialised;
 #line 73 "c:/users/git/coloursampling/tcs3472.h"
@@ -177,8 +184,118 @@ float TCS3472_CalcHue(float* RGBC);
 float max_(float *rgb);
 float min_(float *rgb);
 #line 1 "c:/users/git/coloursampling/sim800.h"
+<<<<<<< HEAD
 #line 19 "c:/users/git/coloursampling/string.h"
 extern char string[ 20 ][ 64 ];
+=======
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
+#line 1 "c:/users/git/coloursampling/string.h"
+#line 1 "c:/users/git/coloursampling/lm35.h"
+
+
+
+
+
+
+
+
+extern sfr sbit LM35_Pin;
+extern sfr sbit LM35_Pin_Dir;
+#line 27 "c:/users/git/coloursampling/lm35.h"
+void setup_LM35(int count);
+int LM35_Adc_Average(int* adc,int adc_pin);
+int LM35_Adc_Single(int adc,int adc_pin);
+void getLM35Temp(float * t,int adc_ave);
+#line 1 "c:/users/git/coloursampling/pid.h"
+#line 29 "c:/users/git/coloursampling/pid.h"
+typedef struct{
+ char control;
+ float PID_Kp, PID_Ki, PID_Kd;
+ float PID_Err;
+ float PID_Integrated;
+ float PID_DiffValue;
+ float PID_Prev_Integrated;
+ float PID_Prev_Input;
+ float PID_MinOutput, PID_MaxOutput;
+ float Err;
+ int PID_OffSet;
+ int Result;
+ unsigned short PID_First_Time:1;
+}_PID;
+
+extern _PID PID_;
+
+
+
+
+
+
+
+char PID_Control(char *PID);
+
+
+
+
+void Init_PID(float Kp, float Ki, float Kd, int MinOutput, int MaxOutput,int Offset);
+
+
+
+
+
+
+
+
+
+void Reset_PID();
+
+
+int PID_Calculate(float Sp, float Pv);
+#line 29 "c:/users/git/coloursampling/config.h"
+extern unsigned short i;
+extern char kk;
+
+extern sfr sbit RD;
+extern sfr sbit GR;
+extern sfr sbit BL;
+
+extern unsigned int current_duty2, current_duty3;
+extern unsigned int pwm_period2, pwm_period3;
+
+
+
+
+
+
+void ConfigPic();
+void FSCM_SetUP();
+void InitUart1();
+void InitUart2();
+void InitISR();
+void WriteData(char *_data);
+void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
+void Initialize_Led_On();
+void SetLedPWM();
+void ApplicationDebug();
+#line 1 "c:/users/git/coloursampling/flash_r_w.h"
+#line 1 "c:/users/git/coloursampling/string.h"
+#line 20 "c:/users/git/coloursampling/flash_r_w.h"
+extern unsigned long FLASH_Settings_VAddr;
+extern unsigned long FLASH_Settings_PAddr;
+
+
+unsigned int NVMWriteWord (void* address, unsigned long _data);
+unsigned int NVMWriteRow (void* address, void* _data);
+unsigned int NVMErasePage(void* address);
+unsigned int NVMUnlock(unsigned int nvmop);
+void NVMRead(void* addr,struct Thresh *vals);
+unsigned long ReadFlashWord();
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
+#line 1 "c:/users/git/coloursampling/tcs3472.h"
+#line 1 "c:/users/git/coloursampling/sim800.h"
+#line 1 "c:/users/git/coloursampling/lm35.h"
+#line 21 "c:/users/git/coloursampling/string.h"
+extern char string[ 21 ][ 64 ];
+>>>>>>> temp
 
 enum ControlColorIO{
 CONFIG,
@@ -201,6 +318,10 @@ WRITE_RAW,
 START,
 CANCEL,
 READA_HUE,
+<<<<<<< HEAD
+=======
+READA_DEG,
+>>>>>>> temp
 ERROR
 };
 
@@ -212,7 +333,7 @@ struct Constants{
 typedef struct pstrings_t{
  char* str;
  char c;
- char string[ 20 ][ 64 ];
+ char string[ 21 ][ 64 ];
  int (*StrSplitFp)(char* str,char c);
 }PString;
 
@@ -257,11 +378,16 @@ void PrintHandler(char c);
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 13 "c:/users/git/coloursampling/sim800.h"
 extern sfr sbit RTS;
-extern sfr sbit CRS;
+extern sfr sbit RTS_Dir;
+extern sfr sbit CTS;
+extern sfr sbit CTS_Dir;
 extern sfr sbit RST;
+extern sfr sbit RST_Dir;
 extern sfr sbit PWR;
+extern sfr sbit PWR_Dir;
 extern sfr sbit STAT;
-#line 29 "c:/users/git/coloursampling/sim800.h"
+extern sfr sbit STAT_Dir;
+#line 37 "c:/users/git/coloursampling/sim800.h"
 extern char rcvSimTxt[150];
 extern char SimTestTxt[150];
 extern char rcvPcTxt[150];
@@ -271,7 +397,7 @@ extern char rcvPcTxt[150];
 
 typedef struct{
  char initial_str;
- char init_inc;
+ int init_inc;
  char start: 1;
  int rssi;
  int ber;
@@ -330,6 +456,7 @@ void WaitForResponse(short dly);
 void RingToTempBuf();
 void Load_Head_Tail_Pointers();
 void RcvSimTxt();
+void PwrDownGSM3();
 void PwrUpGSM3();
 char SetupIOT();
 char WaitForSetupSMS(unsigned int Indx);
@@ -338,8 +465,8 @@ char GetSMSText();
 char ReadMSG(int msg_num);
 void TestRecievedSMS(int res);
 int RemoveSMSText(int sms_cnt);
-int Test_Update_ThingSpeak();
-void SendData(unsigned int* rgbc,float* rgbh);
+int Test_Update_ThingSpeak(float degC);
+void SendData(unsigned int* rgbc,float* rgbh,float degC);
 char SendSMS(char sms_type,char cellNum);
 void TestForOK(char c);
 int SignalStrength();
@@ -433,10 +560,12 @@ int res,minsPassed;
  T0_SP.sec = 0;
  T0_SP.min++;
 
- sprintf(txt,"%u",T0_SP.min);
- UART1_Write_Text(txt);
- UART1_Write(0x0d);
- UART1_Write(0x0a);
+
+
+
+
+
+ Delay_ms(10);
 
  if(T0_SP.min > 59){
  T0_SP.min = 0;
@@ -470,17 +599,25 @@ int res,minsPassed;
  }
 
  }
- LATA10_bit = !LATA10_bit;
+
  }
 }
+<<<<<<< HEAD
 #line 103 "C:/Users/Git/ColourSampling/_Timers.c"
+=======
+#line 117 "C:/Users/Git/ColourSampling/_Timers.c"
+>>>>>>> temp
 void Day_Month(int hr,int day,int mnth){
 int i;
  for(i=0;i<6;i++){
 
  }
 }
+<<<<<<< HEAD
 #line 114 "C:/Users/Git/ColourSampling/_Timers.c"
+=======
+#line 128 "C:/Users/Git/ColourSampling/_Timers.c"
+>>>>>>> temp
 void I2C2_TimeoutCallback(char errorCode) {
 int i;
  if (errorCode == _I2C_TIMEOUT_RD) {

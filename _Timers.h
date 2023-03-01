@@ -4,13 +4,13 @@
 
 /////////////////////////////////////////////
 //includes
-#include <stdint.h>
-#include<time.h>
+//#include <stdint.h>
+//#include<time.h>
 #include "Sim800.h"
 
 ////////////////////////////////////////////
 //defines
-#define TmrDebug
+//#define TmrDebug
 
 
 
