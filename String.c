@@ -628,7 +628,7 @@ char* TestFlash(){
 char txtR[20];
 char str[64];
 unsigned long val[128];
-unsigned long Val;
+unsigned long Val_;
 unsigned int res,i;
  char* tr = "112233";
       // val[0] = atol(tr);//0x1234afaf;
@@ -638,11 +638,11 @@ unsigned int res,i;
       // res = NVMErasePage(FLASH_Settings_PAddr);
       // res = NVMWriteRow(FLASH_Settings_PAddr,val);
       // res = NVMWriteWord(FLASH_Settings_PAddr,val[0]);
-       Val =  ReadFlashWord();
+       Val_ =  ReadFlashWord();
 
 
        strcpy(str,"Val || ");
-       LongWordToHex(Val,txtR);
+       LongWordToHex(Val_,txtR);
       // sprintf(txtR,"%8x",Val);//Threshold.C_thresh);
        strcat(str,txtR);
        strcat(str," || ");

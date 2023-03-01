@@ -2017,7 +2017,6 @@ bito
 bito
 bito
 bito_bit
-bl
 blength
 blength
 blength
@@ -2837,7 +2836,6 @@ busy
 busy
 busy
 busy_bit
-button
 bytetohex
 bytetostr
 bytetostrwithzeros
@@ -10943,11 +10941,8 @@ field7
 field8
 filler1
 findnumber
-flash_erase_page
 flash_settings_paddr
 flash_settings_vaddr
-flash_write_row
-flash_write_word
 floattostr
 floor
 fltdata
@@ -11162,7 +11157,6 @@ getsmstext
 getstrlengths
 getvaluesfromflash
 gp
-gr
 halfsec
 halfsec
 halfsec
@@ -18342,7 +18336,6 @@ rcv_txt_fin
 rcvpctxt
 rcvsimtxt
 rcvsimtxt
-rd
 rd0
 rd0
 rd0

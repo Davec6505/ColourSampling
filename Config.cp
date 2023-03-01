@@ -1,7 +1,7 @@
 #line 1 "C:/Users/Git/ColourSampling/Config.c"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
+#line 1 "c:/users/git/coloursampling/stdint.h"
 
 
 
@@ -130,42 +130,11 @@ void TCS3472_CalcHSL(float* RGBC);
 float max_(float *rgb);
 float min_(float *rgb);
 #line 1 "c:/users/git/coloursampling/_timers.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/time.h"
-
-
-
-struct tm {
- unsigned long tm_sec;
- unsigned long tm_min;
- unsigned long tm_hour;
- unsigned long tm_mday;
- unsigned long tm_mon;
- unsigned long tm_year;
- unsigned long tm_wday;
- unsigned long tm_yday;
- unsigned long tm_isdst;
-};
-
-
-
-
-
-
-
-
-
- typedef unsigned long size_t;
-
-
-typedef unsigned long clock_t;
-typedef unsigned long time_t;
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/git/coloursampling/string.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 20 "c:/users/git/coloursampling/flash_r_w.h"
 extern unsigned long FLASH_Settings_VAddr;
 extern unsigned long FLASH_Settings_PAddr;
@@ -451,7 +420,7 @@ void Reset_PID();
 
 
 int PID_Calculate(float Sp, float Pv);
-#line 28 "c:/users/git/coloursampling/config.h"
+#line 29 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 
@@ -477,11 +446,7 @@ void I2C2_SetTimeoutCallback(unsigned long timeout, void (*I2C_timeout)(char));
 void Initialize_Led_On();
 void SetLedPWM();
 void ApplicationDebug();
-#line 3 "C:/Users/Git/ColourSampling/Config.c"
-sbit RD at LATB0_bit;
-sbit GR at LATG13_bit;
-sbit BL at LATD4_bit;
-
+#line 7 "C:/Users/Git/ColourSampling/Config.c"
 unsigned int current_duty2,current_duty3;
 unsigned int pwm_period2, pwm_period3;
 #line 15 "C:/Users/Git/ColourSampling/Config.c"
@@ -516,7 +481,7 @@ void ConfigPic(){
  InitUart2();
 
 
- current_duty2 = 5000;
+ current_duty2 = 2000;
  current_duty3 = 500;
  pwm_period2 = PWM_Init(5000 , 2, 0, 2);
  pwm_period3 = PWM_Init(5000 , 3, 4, 3);
@@ -579,6 +544,7 @@ void Initialize_Led_On(){
 
 void SetLedPWM(){
 int err,error_counter,i;
+
  for(i=0;i<4;i++)
  RawData[i] = 0;
 
@@ -588,13 +554,14 @@ int err,error_counter,i;
 
  do{
  current_duty2 += (err > 0)? 100:-100;
+
+ if((current_duty2 > 2000)||(current_duty2 < 500))
+ current_duty2 = 2000;
+
  PWM_Set_Duty(current_duty2, 2);
- Delay_ms(500);
+ Delay_ms(1000);
  TCS3472_getRawData(RawData);
  err = TCS3472_C2RGB_Error(RawData);
- error_counter++;
- if(error_counter > 100)
- break;
 
 
 
@@ -605,12 +572,19 @@ int err,error_counter,i;
 
  Delay_ms(10);
 
- }while(err < -150 || err > 150);
+ error_counter++;
+ if(error_counter > 100)
+ break;
+ }while(err < -10 || err > 10);
 
 }
 
 
 
 void ApplicationDebug(){
-#line 154 "C:/Users/Git/ColourSampling/Config.c"
+
+ GetValuesFromFlash();
+#line 157 "C:/Users/Git/ColourSampling/Config.c"
+ SignalStrength();
+
 }

@@ -15,14 +15,15 @@
 //defines
 #define ResetFlash
 #define MainDebug
-#define ThermisterDebug
+//#define ThermisterDebug
 //#define LedDeBug
 
-//#define ApplicationDbg
-//#define MainFlashDebug
+#define ApplicationDbg
+#define MainFlashDebug
 //#define MainColDebug
-//#define MainSigStrengthDebug
+#define MainSigStrengthDebug
 
+#define NULL 0
 //////////////////////////////////////////
 //constants and vars
 extern unsigned short i;

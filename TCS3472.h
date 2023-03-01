@@ -3,7 +3,7 @@
 
 /////////////////////////////////////////////////
 //includes
-#include <stdint.h>
+#include "stdint.h"
 
 extern sfr TCS3472_Initialised;
 

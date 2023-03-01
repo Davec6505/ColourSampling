@@ -1,8 +1,8 @@
 #include "Config.h"
 
-sbit RD at LATB0_bit;
+/*sbit RD at LATB0_bit;
 sbit GR at LATG13_bit;
-sbit BL at LATD4_bit;
+sbit BL at LATD4_bit;*/
 
 unsigned int current_duty2,current_duty3;
 unsigned int pwm_period2, pwm_period3;
@@ -43,7 +43,7 @@ void ConfigPic(){
   InitUart2();
 
    //Initialize PWMs and set duty cycle
-  current_duty2  = 5000;                     // initial value for current_duty
+  current_duty2  = 2000;                     // initial value for current_duty
   current_duty3  = 500;                     // initial value for current_duty1
   pwm_period2 = PWM_Init(5000 , 2, 0, 2);    //pwm frk,pwm pin 1-latd0,pre-scal,tmr2
   pwm_period3 = PWM_Init(5000 , 3, 4, 3);    //pwm frk,pwm pin 1-latd1,pre-scal,tmr5
@@ -106,6 +106,7 @@ void Initialize_Led_On(){
 
 void SetLedPWM(){
 int err,error_counter,i;
+
      for(i=0;i<4;i++)
         RawData[i] = 0;
         
@@ -115,13 +116,14 @@ int err,error_counter,i;
      
     do{
       current_duty2 += (err > 0)? 100:-100;
+      //roll over START again.
+      if((current_duty2 > 2000)||(current_duty2 < 500))
+          current_duty2 = 2000;
+
       PWM_Set_Duty(current_duty2, 2);
-      Delay_ms(500);
+      Delay_ms(1000);
       TCS3472_getRawData(RawData);
       err = TCS3472_C2RGB_Error(RawData);
-      error_counter++;
-      if(error_counter > 100)
-          break;
 #ifdef LedDeBug
        // sprintf(txtLed,"%d",err);
         PrintOut(PrintHandler, "\r\n"
@@ -132,7 +134,10 @@ int err,error_counter,i;
 #else
       Delay_ms(10);
 #endif
-    }while(err < -150 || err > 150);
+      error_counter++;
+      if(error_counter > 100)
+          break;
+    }while(err < -10 || err > 10);
 
 }
 
@@ -146,7 +151,7 @@ void ApplicationDebug(){
         TCS3472_getRawData(RawData);
         GetScaledValues(RawData,&FltData);
         TCS3472_CalcHSL(&FltData);
-        SendData(RawData,FltData,_temp[1]);
+        SendData(RawData,FltData,&_temp[1]);
 #endif
 #ifdef MainSigStrengthDebug
         SignalStrength();

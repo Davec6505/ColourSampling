@@ -1,7 +1,7 @@
 #line 1 "C:/Users/Git/ColourSampling/ISR.c"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/tcs3472.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
+#line 1 "c:/users/git/coloursampling/stdint.h"
 
 
 
@@ -130,42 +130,11 @@ void TCS3472_CalcHSL(float* RGBC);
 float max_(float *rgb);
 float min_(float *rgb);
 #line 1 "c:/users/git/coloursampling/_timers.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/stdint.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/time.h"
-
-
-
-struct tm {
- unsigned long tm_sec;
- unsigned long tm_min;
- unsigned long tm_hour;
- unsigned long tm_mday;
- unsigned long tm_mon;
- unsigned long tm_year;
- unsigned long tm_wday;
- unsigned long tm_yday;
- unsigned long tm_isdst;
-};
-
-
-
-
-
-
-
-
-
- typedef unsigned long size_t;
-
-
-typedef unsigned long clock_t;
-typedef unsigned long time_t;
 #line 1 "c:/users/git/coloursampling/sim800.h"
 #line 1 "c:/users/git/coloursampling/string.h"
 #line 1 "c:/users/git/coloursampling/config.h"
 #line 1 "c:/users/git/coloursampling/flash_r_w.h"
 #line 1 "c:/users/git/coloursampling/string.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic32/include/built_in.h"
 #line 20 "c:/users/git/coloursampling/flash_r_w.h"
 extern unsigned long FLASH_Settings_VAddr;
 extern unsigned long FLASH_Settings_PAddr;
@@ -451,7 +420,7 @@ void Reset_PID();
 
 
 int PID_Calculate(float Sp, float Pv);
-#line 28 "c:/users/git/coloursampling/config.h"
+#line 29 "c:/users/git/coloursampling/config.h"
 extern unsigned short i;
 extern char kk;
 

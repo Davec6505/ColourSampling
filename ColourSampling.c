@@ -21,7 +21,7 @@ char writebuff[64];
 
 //Serial
 char txt[] = "00000";
-char sub_txt[] = "\"+44";
+char sub_txt[] = "\"+27";
 
 //minimum out put of contol is max value pwm can attain
 const int temp_pwm_max = 3780;
@@ -29,6 +29,7 @@ const int temp_pwm_max = 3780;
 /******************************************************
 *main program START
 ******************************************************/
+
 void main() {
 //non static fields
 char cel_num[20];
@@ -48,6 +49,7 @@ static long millis_thermister_sp = 0;
 static long millis_thermister = 0;
 
 static char last_start = 0;
+static char delay_sigstr = 0;
 int sample_test = 0;
 unsigned int pid_out = 0;
 
@@ -130,7 +132,8 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
          PrintOut(PrintHandler, "\r\n"
                                 " *Run      \r\n"
                                 " *Initial Incrament:= %s\r\n"
-                                ,txtInit);
+                                " *PWM_Period:= %u\r\n"
+                                ,txtInit,pwm_period2);
 #else
      Delay_ms(10);
 #endif
@@ -140,13 +143,19 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
    last_millis_sigstr = TMR0.millis;
    millis_sigstr_sp = 5000;
    last_start = 0;
+   SimVars.start = 0;
+   delay_sigstr = 0;
 /***************************************************************
 *reset the led for error Threshold to get accurate readings
 *from the colour chip
 ***************************************************************/
- // Initialize_Led_On();
- //  PWM_Start(3); //start temp control
-
+   Initialize_Led_On();
+  /* PWM_Start(2); //start temp control
+   PWM_Start(2);
+   Delay_ms(50);
+   SetLedPWM();
+   PWM_Stop(2); */
+  RemoveSMSText(10);
 /**************************************************************
 *main => loop forever and call all functions*
 *keep main free from code
@@ -163,7 +172,7 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
      //use  START sent from sms to START anything here
     if(SimVars.start && !last_start){
         last_start = 1;
-        Initialize_Led_On(); //At START cmd Init LED intensity
+       // Initialize_Led_On(); //At START cmd Init LED intensity
         PWM_Start(3); //start temp control
     }else if(!SimVars.start && (last_start > 0)){
         last_start = 0;
@@ -206,6 +215,7 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
 
      //////////////////////////////////////////////////
      //test millis for time to check signal strength
+     if(delay_sigstr > 5){
      res_millis_sigstr = TMR0.millis - last_millis_sigstr;
      if(res_millis_sigstr >= millis_sigstr_sp){
          millis_sigstr_sp   = 600000;
@@ -214,6 +224,8 @@ char txtInit[6],txtR[6],txtH[6],txtT[6],txtI[6],txtK[15],txtC[15],txtF[15],txtRa
          if(STAT)
            SignalStrength();
      }
+     }else
+       delay_sigstr++;
 
      //////////////////////////////////////////////////
      //Update Thingspeak
